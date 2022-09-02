@@ -18,4 +18,8 @@ class ColorManager {
   static const lightGreen = Color(0xff20c976);
   static const darkGreen = Color(0xff091c23);
   static const indicatorBorGreen = Color(0xff204428);
+
+  // * Service Home color
+
+  static const serviceHomeGrey = Color(0xff6e6e6e);
 }

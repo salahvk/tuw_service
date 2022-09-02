@@ -3,7 +3,8 @@ import 'package:social_media_services/screens/OTP_screen.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
-import 'package:social_media_services/screens/profile_screen.dart';
+import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/screens/profile_page.dart';
 
 class Routes {
   static const String introductionScreen = '/';
@@ -11,6 +12,7 @@ class Routes {
   static const String otpScreen = '/otpScreen';
   static const String profileDetailsPage = '/profileDetailsPage';
   static const String homePage = '/homePage';
+  static const String myProfile = '/myProfile';
 }
 
 class RouteGenerator {
@@ -23,9 +25,11 @@ class RouteGenerator {
       case Routes.otpScreen:
         return MaterialPageRoute(builder: (_) => const OTPscreen());
       case Routes.profileDetailsPage:
-        return MaterialPageRoute(builder: (_) => const ProfileDetailsPage());
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
       case Routes.homePage:
         return MaterialPageRoute(builder: (_) => const HomePage());
+      case Routes.myProfile:
+        return MaterialPageRoute(builder: (_) => const ProfilePage());
       default:
         return unDefinedRoute();
     }

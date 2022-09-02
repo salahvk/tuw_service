@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/screens/messagePage.dart';
+import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/customized_drawer.dart';
 
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -34,9 +35,15 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(0.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 CustomDrawerList(
                   title: 'My Profile',
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return const ProfilePage();
+                    }));
+                  },
                 ),
                 CustomDrawerList(
                   title: 'Address Book',
@@ -50,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 CustomDrawerList(
                   title: 'Logout',
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 150,
                 )
               ],

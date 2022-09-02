@@ -3,7 +3,7 @@ import 'package:pinput/pinput.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/utils/pinTheme.dart';
-import 'package:social_media_services/screens/profile_screen.dart';
+import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 
@@ -96,7 +96,7 @@ class _OTPscreenState extends State<OTPscreen> {
                   style: ElevatedButton.styleFrom(elevation: 0),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const ProfileDetailsPage();
+                      return const EditProfileScreen();
                     }));
                   },
                   child: Text(

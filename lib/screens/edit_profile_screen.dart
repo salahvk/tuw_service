@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/screens/home_page.dart';
+import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 
-class ProfileDetailsPage extends StatefulWidget {
-  const ProfileDetailsPage({Key? key}) : super(key: key);
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileDetailsPage> createState() => _ProfileDetailsPageState();
+  State<EditProfileScreen> createState() => _ProfileDetailsPageState();
 }
 
-class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
+class _ProfileDetailsPageState extends State<EditProfileScreen> {
   DateTime selectedDate = DateTime.now();
   String? gender;
   bool male = false;
@@ -37,44 +37,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(4, 4.5),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor:
-                                ColorManager.whiteColor.withOpacity(0.8),
-                            radius: 40.5,
-                            child: Center(
-                              child: Image.asset(
-                                ImageAssets.profileIcon,
-                              ),
-                            ),
-                          ),
-                          const Positioned(
-                              right: 0,
-                              bottom: 3,
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: ColorManager.whiteColor,
-                                child: Icon(
-                                  Icons.edit,
-                                  size: 12,
-                                  color: ColorManager.primary,
-                                ),
-                              ))
-                        ],
-                      ),
+                    child: ProfileImage(
+                      iconSize: 12,
+                      profileSize: 40.5,
+                      iconRadius: 12,
                     ),
                   ),
                 ],
@@ -98,6 +64,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   child: TextField(
                     focusNode: nfocus,
                     style: const TextStyle(),
+                    controller: nameController,
                     decoration: InputDecoration(
                         hintText: 'Enter Name',
                         hintStyle: getRegularStyle(
@@ -273,6 +240,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   ),
                   child: TextField(
                     style: const TextStyle(),
+                    controller: countryController,
                     decoration: InputDecoration(
                         hintText: 'Enter Country',
                         hintStyle: getRegularStyle(
@@ -307,6 +275,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                           ),
                           child: TextField(
                             style: const TextStyle(),
+                            controller: regionController,
                             decoration: InputDecoration(
                                 hintText: 'Enter Region',
                                 hintStyle: getRegularStyle(
@@ -340,6 +309,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                           ),
                           child: TextField(
                             style: const TextStyle(),
+                            controller: stateController,
                             decoration: InputDecoration(
                                 hintText: 'Enter State',
                                 hintStyle: getRegularStyle(
@@ -374,6 +344,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                       minLines: 4,
                       maxLines: 5,
                       style: const TextStyle(),
+                      controller: aboutController,
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(
                               left: 10, right: 10, top: 10),
@@ -406,6 +377,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                               horizontal: 35, vertical: 16),
                         ),
                         onPressed: () {
+                          // print(nameController.text);
+                          // nameController.clear();
                           Navigator.push(context,
                               MaterialPageRoute(builder: (ctx) {
                             return const HomePage();
