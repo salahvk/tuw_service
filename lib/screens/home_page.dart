@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/profile_page.dart';
+import 'package:social_media_services/screens/profile_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/customized_drawer.dart';
 
@@ -50,6 +51,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 CustomDrawerList(
                   title: 'Become a Service man',
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return const ProfileServicePage();
+                    }));
+                  },
                 ),
                 CustomDrawerList(
                   title: 'Privacy Policy',
