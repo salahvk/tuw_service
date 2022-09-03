@@ -22,4 +22,8 @@ class ColorManager {
   // * Service Home color
 
   static const serviceHomeGrey = Color(0xff6e6e6e);
+
+  // * Payment page colors
+  static const paymentPageColor1 = Color(0xff97989a);
+  static const paymentPageColor2 = Color(0xff404340);
 }

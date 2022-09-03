@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
+import 'package:social_media_services/screens/choose_service_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/screens/payment_service_page.dart';
 import 'package:social_media_services/screens/profile_page.dart';
+import 'package:social_media_services/screens/profile_service_page.dart';
 
 class Routes {
   static const String introductionScreen = '/';
@@ -13,6 +16,10 @@ class Routes {
   static const String profileDetailsPage = '/profileDetailsPage';
   static const String homePage = '/homePage';
   static const String myProfile = '/myProfile';
+  static const String profileServicePage = '/profileServicePage';
+  static const String chooseService = '/chooseService';
+  static const String paymentSuccessfull = '/paymentSuccessfull';
+  static const String paymentServicePage = '/paymentServicePage';
 }
 
 class RouteGenerator {
@@ -30,6 +37,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case Routes.myProfile:
         return MaterialPageRoute(builder: (_) => const ProfilePage());
+      case Routes.profileServicePage:
+        return MaterialPageRoute(builder: (_) => const ProfileServicePage());
+      case Routes.chooseService:
+        return MaterialPageRoute(builder: (_) => const ChooseServicePage());
       default:
         return unDefinedRoute();
     }

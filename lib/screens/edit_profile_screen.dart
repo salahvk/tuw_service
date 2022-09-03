@@ -3,6 +3,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/screens/home_page.dart';
+import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 
@@ -15,9 +16,9 @@ class EditProfileScreen extends StatefulWidget {
 
 class _ProfileDetailsPageState extends State<EditProfileScreen> {
   DateTime selectedDate = DateTime.now();
-  String? gender;
-  bool male = false;
-  bool female = false;
+  // String? gender;
+  bool value = true;
+  // bool female = false;
   FocusNode nfocus = FocusNode();
   FocusNode dobfocus = FocusNode();
 
@@ -130,88 +131,27 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 5.0,
-                                      color: Colors.grey.shade400,
-                                      offset: const Offset(3, 3),
-                                    )
-                                  ],
-                                ),
-                                child: CircleAvatar(
-                                  radius: 9,
-                                  backgroundColor: male
-                                      ? ColorManager.primary
-                                      : ColorManager.whiteColor,
-                                  child: Radio(
-                                    fillColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    visualDensity: const VisualDensity(
-                                      horizontal: VisualDensity.minimumDensity,
-                                      vertical: VisualDensity.minimumDensity,
-                                    ),
-                                    value: "Male",
-                                    overlayColor: MaterialStateProperty.all(
-                                        ColorManager.primary),
-                                    groupValue: gender,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        gender = value.toString();
-                                        male = true;
-                                        female = false;
-                                      });
-                                    },
-                                  ),
-                                ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  value = true;
+                                });
+                              },
+                              child: CustomizedRadioButton(
+                                gender: "MALE",
+                                isMaleSelected: value,
                               ),
                             ),
                             const TitleWidget(name: 'Male'),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 5.0,
-                                      color: Colors.grey.shade400,
-                                      offset: const Offset(3, 3),
-                                    )
-                                  ],
-                                ),
-                                child: CircleAvatar(
-                                  radius: 9,
-                                  backgroundColor: female
-                                      ? ColorManager.primary
-                                      : ColorManager.whiteColor,
-                                  child: Radio(
-                                    fillColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    visualDensity: const VisualDensity(
-                                      horizontal: VisualDensity.minimumDensity,
-                                      vertical: VisualDensity.minimumDensity,
-                                    ),
-                                    value: "female",
-                                    overlayColor: MaterialStateProperty.all(
-                                        ColorManager.primary),
-                                    groupValue: gender,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        gender = value.toString();
-
-                                        female = true;
-                                        male = false;
-                                      });
-                                    },
-                                  ),
-                                ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  value = false;
+                                });
+                              },
+                              child: CustomizedRadioButton(
+                                gender: "FEMALE",
+                                isMaleSelected: value,
                               ),
                             ),
                             const TitleWidget(name: 'Female'),

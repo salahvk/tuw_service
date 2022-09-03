@@ -2,6 +2,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/payment_service_page.dart';
+import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 
@@ -14,6 +16,7 @@ class ChooseServicePage extends StatefulWidget {
 
 class _ChooseServicePageState extends State<ChooseServicePage> {
   String? selectedValue;
+  bool isTickSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const CustomStepper(num: 2),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: Row(
@@ -188,7 +192,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
                 child: Container(
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -227,25 +231,51 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      color: ColorManager.whiteColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.grey.shade300,
-                          // offset: const Offset(5, 8.5),
-                        ),
-                      ],
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        isTickSelected = !isTickSelected;
+                      });
+                    },
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                      decoration: BoxDecoration(
+                        color: ColorManager.whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 10.0,
+                            color: Colors.grey.shade300,
+                            // offset: const Offset(5, 8.5),
+                          ),
+                        ],
+                      ),
+                      child: isTickSelected
+                          ? Image.asset('assets/tick_mark.png')
+                          : null,
                     ),
-                    child: Image.asset('assets/tick_mark.png'),
                   ),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                     child: TermsAndCondition(),
                   ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.fromLTRB(13, 0, 13, 0)),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (ctx) {
+                          return const PaymentServicePage();
+                        }));
+                      },
+                      child: Text("CONTINUE TO PAY",
+                          style: getRegularStyle(
+                              color: ColorManager.whiteText, fontSize: 16))),
                 ],
               )
             ],

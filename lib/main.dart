@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/theme_manager.dart';
-import 'package:social_media_services/screens/choose_service_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: getApplicationTheme(context).copyWith(useMaterial3: true),
       initialRoute: Routes.introductionScreen,
       onGenerateRoute: RouteGenerator.getRoute,
-      home: const ChooseServicePage(),
+      // home: const ProfileServicePage(),
     );
   }
 }
