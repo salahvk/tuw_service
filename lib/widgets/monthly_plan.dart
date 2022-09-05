@@ -46,7 +46,10 @@ class MonthlyPlan extends StatelessWidget {
                     Text(amount,
                         style: getSemiBoldtStyle(
                             color: ColorManager.primary, fontSize: 15)),
-                    const Text(" OMR")
+                    Text(" OMR",
+                        style: getRegularStyle(
+                            color: const Color.fromARGB(255, 173, 173, 173),
+                            fontSize: 15))
                   ],
                 )
               ],

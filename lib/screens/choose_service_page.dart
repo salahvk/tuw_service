@@ -1,4 +1,7 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -17,6 +20,7 @@ class ChooseServicePage extends StatefulWidget {
 class _ChooseServicePageState extends State<ChooseServicePage> {
   String? selectedValue;
   bool isTickSelected = false;
+  String? fileName;
 
   @override
   Widget build(BuildContext context) {
@@ -217,12 +221,31 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                               style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.fromLTRB(13, 0, 13, 0)),
-                              onPressed: () {},
+                              onPressed: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: ['pdf', 'doc'],
+                                );
+
+                                if (result != null) {
+                                  PlatformFile file = result.files.first;
+                                  setState(() {
+                                    fileName = file.name;
+                                  });
+                                  print(file.name);
+                                  print(file.bytes);
+                                  print(file.size);
+                                  print(file.extension);
+                                  print(file.path);
+                                } else {}
+                              },
                               child: Text("Browse",
                                   style: getLightStyle(
                                       color: ColorManager.whiteText,
                                       fontSize: 18))),
                         ),
+                        Text(fileName ?? '')
                       ],
                     ),
                   ),
@@ -267,12 +290,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(13, 0, 13, 0)),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (ctx) {
-                          return const PaymentServicePage();
-                        }));
-                      },
+                      onPressed: continueToPay,
                       child: Text("CONTINUE TO PAY",
                           style: getRegularStyle(
                               color: ColorManager.whiteText, fontSize: 16))),
@@ -284,4 +302,62 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
       ),
     );
   }
+
+  continueToPay() {
+    // var snackBar = SnackBar(
+    //   elevation: 0,
+    //   behavior: SnackBarBehavior.fixed,
+    //   backgroundColor: Colors.transparent,
+    //   duration: const Duration(seconds: 1),
+    //   content: AwesomeSnackbarContent(
+    //     title: 'Error!',
+    //     message: 'Please agree the terms and conditions',
+    //     contentType: ContentType.failure,
+    //   ),
+    // );
+
+    isTickSelected
+        ? Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+            return const PaymentServicePage();
+          }))
+        : AnimatedSnackBar.material('Please agree the terms and conditions',
+                type: AnimatedSnackBarType.warning,
+                borderRadius: BorderRadius.circular(6),
+                // brightness: Brightness.dark,
+                duration: const Duration(seconds: 1))
+            .show(
+            context,
+          );
+  }
 }
+
+// https://stackoverflow.com/questions/51161862/how-to-send-an-image-to-an-api-in-dart-flutter
+
+// upload(File imageFile) async {    
+//       // open a bytestream
+//       var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+//       // get file length
+//       var length = await imageFile.length();
+
+//       // string to uri
+//       var uri = Uri.parse("http://ip:8082/composer/predict");
+
+//       // create multipart request
+//       var request = new http.MultipartRequest("POST", uri);
+
+//       // multipart that takes file
+//       var multipartFile = new http.MultipartFile('file', stream, length,
+//           filename: basename(imageFile.path));
+
+//       // add file to multipart
+//       request.files.add(multipartFile);
+
+//       // send
+//       var response = await request.send();
+//       print(response.statusCode);
+
+//       // listen for response
+//       response.stream.transform(utf8.decoder).listen((value) {
+//         print(value);
+//       });
+//     }

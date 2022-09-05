@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/servicer.dart';
 
 class ServiceHomePage extends StatelessWidget {
   ServiceHomePage({Key? key}) : super(key: key);
@@ -41,10 +42,10 @@ class ServiceHomePage extends StatelessWidget {
                       itemBuilder: (BuildContext ctx, index) {
                         return InkWell(
                           onTap: () {
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (ctx) {
-                            //   return const ProfileServicePage();
-                            // }));
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (ctx) {
+                              return const ServicerPage();
+                            }));
                           },
                           child: Container(
                             alignment: Alignment.center,

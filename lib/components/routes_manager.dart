@@ -5,9 +5,9 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
-import 'package:social_media_services/screens/payment_service_page.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/profile_service_page.dart';
+import 'package:social_media_services/screens/servicer.dart';
 
 class Routes {
   static const String introductionScreen = '/';
@@ -20,6 +20,7 @@ class Routes {
   static const String chooseService = '/chooseService';
   static const String paymentSuccessfull = '/paymentSuccessfull';
   static const String paymentServicePage = '/paymentServicePage';
+  static const String servicerPage = '/servicerPage';
 }
 
 class RouteGenerator {
@@ -41,6 +42,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProfileServicePage());
       case Routes.chooseService:
         return MaterialPageRoute(builder: (_) => const ChooseServicePage());
+      case Routes.servicerPage:
+        return MaterialPageRoute(builder: (_) => const ServicerPage());
       default:
         return unDefinedRoute();
     }

@@ -310,7 +310,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                   //       textAlign: TextAlign.center,
                   //     )),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(7, 0, 7, 0),
+                    padding: const EdgeInsets.fromLTRB(7, 10, 7, 0),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(

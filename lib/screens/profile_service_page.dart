@@ -6,6 +6,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/screens/choose_service_page.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
+import 'package:social_media_services/widgets/custom_text_field.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 
@@ -44,13 +45,11 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const MandatoryHeader(heading: 'First Name'),
-                      const TextFieldProfileService(
-                          hintText: 'Enter First Name'),
+                      const CustomTextField(hintText: 'Enter First Name'),
                       const MandatoryHeader(heading: 'Last Name'),
-                      const TextFieldProfileService(
-                          hintText: 'Enter Last Name'),
+                      const CustomTextField(hintText: 'Enter Last Name'),
                       const MandatoryHeader(heading: 'Civil Card No'),
-                      const TextFieldProfileService(hintText: 'Enter Card No'),
+                      const CustomTextField(hintText: 'Enter Card No'),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -331,6 +330,9 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                       color: ColorManager.whiteText,
                                       fontSize: 16))),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 10,
                       )
                     ],
                   ),
@@ -363,41 +365,5 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
         dateController.text = selectedDate.toLocal().toString().split(' ')[0];
       });
     }
-  }
-}
-
-class TextFieldProfileService extends StatelessWidget {
-  final String hintText;
-  const TextFieldProfileService({
-    Key? key,
-    required this.hintText,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10.0,
-              color: Colors.grey.shade300,
-              // offset: const Offset(5, 8.5),
-            ),
-          ],
-        ),
-        child: TextField(
-          // focusNode: nfocus,
-          style: const TextStyle(),
-          // controller: nameController,
-          decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: getRegularStyle(
-                  color: const Color.fromARGB(255, 173, 173, 173),
-                  fontSize: 15)),
-        ),
-      ),
-    );
   }
 }

@@ -171,16 +171,22 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                             ),
                             Text("Service Fee : \$135.00 OMR",
                                 style: getRegularStyle(
-                                    color: ColorManager.black, fontSize: 16)),
+                                    color: const Color.fromARGB(
+                                        255, 173, 173, 173),
+                                    fontSize: 16)),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                               child: Text("Discount      : \$7.00 OMR = 5%",
                                   style: getRegularStyle(
-                                      color: ColorManager.black, fontSize: 16)),
+                                      color: const Color.fromARGB(
+                                          255, 173, 173, 173),
+                                      fontSize: 16)),
                             ),
                             Text("VAT               : \$12.00 OMR = 8%",
                                 style: getRegularStyle(
-                                    color: ColorManager.black, fontSize: 16)),
+                                    color: const Color.fromARGB(
+                                        255, 173, 173, 173),
+                                    fontSize: 16)),
                           ],
                         ),
                       ),

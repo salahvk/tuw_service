@@ -9,7 +9,7 @@ class CustomStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -27,11 +27,20 @@ class CustomStepper extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Colors.grey.shade400,
+                          offset: const Offset(1, 3.5),
+                        ),
+                      ],
+                      color: num == 1 || num == 2 || num == 3
+                          ? ColorManager.primary
+                          : ColorManager.whiteColor,
+                    ),
                     width: 85,
                     height: 2.2,
-                    color: num == 1 || num == 2 || num == 3
-                        ? ColorManager.primary
-                        : ColorManager.whiteColor,
                   ),
                   const Positioned(
                     // left: 30,
@@ -61,11 +70,20 @@ class CustomStepper extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Colors.grey.shade400,
+                          offset: const Offset(1, 3.5),
+                        ),
+                      ],
+                      color: num == 2 || num == 3
+                          ? ColorManager.primary
+                          : ColorManager.whiteColor,
+                    ),
                     width: 85,
                     height: 2.2,
-                    color: num == 2 || num == 3
-                        ? ColorManager.primary
-                        : ColorManager.whiteColor,
                   ),
                   const Positioned(
                     // left: 30,
@@ -97,9 +115,18 @@ class CustomStepper extends StatelessWidget {
                   Container(
                     width: 85,
                     height: 2.2,
-                    color: num == 3
-                        ? ColorManager.primary
-                        : ColorManager.whiteColor,
+                    decoration: BoxDecoration(
+                      color: num == 3
+                          ? ColorManager.primary
+                          : ColorManager.whiteColor,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Colors.grey.shade400,
+                          offset: const Offset(1, 3.5),
+                        ),
+                      ],
+                    ),
                   ),
                   const Positioned(
                     // left: 30,

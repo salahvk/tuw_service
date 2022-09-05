@@ -23,12 +23,12 @@ ThemeData getApplicationTheme(BuildContext context) {
       // canvasColor: ColorManager.background,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+        foregroundColor: ColorManager.whiteText,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
+        backgroundColor: ColorManager.primary,
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-        primary: ColorManager.primary,
-        onPrimary: ColorManager.whiteText,
         textStyle: getRegularStyle(
           color: ColorManager.black,
         ),
