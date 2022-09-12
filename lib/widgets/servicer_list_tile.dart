@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/styles_manager.dart';
 
 class ServicerListTile extends StatelessWidget {
   const ServicerListTile({super.key});
@@ -20,7 +22,7 @@ class ServicerListTile extends StatelessWidget {
         ],
       ),
       width: size.width,
-      height: 100,
+      height: 120,
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
@@ -28,19 +30,110 @@ class ServicerListTile extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              decoration: const BoxDecoration(
-                color: ColorManager.primary,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: ColorManager.primary.withOpacity(0.3),
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(6),
                     bottomLeft: Radius.circular(6)),
               ),
               width: size.width * 0.3,
-              child: ClipRRect(child: Image.asset(ImageAssets.profileIcon)),
+              height: 120,
+              child: Center(
+                child: CircleAvatar(
+                  radius: 43,
+                  backgroundColor: ColorManager.whiteColor,
+                  child: CircleAvatar(
+                    radius: 40,
+                    child: Image.asset(ImageAssets.profileIcon),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 18,
             ),
             SizedBox(
-              width: size.width * 0.3,
+              width: size.width * 0.35,
               child: Column(
-                children: const [Text('data')],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Akhil Mahesh',
+                      style: getRegularStyle(
+                          color: ColorManager.black, fontSize: 16)),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text('Car Servicer',
+                      style: getRegularStyle(
+                          color: const Color.fromARGB(255, 173, 173, 173),
+                          fontSize: 15)),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RatingBar.builder(
+                        initialRating: 4,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 4,
+                        itemSize: 20,
+                        ignoreGestures: true,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 2.50),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(ImageAssets.tools),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text("Engin Worker",
+                          style: getRegularStyle(
+                              color: const Color.fromARGB(255, 173, 173, 173),
+                              fontSize: 15))
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: SizedBox(
+                width: size.width * 0.1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(
+                      Icons.favorite,
+                      size: 23,
+                      color: ColorManager.primary,
+                    ),
+                    Column(
+                      children: [
+                        Image.asset(ImageAssets.car),
+                        Text("30 KM",
+                            style: getMediumtStyle(
+                                color: const Color.fromARGB(255, 173, 173, 173),
+                                fontSize: 10))
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],

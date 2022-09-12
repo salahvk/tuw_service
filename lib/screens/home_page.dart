@@ -3,10 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/screens/messagePage.dart';
-import 'package:social_media_services/screens/profile_page.dart';
-import 'package:social_media_services/screens/profile_service_page.dart';
+
 import 'package:social_media_services/screens/serviceHome.dart';
-import 'package:social_media_services/widgets/customized_drawer.dart';
+import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,49 +25,7 @@ class _HomePageState extends State<HomePage> {
       endDrawer: SizedBox(
         height: size.height * 0.825,
         width: size.width * 0.6,
-        child: DrawerHeader(
-            decoration: const BoxDecoration(
-              color: ColorManager.primary,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-            ),
-            margin: const EdgeInsets.all(0.0),
-            padding: const EdgeInsets.all(0.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomDrawerList(
-                  title: 'My Profile',
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const ProfilePage();
-                    }));
-                  },
-                ),
-                CustomDrawerList(
-                  title: 'Address Book',
-                ),
-                CustomDrawerList(
-                  title: 'Become a Service man',
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const ProfileServicePage();
-                    }));
-                  },
-                ),
-                CustomDrawerList(
-                  title: 'Privacy Policy',
-                ),
-                CustomDrawerList(
-                  title: 'Logout',
-                ),
-                const SizedBox(
-                  height: 150,
-                )
-              ],
-            )),
+        child: const CustomDrawer(),
       ),
       bottomNavigationBar: Stack(
         children: [

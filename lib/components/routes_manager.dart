@@ -8,6 +8,7 @@ import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/profile_service_page.dart';
 import 'package:social_media_services/screens/servicer.dart';
+import 'package:social_media_services/widgets/chat_screen.dart';
 
 class Routes {
   static const String introductionScreen = '/';
@@ -21,6 +22,7 @@ class Routes {
   static const String paymentSuccessfull = '/paymentSuccessfull';
   static const String paymentServicePage = '/paymentServicePage';
   static const String servicerPage = '/servicerPage';
+  static const String chatScreen = '/chatScreen';
 }
 
 class RouteGenerator {
@@ -44,6 +46,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ChooseServicePage());
       case Routes.servicerPage:
         return MaterialPageRoute(builder: (_) => const ServicerPage());
+      case Routes.chatScreen:
+        return MaterialPageRoute(builder: (_) => const ChatScreen());
       default:
         return unDefinedRoute();
     }

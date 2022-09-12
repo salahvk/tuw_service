@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:flutter/material.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 
 class ProfileTitleWidget extends StatelessWidget {

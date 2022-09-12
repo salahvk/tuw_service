@@ -50,9 +50,7 @@ class IntroductionScreen extends StatelessWidget {
                     child: Text(
                       'Choose Any Language',
                       style: getRegularStyle(
-                          // const Color(0xff707070)
-                          color: ColorManager.grayLight,
-                          fontSize: 16),
+                          color: ColorManager.grayLight, fontSize: 16),
                     ),
                   ),
                   Row(

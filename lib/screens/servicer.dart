@@ -1,9 +1,12 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/widgets/chat_screen.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
+import 'package:social_media_services/widgets/ser_status_custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_list_tile.dart';
 
 class ServicerPage extends StatefulWidget {
@@ -25,6 +28,12 @@ class _ServicerPageState extends State<ServicerPage> {
       'Item4',
     ];
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      endDrawer: SizedBox(
+        height: size.height * 0.825,
+        width: size.width * 0.54,
+        child: const SerDrawer(),
+      ),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -97,24 +106,31 @@ class _ServicerPageState extends State<ServicerPage> {
                 const SizedBox(
                   width: 10,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: ColorManager.whiteColor,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10.0,
-                        color: Colors.grey.shade300,
-                        // offset: const Offset(5, 8.5),
+                Builder(
+                  builder: (context) => InkWell(
+                    onTap: () {
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ColorManager.whiteColor,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 10.0,
+                            color: Colors.grey.shade300,
+                            // offset: const Offset(5, 8.5),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  width: size.width * .09,
-                  height: 38,
-                  child: const Icon(
-                    Icons.filter_alt,
-                    size: 25,
-                    color: ColorManager.primary,
+                      width: size.width * .09,
+                      height: 38,
+                      child: const Icon(
+                        Icons.filter_alt,
+                        size: 25,
+                        color: ColorManager.primary,
+                      ),
+                    ),
                   ),
                 )
               ],
@@ -345,10 +361,35 @@ class _ServicerPageState extends State<ServicerPage> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-              child: ServicerListTile(),
-            )
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: ((context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.chatScreen);
+                        },
+                        child: const ServicerListTile()),
+                  );
+                }),
+                itemCount: 3,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              child: ElevatedButton(
+                  onPressed: () {
+                    // player.stop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0)),
+                  child: Text(
+                    "Continue",
+                    style: getRegularStyle(
+                        color: ColorManager.whiteText, fontSize: 16),
+                  )),
+            ),
           ],
         ),
       )),

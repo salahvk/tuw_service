@@ -44,6 +44,8 @@ dependencies:
   just_audio: ^0.9.28
   animated_snack_bar: ^0.2.2
   file_picker: ^3.0.4
+  flutter_rating_bar: ^4.0.1
+  simple_animations: ^5.0.0+2
   # awesome_snackbar_content: ^0.0.8
 
 dev_dependencies:
