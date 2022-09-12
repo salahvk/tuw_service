@@ -1,7 +1,9 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/camera_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -90,10 +92,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: ColorManager.primary,
                           borderRadius: BorderRadius.circular(5)),
                       width: size.width * .435,
-                      height: 180,
+                      height: 150,
                       child: Padding(
                         padding:
-                            const EdgeInsets.only(top: 40, bottom: 37, left: 0),
+                            const EdgeInsets.only(top: 20, bottom: 20, left: 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -103,9 +105,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             const ChatAddTile(
                                 title: "Documents",
                                 image: ImageAssets.documents),
-                            const SizedBox(
-                              height: 3,
-                            ),
+                            // const SizedBox(
+                            //   height: 3,
+                            // ),
                             InkWell(
                               onTap: () {
                                 setState(() {
@@ -139,10 +141,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: ColorManager.primary,
                           borderRadius: BorderRadius.circular(5)),
                       width: size.width * .53,
-                      height: 120,
+                      height: 130,
                       child: Padding(
                         padding:
-                            const EdgeInsets.only(top: 13, bottom: 13, left: 0),
+                            const EdgeInsets.only(top: 14, bottom: 14, left: 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -229,10 +231,24 @@ class _ChatScreenState extends State<ChatScreen> {
                     const SizedBox(
                       width: 5,
                     ),
-                    const Icon(
-                      Icons.camera_alt,
-                      size: 30,
-                      color: ColorManager.primary,
+                    InkWell(
+                      onTap: () async {
+                        print('Icon pressed');
+                        late List<CameraDescription> cameras;
+                        cameras = await availableCameras();
+
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (ctx) {
+                          return CameraApp(
+                            cameras: cameras,
+                          );
+                        }));
+                      },
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                        color: ColorManager.primary,
+                      ),
                     ),
                     const SizedBox(
                       width: 5,

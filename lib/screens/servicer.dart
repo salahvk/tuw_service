@@ -4,7 +4,6 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
-import 'package:social_media_services/widgets/chat_screen.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/ser_status_custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_list_tile.dart';

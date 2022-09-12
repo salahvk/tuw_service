@@ -8,7 +8,7 @@ import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/profile_service_page.dart';
 import 'package:social_media_services/screens/servicer.dart';
-import 'package:social_media_services/widgets/chat_screen.dart';
+import 'package:social_media_services/screens/chat_screen.dart';
 
 class Routes {
   static const String introductionScreen = '/';
