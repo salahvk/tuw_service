@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/screens/camera_screen.dart';
 
@@ -41,27 +42,33 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Akhil Mahesh',
-                style: getRegularStyle(color: ColorManager.black, fontSize: 16),
-              ),
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(ImageAssets.tools),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text("Engin Worker",
-                      style: getRegularStyle(
-                          color: const Color.fromARGB(255, 173, 173, 173),
-                          fontSize: 15))
-                ],
-              ),
-            ],
+          title: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, Routes.workerDetails);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Akhil Mahesh',
+                  style:
+                      getRegularStyle(color: ColorManager.black, fontSize: 16),
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(ImageAssets.tools),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text("Engin Worker",
+                        style: getRegularStyle(
+                            color: const Color.fromARGB(255, 173, 173, 173),
+                            fontSize: 15))
+                  ],
+                ),
+              ],
+            ),
           ),
           actions: const [
             Icon(Icons.videocam),

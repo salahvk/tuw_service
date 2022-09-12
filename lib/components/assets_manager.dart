@@ -17,4 +17,5 @@ class ImageAssets {
   static const String currentLocation = 'assets/current_location.png';
   static const String chooseFromApp = 'assets/choose_from_app.png';
   static const String addressCard = 'assets/address_card.png';
+  static const String privacy = 'assets/Privacy.png';
 }

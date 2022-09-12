@@ -304,18 +304,6 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
   }
 
   continueToPay() {
-    // var snackBar = SnackBar(
-    //   elevation: 0,
-    //   behavior: SnackBarBehavior.fixed,
-    //   backgroundColor: Colors.transparent,
-    //   duration: const Duration(seconds: 1),
-    //   content: AwesomeSnackbarContent(
-    //     title: 'Error!',
-    //     message: 'Please agree the terms and conditions',
-    //     contentType: ContentType.failure,
-    //   ),
-    // );
-
     isTickSelected
         ? Navigator.push(context, MaterialPageRoute(builder: (ctx) {
             return const PaymentServicePage();

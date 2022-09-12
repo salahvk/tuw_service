@@ -4,9 +4,11 @@ import 'package:social_media_services/components/styles_manager.dart';
 
 class LanguageButton extends StatelessWidget {
   final String language;
+  final Color color;
   const LanguageButton({
     Key? key,
     required this.language,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class LanguageButton extends StatelessWidget {
             color: Colors.grey.shade400,
             offset: const Offset(5, 6.5),
           ),
-        ], color: ColorManager.primary, borderRadius: BorderRadius.circular(5)),
+        ], color: color, borderRadius: BorderRadius.circular(5)),
         height: 32,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(13, 4, 13, 4),

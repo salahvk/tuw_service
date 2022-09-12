@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/screens/profile_page.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/screens/profile_service_page.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
 
@@ -23,14 +23,11 @@ class CustomDrawer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomDrawerList(
-              title: 'My Profile',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                  return const ProfilePage();
-                }));
-              },
-            ),
+                title: 'My Profile',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, Routes.myProfile);
+                }),
             CustomDrawerList(
               title: 'Address Book',
             ),
@@ -45,9 +42,14 @@ class CustomDrawer extends StatelessWidget {
             ),
             CustomDrawerList(
               title: 'Privacy Policy',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, Routes.privacyPolicy);
+              },
             ),
             CustomDrawerList(
               title: 'Logout',
+              onTap: () {},
             ),
             const SizedBox(
               height: 150,

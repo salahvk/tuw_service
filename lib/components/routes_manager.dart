@@ -5,10 +5,12 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/screens/privacy_policy.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/profile_service_page.dart';
 import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
+import 'package:social_media_services/screens/worker_detailed_user.dart';
 
 class Routes {
   static const String introductionScreen = '/';
@@ -23,6 +25,8 @@ class Routes {
   static const String paymentServicePage = '/paymentServicePage';
   static const String servicerPage = '/servicerPage';
   static const String chatScreen = '/chatScreen';
+  static const String workerDetails = '/workerDetails';
+  static const String privacyPolicy = '/privacyPolicy';
 }
 
 class RouteGenerator {
@@ -48,6 +52,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ServicerPage());
       case Routes.chatScreen:
         return MaterialPageRoute(builder: (_) => const ChatScreen());
+      case Routes.workerDetails:
+        return MaterialPageRoute(builder: (_) => const WorkerDetailed());
+      case Routes.privacyPolicy:
+        return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
       default:
         return unDefinedRoute();
     }

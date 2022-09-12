@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -6,9 +7,15 @@ import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/language_button.dart';
 
-class IntroductionScreen extends StatelessWidget {
+class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({Key? key}) : super(key: key);
 
+  @override
+  State<IntroductionScreen> createState() => _IntroductionScreenState();
+}
+
+class _IntroductionScreenState extends State<IntroductionScreen> {
+  String selected = '';
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -55,15 +62,45 @@ class IntroductionScreen extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      LanguageButton(
-                        language: 'English',
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            selected = 'English';
+                          });
+                        },
+                        child: LanguageButton(
+                          language: 'English',
+                          color: selected == 'English'
+                              ? ColorManager.selectedGreen
+                              : ColorManager.primary,
+                        ),
                       ),
-                      LanguageButton(
-                        language: 'Arabic',
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            selected = 'Arabic';
+                          });
+                        },
+                        child: LanguageButton(
+                          language: 'Arabic',
+                          color: selected == 'Arabic'
+                              ? ColorManager.selectedGreen
+                              : ColorManager.primary,
+                        ),
                       ),
-                      LanguageButton(
-                        language: 'Hindi',
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            selected = 'Hindi';
+                          });
+                        },
+                        child: LanguageButton(
+                          language: 'Hindi',
+                          color: selected == 'Hindi'
+                              ? ColorManager.selectedGreen
+                              : ColorManager.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -106,10 +143,7 @@ class IntroductionScreen extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(elevation: 0),
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (ctx) {
-                          return const PhoneNumberScreen();
-                        }));
+                        selectLanguage();
                       },
                       child: Text('Get Started',
                           style: getRegularStyle(
@@ -123,5 +157,20 @@ class IntroductionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void selectLanguage() {
+    selected.isNotEmpty
+        ? Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+            return const PhoneNumberScreen();
+          }))
+        : AnimatedSnackBar.material('Please Select a Language to Continue',
+                type: AnimatedSnackBarType.error,
+                borderRadius: BorderRadius.circular(6),
+                // brightness: Brightness.dark,
+                duration: const Duration(seconds: 1))
+            .show(
+            context,
+          );
   }
 }
