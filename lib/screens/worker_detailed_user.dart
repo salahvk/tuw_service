@@ -79,13 +79,16 @@ class WorkerDetailed extends StatelessWidget {
                 children: [
                   Container(
                     height: 80,
-                    width: size.width * .3,
+                    width: size.width * .28,
                     color: ColorManager.grayLight,
                     child: CachedNetworkImage(
                       imageUrl: engineWorker1,
                       fit: BoxFit.cover,
                       // cacheManager: customCacheManager,
                     ),
+                  ),
+                  const SizedBox(
+                    width: 4,
                   ),
                   Container(
                     height: 80,
@@ -97,9 +100,12 @@ class WorkerDetailed extends StatelessWidget {
                       // cacheManager: customCacheManager,
                     ),
                   ),
+                  const SizedBox(
+                    width: 3,
+                  ),
                   Container(
                     height: 80,
-                    width: size.width * .3,
+                    width: size.width * .28,
                     color: ColorManager.grayLight,
                     child: CachedNetworkImage(
                       imageUrl: engineWorker1,

@@ -3,6 +3,7 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/theme_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/screens/worker_admin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: getApplicationTheme(context).copyWith(useMaterial3: true),
       initialRoute: Routes.introductionScreen,
       onGenerateRoute: RouteGenerator.getRoute,
-      // home: const ProfileServicePage(),
+      home: const WorkerDetailedAdmin(),
     );
   }
 }
