@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_services/Remaining%20pages/rating_page.dart';
+import 'package:social_media_services/Remaining%20pages/user_address_page.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/theme_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: getApplicationTheme(context).copyWith(useMaterial3: true),
       initialRoute: Routes.introductionScreen,
       onGenerateRoute: RouteGenerator.getRoute,
-      home: const RatingPage(),
+      home: const UserAddressPage(),
     );
   }
 }
