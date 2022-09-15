@@ -4,8 +4,8 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/lorem.dart';
 
-class PrivacyPolicy extends StatelessWidget {
-  const PrivacyPolicy({super.key});
+class TermsAndConditionPage extends StatelessWidget {
+  const TermsAndConditionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class PrivacyPolicy extends StatelessWidget {
                     width: 8,
                   ),
                   Text(
-                    "Privacy Policy",
+                    "Terms & Conditions",
                     style: getRegularStyle(
                         color: ColorManager.black, fontSize: 17),
                   )

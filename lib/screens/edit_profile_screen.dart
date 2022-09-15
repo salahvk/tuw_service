@@ -275,23 +275,35 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                       BoxShadow(
                         blurRadius: 10.0,
                         color: Colors.grey.shade300,
-                        // offset: const Offset(5, 8.5),
+                        offset: const Offset(4, 4.5),
                       ),
                     ],
                   ),
-                  child: SizedBox(
+                  child: Container(
                     child: TextField(
                       minLines: 4,
                       maxLines: 5,
                       style: const TextStyle(),
                       controller: aboutController,
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 10),
-                          hintText: 'Enter About',
-                          hintStyle: getRegularStyle(
-                              color: const Color.fromARGB(255, 173, 173, 173),
-                              fontSize: 15)),
+                              contentPadding: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 10),
+                              hintText: 'Enter About',
+                              hintStyle: getRegularStyle(
+                                  color:
+                                      const Color.fromARGB(255, 173, 173, 173),
+                                  fontSize: 15))
+                          .copyWith(
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      color: ColorManager.whiteColor,
+                                      width: .5)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      color: ColorManager.whiteColor,
+                                      width: .5))),
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
+import 'package:social_media_services/screens/Terms&Conditions.dart';
 import 'package:social_media_services/screens/choose_service_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
@@ -27,6 +28,7 @@ class Routes {
   static const String chatScreen = '/chatScreen';
   static const String workerDetails = '/workerDetails';
   static const String privacyPolicy = '/privacyPolicy';
+  static const String termsAndConditions = '/termsAndConditions';
 }
 
 class RouteGenerator {
@@ -56,6 +58,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const WorkerDetailed());
       case Routes.privacyPolicy:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
+      case Routes.termsAndConditions:
+        return MaterialPageRoute(builder: (_) => const TermsAndConditionPage());
       default:
         return unDefinedRoute();
     }

@@ -87,7 +87,7 @@ class RatingPage extends StatelessWidget {
                     ),
                     Flexible(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(0, 15, 10, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

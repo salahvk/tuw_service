@@ -53,7 +53,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                         ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 33, 0, 15),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 15),
                     child: Text(
                       'Choose Any Language',
                       style: getRegularStyle(
@@ -105,7 +105,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 33, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
                     child: Text("Lorem Ipsum has industry's \nstandard dummy",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.robotoSlab(
@@ -122,7 +122,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             ]))),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                     child: Text(
                         "Lorem Ipsum has been the industry's  \nstandard dummy",
                         textAlign: TextAlign.center,
