@@ -9,24 +9,24 @@ class TermsAndCondition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('By continuing, you agree to ',
-              style: getRegularStyle(
-                  color: const Color(0xffafafaf), fontSize: 13)),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Routes.termsAndConditions);
-            },
-            child: Text('Terms & Conditions',
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, Routes.termsAndConditions);
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('By continuing, you agree to ',
+                style: getRegularStyle(
+                    color: const Color(0xffafafaf), fontSize: 13)),
+            Text('Terms & Conditions',
                 style: getRegularStyle(
                         color: const Color(0xffafafaf), fontSize: 13)
                     .copyWith(decoration: TextDecoration.underline)),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Stack(
         children: [
           Container(
-            height: 72,
+            height: 45,
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 blurRadius: 5.0,
@@ -38,43 +38,29 @@ class _HomePageState extends State<HomePage> {
                 offset: const Offset(6, 1),
               ),
             ]),
+          ),
+          SizedBox(
+            height: 44,
             child: GNav(
-              // rippleColor: Colors.grey[300]!,
-              // hoverColor: ColorManager.errorRed,
               tabMargin: const EdgeInsets.symmetric(
-                vertical: 13,
+                vertical: 0,
               ),
               gap: 0,
               backgroundColor: ColorManager.whiteColor,
               mainAxisAlignment: MainAxisAlignment.center,
               activeColor: ColorManager.grayDark,
               iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 11),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               duration: const Duration(milliseconds: 400),
               tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
-
               color: ColorManager.black,
               tabs: const [
                 GButton(
                   icon: Icons.home,
-                  // text: 'Home',
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  // text: 'Message',
                 ),
-                // GButton(
-                //   icon: Icons.music_note_sharp,
-                //   text: 'Music',
-                // ),
-                // GButton(
-                //   icon: Icons.person,
-                //   text: 'Profile',
-                // ),
-                // GButton(
-                //   icon: Icons.home,
-                //   text: 'Home',
-                // ),
               ],
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
@@ -85,17 +71,20 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-              right: 15,
-              bottom: 24,
+              right: 5,
+              bottom: 0,
               child: Builder(
                 builder: (context) => InkWell(
                   onTap: () {
                     Scaffold.of(context).openEndDrawer();
                   },
-                  child: const Icon(
-                    Icons.menu,
-                    size: 25,
-                    color: ColorManager.black,
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.menu,
+                      size: 25,
+                      color: ColorManager.black,
+                    ),
                   ),
                 ),
               ))

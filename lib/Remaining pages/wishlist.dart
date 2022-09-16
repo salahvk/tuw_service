@@ -1,16 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/messagePage.dart';
+import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/widgets/custom_drawer.dart';
 
-class WishList extends StatelessWidget {
+class WishList extends StatefulWidget {
   const WishList({super.key});
 
+  @override
+  State<WishList> createState() => _WishListState();
+}
+
+class _WishListState extends State<WishList> {
+  int _selectedIndex = 2;
+  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      endDrawer: SizedBox(
+        height: size.height * 0.825,
+        width: size.width * 0.6,
+        child: const CustomDrawer(),
+      ),
+      // * Custom bottom Nav
+      bottomNavigationBar: Stack(
+        children: [
+          Container(
+            height: 45,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                blurRadius: 5.0,
+                color: Colors.grey.shade400,
+                offset: const Offset(6, 1),
+              ),
+            ]),
+          ),
+          SizedBox(
+            height: 44,
+            child: GNav(
+              tabMargin: const EdgeInsets.symmetric(
+                vertical: 0,
+              ),
+              gap: 0,
+              backgroundColor: ColorManager.whiteColor,
+              mainAxisAlignment: MainAxisAlignment.center,
+              activeColor: ColorManager.grayDark,
+              iconSize: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              duration: const Duration(milliseconds: 400),
+              tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
+              color: ColorManager.black,
+              tabs: const [
+                GButton(
+                  icon: Icons.home,
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.message,
+                ),
+              ],
+              haptic: true,
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ),
+          ),
+          Positioned(
+              right: 5,
+              bottom: 0,
+              child: Builder(
+                builder: (context) => InkWell(
+                  onTap: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.menu,
+                      size: 25,
+                      color: ColorManager.black,
+                    ),
+                  ),
+                ),
+              ))
+        ],
+      ),
       appBar: AppBar(
         title: Text(
           "WishList",

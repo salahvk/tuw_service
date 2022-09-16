@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/screens/worker_admin.dart';
 
 class ProfileImage extends StatefulWidget {
   double profileSize = 0;
   double iconSize = 0;
   double iconRadius = 0;
+  bool isNavigationActive = false;
   ProfileImage(
       {Key? key,
       required this.profileSize,
       required this.iconSize,
+      required this.isNavigationActive,
       required this.iconRadius})
       : super(key: key);
 
@@ -68,12 +71,10 @@ class _ProfileImageState extends State<ProfileImage> {
                     customBorder: const CircleBorder(),
                     enableFeedback: true,
                     excludeFromSemantics: true,
-                    onTap: () async {
-                      print("Img picker");
-                      final XFile? image =
-                          await _picker.pickImage(source: ImageSource.gallery);
-                      // final XFile? photo =
-                      //     await _picker.pickImage(source: ImageSource.camera);
+                    onTap: () {
+                      widget.isNavigationActive
+                          ? navigateToWorkersPage()
+                          : selectImage();
                     },
                     child: CircleAvatar(
                       radius: widget.iconRadius,
@@ -90,5 +91,18 @@ class _ProfileImageState extends State<ProfileImage> {
         ],
       ),
     );
+  }
+
+  selectImage() async {
+    print("Img picker");
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    // final XFile? photo =
+    //     await _picker.pickImage(source: ImageSource.camera);
+  }
+
+  navigateToWorkersPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const WorkerDetailedAdmin();
+    }));
   }
 }

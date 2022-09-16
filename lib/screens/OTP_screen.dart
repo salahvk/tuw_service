@@ -95,9 +95,10 @@ class _OTPscreenState extends State<OTPscreen> {
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 0),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: (ctx) {
                       return const EditProfileScreen();
-                    }));
+                    }), (route) => false);
                   },
                   child: Text(
                     'Verify Now',

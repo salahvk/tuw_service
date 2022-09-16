@@ -20,4 +20,6 @@ class ImageAssets {
   static const String privacy = 'assets/Privacy.png';
   static const String penEdit = 'assets/penEdit.png';
   static const String addImage = 'assets/add_image.png';
+  static const String homeIcon = 'assets/homeIcon.png';
+  static const String chatIcon = 'assets/chatIcon.png';
 }

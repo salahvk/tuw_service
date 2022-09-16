@@ -1,9 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/screens/messagePage.dart';
+import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/ser_status_custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_list_tile.dart';
@@ -17,6 +21,8 @@ class ServicerPage extends StatefulWidget {
 
 class _ServicerPageState extends State<ServicerPage> {
   String? selectedValue;
+  int _selectedIndex = 2;
+  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -32,6 +38,77 @@ class _ServicerPageState extends State<ServicerPage> {
         height: size.height * 0.825,
         width: size.width * 0.54,
         child: const SerDrawer(),
+      ),
+      //   drawerEnableOpenDragGesture: false,
+      // endDrawer: SizedBox(
+      //   height: size.height * 0.825,
+      //   width: size.width * 0.6,
+      //   child: const CustomDrawer(),
+      // ),
+      // * Custom bottom Nav
+      bottomNavigationBar: Stack(
+        children: [
+          Container(
+            height: 45,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                blurRadius: 5.0,
+                color: Colors.grey.shade400,
+                offset: const Offset(6, 1),
+              ),
+            ]),
+          ),
+          SizedBox(
+            height: 44,
+            child: GNav(
+              tabMargin: const EdgeInsets.symmetric(
+                vertical: 0,
+              ),
+              gap: 0,
+              backgroundColor: ColorManager.whiteColor,
+              mainAxisAlignment: MainAxisAlignment.center,
+              activeColor: ColorManager.grayDark,
+              iconSize: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              duration: const Duration(milliseconds: 400),
+              tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
+              color: ColorManager.black,
+              tabs: const [
+                GButton(
+                  icon: Icons.home,
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.message,
+                ),
+              ],
+              haptic: true,
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ),
+          ),
+          Positioned(
+              right: 5,
+              bottom: 0,
+              child: Builder(
+                builder: (context) => InkWell(
+                  onTap: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.menu,
+                      size: 25,
+                      color: ColorManager.black,
+                    ),
+                  ),
+                ),
+              ))
+        ],
       ),
       body: SafeArea(
           child: Padding(

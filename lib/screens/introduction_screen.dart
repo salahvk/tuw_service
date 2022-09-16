@@ -1,4 +1,3 @@
-import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -160,17 +159,19 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   }
 
   void selectLanguage() {
-    selected.isNotEmpty
-        ? Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-            return const PhoneNumberScreen();
-          }))
-        : AnimatedSnackBar.material('Please Select a Language to Continue',
-                type: AnimatedSnackBarType.error,
-                borderRadius: BorderRadius.circular(6),
-                // brightness: Brightness.dark,
-                duration: const Duration(seconds: 1))
-            .show(
-            context,
-          );
+    // selected.isNotEmpty
+    //     ?
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const PhoneNumberScreen();
+    }));
+    // :
+    //  AnimatedSnackBar.material('Please Select a Language to Continue',
+    //         type: AnimatedSnackBarType.error,
+    //         borderRadius: BorderRadius.circular(6),
+    //         // brightness: Brightness.dark,
+    //         duration: const Duration(seconds: 1))
+    //     .show(
+    //     context,
+    //   );
   }
 }
