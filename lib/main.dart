@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: getApplicationTheme(context).copyWith(useMaterial3: true),
       initialRoute: Routes.introductionScreen,
       onGenerateRoute: RouteGenerator.getRoute,
-      // home: const SearchNearService(),
+      // home: CountUpTimerPage(),
     );
   }
 }

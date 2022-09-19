@@ -62,12 +62,14 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
               duration: const Duration(milliseconds: 400),
               tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
               color: ColorManager.black,
-              tabs: const [
+              tabs: [
                 GButton(
-                  icon: Icons.home,
+                  icon: FontAwesomeIcons.message,
+                  leading: Image.asset(ImageAssets.homeIcon),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
+                  leading: Image.asset(ImageAssets.chatIcon),
                 ),
               ],
               haptic: true,

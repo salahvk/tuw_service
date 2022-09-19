@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
@@ -67,12 +68,17 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
               duration: const Duration(milliseconds: 400),
               tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
               color: ColorManager.black,
-              tabs: const [
+              tabs: [
                 GButton(
-                  icon: Icons.home,
+                  icon: FontAwesomeIcons.message,
+                  leading: Image.asset(
+                    ImageAssets.homeIcon,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
+                  leading: Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover),
                 ),
               ],
               haptic: true,

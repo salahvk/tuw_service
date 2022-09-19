@@ -1,10 +1,15 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/screens/camera_screen.dart';
+import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:social_media_services/widgets/chat_add_tile.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:vibration/vibration.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -14,11 +19,51 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _isHours = true;
   bool ismicVisible = true;
   bool ismenuVisible = false;
   bool isMapmenuVisible = false;
+  bool isDropped = false;
+  // bool isAnimationVisible = false;
+  bool isRecordingOn = false;
+  bool isVibrantFeatureAvailable = false;
+
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
+    mode: StopWatchMode.countUp,
+    onChange: (value) => print('onChange $value'),
+    onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
+    onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
+    onStopped: () {
+      print('onStop');
+    },
+    onEnded: () {
+      print('onEnded');
+    },
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    initfun();
+    // isVib();
+    // setState(() {
+    //   isVibrantFeatureAvailable = isVib();
+    // });
+
+    /// Can be set preset time. This case is "00:01.23".
+    // _stopWatchTimer.setPresetTime(mSec: 1234);
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // _stopWatchTimer.onStartTimer;
+
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -261,10 +306,15 @@ class _ChatScreenState extends State<ChatScreen> {
                       width: 5,
                     ),
                     ismicVisible
-                        ? const Icon(
-                            Icons.mic_none_outlined,
-                            size: 30,
-                            color: ColorManager.primary,
+                        ? InkWell(
+                            onTap: () {
+                              print("object");
+                            },
+                            child: const Icon(
+                              Icons.mic_none_outlined,
+                              size: 30,
+                              color: ColorManager.primary,
+                            ),
                           )
                         : const Icon(
                             Icons.send,
@@ -277,46 +327,275 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
               ),
-            )
+            ),
+            ismicVisible
+                ? Positioned(
+                    bottom: 16,
+                    right: 4,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: ColorManager.whiteColor,
+                          // border: isAnimationVisible
+                          //     ? Border.all(
+                          //         color: ColorManager.grayLight,
+                          //       )
+                          //     : Border.all(color: ColorManager.whiteColor),
+                          borderRadius: BorderRadius.circular(10)),
+                      height:
+                          //  isAnimationVisible ? 125 :
+                          35,
+                      width: 35,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // isAnimationVisible
+                          //     ? DragTarget<String>(
+                          //         builder: (
+                          //           BuildContext context,
+                          //           List<dynamic> accepted,
+                          //           List<dynamic> rejected,
+                          //         ) {
+                          //           return SizedBox(
+                          //               height: 90,
+                          //               width: 35,
+                          //               // color: Colors.yellow,
+                          //               child: Column(
+                          //                 children: [
+                          //                   isDropped
+                          //                       ? const Icon(Icons.lock)
+                          //                       : const Icon(
+                          //                           Icons.lock_open,
+                          //                         )
+                          //                 ],
+                          //               ));
+                          //         },
+                          //         onWillAccept: (data) {
+                          //           return data == 'red';
+                          //         },
+                          //         onAccept: (data) {
+                          //           setState(() {
+                          //             isDropped = true;
+                          //           });
+                          //         },
+                          //       )
+                          //     : Container(),
+                          // isAnimationVisible
+                          //     ? const SizedBox(
+                          //         height: 0,
+                          //       )
+                          //     : Container(),
+                          Draggable<String>(
+                            // Data is the value this Draggable stores.
+                            // onDragStarted: () {
+                            //   setState(() {
+                            //     isAnimationVisible = true;
+                            //   });
+                            // },
+                            data: 'red',
+                            feedback: const Icon(
+                              Icons.mic_none_outlined,
+                              size: 30,
+                              color: ColorManager.primary,
+                            ),
+                            // * background item
+                            axis: Axis.vertical,
+                            childWhenDragging: const Icon(
+                              Icons.mic_rounded,
+                              size: 30,
+                              color: ColorManager.grayLight,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Vibration.vibrate(duration: 200);
+                                showSnackBar("Long press to record", context);
+                              },
+                              // onTap: () async {
+                              //   // initfun();
+                              //   _stopWatchTimer.onStartTimer;
+                              //   print('object');
+                              //   // await Vibration.hasVibrator() != null
+                              //   //     ? Vibration.vibrate(duration: 200)
+                              //   //     : Vibration.cancel();
+                              //   showSnackBar("Long press to record", context);
+                              // },
+                              // onLongPress: () {
+                              //   // initfun();
+                              //   _stopWatchTimer.onStartTimer;
+                              //   // await Vibration.hasVibrator() != null
+                              //   //     ? Vibration.vibrate(duration: 200)
+                              //   //     : Vibration.cancel();
+                              //   // setState(() {
+                              //   //   // isAnimationVisible = true;
+                              //   // });
+                              //   // await initfun();
+                              // },
+                              onLongPress: () {
+                                _stopWatchTimer.onStartTimer();
+                                setState(() {
+                                  isRecordingOn = true;
+                                });
+                                // Vibration.hasVibrator() != null
+                                // isVibrantFeatureAvailable
+                                // ?
+                                Vibration.vibrate(duration: 200);
+                                // : Vibration.cancel();
+                              },
+                              child: const Icon(
+                                Icons.mic_none_outlined,
+                                size: 30,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
+
+            // * Recording on container
+
+            isRecordingOn
+                ? Positioned(
+                    bottom: 0,
+                    // top: 20,
+                    // right: 0,
+                    // right: 0,
+                    child: Container(
+                      height: 60,
+                      width: size.width,
+                      color: ColorManager.whiteColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            const Icon(
+                              Icons.delete,
+                              color: ColorManager.black,
+                              size: 30,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            SizedBox(
+                              width: 50,
+                              child: Row(
+                                children: [
+                                  StreamBuilder<int>(
+                                    stream: _stopWatchTimer.minuteTime,
+                                    initialData:
+                                        _stopWatchTimer.minuteTime.value,
+                                    builder: (context, snap) {
+                                      final value = snap.data;
+                                      print('Listen every minute. $value');
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            value.toString(),
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: 'Helvetica',
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+
+                                  //* Display every second.
+                                  StreamBuilder<int>(
+                                    stream: _stopWatchTimer.secondTime,
+                                    initialData:
+                                        _stopWatchTimer.secondTime.value,
+                                    builder: (context, snap) {
+                                      final value = snap.data;
+                                      final seconds = value! % 60;
+                                      print('Listen every second. $value');
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            ":${seconds.toString()}",
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Helvetica',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * .2,
+                            ),
+
+                            Shimmer.fromColors(
+                                baseColor: ColorManager.primary,
+                                highlightColor: ColorManager.indicatorBorGreen,
+                                child: Text(
+                                  "Recording",
+                                  style: getBoldtStyle(
+                                      color: ColorManager.background,
+                                      fontSize: 17),
+                                )),
+                            SizedBox(
+                              width: size.width * .2,
+                            ),
+                            // const Spacer(),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isRecordingOn = false;
+                                });
+                                _stopWatchTimer.onResetTimer();
+                              },
+                              child: const Icon(
+                                Icons.send,
+                                size: 30,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            )
+                          ],
+                        ),
+                      ),
+                    ))
+                : Container()
           ],
         ),
       ),
     );
   }
+
+  initfun() {
+    _stopWatchTimer.rawTime.listen((value) =>
+        print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}'));
+    _stopWatchTimer.minuteTime.listen((value) => print('minuteTime $value'));
+    _stopWatchTimer.secondTime.listen((value) => print('secondTime $value'));
+    _stopWatchTimer.records.listen((value) => print('records $value'));
+    _stopWatchTimer.fetchStopped
+        .listen((value) => print('stopped from stream'));
+    _stopWatchTimer.fetchEnded.listen((value) => print('ended from stream'));
+  }
 }
 
-class ChatAddTile extends StatelessWidget {
-  final String title;
-  final String image;
-  const ChatAddTile({
-    Key? key,
-    required this.title,
-    required this.image,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(
-          width: 20,
-        ),
-        SizedBox(
-          width: 25,
-          height: 25,
-          child: Image.asset(
-            image,
-            color: ColorManager.whiteColor,
-            fit: BoxFit.contain,
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Text(title,
-            style: getBoldtStyle(color: ColorManager.whiteColor, fontSize: 15))
-      ],
-    );
-  }
+bool isVib() {
+  final vib = Vibration.hasVibrator() != null ? true : false;
+  return vib;
 }
