@@ -71,14 +71,22 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
               tabs: [
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: Image.asset(
-                    ImageAssets.homeIcon,
-                    fit: BoxFit.cover,
+                  leading: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Image.asset(
+                      ImageAssets.homeIcon,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover),
+                  leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child:
+                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
                 ),
               ],
               haptic: true,

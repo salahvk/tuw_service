@@ -5,9 +5,11 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/screens/camera_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
+import 'package:social_media_services/widgets/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 
@@ -19,7 +21,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _isHours = true;
   bool ismicVisible = true;
   bool ismenuVisible = false;
   bool isMapmenuVisible = false;
@@ -30,28 +31,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
-    onChange: (value) => print('onChange $value'),
-    onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
-    onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
-    onStopped: () {
-      print('onStop');
-    },
-    onEnded: () {
-      print('onEnded');
-    },
   );
 
   @override
   void initState() {
     super.initState();
-    initfun();
+
     // isVib();
     // setState(() {
     //   isVibrantFeatureAvailable = isVib();
     // });
-
-    /// Can be set preset time. This case is "00:01.23".
-    // _stopWatchTimer.setPresetTime(mSec: 1234);
   }
 
   @override
@@ -62,8 +51,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // _stopWatchTimer.onStartTimer;
-
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -77,7 +64,6 @@ class _ChatScreenState extends State<ChatScreen> {
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: CircleAvatar(
-              // backgroundColor: ColorManager.grayLight.withOpacity(0.8),
               radius: 14,
               child: CircleAvatar(
                 radius: 16,
@@ -129,25 +115,47 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Stack(
           children: [
-            Positioned(
-                top: 0,
-                // left: 30,
-                child: Column(
-                  children: const [],
-                )),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+              child: Column(
+                children: [
+                  CustomChatBubble(
+                      isSendByme: true,
+                      seen: true,
+                      text: 'How can help you',
+                      image: "",
+                      time: "2:05 PM"),
+                  CustomChatBubble(
+                    isSendByme: false,
+                    seen: false,
+                    time: "3:00 PM",
+                    image: switzeland,
+                    text: 'Hi friend',
+                  ),
+                  CustomChatBubble(
+                    isSendByme: true,
+                    seen: false,
+                    time: "5:00 PM",
+                    image: '',
+                    text: 'Where are you now',
+                  ),
+                ],
+              ),
+            ),
+
             ismenuVisible
                 ? Positioned(
                     bottom: 60,
-                    left: 5,
+                    left: 2,
                     child: Container(
                       decoration: BoxDecoration(
                           color: ColorManager.primary,
                           borderRadius: BorderRadius.circular(5)),
-                      width: size.width * .435,
-                      height: 150,
+                      width: size.width * .49,
+                      height: 155,
                       child: Padding(
                         padding:
-                            const EdgeInsets.only(top: 20, bottom: 20, left: 0),
+                            const EdgeInsets.only(top: 25, bottom: 20, left: 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -187,13 +195,13 @@ class _ChatScreenState extends State<ChatScreen> {
             isMapmenuVisible
                 ? Positioned(
                     bottom: 60,
-                    right: 5,
+                    right: 2,
                     child: Container(
                       decoration: BoxDecoration(
                           color: ColorManager.primary,
                           borderRadius: BorderRadius.circular(5)),
-                      width: size.width * .53,
-                      height: 130,
+                      width: size.width * .49,
+                      height: 140,
                       child: Padding(
                         padding:
                             const EdgeInsets.only(top: 14, bottom: 14, left: 0),
@@ -581,17 +589,6 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
-  }
-
-  initfun() {
-    _stopWatchTimer.rawTime.listen((value) =>
-        print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}'));
-    _stopWatchTimer.minuteTime.listen((value) => print('minuteTime $value'));
-    _stopWatchTimer.secondTime.listen((value) => print('secondTime $value'));
-    _stopWatchTimer.records.listen((value) => print('records $value'));
-    _stopWatchTimer.fetchStopped
-        .listen((value) => print('stopped from stream'));
-    _stopWatchTimer.fetchEnded.listen((value) => print('ended from stream'));
   }
 }
 

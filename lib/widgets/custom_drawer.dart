@@ -13,7 +13,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return DrawerHeader(
         decoration: const BoxDecoration(
-          color: ColorManager.primary,
+          color: ColorManager.primary2,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
         ),

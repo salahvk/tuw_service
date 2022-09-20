@@ -13,11 +13,12 @@ class ChatAddTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(
-          width: 20,
+        SizedBox(
+          width: size.width * .03,
         ),
         SizedBox(
           width: 25,
@@ -28,8 +29,8 @@ class ChatAddTile extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         ),
-        const SizedBox(
-          width: 10,
+        SizedBox(
+          width: size.width * .025,
         ),
         Text(title,
             style: getBoldtStyle(color: ColorManager.whiteColor, fontSize: 15))

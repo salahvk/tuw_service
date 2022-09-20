@@ -29,25 +29,37 @@ class ServicerListTile extends StatelessWidget {
             color: ColorManager.whiteColor),
         child: Row(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: ColorManager.primary.withOpacity(0.3),
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(6),
-                    bottomLeft: Radius.circular(6)),
-              ),
-              width: size.width * 0.3,
-              height: 120,
-              child: Center(
-                child: CircleAvatar(
-                  radius: 43,
-                  backgroundColor: ColorManager.whiteColor,
-                  child: CircleAvatar(
-                    radius: 40,
-                    child: Image.asset(ImageAssets.profileIcon),
+            Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    // color: ColorManager.primary.withOpacity(0.3),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(6),
+                        bottomLeft: Radius.circular(6)),
+                  ),
+                  width: size.width * 0.3,
+                  height: 120,
+                  child: Center(
+                    child: CircleAvatar(
+                      radius: 43,
+                      backgroundColor: ColorManager.whiteColor,
+                      child: CircleAvatar(
+                        radius: 40,
+                        child: Image.asset(ImageAssets.profileIcon),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Positioned(
+                  height: 65,
+                  left: size.width * .06,
+                  child: const CircleAvatar(
+                    radius: 8,
+                    backgroundColor: ColorManager.primary,
+                  ),
+                )
+              ],
             ),
             const SizedBox(
               width: 18,

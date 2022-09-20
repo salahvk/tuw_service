@@ -15,12 +15,12 @@ class SerDrawer extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return DrawerHeader(
         decoration: const BoxDecoration(
-          color: ColorManager.primary,
+          color: ColorManager.primary2,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
         ),
         margin: const EdgeInsets.all(0.0),
-        padding: const EdgeInsets.fromLTRB(0.0, -25.0, 0.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(0.0, 0, 0.0, 0.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

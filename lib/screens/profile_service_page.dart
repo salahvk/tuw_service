@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/screens/choose_service_page.dart';
@@ -28,7 +29,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
   bool isTickSelected = false;
   DateTime selectedDate = DateTime.now();
   bool value = true;
-  int _selectedIndex = 2;
+  final int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
 
   @override
@@ -78,19 +79,32 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
               tabs: [
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: Image.asset(ImageAssets.homeIcon),
+                  leading: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Image.asset(
+                      ImageAssets.homeIcon,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: Image.asset(ImageAssets.chatIcon),
+                  leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child:
+                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
                 ),
               ],
               haptic: true,
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.homePage, (route) => false);
+                // setState(() {
+                //   _selectedIndex = index;
+                // });
               },
             ),
           ),

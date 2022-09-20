@@ -62,11 +62,22 @@ class _ProfilePageState extends State<ProfilePage> {
               tabs: [
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: Image.asset(ImageAssets.homeIcon),
+                  leading: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Image.asset(
+                      ImageAssets.homeIcon,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: Image.asset(ImageAssets.chatIcon),
+                  leading: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child:
+                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
                 ),
               ],
               haptic: true,
