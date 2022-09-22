@@ -5,12 +5,15 @@ import 'package:social_media_services/screens/OTP_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class PhoneNumberScreen extends StatelessWidget {
   const PhoneNumberScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -77,7 +80,7 @@ class PhoneNumberScreen extends StatelessWidget {
                         decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.only(
                                     left: 0, right: 10, top: 20, bottom: 20),
-                                hintText: 'Enter Mobile Number',
+                                hintText: str.m_ent_mob_no,
                                 hintStyle: getRegularStyle(
                                     color: ColorManager.grayLight,
                                     fontSize: 15))
@@ -105,8 +108,7 @@ class PhoneNumberScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(40, 40, 40, 30),
-            child: Text(
-                "We will send you an OTP for verify your mobile number.",
+            child: Text(str.m_sub1,
                 textAlign: TextAlign.center,
                 style: getRegularStyle(
                     color: ColorManager.grayLight, fontSize: 15)),
@@ -131,7 +133,7 @@ class PhoneNumberScreen extends StatelessWidget {
                     }));
                   },
                   child: Text(
-                    'Continue',
+                    str.m_continue,
                     style: getRegularStyle(
                         color: ColorManager.whiteText, fontSize: 18),
                   ))),

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/main.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/language_button.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({Key? key}) : super(key: key);
@@ -18,6 +21,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -36,7 +40,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text('Social Media Services',
+                    child: Text(str.l_heading,
                         style: GoogleFonts.robotoSlab(
                             textStyle: const TextStyle(
                                 color: Color(0xff16a64c),
@@ -54,7 +58,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 15),
                     child: Text(
-                      'Choose Any Language',
+                      str.l_choose_language,
                       style: getRegularStyle(
                           color: ColorManager.grayLight, fontSize: 16),
                     ),
@@ -67,6 +71,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           setState(() {
                             selected = 'English';
                           });
+                          MyApp.of(context).setLocale(
+                            const Locale.fromSubtags(
+                              languageCode: 'en',
+                            ),
+                          );
                         },
                         child: LanguageButton(
                           language: 'English',
@@ -80,6 +89,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           setState(() {
                             selected = 'Arabic';
                           });
+                          MyApp.of(context).setLocale(
+                            const Locale.fromSubtags(
+                              languageCode: 'ar',
+                            ),
+                          );
                         },
                         child: LanguageButton(
                           language: 'Arabic',
@@ -93,6 +107,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           setState(() {
                             selected = 'Hindi';
                           });
+                          MyApp.of(context).setLocale(
+                            const Locale.fromSubtags(
+                              languageCode: 'hi',
+                            ),
+                          );
                         },
                         child: LanguageButton(
                           language: 'Hindi',
@@ -105,7 +124,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
-                    child: Text("Lorem Ipsum has industry's \nstandard dummy",
+                    child: Text(str.l_description,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.robotoSlab(
                             textStyle: TextStyle(
@@ -122,8 +141,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Text(
-                        "Lorem Ipsum has been the industry's  \nstandard dummy",
+                    child: Text(str.l_description2,
                         textAlign: TextAlign.center,
                         style: getRegularStyle(
                             color: ColorManager.grayLight, fontSize: 16)),
@@ -144,7 +162,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       onPressed: () {
                         selectLanguage();
                       },
-                      child: Text('Get Started',
+                      child: Text(str.l_get_started,
                           style: getRegularStyle(
                               color: ColorManager.whiteColor, fontSize: 18)),
                     ),

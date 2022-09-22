@@ -1,4 +1,11 @@
 {
-  "language": "English",
-  "helloWorld": "This is an example of speech synthesis in"
+    "l_heading":"Social Media Services",
+    "l_choose_language": "Choose Any Language",
+    "l_description": "Description",
+    "l_description2":"Description2",
+    "l_get_started":"Get Started",
+
+    "m_ent_mob_no":"Enter Mobile Number",
+    "m_sub1":"We will send you an OTP for verify your mobile number.",
+    "m_continue":"Continue"
 }
