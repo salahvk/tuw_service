@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/main.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
-import 'package:social_media_services/widgets/language_button.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/language_button.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final provider = Provider.of<DataProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -63,65 +66,43 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           color: ColorManager.grayLight, fontSize: 16),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            selected = 'English';
-                          });
-                          MyApp.of(context).setLocale(
-                            const Locale.fromSubtags(
-                              languageCode: 'en',
+                  SizedBox(
+                      // decoration: BoxDecoration(
+                      //   boxShadow: [
+                      //     BoxShadow(
+                      //       blurRadius: 6.0,
+                      //       color: Colors.grey.shade300,
+                      //       offset: const Offset(6, 6.5),
+                      //     ),
+                      //   ],
+                      // ),
+                      height: 32,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (ctx, index) {
+                          final lan = provider.languageModel?.languages?[index];
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                selected = lan?.language ?? '';
+                              });
+                              MyApp.of(context).setLocale(
+                                Locale.fromSubtags(
+                                  languageCode: lan?.shortcode ?? '',
+                                ),
+                              );
+                            },
+                            child: LanguageButton(
+                              language: lan?.language ?? '',
+                              color: selected == lan?.language
+                                  ? ColorManager.selectedGreen
+                                  : ColorManager.primary,
                             ),
                           );
                         },
-                        child: LanguageButton(
-                          language: 'English',
-                          color: selected == 'English'
-                              ? ColorManager.selectedGreen
-                              : ColorManager.primary,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            selected = 'Arabic';
-                          });
-                          MyApp.of(context).setLocale(
-                            const Locale.fromSubtags(
-                              languageCode: 'ar',
-                            ),
-                          );
-                        },
-                        child: LanguageButton(
-                          language: 'Arabic',
-                          color: selected == 'Arabic'
-                              ? ColorManager.selectedGreen
-                              : ColorManager.primary,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            selected = 'Hindi';
-                          });
-                          MyApp.of(context).setLocale(
-                            const Locale.fromSubtags(
-                              languageCode: 'hi',
-                            ),
-                          );
-                        },
-                        child: LanguageButton(
-                          language: 'Hindi',
-                          color: selected == 'Hindi'
-                              ? ColorManager.selectedGreen
-                              : ColorManager.primary,
-                        ),
-                      ),
-                    ],
-                  ),
+                        itemCount: 3,
+                        scrollDirection: Axis.horizontal,
+                      )),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
                     child: Text(str.l_description,

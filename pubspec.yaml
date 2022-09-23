@@ -61,6 +61,12 @@ dependencies:
   provider: ^6.0.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  http: ^0.13.5
+ 
+ 
+ 
+  # jovial_svg: ^1.1.6
+
 
 
   

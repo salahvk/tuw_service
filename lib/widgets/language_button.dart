@@ -25,10 +25,13 @@ class LanguageButton extends StatelessWidget {
         ], color: color, borderRadius: BorderRadius.circular(5)),
         height: 32,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(13, 4, 13, 4),
-          child: Text(
-            language,
-            style: getRegularStyle(color: ColorManager.whiteText, fontSize: 16),
+          padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
+          child: Center(
+            child: Text(
+              language,
+              style:
+                  getRegularStyle(color: ColorManager.whiteText, fontSize: 16),
+            ),
           ),
         ),
       ),

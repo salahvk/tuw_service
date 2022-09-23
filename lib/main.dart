@@ -26,12 +26,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String lang = '';
   Locale locale = const Locale('en', '');
 
-  void setLocale(Locale value) {
+  void setLocale(Locale value) async {
     setState(() {
       locale = value;
     });
+    // await Hive.box("LocalLan").put('lang', value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // lang = Hive.box('LocalLan').get('lang', defaultValue: 'en') as String;
   }
 
   @override
@@ -59,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Social Media Services',
         debugShowCheckedModeBanner: false,
         theme: getApplicationTheme(context).copyWith(useMaterial3: true),
-        initialRoute: Routes.introductionScreen,
+        initialRoute: Routes.splashScreen,
         onGenerateRoute: RouteGenerator.getRoute,
         // home: CountUpTimerPage(),
       ),

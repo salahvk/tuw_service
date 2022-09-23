@@ -11,10 +11,12 @@ import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/profile_service_page.dart';
 import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
+import 'package:social_media_services/screens/splash_screen.dart';
 import 'package:social_media_services/screens/worker_detailed_user.dart';
 
 class Routes {
-  static const String introductionScreen = '/';
+  static const String splashScreen = '/';
+  static const String introductionScreen = '/introductionScreen';
   static const String phoneNumber = '/phoneNumber';
   static const String otpScreen = '/otpScreen';
   static const String profileDetailsPage = '/profileDetailsPage';
@@ -34,6 +36,8 @@ class Routes {
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      case Routes.splashScreen:
+        return MaterialPageRoute(builder: (_) => const Splash());
       case Routes.introductionScreen:
         return MaterialPageRoute(builder: (_) => const IntroductionScreen());
       case Routes.phoneNumber:
