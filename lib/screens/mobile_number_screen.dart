@@ -1,7 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-// import 'package:jovial_svg/jovial_svg.dart';
+import 'package:jovial_svg/jovial_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/get_countries.dart';
@@ -215,11 +216,27 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                         value: item,
                                         child: Row(
                                           children: [
-                                            // SizedBox(
-                                            //     width: 23,
-                                            //     height: 15,
-                                            //     child: ScalableImageWidget(
-                                            //         si: provider.SIimage!)),
+                                            SizedBox(
+                                                width: 23,
+                                                height: 15,
+                                                child: ScalableImageWidget
+                                                    .fromSISource(
+                                                        onLoading: (p0) {
+                                                          return Container(
+                                                            child:
+                                                                const CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                            ),
+                                                          );
+                                                        },
+                                                        cache:
+                                                            ScalableImageCache(
+                                                                size: 210),
+                                                        si: ScalableImageSource
+                                                            .fromSvgHttpUrl(
+                                                                bigFloats: true,
+                                                                Uri.parse(
+                                                                    '$endPoint${item.countryflag}')))),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
