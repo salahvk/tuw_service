@@ -315,9 +315,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     ismicVisible
                         ? InkWell(
-                            onTap: () {
-                              print("object");
-                            },
+                            onTap: () {},
                             child: const Icon(
                               Icons.mic_none_outlined,
                               size: 30,
@@ -420,7 +418,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               // onTap: () async {
                               //   // initfun();
                               //   _stopWatchTimer.onStartTimer;
-                              //   print('object');
+
                               //   // await Vibration.hasVibrator() != null
                               //   //     ? Vibration.vibrate(duration: 200)
                               //   //     : Vibration.cancel();

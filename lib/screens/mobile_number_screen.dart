@@ -1,15 +1,21 @@
+import 'dart:convert';
+
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:jovial_svg/jovial_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
+import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -22,11 +28,15 @@ class PhoneNumberScreen extends StatefulWidget {
 
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   Countries? selectedValue;
+  String? countryCode;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    countryCode = "91";
+    print(countryCode);
+    print("first");
   }
 
   @override
@@ -34,6 +44,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -49,132 +60,6 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(8),
-          //     child: Container(
-          //       decoration: BoxDecoration(
-          //         boxShadow: [
-          //           BoxShadow(
-          //             blurRadius: 10.0,
-          //             color: Colors.grey.shade300,
-          //             offset: const Offset(5, 8.5),
-          //           ),
-          //         ],
-          //       ),
-          //       child: Row(
-          //         children: [
-          //           Container(
-          //             decoration: const BoxDecoration(
-          //               color: ColorManager.whiteText,
-          //             ),
-          //             // height: 64,
-          //             padding: const EdgeInsets.only(
-          //                 left: 0, right: 0, top: 10, bottom: 10),
-          //             // width: 100,
-          //             child: Row(
-          //               children: [
-          //                 Padding(
-          //                   padding: const EdgeInsets.only(left: 0, right: 0),
-          //                   child: SizedBox(
-          //                     width: 30,
-          //                     child: DropdownButtonHideUnderline(
-          //                       child: SizedBox(
-          //                         width: 30,
-          //                         child: DropdownButton2(
-          //                           // icon: const Icon(
-          //                           //   Icons.keyboard_arrow_down,
-          //                           //   size: 35,
-          //                           //   color: ColorManager.black,
-          //                           // ),
-          //                           hint: Text('+',
-          //                               style: getRegularStyle(
-          //                                   color: const Color.fromARGB(
-          //                                       255, 173, 173, 173),
-          //                                   fontSize: 15)),
-          //                           items: provider.countriesModel?.countries
-          //                               ?.map((item) =>
-          //                                   DropdownMenuItem<Countries>(
-          //                                     value: item,
-          //                                     child: Text(
-          //                                         item.countryName ?? '',
-          //                                         style: getRegularStyle(
-          //                                             color: ColorManager.black,
-          //                                             fontSize: 15)),
-          //                                   ))
-          //                               .toList(),
-          //                           value: selectedValue,
-          //                           onChanged: (value) {
-          //                             setState(() {
-          //                               selectedValue = value as String;
-          //                             });
-          //                           },
-          //                           buttonHeight: 40,
-          //                           // buttonWidth: 140,
-          //                           itemHeight: 40, dropdownWidth: 180,
-          //                           buttonWidth: 90,
-          //                           dropdownMaxHeight: 200,
-          //                           buttonPadding:
-          //                               const EdgeInsets.fromLTRB(12, 0, 0, 0),
-          //                           // dropdownWidth: size.width,
-          //                           itemPadding:
-          //                               const EdgeInsets.fromLTRB(12, 0, 0, 0),
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-
-          //                   Text(
-          //                     '+976',
-          //                     style: getRegularStyle(
-          //                         color: Colors.black54, fontSize: 17),
-          //                   ),
-          //                 ),
-          //                 Container(
-          //                   height: 40,
-          //                   width: .6,
-          //                   color: ColorManager.grayLight,
-          //                 )
-          //               ],
-          //             ),
-          //           ),
-          //           SizedBox(
-          //             width: 300,
-          //             height: 64,
-          //             child: TextField(
-          //               keyboardType: TextInputType.phone,
-          //               style: const TextStyle(),
-          //               decoration: InputDecoration(
-          //                       contentPadding: const EdgeInsets.only(
-          //                           left: 0, right: 10, top: 20, bottom: 20),
-          //                       hintText: str.m_ent_mob_no,
-          //                       hintStyle: getRegularStyle(
-          //                           color: ColorManager.grayLight,
-          //                           fontSize: 15))
-          //                   .copyWith(
-          //                       // enabledBorder: const OutlineInputBorder(
-          //                       //     borderRadius: BorderRadius.only(
-          //                       //         topRight: Radius.circular(5),
-          //                       //         bottomRight: Radius.circular(5)),
-          //                       //     borderSide: BorderSide(
-          //                       //         color: ColorManager.whiteColor,
-          //                       //         width: .5)),
-          //                       // focusedBorder: const OutlineInputBorder(
-          //                       //     borderRadius: BorderRadius.only(
-          //                       //         topRight: Radius.circular(5),
-          //                       //         bottomRight: Radius.circular(5)),
-          //                       //     borderSide: BorderSide(
-          //                       //         color: ColorManager.whiteColor,
-          //                       //         width: .5))
-          //                       ),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
 
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -202,7 +87,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: SizedBox(
-                          width: 50,
+                          width: size.width * .18,
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               iconSize: 0,
@@ -216,27 +101,28 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                         value: item,
                                         child: Row(
                                           children: [
-                                            SizedBox(
-                                                width: 23,
-                                                height: 15,
-                                                child: ScalableImageWidget
-                                                    .fromSISource(
-                                                        onLoading: (p0) {
-                                                          return Container(
-                                                            child:
-                                                                const CircularProgressIndicator(
-                                                              strokeWidth: 2,
-                                                            ),
-                                                          );
-                                                        },
-                                                        cache:
-                                                            ScalableImageCache(
-                                                                size: 210),
-                                                        si: ScalableImageSource
-                                                            .fromSvgHttpUrl(
-                                                                bigFloats: true,
-                                                                Uri.parse(
-                                                                    '$endPoint${item.countryflag}')))),
+                                            // SizedBox(
+                                            //     width: 23,
+                                            //     height: 15,
+                                            //     child: ScalableImageWidget
+                                            //         .fromSISource(
+                                            //             scale: 5,
+                                            //             onLoading: (p0) {
+                                            //               return Container(
+                                            //                 child:
+                                            //                     const CircularProgressIndicator(
+                                            //                   strokeWidth: 2,
+                                            //                 ),
+                                            //               );
+                                            //             },
+                                            //             cache:
+                                            //                 ScalableImageCache(
+                                            //                     size: 210),
+                                            //             si: ScalableImageSource
+                                            //                 .fromSvgHttpUrl(
+                                            //                     // bigFloats: true,
+                                            //                     Uri.parse(
+                                            //                         '$endPoint${item.countryflag}')))),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
@@ -273,12 +159,12 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                               customButton: selectedValue == null
                                   ? const Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(20, 20, 0, 20),
+                                          EdgeInsets.fromLTRB(20, 20, 20, 20),
                                       child: Text('+91'),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          20, 20, 0, 20),
+                                          10, 20, 10, 20),
                                       child: Text(
                                           "+${selectedValue?.phonecode.toString()}"),
                                     ),
@@ -288,6 +174,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 setState(() {});
                                 selectedValue = value as Countries;
                                 print(selectedValue?.phonecode);
+                                countryCode =
+                                    selectedValue?.phonecode.toString();
 
                                 // final s = selectedValue.toString().split(' ');
                                 // print(s[2]);
@@ -317,9 +205,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
+                      // const SizedBox(
+                      //   width: 20,
+                      // ),
                       Container(
                         height: 40,
                         width: .6,
@@ -332,6 +220,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           child: SizedBox(
                         child: TextField(
                           keyboardType: TextInputType.phone,
+                          controller: phoneNumCon,
                           style: const TextStyle(),
                           decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(
@@ -386,11 +275,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               height: 50,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 0),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const OTPscreen();
-                    }));
-                  },
+                  onPressed: onContinue,
                   child: Text(
                     str.m_continue,
                     style: getRegularStyle(
@@ -402,5 +287,60 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         ],
       )),
     );
+  }
+
+  onContinue() async {
+    final OtpProvider = Provider.of<OTPProvider>(context, listen: false);
+    final str = AppLocalizations.of(context)!;
+    final phoneNumber = phoneNumCon.text.trim();
+    if (phoneNumber.isEmpty) {
+      AnimatedSnackBar.material(str.m_snack,
+              type: AnimatedSnackBarType.error,
+              borderRadius: BorderRadius.circular(6),
+              duration: const Duration(seconds: 1))
+          .show(
+        context,
+      );
+    } else if (phoneNumber.length > 10) {
+      AnimatedSnackBar.material('Mobile Number must not be above 10 digits',
+              type: AnimatedSnackBarType.error,
+              borderRadius: BorderRadius.circular(6),
+              duration: const Duration(seconds: 1))
+          .show(
+        context,
+      );
+    } else {
+      OtpProvider.getPhoneNo(phoneNumCon.text);
+      OtpProvider.getCountryCode(countryCode);
+      getOtp();
+    }
+  }
+
+  getOtp() async {
+    print("getting otp");
+    try {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      var response = await http.post(
+          Uri.parse(
+              "$apiUser/request_otp?countrycode=$countryCode&phone=${phoneNumCon.text}"),
+          headers: {"device-id": provider.deviceId ?? ''});
+      // print(response.body);
+      if (response.statusCode != 200) {
+        showSnackBar("Something Went Wrong", context);
+        return;
+      }
+
+      var jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse);
+      print(countryCode);
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+        return const OTPscreen();
+      }));
+      // var languageModel = LanguageModel.fromJson(jsonResponse);
+      // provider.languageModelData(languageModel);
+    } on Exception catch (_) {
+      showSnackBar("Something Went Wrong", context);
+    }
   }
 }

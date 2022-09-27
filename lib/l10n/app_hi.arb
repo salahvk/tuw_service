@@ -1,11 +1,46 @@
 {
     "l_heading":"सोशल मीडिया सर्विस",
-    "l_choose_language": "चूसे अन्य लैंग्वेज ",
+    "l_choose_language": "कोई भी भाषा चुनें",
     "l_description": "डिस्क्रिप्शन",
     "l_description2":"डिस्क्रिप्शन2",
-    "l_get_started":"गेट स्टार्टेड",
+    "l_get_started":"शुरू हो जाओ",
 
-    "m_ent_mob_no":"सोशल मीडिया सर्विस",
-    "m_sub1":"सोशल मीडिया सर्विस सोशल मीडिया सर्विस सोशल मीडिया सर्विस.",
-    "m_continue":"सोशल मीडिया"
+    "m_ent_mob_no":"मोबाइल नंबर दर्ज करें",
+    "m_sub1":"हम आपके मोबाइल नंबर को सत्यापित करने के लिए आपको एक ओटीपी भेजेंगे।.",
+    "m_continue":"जारी रखना",
+    "m_snack":"कृपया एक मान्य मोबाइल नंबर दर्ज करें",
+    "m_10digits":"Mobile Number must not be above 10 digits",
+
+    "t_1":"जारी रखकर, आप सहमत हैं",
+    "t_2":"नियम एवं शर्तें",
+
+    "o_verification":"पुष्टि संख्या",
+    "o_pls_type":"कृपया सत्यापन कोड टाइप करें जिसे भेजें",
+    "o_dont":"कोड नहीं मिला?",
+    "o_resend":"पुन: भेजें",
+    "o_verify":"अभी सत्यापित करें",
+    "o_snack":"एक मान्य ओटीपी दर्ज करें",
+
+    "e_name":"नाम",
+    "e_name_h":"नाम दर्ज",
+    "e_dob":"जन्म की तारीख",
+    "e_dob_h":"जन्म् की तारीख़ दर्ज करे",
+    "e_gender":"लिंग",
+    "e_male":"पुरुष",
+    "e_female":"मादा",
+    "e_country":"देश",
+    "e_country_h":"Enter Country",
+    "e_region":"Region",
+    "e_region_h":"Enter Region",
+    "e_state":"State",
+    "e_state_h":"Enter State",
+    "e_about":"About",
+    "e_about_h":"Enter About",
+    "e_save":"SAVE",
+
+    "d_my_profile":"मेरी प्रोफाइल",
+    "d_address":"पता पुस्तिका",
+    "d_become":"सर्विस मैन बनें",
+    "d_privacy":"गोपनीयता नीति",
+    "d_logout":"लॉग आउट"
 }

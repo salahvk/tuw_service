@@ -49,7 +49,6 @@ class _ServicerPageState extends State<ServicerPage> {
       // * Custom bottom Nav
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          print('object');
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.homePage, (route) => false);
         },

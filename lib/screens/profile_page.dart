@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:social_media_services/Remaining%20pages/wishlist.dart';
+import 'package:social_media_services/components/routes_manager.dart';
+import 'package:social_media_services/screens/wishlist.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -19,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndex = 2;
+  final int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   @override
   Widget build(BuildContext context) {
@@ -83,9 +84,11 @@ class _ProfilePageState extends State<ProfilePage> {
               haptic: true,
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.homePage, (route) => false);
+                // setState(() {
+                //   _selectedIndex = index;
+                // });
               },
             ),
           ),

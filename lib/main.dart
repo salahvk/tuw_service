@@ -6,6 +6,7 @@ import 'package:social_media_services/components/theme_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/otp_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     // lang = Hive.box('LocalLan').get('lang', defaultValue: 'en') as String;
   }
 
@@ -49,6 +51,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DataProvider()),
+        ChangeNotifierProvider(create: (_) => OTPProvider()),
       ],
       child: MaterialApp(
         supportedLocales: const [

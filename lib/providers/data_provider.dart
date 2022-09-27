@@ -18,6 +18,8 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String? deviceId;
+
   // ScalableImage? SIimage;
 
   // void siImageData(value) {

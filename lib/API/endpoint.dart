@@ -1,4 +1,5 @@
 const String endPoint = "http://projects.techoriz.in/serviceapp/public";
-const String api = "$endPoint/api/getall";
-const String languagesApi = "$api/languages";
-const String countriesApi = "$api/countries";
+const String apiGet = "$endPoint/api/getall";
+const String apiUser = "$endPoint/api/user";
+const String languagesApi = "$apiGet/languages";
+const String countriesApi = "$apiGet/countries";

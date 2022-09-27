@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -91,6 +92,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                   languageCode: lan?.shortcode ?? '',
                                 ),
                               );
+                              Hive.box("LocalLan")
+                                  .put('lang', lan?.shortcode ?? '');
+
+                              print(Hive.box("LocalLan").get('lang'));
                             },
                             child: LanguageButton(
                               language: lan?.language ?? '',

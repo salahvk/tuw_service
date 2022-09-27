@@ -1,11 +1,16 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/utils/pinTheme.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OTPscreen extends StatefulWidget {
   const OTPscreen({Key? key}) : super(key: key);
@@ -21,6 +26,8 @@ class _OTPscreenState extends State<OTPscreen> {
   Widget build(BuildContext context) {
     // final focusedPinTheme = focusedTheme;
     final size = MediaQuery.of(context).size;
+    final OtpProvider = Provider.of<OTPProvider>(context, listen: false);
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -36,14 +43,14 @@ class _OTPscreenState extends State<OTPscreen> {
                   const IntroductionLogo(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
-                    child: Text('Verification Code',
+                    child: Text(str.o_verification,
                         style: getBoldtStyle(
                             color: ColorManager.black, fontSize: 20)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Text(
-                        "Please type the verification code send to \n+976 1234 123 123",
+                        "${str.o_pls_type} \n+${OtpProvider.countryCode} ${OtpProvider.phoneNo}",
                         textAlign: TextAlign.center,
                         style: getRegularStyle(
                             color: const Color(0xff9f9f9f), fontSize: 15)),
@@ -57,13 +64,16 @@ class _OTPscreenState extends State<OTPscreen> {
               separator: const SizedBox(
                 width: 20,
               ),
+              controller: otpCon,
               focusedPinTheme: focusedPinTheme,
-              validator: (s) {
-                return s == '2222' ? null : 'Pin is incorrect';
-              },
+              // validator: (s) {
+              //   return s == '2222' ? null : 'Pin is incorrect';
+              // },
               pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
               showCursor: true,
-              onCompleted: (pin) => print(pin),
+              onCompleted: (pin) {
+                verifyNow();
+              },
             ),
           ),
           Padding(
@@ -71,10 +81,10 @@ class _OTPscreenState extends State<OTPscreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Don't get the code? ",
+                Text(str.o_dont,
                     style: getRegularStyle(
                         color: const Color(0xff9f9f9f), fontSize: 15)),
-                Text('Resend',
+                Text(str.o_resend,
                     style: getRegularStyle(
                         color: ColorManager.primary, fontSize: 15)),
               ],
@@ -94,14 +104,9 @@ class _OTPscreenState extends State<OTPscreen> {
               height: 50,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 0),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(context,
-                        MaterialPageRoute(builder: (ctx) {
-                      return const EditProfileScreen();
-                    }), (route) => false);
-                  },
+                  onPressed: verifyNow,
                   child: Text(
-                    'Verify Now',
+                    str.o_verify,
                     style: getRegularStyle(
                         color: ColorManager.whiteText, fontSize: 18),
                   ))),
@@ -111,5 +116,23 @@ class _OTPscreenState extends State<OTPscreen> {
         ],
       )),
     );
+  }
+
+  verifyNow() {
+    final str = AppLocalizations.of(context)!;
+    if (otpCon.text.length < 4) {
+      AnimatedSnackBar.material(str.o_snack,
+              type: AnimatedSnackBarType.error,
+              borderRadius: BorderRadius.circular(6),
+              // brightness: Brightness.dark,
+              duration: const Duration(seconds: 1))
+          .show(
+        context,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
+        return const EditProfileScreen();
+      }), (route) => false);
+    }
   }
 }

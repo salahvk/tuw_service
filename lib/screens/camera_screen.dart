@@ -82,7 +82,7 @@ class _CameraAppState extends State<CameraApp> {
     takePicture().then((XFile? file) {
       if (mounted) {
         // saveFile();
-        print('object');
+
         // createFolderInAppDocDir('folderName');
         // setState(() {
         //   externalStorageDirectories = getExternalStorageDirectories();

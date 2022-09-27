@@ -1,11 +1,46 @@
 {
-    "l_heading":"سكيل  ميديا  سرفيسص",
-    "l_choose_language": "كوس أني لانجج ",
+    "l_heading":"سكيل ميديا سرفيسص",
+    "l_choose_language": "اختر أي لغة",
     "l_description": "دسكربت ",
     "l_description2":"دسكربت 2",
-    "l_get_started":"جت ستارتد ",
+    "l_get_started":"البدء",
 
-    "m_ent_mob_no":"كوس أني لانجج ",
-    "m_sub1":"كوس أني لانجج كوس أني لانجج كوس أني لانجج .",
-    "m_continue":"كوس أني لانجج "
+    "m_ent_mob_no":"أدخل رقم الهاتف المتحرك",
+    "m_sub1":".سوف نرسل لك OTP للتحقق من رقم هاتفك المحمول",
+    "m_continue":"يكمل",
+    "m_snack":"الرجاء إدخال رقم جوال صحيح",
+    "m_10digits":"Mobile Number must not be above 10 digits",
+
+    "t_1":"بالمتابعة ، أنت توافق على",
+    "t_2":"البنود و الظروف",
+
+    "o_verification":"رمز التحقق",
+    "o_pls_type":"الرجاء كتابة رمز التحقق المرسل إلى",
+    "o_dont":"لا تحصل على الرمز؟",
+    "o_resend":"إعادة إرسال",
+    "o_verify":"تحقق الآن",
+    "o_snack":"OTP أدخل صالح",
+
+    "e_name":"اسم",
+    "e_name_h":"أدخل الاسم",
+    "e_dob":"تاريخ الولادة",
+    "e_dob_h":"أدخل تاريخ الميلاد",
+    "e_gender":"جنس",
+    "e_male":"ذكر",
+    "e_female":"أنثى",
+    "e_country":"دولة",
+    "e_country_h":"Enter Country",
+    "e_region":"Region",
+    "e_region_h":"Enter Region",
+    "e_state":"State",
+    "e_state_h":"Enter State",
+    "e_about":"About",
+    "e_about_h":"Enter About",
+    "e_save":"SAVE",
+
+    "d_my_profile":"ملفي",
+    "d_address":"دليل العناوين",
+    "d_become":"كن رجل خدمة",
+    "d_privacy":"سياسة الخصوصية",
+    "d_logout":"تسجيل خروج"
 }

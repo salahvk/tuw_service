@@ -7,5 +7,40 @@
 
     "m_ent_mob_no":"Enter Mobile Number",
     "m_sub1":"We will send you an OTP for verify your mobile number.",
-    "m_continue":"Continue"
+    "m_continue":"Continue",
+    "m_snack":"Please Enter a valid Mobile Number",
+    "m_10digits":"Mobile Number must not be above 10 digits",
+
+    "t_1":"By continuing, you agree to ",
+    "t_2":"Terms & Conditions",
+
+    "o_verification":"Verification Code",
+    "o_pls_type":"Please type the verification code send to ",
+    "o_dont":"Don't get the code? ",
+    "o_resend":"Resend",
+    "o_verify":"Verify Now",
+    "o_snack":"Enter a valid OTP",
+
+    "e_name":"Name",
+    "e_name_h":"Enter Name",
+    "e_dob":"Date of Birth",
+    "e_dob_h":"Enter Date of Birth",
+    "e_gender":"Gender",
+    "e_male":"Male",
+    "e_female":"Female",
+    "e_country":"Country",
+    "e_country_h":"Enter Country",
+    "e_region":"Region",
+    "e_region_h":"Enter Region",
+    "e_state":"State",
+    "e_state_h":"Enter State",
+    "e_about":"About",
+    "e_about_h":"Enter About",
+    "e_save":"SAVE",
+
+    "d_my_profile":"My Profile",
+    "d_address":"Address Book",
+    "d_become":"Become a Service man",
+    "d_privacy":"Privacy Policy",
+    "d_logout":"Logout"
 }
