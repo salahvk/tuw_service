@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -12,6 +14,7 @@ import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -28,11 +31,21 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   FocusNode nfocus = FocusNode();
   FocusNode dobfocus = FocusNode();
   int _selectedIndex = 2;
+  String lang = '';
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -72,21 +85,16 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                 GButton(
                   icon: FontAwesomeIcons.message,
                   leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Image.asset(
-                      ImageAssets.homeIcon,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                      width: 24,
+                      height: 24,
+                      child: SvgPicture.asset(ImageAssets.homeIconSvg)),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
                   leading: SizedBox(
                       width: 24,
                       height: 24,
-                      child:
-                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
+                      child: SvgPicture.asset(ImageAssets.chatIconSvg)),
                 ),
               ],
               haptic: true,
@@ -99,7 +107,8 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
             ),
           ),
           Positioned(
-              right: 5,
+              left: lang == 'ar' ? 5 : null,
+              right: lang != 'ar' ? 5 : null,
               bottom: 0,
               child: Builder(
                 builder: (context) => InkWell(
@@ -159,9 +168,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                           ),
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        child: TitleWidget(name: 'Name'),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: TitleWidget(name: str.e_name),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -180,7 +189,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                             style: const TextStyle(),
                             controller: nameController,
                             decoration: InputDecoration(
-                                hintText: 'Enter Name',
+                                hintText: str.e_name_h,
                                 hintStyle: getRegularStyle(
                                     color: const Color.fromARGB(
                                         255, 173, 173, 173),
@@ -193,9 +202,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                child: TitleWidget(name: 'Date of Birth'),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                child: TitleWidget(name: str.e_dob),
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -222,7 +231,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                             color: ColorManager.primary,
                                           ),
                                         ),
-                                        hintText: 'Enter Date of Birth',
+                                        hintText: str.e_dob_h,
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
@@ -236,9 +245,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: TitleWidget(name: 'Gender'),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: TitleWidget(name: str.e_gender),
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -256,7 +265,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         isMaleSelected: value,
                                       ),
                                     ),
-                                    const TitleWidget(name: 'Male'),
+                                    TitleWidget(name: str.e_male),
                                     InkWell(
                                       onTap: () {
                                         setState(() {
@@ -268,7 +277,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         isMaleSelected: value,
                                       ),
                                     ),
-                                    const TitleWidget(name: 'Female'),
+                                    TitleWidget(name: str.e_female),
                                   ],
                                 ),
                               )
@@ -276,9 +285,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                           )
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: TitleWidget(name: 'Country'),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: TitleWidget(name: str.e_country),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -296,7 +305,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                             style: const TextStyle(),
                             controller: countryController,
                             decoration: InputDecoration(
-                                hintText: 'Enter Country',
+                                hintText: str.e_country_h,
                                 hintStyle: getRegularStyle(
                                     color: const Color.fromARGB(
                                         255, 173, 173, 173),
@@ -311,15 +320,14 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                child: TitleWidget(name: 'Region'),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                child: TitleWidget(name: str.e_region),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 10, 15, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Container(
-                                  width: size.width * .44,
+                                  width: size.width * .45,
                                   decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
@@ -333,7 +341,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                     style: const TextStyle(),
                                     controller: regionController,
                                     decoration: InputDecoration(
-                                        hintText: 'Enter Region',
+                                        hintText: str.e_region_h,
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
@@ -346,9 +354,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                child: TitleWidget(name: 'State'),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                child: TitleWidget(name: str.e_state),
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -367,7 +375,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                     style: const TextStyle(),
                                     controller: stateController,
                                     decoration: InputDecoration(
-                                        hintText: 'Enter State',
+                                        hintText: str.e_state_h,
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
@@ -379,9 +387,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                           ),
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: TitleWidget(name: 'About'),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: TitleWidget(name: str.e_about),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
@@ -404,7 +412,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                               decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(
                                           left: 10, right: 10, top: 10),
-                                      hintText: 'Enter About',
+                                      hintText: str.e_about_h,
                                       hintStyle: getRegularStyle(
                                           color: const Color.fromARGB(
                                               255, 173, 173, 173),
@@ -456,7 +464,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                 },
                                 child: Center(
                                   child: Text(
-                                    'SAVE',
+                                    str.e_save,
                                     textAlign: TextAlign.justify,
                                     style: getRegularStyle(
                                         color: ColorManager.whiteText,

@@ -1,13 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/main.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
@@ -29,6 +32,7 @@ class PhoneNumberScreen extends StatefulWidget {
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   Countries? selectedValue;
   String? countryCode;
+  String lang = '';
 
   @override
   void initState() {
@@ -37,6 +41,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     countryCode = "91";
     print(countryCode);
     print("first");
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setTimer();
+    });
   }
 
   @override
@@ -170,15 +177,10 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                     ),
                               value: selectedValue,
                               onChanged: (value) {
-                                print(value);
                                 setState(() {});
                                 selectedValue = value as Countries;
-                                print(selectedValue?.phonecode);
                                 countryCode =
                                     selectedValue?.phonecode.toString();
-
-                                // final s = selectedValue.toString().split(' ');
-                                // print(s[2]);
                               },
                               buttonHeight: 40,
                               dropdownPadding:
@@ -193,11 +195,10 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 borderRadius: BorderRadius.circular(6),
                                 color: ColorManager.primary2,
                               ),
-                              // dropdownPadding:
-                              //     const EdgeInsets.fromLTRB(0, 30, 0, 0),
+
                               buttonPadding:
                                   const EdgeInsets.fromLTRB(0, 0, 6, 0),
-                              // dropdownWidth: size.width,
+
                               itemPadding:
                                   const EdgeInsets.fromLTRB(6, 0, 0, 8),
                               isExpanded: true,
@@ -205,9 +206,6 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           ),
                         ),
                       ),
-                      // const SizedBox(
-                      //   width: 20,
-                      // ),
                       Container(
                         height: 40,
                         width: .6,
@@ -331,16 +329,31 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       }
 
       var jsonResponse = jsonDecode(response.body);
-
       print(jsonResponse);
-      print(countryCode);
       Navigator.push(context, MaterialPageRoute(builder: (ctx) {
         return const OTPscreen();
       }));
-      // var languageModel = LanguageModel.fromJson(jsonResponse);
-      // provider.languageModelData(languageModel);
     } on Exception catch (_) {
       showSnackBar("Something Went Wrong", context);
     }
+  }
+
+// * Flutter internationalizing functions
+
+  setTimer() {
+    Future.delayed(const Duration(seconds: 1));
+    getlocalLanguage();
+  }
+
+  getlocalLanguage() {
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+    if (!mounted) return;
+    MyApp.of(context).setLocale(
+      Locale.fromSubtags(
+        languageCode: lang,
+      ),
+    );
   }
 }

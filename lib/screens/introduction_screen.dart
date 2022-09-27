@@ -3,10 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/main.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,55 +58,14 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                         // getRegularStyle(color: Color(0xff16a64c), fontSize: 25),
                         ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 15),
-                    child: Text(
-                      str.l_choose_language,
-                      style: getRegularStyle(
-                          color: ColorManager.grayLight, fontSize: 16),
-                    ),
-                  ),
-                  SizedBox(
-                      // decoration: BoxDecoration(
-                      //   boxShadow: [
-                      //     BoxShadow(
-                      //       blurRadius: 6.0,
-                      //       color: Colors.grey.shade300,
-                      //       offset: const Offset(6, 6.5),
-                      //     ),
-                      //   ],
-                      // ),
-                      height: 32,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (ctx, index) {
-                          final lan = provider.languageModel?.languages?[index];
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                selected = lan?.language ?? '';
-                              });
-                              MyApp.of(context).setLocale(
-                                Locale.fromSubtags(
-                                  languageCode: lan?.shortcode ?? '',
-                                ),
-                              );
-                              Hive.box("LocalLan")
-                                  .put('lang', lan?.shortcode ?? '');
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(0, 20, 0, 15),
+                  //   child: Text(
+                  //     str.l_choose_language,
+                  //     style: getRegularStyle(
+                  //         color: ColorManager.grayLight, fontSize: 16),
+                  //   ),
 
-                              print(Hive.box("LocalLan").get('lang'));
-                            },
-                            child: LanguageButton(
-                              language: lan?.language ?? '',
-                              color: selected == lan?.language
-                                  ? ColorManager.selectedGreen
-                                  : ColorManager.primary,
-                            ),
-                          );
-                        },
-                        itemCount: 3,
-                        scrollDirection: Axis.horizontal,
-                      )),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
                     child: Text(str.l_description,
@@ -132,27 +90,72 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                         style: getRegularStyle(
                             color: ColorManager.grayLight, fontSize: 16)),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      // color: Colors.transparent,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 5.0,
-                          color: Colors.grey.shade400,
-                          offset: const Offset(6, 4),
-                        ),
-                      ],
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(elevation: 0),
-                      onPressed: () {
-                        selectLanguage();
-                      },
-                      child: Text(str.l_get_started,
-                          style: getRegularStyle(
-                              color: ColorManager.whiteColor, fontSize: 18)),
-                    ),
-                  )
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     // color: Colors.transparent,
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         blurRadius: 5.0,
+                  //         color: Colors.grey.shade400,
+                  //         offset: const Offset(6, 4),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(elevation: 0),
+                  //     onPressed: () {
+                  //       selectLanguage();
+                  //     },
+                  //     child: Text(str.l_get_started,
+                  //         style: getRegularStyle(
+                  //             color: ColorManager.whiteColor, fontSize: 18)),
+                  //   ),
+                  // )
+
+                  // ),
+                  SizedBox(
+                      // decoration: BoxDecoration(
+                      //   boxShadow: [
+                      //     BoxShadow(
+                      //       blurRadius: 6.0,
+                      //       color: Colors.grey.shade300,
+                      //       offset: const Offset(6, 6.5),
+                      //     ),
+                      //   ],
+                      // ),
+                      height: 32,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (ctx, index) {
+                          final lan = provider.languageModel?.languages?[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, Routes.phoneNumber);
+                              setState(() {
+                                selected = lan?.language ?? '';
+                              });
+
+                              // MyApp.of(context).setLocale(
+                              //   Locale.fromSubtags(
+                              //     languageCode: lan?.shortcode ?? '',
+                              //   ),
+                              // );
+                              Hive.box("LocalLan")
+                                  .put('lang', lan?.shortcode ?? '');
+
+                              print(Hive.box("LocalLan").get('lang'));
+                            },
+                            child: LanguageButton(
+                              language: lan?.language ?? '',
+                              color: selected == lan?.language
+                                  ? ColorManager.selectedGreen
+                                  : ColorManager.primary,
+                            ),
+                          );
+                        },
+                        itemCount: 3,
+                        scrollDirection: Axis.horizontal,
+                      )),
                 ],
               ),
             )
@@ -162,12 +165,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     );
   }
 
-  void selectLanguage() {
+  selectLanguage() {
     // selected.isNotEmpty
     //     ?
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-      return const PhoneNumberScreen();
-    }));
+    // Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+    //   return const PhoneNumberScreen();
+    // }));
     // :
     //  AnimatedSnackBar.material('Please Select a Language to Continue',
     //         type: AnimatedSnackBarType.error,

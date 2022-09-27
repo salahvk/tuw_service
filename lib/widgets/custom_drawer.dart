@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
-import 'package:social_media_services/screens/profile_service_page.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -11,6 +12,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return DrawerHeader(
         decoration: const BoxDecoration(
           color: ColorManager.primary2,
@@ -23,16 +25,16 @@ class CustomDrawer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomDrawerList(
-                title: 'My Profile',
+                title: str.d_my_profile,
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, Routes.myProfile);
                 }),
             CustomDrawerList(
-              title: 'Address Book',
+              title: str.d_address,
             ),
             CustomDrawerList(
-              title: 'Become a Service man',
+              title: str.d_become,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) {
@@ -41,14 +43,14 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             CustomDrawerList(
-              title: 'Privacy Policy',
+              title: str.d_privacy,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, Routes.privacyPolicy);
               },
             ),
             CustomDrawerList(
-              title: 'Logout',
+              title: str.d_logout,
               onTap: () {},
             ),
             const SizedBox(

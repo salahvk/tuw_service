@@ -1,6 +1,12 @@
-l = landingPage/IntroductionPage
-m = Mobile number screen
-t = terms and conditions
-o = otp screen
-e = edit profile page
-d = drawer
+l =  landingPage/IntroductionPage
+m =  Mobile number screen
+t =  terms and conditions
+o =  otp screen
+e =  edit profile page
+d =  drawer
+p =  profile service man
+c =  choose service page
+ps = payment service page
+s  = servicer page
+cp = chat page
+

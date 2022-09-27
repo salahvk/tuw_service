@@ -1,5 +1,6 @@
 class ImageAssets {
   static const String paperPlane = 'assets/paper-plane.png';
+  static const String paperPlaneSvg = 'assets/paper-plane.svg';
   static const String profileIcon = 'assets/profile_icon.png';
   static const String paymentSuccess = 'assets/payment_success.json';
   static const String tools = 'assets/tools.png';
@@ -21,5 +22,7 @@ class ImageAssets {
   static const String penEdit = 'assets/penEdit.png';
   static const String addImage = 'assets/add_image.png';
   static const String homeIcon = 'assets/homeIcon.png';
+  static const String homeIconSvg = 'assets/home.svg';
   static const String chatIcon = 'assets/chatIcon.png';
+  static const String chatIconSvg = 'assets/chat.svg';
 }

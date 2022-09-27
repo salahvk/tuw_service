@@ -64,6 +64,7 @@ dependencies:
   http: ^0.13.5
   jovial_svg: ^1.1.6
   platform_device_id: ^1.0.1
+  flutter_svg: ^1.1.5
 
 
 

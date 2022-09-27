@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -28,6 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // bool isAnimationVisible = false;
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
+  String lang = '';
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
@@ -36,6 +38,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
 
     // isVib();
     // setState(() {
@@ -146,7 +151,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ismenuVisible
                 ? Positioned(
                     bottom: 60,
-                    left: 2,
+                    left: lang != 'ar' ? 2 : null,
+                    right: lang == 'ar' ? 2 : null,
                     child: Container(
                       decoration: BoxDecoration(
                           color: ColorManager.primary,
@@ -195,7 +201,8 @@ class _ChatScreenState extends State<ChatScreen> {
             isMapmenuVisible
                 ? Positioned(
                     bottom: 60,
-                    right: 2,
+                    left: lang == 'ar' ? 2 : null,
+                    right: lang != 'ar' ? 2 : null,
                     child: Container(
                       decoration: BoxDecoration(
                           color: ColorManager.primary,
@@ -336,8 +343,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             ismicVisible
                 ? Positioned(
+                    // top: 0,
                     bottom: 16,
-                    right: 4,
+                    right: lang != 'ar' ? 4 : null,
+                    left: lang == 'ar' ? 4 : null,
                     child: Container(
                       decoration: BoxDecoration(
                           color: ColorManager.whiteColor,

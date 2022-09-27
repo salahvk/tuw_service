@@ -1,13 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
-import 'package:social_media_services/screens/choose_service_page.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_service_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
@@ -16,6 +18,7 @@ import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/custom_text_field.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileServicePage extends StatefulWidget {
   const ProfileServicePage({Key? key}) : super(key: key);
@@ -31,9 +34,20 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
   bool value = true;
   final int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  String lang = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     final List<String> items = [
       'Item1',
@@ -82,19 +96,16 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                   leading: SizedBox(
                     width: 24,
                     height: 24,
-                    child: Image.asset(
-                      ImageAssets.homeIcon,
-                      fit: BoxFit.cover,
-                    ),
+                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
                   ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
                   leading: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child:
-                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
+                    width: 24,
+                    height: 24,
+                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                  ),
                 ),
               ],
               haptic: true,
@@ -109,7 +120,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
             ),
           ),
           Positioned(
-              right: 5,
+              left: lang == 'ar' ? 5 : null,
+              right: lang != 'ar' ? 5 : null,
               bottom: 0,
               child: Builder(
                 builder: (context) => InkWell(
@@ -141,20 +153,19 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const MandatoryHeader(heading: 'First Name'),
-                            const CustomTextField(hintText: 'Enter First Name'),
-                            const MandatoryHeader(heading: 'Last Name'),
-                            const CustomTextField(hintText: 'Enter Last Name'),
-                            const MandatoryHeader(heading: 'Civil Card No'),
-                            const CustomTextField(hintText: 'Enter Card No'),
+                            MandatoryHeader(heading: str.p_first_name),
+                            CustomTextField(hintText: str.p_first_name_h),
+                            MandatoryHeader(heading: str.p_last_name),
+                            CustomTextField(hintText: str.p_last_name_h),
+                            MandatoryHeader(heading: str.p_civil),
+                            CustomTextField(hintText: str.p_civil_h),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const MandatoryHeader(
-                                        heading: 'Date of Birth'),
+                                    MandatoryHeader(heading: str.p_dob),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
@@ -182,7 +193,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                                   color: ColorManager.primary,
                                                 ),
                                               ),
-                                              hintText: 'Enter Date of Birth',
+                                              hintText: str.p_dob_h,
                                               hintStyle: getRegularStyle(
                                                   color: const Color.fromARGB(
                                                       255, 173, 173, 173),
@@ -196,9 +207,11 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   // mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Padding(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: MandatoryHeader(heading: 'Gender'),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 0, 0, 0),
+                                      child: MandatoryHeader(
+                                          heading: str.p_gender),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -218,7 +231,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                               isMaleSelected: value,
                                             ),
                                           ),
-                                          const TitleWidget(name: 'Male'),
+                                          TitleWidget(name: str.p_male),
                                           InkWell(
                                             onTap: () {
                                               setState(() {
@@ -230,7 +243,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                               isMaleSelected: value,
                                             ),
                                           ),
-                                          const TitleWidget(name: 'Female'),
+                                          TitleWidget(name: str.p_female),
                                         ],
                                       ),
                                     )
@@ -241,9 +254,9 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                               child: Row(
-                                children: const [
-                                  TitleWidget(name: 'Country'),
-                                  Icon(
+                                children: [
+                                  TitleWidget(name: str.p_country),
+                                  const Icon(
                                     Icons.star_outlined,
                                     size: 10,
                                     color: ColorManager.errorRed,
@@ -279,7 +292,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                           size: 35,
                                           color: ColorManager.black,
                                         ),
-                                        hint: Text('Enter Country',
+                                        hint: Text(str.p_country_h,
                                             style: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),
@@ -324,7 +337,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const MandatoryHeader(heading: 'Region'),
+                                    MandatoryHeader(heading: str.p_region),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 15, 0),
@@ -343,7 +356,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                           style: const TextStyle(),
                                           controller: regionController,
                                           decoration: InputDecoration(
-                                              hintText: 'Enter Region',
+                                              hintText: str.p_region_h,
                                               hintStyle: getRegularStyle(
                                                   color: const Color.fromARGB(
                                                       255, 173, 173, 173),
@@ -356,7 +369,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const MandatoryHeader(heading: 'State'),
+                                    MandatoryHeader(heading: str.p_state),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
@@ -375,7 +388,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                           style: const TextStyle(),
                                           controller: stateController,
                                           decoration: InputDecoration(
-                                              hintText: 'Enter State',
+                                              hintText: str.p_state_h,
                                               hintStyle: getRegularStyle(
                                                   color: const Color.fromARGB(
                                                       255, 173, 173, 173),
@@ -387,7 +400,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 ),
                               ],
                             ),
-                            const MandatoryHeader(heading: 'Address'),
+                            MandatoryHeader(heading: str.p_address),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
                               child: Container(
@@ -409,7 +422,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                     decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(
                                             left: 10, right: 10, top: 10),
-                                        hintText: 'Enter Address',
+                                        hintText: str.p_address_h,
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
@@ -432,7 +445,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                         return const ChooseServicePage();
                                       }));
                                     },
-                                    child: Text("CONTINUE",
+                                    child: Text(str.p_continue,
                                         style: getRegularStyle(
                                             color: ColorManager.whiteText,
                                             fontSize: 16))),

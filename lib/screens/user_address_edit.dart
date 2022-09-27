@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/screens/messagePage.dart';
-import 'package:social_media_services/screens/payment_service_page.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
@@ -25,6 +27,15 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   String? selectedValue;
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> items = [
@@ -75,19 +86,16 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                     leading: SizedBox(
                       width: 24,
                       height: 24,
-                      child: Image.asset(
-                        ImageAssets.homeIcon,
-                        fit: BoxFit.cover,
-                      ),
+                      child: SvgPicture.asset(ImageAssets.homeIconSvg),
                     ),
                   ),
                   GButton(
                     icon: FontAwesomeIcons.message,
                     leading: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: Image.asset(ImageAssets.chatIcon,
-                            fit: BoxFit.cover)),
+                      width: 24,
+                      height: 24,
+                      child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                    ),
                   ),
                 ],
                 haptic: true,
@@ -100,7 +108,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
               ),
             ),
             Positioned(
-                right: 5,
+                left: lang == 'ar' ? 5 : null,
+                right: lang != 'ar' ? 5 : null,
                 bottom: 0,
                 child: Builder(
                   builder: (context) => InkWell(

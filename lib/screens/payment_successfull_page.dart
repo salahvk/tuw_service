@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_media_services/screens/user_address_page.dart';
@@ -24,6 +26,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   final player = AudioPlayer();
   bool isProgress = true;
+  String lang = '';
 
   paySuccessSound() async {
     final duration = await player.setAsset('assets/Gpay.mp3');
@@ -33,6 +36,9 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   void initState() {
     super.initState();
     paySuccessSound();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
 
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
@@ -86,10 +92,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                   leading: SizedBox(
                     width: 24,
                     height: 24,
-                    child: Image.asset(
-                      ImageAssets.homeIcon,
-                      fit: BoxFit.cover,
-                    ),
+                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
                   ),
                 ),
                 GButton(
@@ -97,8 +100,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                   leading: SizedBox(
                       width: 24,
                       height: 24,
-                      child:
-                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
+                      child: SvgPicture.asset(ImageAssets.chatIconSvg)),
                 ),
               ],
               haptic: true,
@@ -111,7 +113,8 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
           ),
           Positioned(
-              right: 5,
+              left: lang == 'ar' ? 5 : null,
+              right: lang != 'ar' ? 5 : null,
               bottom: 0,
               child: Builder(
                 builder: (context) => InkWell(

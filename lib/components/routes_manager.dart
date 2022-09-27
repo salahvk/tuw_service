@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
 import 'package:social_media_services/screens/Terms&Conditions.dart';
-import 'package:social_media_services/screens/choose_service_page.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_service_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/screens/privacy_policy.dart';
 import 'package:social_media_services/screens/profile_page.dart';
-import 'package:social_media_services/screens/profile_service_page.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/screens/splash_screen.dart';

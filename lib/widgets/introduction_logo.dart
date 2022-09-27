@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 
@@ -43,9 +44,7 @@ class IntroductionLogo extends StatelessWidget {
                     backgroundColor: ColorManager.primary..withOpacity(0.25),
                     radius: 44.5,
                     child: Center(
-                      child: Image.asset(
-                        ImageAssets.paperPlane,
-                      ),
+                      child: SvgPicture.asset(ImageAssets.paperPlaneSvg),
                     ),
                   ),
                 ),

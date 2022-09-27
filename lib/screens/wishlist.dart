@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -19,6 +21,16 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList> {
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  String lang = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -63,19 +75,16 @@ class _WishListState extends State<WishList> {
                   leading: SizedBox(
                     width: 24,
                     height: 24,
-                    child: Image.asset(
-                      ImageAssets.homeIcon,
-                      fit: BoxFit.cover,
-                    ),
+                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
                   ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
                   leading: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child:
-                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
+                    width: 24,
+                    height: 24,
+                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                  ),
                 ),
               ],
               haptic: true,
@@ -88,7 +97,8 @@ class _WishListState extends State<WishList> {
             ),
           ),
           Positioned(
-              right: 5,
+              left: lang == 'ar' ? 5 : null,
+              right: lang != 'ar' ? 5 : null,
               bottom: 0,
               child: Builder(
                 builder: (context) => InkWell(

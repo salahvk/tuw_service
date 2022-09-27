@@ -3,18 +3,21 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/screens/messagePage.dart';
-import 'package:social_media_services/screens/payment_service_page.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseServicePage extends StatefulWidget {
   const ChooseServicePage({Key? key}) : super(key: key);
@@ -29,9 +32,20 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
   String? fileName;
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  String lang = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     final List<String> items = [
       'Item1',
@@ -80,19 +94,16 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                   leading: SizedBox(
                     width: 24,
                     height: 24,
-                    child: Image.asset(
-                      ImageAssets.homeIcon,
-                      fit: BoxFit.cover,
-                    ),
+                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
                   ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
                   leading: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child:
-                          Image.asset(ImageAssets.chatIcon, fit: BoxFit.cover)),
+                    width: 24,
+                    height: 24,
+                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                  ),
                 ),
               ],
               haptic: true,
@@ -105,7 +116,8 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
             ),
           ),
           Positioned(
-              right: 5,
+              left: lang == 'ar' ? 5 : null,
+              right: lang != 'ar' ? 5 : null,
               bottom: 0,
               child: Builder(
                 builder: (context) => InkWell(
@@ -136,9 +148,9 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Row(
-                        children: const [
-                          TitleWidget(name: 'Service Group'),
-                          Icon(
+                        children: [
+                          TitleWidget(name: str.c_service_group),
+                          const Icon(
                             Icons.star_outlined,
                             size: 10,
                             color: ColorManager.errorRed,
@@ -172,7 +184,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                   size: 35,
                                   color: ColorManager.black,
                                 ),
-                                hint: Text('Enter Group',
+                                hint: Text(str.c_service_group_h,
                                     style: getRegularStyle(
                                         color: const Color.fromARGB(
                                             255, 173, 173, 173),
@@ -209,9 +221,9 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Row(
-                        children: const [
-                          TitleWidget(name: 'Service List'),
-                          Icon(
+                        children: [
+                          TitleWidget(name: str.c_service_list),
+                          const Icon(
                             Icons.star_outlined,
                             size: 10,
                             color: ColorManager.errorRed,
@@ -283,10 +295,9 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Row(
-                        children: const [
-                          TitleWidget(
-                              name: 'Vehicle Registration Card/ CR Copy'),
-                          Icon(
+                        children: [
+                          TitleWidget(name: str.c_vehicle),
+                          const Icon(
                             Icons.star_outlined,
                             size: 10,
                             color: ColorManager.errorRed,
@@ -340,7 +351,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                         print(file.path);
                                       } else {}
                                     },
-                                    child: Text("Browse",
+                                    child: Text(str.c_browse,
                                         style: getLightStyle(
                                             color: ColorManager.whiteText,
                                             fontSize: 18))),
@@ -396,7 +407,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                 padding:
                                     const EdgeInsets.fromLTRB(13, 0, 13, 0)),
                             onPressed: continueToPay,
-                            child: Text("CONTINUE TO PAY",
+                            child: Text(str.c_pay,
                                 style: getRegularStyle(
                                     color: ColorManager.whiteText,
                                     fontSize: 16))),
@@ -410,11 +421,12 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
   }
 
   continueToPay() {
+    final str = AppLocalizations.of(context)!;
     isTickSelected
         ? Navigator.push(context, MaterialPageRoute(builder: (ctx) {
             return const PaymentServicePage();
           }))
-        : AnimatedSnackBar.material('Please agree the terms and conditions',
+        : AnimatedSnackBar.material(str.c_snack,
                 type: AnimatedSnackBarType.warning,
                 borderRadius: BorderRadius.circular(6),
                 // brightness: Brightness.dark,
