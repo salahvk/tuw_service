@@ -316,11 +316,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
   getOtp() async {
     print("getting otp");
+    final String id = Hive.box("LocalLan").get('lang_id');
+    print(id);
     try {
       final provider = Provider.of<DataProvider>(context, listen: false);
       var response = await http.post(
           Uri.parse(
-              "$apiUser/request_otp?countrycode=$countryCode&phone=${phoneNumCon.text}"),
+              "$apiUser/request_otp?countrycode=$countryCode&phone=${phoneNumCon.text}&language_id=$id"),
           headers: {"device-id": provider.deviceId ?? ''});
       // print(response.body);
       if (response.statusCode != 200) {

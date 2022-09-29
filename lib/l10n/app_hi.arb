@@ -87,5 +87,24 @@
     "cp_s_loc_1":"वर्तमान स्थान",
     "cp_s_loc_2":"भेजें",
     "cp_choose":"ऐप से चुनें",
-    "cp_address":"पता कार्ड"
+    "cp_address":"पता कार्ड",
+    "cp_long_press":"Long press to record",
+    "cp_re":"Recording",
+
+    "cs_profile":"प्रोफ़ाइल",
+    "cs_choose_service":"सेवा चुनें",
+    "cs_pay":"भुगतान",
+
+    "ps_card":"कार्डधारक का नाम",
+    "ps_card_h":"धारक का नाम दर्ज करें",
+    "ps_card_no":"कार्ड नंबर",
+    "ps_card_no_h":"कार्ड नंबर दर्ज करें",
+    "ps_ex":"अवधि समाप्त तारीख",
+    "ps_cvv":"सी वी वी कोड",
+    "ps_cvv_h":"सीवीवी दर्ज करें",
+    "ps_coupon":"कूपन कोड",
+    "ps_coupon_h":"कूपन कोड डालें",
+    "ps_yearly":"वार्षिक योजना",
+    "ps_monthly":"मासिक योजना",
+    "ps_pay":"अब भुगतान करें"
 }

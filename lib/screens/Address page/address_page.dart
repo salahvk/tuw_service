@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
-import 'package:social_media_services/screens/user_address_edit.dart';
+import 'package:social_media_services/screens/Address%20page/address_edit.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -15,14 +15,14 @@ import 'package:social_media_services/screens/worker_admin.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 
-class UserAddressPage extends StatefulWidget {
-  const UserAddressPage({super.key});
+class AddressPage extends StatefulWidget {
+  const AddressPage({super.key});
 
   @override
-  State<UserAddressPage> createState() => _UserAddressPageState();
+  State<AddressPage> createState() => _AddressPageState();
 }
 
-class _UserAddressPageState extends State<UserAddressPage> {
+class _AddressPageState extends State<AddressPage> {
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';

@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:social_media_services/components/routes_manager.dart';
-import 'package:social_media_services/screens/wishlist.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -153,10 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (ctx) {
-                return const MessagePage();
-              }));
+              Navigator.pushNamed(context, Routes.chatScreen);
             },
             child: const ProfileTitleWidget(
               name: 'Message',
@@ -165,10 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (ctx) {
-                return const WishList();
-              }));
+              Navigator.pushNamed(context, Routes.wishList);
             },
             child: const ProfileTitleWidget(
               name: 'Favourites',

@@ -34,7 +34,7 @@ class MonthlyPlan extends StatelessWidget {
               color: ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(5)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 14, 0, 14),
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

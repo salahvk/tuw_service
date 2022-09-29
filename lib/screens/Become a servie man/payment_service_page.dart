@@ -14,6 +14,7 @@ import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/monthly_plan.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentServicePage extends StatefulWidget {
   const PaymentServicePage({Key? key}) : super(key: key);
@@ -43,6 +44,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     final List<String> items = [
       'Item1',
       'Item2',
@@ -142,19 +144,19 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const CustomStepper(num: 3),
-                      const MandatoryHeader(heading: 'Card Holder Name'),
-                      const TextFieldProfileService(
-                          hintText: 'Enter Holder Name'),
-                      const MandatoryHeader(heading: 'Card Number'),
-                      const TextFieldProfileService(hintText: 'Enter Card No'),
+                      MandatoryHeader(heading: str.ps_card),
+                      TextFieldProfileService(hintText: str.ps_card_h),
+                      MandatoryHeader(heading: str.ps_card_no),
+                      TextFieldProfileService(hintText: str.ps_card_no_h),
 
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const MandatoryHeader(heading: 'Expired Date'),
+                              MandatoryHeader(heading: str.ps_ex),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Container(
@@ -180,7 +182,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                             color: ColorManager.primary,
                                           ),
                                         ),
-                                        hintText: 'Expired Date',
+                                        hintText: str.ps_ex,
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
@@ -194,19 +196,20 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: MandatoryHeader(heading: 'CVV Code'),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: MandatoryHeader(heading: str.ps_cvv),
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
                                         width: size.width * .45,
-                                        child: const TextFieldProfileService(
-                                            hintText: 'Enter CVV')),
+                                        child: TextFieldProfileService(
+                                            hintText: str.ps_cvv_h)),
                                   ],
                                 ),
                               )
@@ -215,9 +218,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                         ],
                       ),
 
-                      const MandatoryHeader(heading: 'Coupon Code'),
-                      const TextFieldProfileService(
-                          hintText: 'Enter Coupon Code'),
+                      MandatoryHeader(heading: str.ps_coupon),
+                      TextFieldProfileService(hintText: str.ps_coupon_h),
 
                       // * Region
                       Padding(
@@ -230,7 +232,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                               children: [
                                 MonthlyPlan(
                                   size: size,
-                                  plan: "Monthly Plan",
+                                  plan: str.ps_monthly,
                                   amount: '\$135.00',
                                 ),
                               ],
@@ -240,7 +242,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                               children: [
                                 MonthlyPlan(
                                     size: size,
-                                    plan: "Yearly Plan",
+                                    plan: str.ps_yearly,
                                     amount: '\$207.00')
                               ],
                             ),
@@ -265,11 +267,12 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                 color: ColorManager.whiteColor,
                                 borderRadius: BorderRadius.circular(5)),
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(14, 20, 14, 20),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("MONTHLY PLAN",
+                                  Text(str.ps_monthly,
                                       style: getBoldtStyle(
                                           color: ColorManager.black,
                                           fontSize: 18)),
@@ -315,7 +318,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                   return const PaymentSuccessPage();
                                 }), (route) => false);
                               },
-                              child: Text("PAY NOW",
+                              child: Text(str.ps_pay,
                                   style: getRegularStyle(
                                       color: ColorManager.whiteText,
                                       fontSize: 16))),

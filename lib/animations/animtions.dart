@@ -1,5 +1,34 @@
+// Skip to content
+// Search or jump to…
+// Pull requests
+// Issues
+// Marketplace
+// Explore
+ 
+// @salahvk 
+// salahvk
+// /
+// shopping
+// Private
+// Code
+// Issues
+// Pull requests
+// Actions
+// Projects
+// Security
+// Insights
+// Settings
+// shopping/lib/animation/animation.dart
+
+// salah status updated added, some UI changes
+// Latest commit 7725f05 on Jul 3
+//  History
+//  0 contributors
+// 72 lines (62 sloc)  2.33 KB
+
 // import 'package:flutter/material.dart';
 
+// import 'package:simple_animations/simple_animations.dart';
 
 // // define animated properties
 // enum AniProps { opacity, translateY }
@@ -69,3 +98,18 @@
 //     );
 //   }
 // }
+// Footer
+// © 2022 GitHub, Inc.
+// Footer navigation
+// Terms
+// Privacy
+// Security
+// Status
+// Docs
+// Contact GitHub
+// Pricing
+// API
+// Training
+// Blog
+// About
+// shopping/place_menu.dart at main · salahvk/shoppingshopping/animation.dart at main · salahvk/shopping

@@ -26,7 +26,7 @@ class ProfileTitleWidget extends StatelessWidget {
             size: 22,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: 8, right: 8),
             child: Text(name,
                 style: getRegularStyle(
                     color: ColorManager.serviceHomeGrey, fontSize: 17)),

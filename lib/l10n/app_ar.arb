@@ -87,5 +87,24 @@
     "cp_s_loc_1":"إرسال الموقع",
     "cp_s_loc_2":"الحالي",
     "cp_choose":"اختر من التطبيق",
-    "cp_address":"بطاقة العنوان"
+    "cp_address":"بطاقة العنوان",
+    "cp_long_press":"Long press to record",
+    "cp_re":"Recording",
+
+    "cs_profile":"الملف الشخصي",
+    "cs_choose_service":"اختر الخدمة",
+    "cs_pay":"دفع",
+
+    "ps_card":"إسم صاحب البطاقة",
+    "ps_card_h":"أدخل اسم الحامل",
+    "ps_card_no":"رقم البطاقة",
+    "ps_card_no_h":"أدخل رقم البطاقة",
+    "ps_ex":"منتهي الصلاحية",
+    "ps_cvv":"رقم Cvv",
+    "ps_cvv_h":" أدخل CVV",
+    "ps_coupon":"رمز الكوبون",
+    "ps_coupon_h":"أدخل رمز القسيمة",
+    "ps_yearly":"الخطة السنوية",
+    "ps_monthly":"خطة شهرية",
+    "ps_pay":"ادفع الآن"
 }

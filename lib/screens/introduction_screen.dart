@@ -134,16 +134,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               setState(() {
                                 selected = lan?.language ?? '';
                               });
-
-                              // MyApp.of(context).setLocale(
-                              //   Locale.fromSubtags(
-                              //     languageCode: lan?.shortcode ?? '',
-                              //   ),
-                              // );
                               Hive.box("LocalLan")
                                   .put('lang', lan?.shortcode ?? '');
-
-                              print(Hive.box("LocalLan").get('lang'));
+                              String? id = provider
+                                  .languageModel?.languages?[index].id
+                                  .toString();
+                              Hive.box("LocalLan").put('lang_id', id ?? '');
                             },
                             child: LanguageButton(
                               language: lan?.language ?? '',

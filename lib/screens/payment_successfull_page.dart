@@ -5,7 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
-import 'package:social_media_services/screens/user_address_page.dart';
+import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -226,7 +226,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                             onPressed: () {
                               Navigator.pushReplacement(context,
                                   MaterialPageRoute(builder: (ctx) {
-                                return const UserAddressPage();
+                                return const AddressPage();
                               }));
                               // player.stop();
                             },

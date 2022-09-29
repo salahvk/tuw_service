@@ -12,6 +12,7 @@ import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_
 import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/screens/splash_screen.dart';
+import 'package:social_media_services/screens/wishlist.dart';
 import 'package:social_media_services/screens/worker_detailed_user.dart';
 
 class Routes {
@@ -31,6 +32,7 @@ class Routes {
   static const String workerDetails = '/workerDetails';
   static const String privacyPolicy = '/privacyPolicy';
   static const String termsAndConditions = '/termsAndConditions';
+  static const String wishList = '/wishList';
 }
 
 class RouteGenerator {
@@ -64,6 +66,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
       case Routes.termsAndConditions:
         return MaterialPageRoute(builder: (_) => const TermsAndConditionPage());
+      case Routes.wishList:
+        return MaterialPageRoute(builder: (_) => const WishList());
       default:
         return unDefinedRoute();
     }

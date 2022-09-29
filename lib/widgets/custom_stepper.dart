@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomStepper extends StatelessWidget {
   final int num;
@@ -8,6 +9,7 @@ class CustomStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
@@ -16,7 +18,7 @@ class CustomStepper extends StatelessWidget {
           Column(
             children: [
               Text(
-                "Profile",
+                str.cs_profile,
                 style: getMediumtStyle(
                     color: ColorManager.paymentPageColor1, fontSize: 10),
               ),
@@ -60,7 +62,7 @@ class CustomStepper extends StatelessWidget {
           ),
           Column(
             children: [
-              Text("Choose Service",
+              Text(str.cs_choose_service,
                   style: getMediumtStyle(
                       color: ColorManager.paymentPageColor1, fontSize: 10)),
               const SizedBox(
@@ -103,7 +105,7 @@ class CustomStepper extends StatelessWidget {
           ),
           Column(
             children: [
-              Text("Payment",
+              Text(str.cs_pay,
                   style: getMediumtStyle(
                       color: ColorManager.paymentPageColor1, fontSize: 10)),
               const SizedBox(
