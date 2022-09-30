@@ -10,7 +10,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
-import 'package:social_media_services/screens/worker_detailed_user.dart';
+import 'package:social_media_services/screens/worker_details_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/statusListTile.dart';
 
@@ -36,6 +36,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(

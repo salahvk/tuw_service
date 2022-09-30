@@ -58,6 +58,59 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // ElevatedButton(
+          //     onPressed: () {
+          //       const sm = 'India';
+          //       s(sm);
+          //     },
+          //     child: const Text('data'))
+          // DropdownSearch<List<Countries>>(
+          //     // asyncItems: (filter) => getData(filter),
+
+          //     // compareFn: (i, s) => i.isEqual(s),
+
+          //     items: [
+          //       provider.countriesModel!.countries!,
+          //     ],
+          //     popupProps: PopupPropsMultiSelection.menu(
+          //       // isFilterOnline: true,
+          //       // showSelectedItems: true,
+          //       showSearchBox: true,
+          //       selectionWidget: (context, item, isSelected) {
+          //         return Container(
+          //           color: ColorManager.errorRed,
+          //           height: 5,
+          //           width: 6,
+          //         );
+          //       },
+
+          //       itemBuilder: customPopupItemBuilderExample2,
+          //       favoriteItemProps: const FavoriteItemProps(
+          //         showFavoriteItems: true,
+          //         // favoriteItems: (us) {
+          //         //   return us
+          //         //       .where((e) => e.countryName!.contains("Mrs"))
+          //         //       .toList();
+          //         // },
+          //       ),
+
+          //       // validationWidgetBuilder: (ctx, selectedItems) {
+          //       //   return Container(
+          //       //     color: Colors.blue[200],
+          //       //     height: 56,
+          //       //     child: Align(
+          //       //       alignment: Alignment.center,
+          //       //       child: MaterialButton(
+          //       //         child: const Text('OK'),
+          //       //         onPressed: () {
+          //       //           // _popupCustomValidationKey.currentState?.popupOnValidate();
+          //       //         },
+          //       //       ),
+          //       //     ),
+          //       //   );
+          //       // },
+          //     )),
+
           SizedBox(
             height: size.height * 0.36,
             child: const Center(
@@ -202,6 +255,48 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                               itemPadding:
                                   const EdgeInsets.fromLTRB(6, 0, 0, 8),
                               isExpanded: true,
+                              searchController: null,
+
+                              // searchMatchFn: (item, searchValue) {
+                              //   return (item.value.toString().contains(''));
+                              //   // final s = provider.countriesModel!.countries!
+                              //   //     .map((e) => e.countryName);
+                              //   // return s.contains(searchValue);
+                              // },
+
+                              // searchInnerWidget: Padding(
+                              //   padding: const EdgeInsets.only(
+                              //     top: 8,
+                              //     bottom: 4,
+                              //     right: 8,
+                              //     left: 8,
+                              //   ),
+                              //   child: TextFormField(
+                              //     controller: searchCon,
+                              //     onChanged: (value) {
+                              //       s(value);
+                              //     },
+                              //     decoration: InputDecoration(
+                              //       isDense: true,
+                              //       contentPadding: const EdgeInsets.symmetric(
+                              //         horizontal: 10,
+                              //         vertical: 8,
+                              //       ),
+                              //       hintText: 'Search your country',
+                              //       hintStyle: const TextStyle(fontSize: 12),
+                              //       border: OutlineInputBorder(
+                              //         borderRadius: BorderRadius.circular(8),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+
+                              // //This to clear the search value when you close the menu
+                              // onMenuStateChange: (isOpen) {
+                              //   if (!isOpen) {
+                              //     searchCon.clear();
+                              //   }
+                              // },
                             ),
                           ),
                         ),
@@ -220,7 +315,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                           keyboardType: TextInputType.phone,
                           controller: phoneNumCon,
                           style: const TextStyle(),
+                          maxLength: 10,
                           decoration: InputDecoration(
+                                  counterText: '',
                                   contentPadding: const EdgeInsets.only(
                                       left: 0, right: 10, top: 20, bottom: 20),
                                   hintText: str.m_ent_mob_no,
@@ -288,6 +385,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   }
 
   onContinue() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final OtpProvider = Provider.of<OTPProvider>(context, listen: false);
     final str = AppLocalizations.of(context)!;
     final phoneNumber = phoneNumCon.text.trim();
@@ -301,6 +399,14 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       );
     } else if (phoneNumber.length > 10) {
       AnimatedSnackBar.material('Mobile Number must not be above 10 digits',
+              type: AnimatedSnackBarType.error,
+              borderRadius: BorderRadius.circular(6),
+              duration: const Duration(seconds: 1))
+          .show(
+        context,
+      );
+    } else if (phoneNumber != '8089852417') {
+      AnimatedSnackBar.material('Enter a valid Number',
               type: AnimatedSnackBarType.error,
               borderRadius: BorderRadius.circular(6),
               duration: const Duration(seconds: 1))
@@ -335,8 +441,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       Navigator.push(context, MaterialPageRoute(builder: (ctx) {
         return const OTPscreen();
       }));
-    } on Exception catch (_) {
+    } on Exception catch (e) {
       showSnackBar("Something Went Wrong", context);
+      print(e);
     }
   }
 
@@ -357,5 +464,17 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         languageCode: lang,
       ),
     );
+  }
+
+  s(filter) {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    provider.countriesModel?.countries?.forEach((element) {
+      final m = element.countryName?.contains(filter);
+      if (m == true) {
+        print(element.countryName);
+      }
+      // final z = (m == true ? element.countryName : null);
+      // print(z);
+    });
   }
 }

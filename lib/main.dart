@@ -59,7 +59,6 @@ class _MyAppState extends State<MyApp> {
           Locale('hi', ''), // Hindi
           Locale('ar', ''), // arabic
         ],
-
         locale: locale,
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -72,7 +71,7 @@ class _MyAppState extends State<MyApp> {
         theme: getApplicationTheme(context).copyWith(useMaterial3: true),
         initialRoute: Routes.splashScreen,
         onGenerateRoute: RouteGenerator.getRoute,
-        // home: CountUpTimerPage(),
+        // home: const OTPscreen(),
       ),
     );
   }

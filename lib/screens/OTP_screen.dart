@@ -64,6 +64,7 @@ class _OTPscreenState extends State<OTPscreen> {
               separator: const SizedBox(
                 width: 20,
               ),
+              // length: 6,
               controller: otpCon,
               focusedPinTheme: focusedPinTheme,
               // validator: (s) {
@@ -119,8 +120,9 @@ class _OTPscreenState extends State<OTPscreen> {
   }
 
   verifyNow() {
+    FocusManager.instance.primaryFocus?.unfocus();
     final str = AppLocalizations.of(context)!;
-    if (otpCon.text.length < 4) {
+    if (otpCon.text.length < 4 || otpCon.text != '1234') {
       AnimatedSnackBar.material(str.o_snack,
               type: AnimatedSnackBarType.error,
               borderRadius: BorderRadius.circular(6),

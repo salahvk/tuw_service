@@ -1,7 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/screens/servicer.dart';
 
 class ServiceHomePage extends StatelessWidget {
@@ -27,9 +29,38 @@ class ServiceHomePage extends StatelessWidget {
                   style: getBoldtStyle(color: ColorManager.black, fontSize: 20),
                 ),
               ),
+              // * carousel
+              CarouselSlider.builder(
+                itemCount: 10,
+                itemBuilder:
+                    (BuildContext context, int itemIndex, int pageViewIndex) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: ColorManager.whiteColor,
+                    ),
+                    // width: 250,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                        switzeland,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  );
+                },
+                options: CarouselOptions(
+                  autoPlay: false,
+                  height: 110,
+                  onPageChanged: (index, reason) {},
+                  enlargeCenterPage: true,
+                  viewportFraction: 0.3,
+                  aspectRatio: 2.0,
+                  initialPage: 30,
+                ),
+              ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
                   child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(

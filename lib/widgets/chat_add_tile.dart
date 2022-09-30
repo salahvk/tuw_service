@@ -33,7 +33,7 @@ class ChatAddTile extends StatelessWidget {
           width: size.width * .025,
         ),
         Text(title,
-            style: getBoldtStyle(color: ColorManager.whiteColor, fontSize: 15))
+            style: getBoldtStyle(color: ColorManager.whiteColor, fontSize: 13))
       ],
     );
   }

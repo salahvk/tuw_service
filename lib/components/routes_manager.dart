@@ -13,7 +13,7 @@ import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/screens/splash_screen.dart';
 import 'package:social_media_services/screens/wishlist.dart';
-import 'package:social_media_services/screens/worker_detailed_user.dart';
+import 'package:social_media_services/screens/worker_details_page.dart';
 
 class Routes {
   static const String splashScreen = '/';
