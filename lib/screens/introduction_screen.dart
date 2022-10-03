@@ -31,10 +31,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           children: [
             SizedBox(
               height: size.height * 0.36,
-              child: const Center(
+              child: Center(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-                  child: IntroductionLogo(),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, size.height * 0.04),
+                  child: const IntroductionLogo(),
                 ),
               ),
             ),

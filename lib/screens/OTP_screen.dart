@@ -58,7 +58,7 @@ class _OTPscreenState extends State<OTPscreen> {
                 ],
               )),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+            padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
             child: Pinput(
               defaultPinTheme: defaultPinTheme,
               separator: const SizedBox(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -33,22 +32,27 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   Countries? selectedValue;
   String? countryCode;
   String lang = '';
+  List<Countries> r = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     countryCode = "91";
-    print(countryCode);
-    print("first");
+
+    r.clear();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      r = (provider.countriesModel!.countries)!;
       setTimer();
     });
+    print(r);
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // print(size.height);
+    // print(size.width);
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
 
@@ -58,58 +62,65 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ElevatedButton(
-          //     onPressed: () {
-          //       const sm = 'India';
-          //       s(sm);
-          //     },
-          //     child: const Text('data'))
-          // DropdownSearch<List<Countries>>(
-          //     // asyncItems: (filter) => getData(filter),
+          SizedBox(
+            height: 200,
+            width: 200,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) async {
+                      String capitalize(String s) =>
+                          s[0].toUpperCase() + s.substring(1);
 
-          //     // compareFn: (i, s) => i.isEqual(s),
+                      if (value.isEmpty) {
+                        print('empty');
+                        r = [];
+                        setState(() {
+                          r = (provider.countriesModel!.countries)!;
+                        });
 
-          //     items: [
-          //       provider.countriesModel!.countries!,
-          //     ],
-          //     popupProps: PopupPropsMultiSelection.menu(
-          //       // isFilterOnline: true,
-          //       // showSelectedItems: true,
-          //       showSearchBox: true,
-          //       selectionWidget: (context, item, isSelected) {
-          //         return Container(
-          //           color: ColorManager.errorRed,
-          //           height: 5,
-          //           width: 6,
-          //         );
-          //       },
+                        print(r.length);
+                      } else {
+                        final lower = capitalize(value);
+                        s(lower);
+                        print(r.length);
+                      }
 
-          //       itemBuilder: customPopupItemBuilderExample2,
-          //       favoriteItemProps: const FavoriteItemProps(
-          //         showFavoriteItems: true,
-          //         // favoriteItems: (us) {
-          //         //   return us
-          //         //       .where((e) => e.countryName!.contains("Mrs"))
-          //         //       .toList();
-          //         // },
-          //       ),
+                      // print(r);
+                    },
+                  ),
+                ),
 
-          //       // validationWidgetBuilder: (ctx, selectedItems) {
-          //       //   return Container(
-          //       //     color: Colors.blue[200],
-          //       //     height: 56,
-          //       //     child: Align(
-          //       //       alignment: Alignment.center,
-          //       //       child: MaterialButton(
-          //       //         child: const Text('OK'),
-          //       //         onPressed: () {
-          //       //           // _popupCustomValidationKey.currentState?.popupOnValidate();
-          //       //         },
-          //       //       ),
-          //       //     ),
-          //       //   );
-          //       // },
-          //     )),
+                // Expanded(child: StreamBuilder<List<Countries>>(
+                //   stream: ,
+                // ))
+                Expanded(
+                  child: ListView.builder(
+                      itemCount:
+                          // r.isEmpty
+                          //     ? provider.countriesModel!.countries!.length
+                          //     :
+                          r.length,
+                      shrinkWrap: true,
+                      itemBuilder: (ctx, index) {
+                        return Container(
+                          width: 100,
+                          height: 50,
+                          color: ColorManager.primary,
+                          // child: r.isEmpty
+                          //     ? Text(provider.countriesModel!.countries![index]
+                          //             .countryName ??
+                          //         '')
+                          // :
+                          child: Text(r[index].countryName ?? ''),
+                        );
+                      }),
+                ),
+              ],
+            ),
+          ),
 
           SizedBox(
             height: size.height * 0.36,
@@ -147,159 +158,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: SizedBox(
-                          width: size.width * .18,
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              iconSize: 0,
-                              hint: Text('',
-                                  style: getRegularStyle(
-                                      color: const Color.fromARGB(
-                                          255, 173, 173, 173),
-                                      fontSize: 15)),
-                              items: provider.countriesModel?.countries
-                                  ?.map((item) => DropdownMenuItem(
-                                        value: item,
-                                        child: Row(
-                                          children: [
-                                            // SizedBox(
-                                            //     width: 23,
-                                            //     height: 15,
-                                            //     child: ScalableImageWidget
-                                            //         .fromSISource(
-                                            //             scale: 5,
-                                            //             onLoading: (p0) {
-                                            //               return Container(
-                                            //                 child:
-                                            //                     const CircularProgressIndicator(
-                                            //                   strokeWidth: 2,
-                                            //                 ),
-                                            //               );
-                                            //             },
-                                            //             cache:
-                                            //                 ScalableImageCache(
-                                            //                     size: 210),
-                                            //             si: ScalableImageSource
-                                            //                 .fromSvgHttpUrl(
-                                            //                     // bigFloats: true,
-                                            //                     Uri.parse(
-                                            //                         '$endPoint${item.countryflag}')))),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      5, 0, 6, 0),
-                                              child: Text(
-                                                  '+${item.phonecode.toString()}',
-                                                  style: getSemiBoldtStyle(
-                                                      color: ColorManager
-                                                          .background,
-                                                      fontSize: 13)),
-                                            ),
-                                            Text(item.countryName ?? '',
-                                                style: getSemiBoldtStyle(
-                                                    color:
-                                                        ColorManager.background,
-                                                    fontSize: item.countryName!
-                                                                .length <
-                                                            12
-                                                        ? 12
-                                                        : item.countryName!
-                                                                    .length <
-                                                                20
-                                                            ? 10
-                                                            : item.countryName!
-                                                                        .length >
-                                                                    25
-                                                                ? 6
-                                                                : 8)),
-                                          ],
-                                        ),
-                                      ))
-                                  .toList(),
-
-                              customButton: selectedValue == null
-                                  ? const Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(20, 20, 20, 20),
-                                      child: Text('+91'),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 20, 10, 20),
-                                      child: Text(
-                                          "+${selectedValue?.phonecode.toString()}"),
-                                    ),
-                              value: selectedValue,
-                              onChanged: (value) {
-                                setState(() {});
-                                selectedValue = value as Countries;
-                                countryCode =
-                                    selectedValue?.phonecode.toString();
-                              },
-                              buttonHeight: 40,
-                              dropdownPadding:
-                                  const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              // buttonWidth: 140,
-                              itemHeight: 40, dropdownWidth: 200,
-                              buttonWidth: 80,
-                              style: getRegularStyle(
-                                  color: Colors.black54, fontSize: 17),
-                              dropdownMaxHeight: 200,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: ColorManager.primary2,
-                              ),
-
-                              buttonPadding:
-                                  const EdgeInsets.fromLTRB(0, 0, 6, 0),
-
-                              itemPadding:
-                                  const EdgeInsets.fromLTRB(6, 0, 0, 8),
-                              isExpanded: true,
-                              searchController: null,
-
-                              // searchMatchFn: (item, searchValue) {
-                              //   return (item.value.toString().contains(''));
-                              //   // final s = provider.countriesModel!.countries!
-                              //   //     .map((e) => e.countryName);
-                              //   // return s.contains(searchValue);
-                              // },
-
-                              // searchInnerWidget: Padding(
-                              //   padding: const EdgeInsets.only(
-                              //     top: 8,
-                              //     bottom: 4,
-                              //     right: 8,
-                              //     left: 8,
-                              //   ),
-                              //   child: TextFormField(
-                              //     controller: searchCon,
-                              //     onChanged: (value) {
-                              //       s(value);
-                              //     },
-                              //     decoration: InputDecoration(
-                              //       isDense: true,
-                              //       contentPadding: const EdgeInsets.symmetric(
-                              //         horizontal: 10,
-                              //         vertical: 8,
-                              //       ),
-                              //       hintText: 'Search your country',
-                              //       hintStyle: const TextStyle(fontSize: 12),
-                              //       border: OutlineInputBorder(
-                              //         borderRadius: BorderRadius.circular(8),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-
-                              // //This to clear the search value when you close the menu
-                              // onMenuStateChange: (isOpen) {
-                              //   if (!isOpen) {
-                              //     searchCon.clear();
-                              //   }
-                              // },
-                            ),
-                          ),
-                        ),
+                            width: size.width * .18, child: const Text('data')),
                       ),
                       Container(
                         height: 40,
@@ -471,10 +330,17 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     provider.countriesModel?.countries?.forEach((element) {
       final m = element.countryName?.contains(filter);
       if (m == true) {
-        print(element.countryName);
+        // print(element.countryName);
+        setState(() {
+          r = [];
+          r.add(element);
+        });
       }
       // final z = (m == true ? element.countryName : null);
       // print(z);
     });
   }
+  // Stream<List<Countries>> readCountries(){
+  //  return stream;
+  // }
 }

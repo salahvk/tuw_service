@@ -1,0 +1,151 @@
+DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              iconSize: 0,
+                              hint: Text('',
+                                  style: getRegularStyle(
+                                      color: const Color.fromARGB(
+                                          255, 173, 173, 173),
+                                      fontSize: 15)),
+                              items: provider.countriesModel?.countries
+                                  ?.map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Row(
+                                          children: [
+                                            // SizedBox(
+                                            //     width: 23,
+                                            //     height: 15,
+                                            //     child: ScalableImageWidget
+                                            //         .fromSISource(
+                                            //             scale: 5,
+                                            //             onLoading: (p0) {
+                                            //               return Container(
+                                            //                 child:
+                                            //                     const CircularProgressIndicator(
+                                            //                   strokeWidth: 2,
+                                            //                 ),
+                                            //               );
+                                            //             },
+                                            //             cache:
+                                            //                 ScalableImageCache(
+                                            //                     size: 210),
+                                            //             si: ScalableImageSource
+                                            //                 .fromSvgHttpUrl(
+                                            //                     // bigFloats: true,
+                                            //                     Uri.parse(
+                                            //                         '$endPoint${item.countryflag}')))),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      5, 0, 6, 0),
+                                              child: Text(
+                                                  '+${item.phonecode.toString()}',
+                                                  style: getSemiBoldtStyle(
+                                                      color: ColorManager
+                                                          .background,
+                                                      fontSize: 13)),
+                                            ),
+                                            Text(item.countryName ?? '',
+                                                style: getSemiBoldtStyle(
+                                                    color:
+                                                        ColorManager.background,
+                                                    fontSize: item.countryName!
+                                                                .length <
+                                                            12
+                                                        ? 12
+                                                        : item.countryName!
+                                                                    .length <
+                                                                20
+                                                            ? 10
+                                                            : item.countryName!
+                                                                        .length >
+                                                                    25
+                                                                ? 6
+                                                                : 8)),
+                                          ],
+                                        ),
+                                      ))
+                                  .toList(),
+
+                              customButton: selectedValue == null
+                                  ? const Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                      child: Text('+91'),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 20, 10, 20),
+                                      child: Text(
+                                          "+${selectedValue?.phonecode.toString()}"),
+                                    ),
+                              value: selectedValue?.countryName,
+                              onChanged: (value) {
+                                setState(() {});
+                                selectedValue = value as Countries;
+                                countryCode =
+                                    selectedValue?.phonecode.toString();
+                              },
+                              buttonHeight: 40,
+                              dropdownPadding:
+                                  const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              // buttonWidth: 140,
+                              itemHeight: 40, dropdownWidth: 200,
+                              buttonWidth: 80,
+                              style: getRegularStyle(
+                                  color: Colors.black54, fontSize: 17),
+                              dropdownMaxHeight: 200,
+                              dropdownDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: ColorManager.primary2,
+                              ),
+
+                              buttonPadding:
+                                  const EdgeInsets.fromLTRB(0, 0, 6, 0),
+
+                              itemPadding:
+                                  const EdgeInsets.fromLTRB(6, 0, 0, 8),
+                              isExpanded: true,
+                              searchController: null,
+
+                              // searchMatchFn: (item, searchValue) {
+                              //   return (item.value.toString().contains(''));
+                              //   // final s = provider.countriesModel!.countries!
+                              //   //     .map((e) => e.countryName);
+                              //   // return s.contains(searchValue);
+                              // },
+
+                              // searchInnerWidget: Padding(
+                              //   padding: const EdgeInsets.only(
+                              //     top: 8,
+                              //     bottom: 4,
+                              //     right: 8,
+                              //     left: 8,
+                              //   ),
+                              //   child: TextFormField(
+                              //     controller: searchCon,
+                              //     onChanged: (value) {
+                              //       s(value);
+                              //     },
+                              //     decoration: InputDecoration(
+                              //       isDense: true,
+                              //       contentPadding: const EdgeInsets.symmetric(
+                              //         horizontal: 10,
+                              //         vertical: 8,
+                              //       ),
+                              //       hintText: 'Search your country',
+                              //       hintStyle: const TextStyle(fontSize: 12),
+                              //       border: OutlineInputBorder(
+                              //         borderRadius: BorderRadius.circular(8),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+
+                              // //This to clear the search value when you close the menu
+                              // onMenuStateChange: (isOpen) {
+                              //   if (!isOpen) {
+                              //     searchCon.clear();
+                              //   }
+                              // },
+                            ),
+                          ),
