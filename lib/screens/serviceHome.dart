@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/servicer.dart';
 
 class ServiceHomePage extends StatelessWidget {
@@ -15,10 +17,11 @@ class ServiceHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mob = Responsive.isMobile(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
+          padding: EdgeInsets.fromLTRB(10, mob ? 40 : 20, 10, 0),
           // implement GridView.builder
           child: Column(
             children: [
@@ -41,8 +44,8 @@ class ServiceHomePage extends StatelessWidget {
                     // width: 250,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        switzeland,
+                      child: CachedNetworkImage(
+                        imageUrl: switzeland,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -50,25 +53,24 @@ class ServiceHomePage extends StatelessWidget {
                 },
                 options: CarouselOptions(
                   autoPlay: false,
-                  height: 110,
+                  height: mob ? 110 : 60,
                   onPageChanged: (index, reason) {},
                   enlargeCenterPage: true,
                   viewportFraction: 0.3,
                   aspectRatio: 2.0,
-                  initialPage: 30,
+                  initialPage: 0,
                 ),
               ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
                   child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 130,
-                              childAspectRatio: 3 / 3,
-                              crossAxisSpacing: 14,
-                              mainAxisExtent: 123,
-                              mainAxisSpacing: 20),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: mob ? 130 : 100,
+                          childAspectRatio: 3 / 3,
+                          crossAxisSpacing: 14,
+                          mainAxisExtent: mob ? 123 : 100,
+                          mainAxisSpacing: 20),
                       itemCount: myProducts.length,
                       itemBuilder: (BuildContext ctx, index) {
                         return InkWell(
@@ -100,11 +102,11 @@ class ServiceHomePage extends StatelessWidget {
                                 Text(myProducts[index + 1]["name"],
                                     style: getRegularStyle(
                                         color: ColorManager.serviceHomeGrey,
-                                        fontSize: 16)),
+                                        fontSize: mob ? 16 : 12)),
                                 Text("100+ Profiles",
                                     style: getRegularStyle(
                                         color: const Color(0xffbababa),
-                                        fontSize: 14)),
+                                        fontSize: mob ? 14 : 10)),
                               ],
                             ),
                           ),

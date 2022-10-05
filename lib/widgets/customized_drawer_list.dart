@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 
 class CustomDrawerList extends StatelessWidget {
   final String title;
@@ -45,8 +46,9 @@ class CustomDrawerList extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 3),
                   child: Text(
                     title,
-                    style:
-                        getBoldtStyle(color: ColorManager.black, fontSize: 16),
+                    style: getBoldtStyle(
+                        color: ColorManager.black,
+                        fontSize: Responsive.isMobile(context) ? 16 : 13),
                   ),
                 ),
               ],

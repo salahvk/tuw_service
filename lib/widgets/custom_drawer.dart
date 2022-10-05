@@ -1,23 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
+
     return DrawerHeader(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: ColorManager.primary2,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+          borderRadius: lang == 'ar'
+              ? const BorderRadius.only(
+                  topRight: Radius.circular(8), bottomRight: Radius.circular(8))
+              : const BorderRadius.only(
+                  topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
         ),
         margin: const EdgeInsets.all(0.0),
         padding: const EdgeInsets.all(0.0),

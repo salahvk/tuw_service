@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/widgets/ser_status_custom_drawer.dart';
+import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:social_media_services/widgets/servicer_list_tile.dart';
 
 class SearchNearService extends StatefulWidget {

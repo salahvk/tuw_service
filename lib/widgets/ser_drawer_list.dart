@@ -50,7 +50,7 @@ class _SerDrawerListState extends State<SerDrawerList> {
                     isTickSelected ? Image.asset(ImageAssets.blackTick) : null,
               ),
               Padding(
-                  padding: const EdgeInsets.only(left: 8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Image.asset(
                     widget.image,
                     color: ColorManager.whiteColor,

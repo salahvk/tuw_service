@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 
 class ServicerListTile extends StatelessWidget {
   const ServicerListTile({super.key});
@@ -10,6 +11,7 @@ class ServicerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    bool mob = Responsive.isMobile(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -22,7 +24,7 @@ class ServicerListTile extends StatelessWidget {
         ],
       ),
       width: size.width,
-      height: 120,
+      height: Responsive.isMobile(context) ? 120 : 80,
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
@@ -39,23 +41,27 @@ class ServicerListTile extends StatelessWidget {
                         bottomLeft: Radius.circular(6)),
                   ),
                   width: size.width * 0.3,
-                  height: 120,
+                  height: mob ? 120 : 80,
                   child: Center(
                     child: CircleAvatar(
-                      radius: 43,
-                      backgroundColor: ColorManager.whiteColor,
+                      radius: mob ? 43 : 30,
+                      backgroundColor: mob ? ColorManager.whiteColor : null,
                       child: CircleAvatar(
-                        radius: 40,
-                        child: Image.asset(ImageAssets.profileIcon),
+                        radius: mob ? 40 : 20,
+                        // backgroundColor: ColorManager.grayDark,
+                        child: Image.asset(
+                          ImageAssets.profileIcon,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  height: 65,
+                  height: mob ? 65 : 45,
                   left: size.width * .06,
-                  child: const CircleAvatar(
-                    radius: 8,
+                  child: CircleAvatar(
+                    radius: mob ? 8 : 6,
                     backgroundColor: ColorManager.primary,
                   ),
                 )
@@ -72,14 +78,14 @@ class ServicerListTile extends StatelessWidget {
                 children: [
                   Text('Akhil Mahesh',
                       style: getRegularStyle(
-                          color: ColorManager.black, fontSize: 16)),
+                          color: ColorManager.black, fontSize: mob ? 16 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
                   Text('Car Servicer',
                       style: getRegularStyle(
                           color: const Color.fromARGB(255, 173, 173, 173),
-                          fontSize: 15)),
+                          fontSize: mob ? 15 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
@@ -92,7 +98,7 @@ class ServicerListTile extends StatelessWidget {
                         direction: Axis.horizontal,
                         allowHalfRating: true,
                         itemCount: 4,
-                        itemSize: 20,
+                        itemSize: mob ? 20 : 12,
                         ignoreGestures: true,
                         itemPadding:
                             const EdgeInsets.symmetric(horizontal: 2.50),
@@ -116,7 +122,7 @@ class ServicerListTile extends StatelessWidget {
                       Text("Engin Worker",
                           style: getRegularStyle(
                               color: const Color.fromARGB(255, 173, 173, 173),
-                              fontSize: 15))
+                              fontSize: mob ? 15 : 10))
                     ],
                   )
                 ],
@@ -130,9 +136,9 @@ class ServicerListTile extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.favorite,
-                      size: 23,
+                      size: mob ? 23 : 15,
                       color: ColorManager.primary,
                     ),
                     Column(

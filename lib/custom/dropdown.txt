@@ -1,0 +1,22 @@
+getCountryCode(){
+   final provider = Provider.of<DataProvider>(context, listen: false);
+  
+                                          String capitalize(String s) =>
+                                              s[0].toUpperCase() +
+                                              s.substring(1);
+
+                                          if (codeController.text.isEmpty) {
+                                            print('empty');
+                                            r = [];
+                                            setState(() {
+                                              r = (provider
+                                                  .countriesModel!.countries)!;
+                                            });
+
+                                            print(r.length);
+                                          } else {
+                                            final lower = capitalize(codeController.text);
+                                            s(lower);
+                                            print(r.length);
+                                          }
+ }

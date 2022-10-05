@@ -24,6 +24,7 @@ ThemeData getApplicationTheme(BuildContext context) {
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
         foregroundColor: ColorManager.whiteText,
+        // fixedSize: const Size.fromHeight(100),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -68,8 +69,8 @@ ThemeData getApplicationTheme(BuildContext context) {
         // contentPadding: EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
         filled: true,
         fillColor: ColorManager.whiteColor,
-        hintStyle: getSemiBoldtStyle(
-            color: ColorManager.tertiary.withOpacity(.5), fontSize: 16),
+        hintStyle: getRegularStyle(
+            color: const Color.fromARGB(255, 173, 173, 173), fontSize: 15),
         labelStyle:
             getSemiBoldtStyle(color: ColorManager.tertiary.withOpacity(.5)),
         floatingLabelStyle:

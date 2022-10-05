@@ -7,6 +7,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/camera_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
@@ -26,6 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool ismenuVisible = false;
   bool isMapmenuVisible = false;
   bool isDropped = false;
+
   // bool isAnimationVisible = false;
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
@@ -57,6 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    bool mob = Responsive.isMobile(context);
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -242,8 +245,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 height: 60,
                 child: Row(
                   children: [
-                    const SizedBox(
-                      width: 7,
+                    SizedBox(
+                      width: mob ? 7 : 2,
                     ),
                     InkWell(
                       onTap: () {
@@ -269,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: ColorManager.primary)),
-                        width: size.width * 0.69,
+                        width: mob ? size.width * 0.69 : size.width * 0.65,
                         height: 40,
                         child: TextField(
                           // controller: chatMsg,
@@ -317,8 +320,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: ColorManager.primary,
                       ),
                     ),
-                    const SizedBox(
-                      width: 5,
+                    SizedBox(
+                      width: mob ? 5 : 2,
                     ),
                     ismicVisible
                         ? InkWell(

@@ -7,6 +7,7 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -46,6 +47,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final mob = Responsive.isMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -193,7 +195,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                 hintStyle: getRegularStyle(
                                     color: const Color.fromARGB(
                                         255, 173, 173, 173),
-                                    fontSize: 15)),
+                                    fontSize: Responsive.isMobile(context)
+                                        ? 15
+                                        : 10)),
                           ),
                         ),
                       ),
@@ -235,7 +239,10 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
-                                            fontSize: 14)),
+                                            fontSize:
+                                                Responsive.isMobile(context)
+                                                    ? 14
+                                                    : 10)),
                                   ),
                                 ),
                               ),
@@ -309,7 +316,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                 hintStyle: getRegularStyle(
                                     color: const Color.fromARGB(
                                         255, 173, 173, 173),
-                                    fontSize: 15)),
+                                    fontSize: Responsive.isMobile(context)
+                                        ? 15
+                                        : 10)),
                           ),
                         ),
                       ),
@@ -345,7 +354,10 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
-                                            fontSize: 15)),
+                                            fontSize:
+                                                Responsive.isMobile(context)
+                                                    ? 15
+                                                    : 10)),
                                   ),
                                 ),
                               ),
@@ -379,7 +391,10 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         hintStyle: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
-                                            fontSize: 15)),
+                                            fontSize:
+                                                Responsive.isMobile(context)
+                                                    ? 15
+                                                    : 10)),
                                   ),
                                 ),
                               ),
@@ -416,7 +431,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                       hintStyle: getRegularStyle(
                                           color: const Color.fromARGB(
                                               255, 173, 173, 173),
-                                          fontSize: 15))
+                                          fontSize: Responsive.isMobile(context)
+                                              ? 15
+                                              : 10))
                                   .copyWith(
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius:
@@ -451,8 +468,8 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                             padding: const EdgeInsets.fromLTRB(7, 0, 7, 5),
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 35, vertical: 16),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 35, vertical: mob ? 16 : 10),
                                 ),
                                 onPressed: () {
                                   // print(nameController.text);
@@ -468,7 +485,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                     textAlign: TextAlign.justify,
                                     style: getRegularStyle(
                                         color: ColorManager.whiteText,
-                                        fontSize: 15),
+                                        fontSize: Responsive.isMobile(context)
+                                            ? 15
+                                            : 10),
                                   ),
                                 )),
                           )

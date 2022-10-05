@@ -1,23 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/widgets/Ser_button.dart';
 import 'package:social_media_services/widgets/ser_drawer_list.dart';
 
-class SerDrawer extends StatelessWidget {
+class SerDrawer extends StatefulWidget {
   const SerDrawer({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<SerDrawer> createState() => _SerDrawerState();
+}
+
+class _SerDrawerState extends State<SerDrawer> {
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final mob = Responsive.isMobile(context);
     return DrawerHeader(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: ColorManager.primary2,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+          borderRadius: lang == 'ar'
+              ? const BorderRadius.only(
+                  topRight: Radius.circular(8), bottomRight: Radius.circular(8))
+              : const BorderRadius.only(
+                  topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
         ),
         margin: const EdgeInsets.all(0.0),
         padding: const EdgeInsets.fromLTRB(0.0, 0, 0.0, 0.0),
@@ -26,14 +46,14 @@ class SerDrawer extends StatelessWidget {
           children: [
             ServiceStatusButton(size: size),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 14, 0, 0.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 14, 16, 0.0),
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Available Transport:',
                     style: getSemiBoldtStyle(
-                        color: ColorManager.whiteText, fontSize: 16),
+                        color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
                   ),
                 ],
               ),
@@ -45,14 +65,14 @@ class SerDrawer extends StatelessWidget {
               image: ImageAssets.car,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 30, 0, 0.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 30, 16, 0.0),
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Service Type:',
                     style: getSemiBoldtStyle(
-                        color: ColorManager.whiteText, fontSize: 16),
+                        color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
                   ),
                 ],
               ),
@@ -74,7 +94,9 @@ class SerDrawer extends StatelessWidget {
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
+              padding: mob
+                  ? const EdgeInsets.fromLTRB(0, 15, 0, 30)
+                  : const EdgeInsets.fromLTRB(0, 5, 0, 10),
               child: ElevatedButton(
                   onPressed: () {
                     // player.stop();

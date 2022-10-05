@@ -9,10 +9,11 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
-import 'package:social_media_services/widgets/ser_status_custom_drawer.dart';
+import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:social_media_services/widgets/servicer_list_tile.dart';
 
 class ServicerPage extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ServicerPageState extends State<ServicerPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final mob = Responsive.isMobile(context);
     final List<String> items = [
       'Item1',
       'Item2',
@@ -213,14 +215,16 @@ class _ServicerPageState extends State<ServicerPage> {
                                     hintStyle: getRegularStyle(
                                         color: const Color.fromARGB(
                                             255, 173, 173, 173),
-                                        fontSize: 15)),
+                                        fontSize: Responsive.isMobile(context)
+                                            ? 15
+                                            : 10)),
                               ),
                             ),
                           )),
 
                       // * Filter icon
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: Responsive.isMobile(context) ? 10 : 5,
                       ),
                       Builder(
                         builder: (context) => InkWell(
@@ -273,13 +277,14 @@ class _ServicerPageState extends State<ServicerPage> {
                               ),
                               child: Container(
                                 width: size.width * .44,
-                                height: 50,
+                                height: mob ? 50 : 35,
                                 decoration: BoxDecoration(
                                     color: ColorManager.whiteColor,
-                                    borderRadius: BorderRadius.circular(8)),
+                                    borderRadius: BorderRadius.circular(4)),
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                  padding: mob
+                                      ? const EdgeInsets.fromLTRB(0, 10, 0, 10)
+                                      : const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton2(
                                       icon: const Icon(
@@ -291,7 +296,10 @@ class _ServicerPageState extends State<ServicerPage> {
                                           style: getRegularStyle(
                                               color: const Color.fromARGB(
                                                   255, 173, 173, 173),
-                                              fontSize: 15)),
+                                              fontSize:
+                                                  Responsive.isMobile(context)
+                                                      ? 15
+                                                      : 10)),
                                       items: items
                                           .map((item) =>
                                               DropdownMenuItem<String>(
@@ -333,6 +341,7 @@ class _ServicerPageState extends State<ServicerPage> {
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
                               width: size.width * .44,
+                              height: mob ? 50 : 35,
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
@@ -350,7 +359,9 @@ class _ServicerPageState extends State<ServicerPage> {
                                     hintStyle: getRegularStyle(
                                         color: const Color.fromARGB(
                                             255, 173, 173, 173),
-                                        fontSize: 15)),
+                                        fontSize: Responsive.isMobile(context)
+                                            ? 15
+                                            : 10)),
                               ),
                             ),
                           ),
@@ -380,33 +391,30 @@ class _ServicerPageState extends State<ServicerPage> {
                               ),
                               child: Container(
                                 width: size.width * .44,
-                                height: 50,
+                                height: mob ? 50 : 35,
                                 decoration: BoxDecoration(
                                     color: ColorManager.whiteColor,
-                                    borderRadius: BorderRadius.circular(8)),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                          width: 30,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: ColorManager.primary,
-                                          ),
-                                          height: 30,
-                                          child: const Icon(
-                                            Icons.add_location_alt_outlined,
-                                            color: ColorManager.whiteColor,
-                                          )),
-                                      const SizedBox(
-                                        width: 15,
-                                      )
-                                    ],
-                                  ),
+                                    borderRadius: BorderRadius.circular(4)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                        width: mob ? 30 : 20,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: ColorManager.primary,
+                                        ),
+                                        height: mob ? 30 : 25,
+                                        child: Icon(
+                                          Icons.add_location_alt_outlined,
+                                          color: ColorManager.whiteColor,
+                                          size: mob ? 20 : 15,
+                                        )),
+                                    const SizedBox(
+                                      width: 15,
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
@@ -431,51 +439,48 @@ class _ServicerPageState extends State<ServicerPage> {
                               ),
                               child: Container(
                                 width: size.width * .44,
-                                height: 50,
+                                height: mob ? 50 : 35,
                                 decoration: BoxDecoration(
                                     color: ColorManager.whiteColor,
-                                    borderRadius: BorderRadius.circular(8)),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2(
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 35,
-                                        color: ColorManager.black,
-                                      ),
-                                      hint: Text('State',
-                                          style: getRegularStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 173, 173, 173),
-                                              fontSize: 15)),
-                                      items: items
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(item,
-                                                    style: getRegularStyle(
-                                                        color:
-                                                            ColorManager.black,
-                                                        fontSize: 15)),
-                                              ))
-                                          .toList(),
-                                      value: selectedValue,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedValue = value as String;
-                                        });
-                                      },
-                                      buttonHeight: 40,
-                                      // buttonWidth: 140,
-                                      itemHeight: 40,
-                                      buttonPadding: const EdgeInsets.fromLTRB(
-                                          12, 0, 8, 0),
-                                      // dropdownWidth: size.width,
-                                      itemPadding: const EdgeInsets.fromLTRB(
-                                          12, 0, 12, 0),
+                                    borderRadius: BorderRadius.circular(4)),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 35,
+                                      color: ColorManager.black,
                                     ),
+                                    hint: Text('State',
+                                        style: getRegularStyle(
+                                            color: const Color.fromARGB(
+                                                255, 173, 173, 173),
+                                            fontSize:
+                                                Responsive.isMobile(context)
+                                                    ? 15
+                                                    : 10)),
+                                    items: items
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(item,
+                                                  style: getRegularStyle(
+                                                      color: ColorManager.black,
+                                                      fontSize: 15)),
+                                            ))
+                                        .toList(),
+                                    value: selectedValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedValue = value as String;
+                                      });
+                                    },
+                                    buttonHeight: 40,
+                                    // buttonWidth: 140,
+                                    itemHeight: 40,
+                                    buttonPadding:
+                                        const EdgeInsets.fromLTRB(12, 0, 8, 0),
+                                    // dropdownWidth: size.width,
+                                    itemPadding:
+                                        const EdgeInsets.fromLTRB(12, 0, 12, 0),
                                   ),
                                 ),
                               ),
@@ -501,18 +506,37 @@ class _ServicerPageState extends State<ServicerPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          // player.stop();
-                        },
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.fromLTRB(30, 0, 30, 0)),
-                        child: Text(
-                          "Continue",
-                          style: getRegularStyle(
-                              color: ColorManager.whiteText, fontSize: 16),
-                        )),
+                    padding: mob
+                        ? const EdgeInsets.fromLTRB(0, 5, 0, 10)
+                        : const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                    child: mob
+                        ? ElevatedButton(
+                            onPressed: () {
+                              // player.stop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.fromLTRB(30, 0, 30, 0)),
+                            child: Text(
+                              "Continue",
+                              style: getRegularStyle(
+                                  color: ColorManager.whiteText, fontSize: 16),
+                            ))
+                        : Container(
+                            width: 100,
+                            height: 25,
+                            decoration: BoxDecoration(
+                                color: ColorManager.primary,
+                                borderRadius: BorderRadius.circular(3)),
+                            child: Center(
+                              child: Text(
+                                "Continue",
+                                style: getRegularStyle(
+                                    color: ColorManager.whiteText,
+                                    fontSize: 12),
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),
