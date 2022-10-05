@@ -167,12 +167,12 @@
     "we_save":"SAVE",
     "we_report":"Report",
     "we_block":"Block",
-     "wd_desc":"Description",
+    "wd_desc":"Description",
     "wd_ser":"Service Type",
     "wd_tran":"Transport",
     "wd_more":"More Details",
     "wd_report":"Report",
     "wd_online":"Online",
     "wd_offline":"Offline",
-    "wd_online":"Busy"
+    "wd_busy":"Busy"
 }

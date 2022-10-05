@@ -174,5 +174,5 @@
     "wd_report":"Report",
     "wd_online":"Online",
     "wd_offline":"Offline",
-    "wd_online":"Busy"
+    "wd_busy":"Busy"
 }

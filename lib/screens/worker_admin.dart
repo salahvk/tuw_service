@@ -13,6 +13,7 @@ import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/worker_details_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/statusListTile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WorkerDetailedAdmin extends StatefulWidget {
   const WorkerDetailedAdmin({super.key});
@@ -39,6 +40,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -183,10 +185,10 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                         color: ColorManager.primary,
                                         borderRadius: BorderRadius.circular(5)),
                                     width: 95,
-                                    height: 100,
+                                    height: 120,
                                     child: Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(5, 8, 0, 0),
+                                          const EdgeInsets.fromLTRB(5, 8, 5, 0),
                                       child: Column(
                                         children: [
                                           InkWell(
@@ -197,7 +199,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                               },
                                               child: StatusLIstTile(
                                                 checkBoxValue: checkBoxValue,
-                                                title: "Online",
+                                                title: str.wd_online,
                                               )),
                                           InkWell(
                                               onTap: () {
@@ -207,7 +209,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                               },
                                               child: StatusLIstTile(
                                                 checkBoxValue: checkBoxValue,
-                                                title: "Offline",
+                                                title: str.wd_offline,
                                               )),
                                           InkWell(
                                               onTap: () {
@@ -217,8 +219,8 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                               },
                                               child: StatusLIstTile(
                                                 checkBoxValue: checkBoxValue,
-                                                title: "Busy",
-                                              ))
+                                                title: str.wd_busy,
+                                              )),
                                         ],
                                       ),
                                     ),
@@ -413,7 +415,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                         child: Row(
                           children: [
                             Text(
-                              'Service Type:',
+                              str.wd_ser,
                               style: getRegularStyle(
                                   color: ColorManager.black, fontSize: 16),
                             ),
@@ -441,7 +443,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                       Row(
                         children: [
                           Text(
-                            'Transport:',
+                            str.wd_tran,
                             style: getRegularStyle(
                                 color: ColorManager.black, fontSize: 16),
                           ),
@@ -548,6 +550,7 @@ class DescriptionEditWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: ColorManager.whiteColor,
@@ -571,7 +574,7 @@ class DescriptionEditWidget extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Description:',
+                  str.wd_desc,
                   style:
                       getRegularStyle(color: ColorManager.black, fontSize: 16),
                 ),

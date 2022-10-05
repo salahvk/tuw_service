@@ -14,6 +14,7 @@ import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -60,6 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
+    final str = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -168,11 +170,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const ChatAddTile(
-                                title: "Photo & Video\nLibrary",
+                            ChatAddTile(
+                                title: lang == 'ar'
+                                    ? str.cp_photo2
+                                    : "Photo & Video\nLibrary",
                                 image: ImageAssets.gallery),
-                            const ChatAddTile(
-                                title: "Documents",
+                            ChatAddTile(
+                                title: str.cp_doc,
                                 image: ImageAssets.documents),
                             // const SizedBox(
                             //   height: 3,
@@ -188,8 +192,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 color: isMapmenuVisible
                                     ? ColorManager.selectedGreen
                                     : ColorManager.primary,
-                                child: const ChatAddTile(
-                                  title: "Share Location",
+                                child: ChatAddTile(
+                                  title: str.cp_loc,
                                   image: ImageAssets.map,
                                 ),
                               ),
@@ -218,16 +222,18 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const ChatAddTile(
-                                title: "Send Current\nLocation",
+                            ChatAddTile(
+                                title: lang == 'ar'
+                                    ? str.cp_s_loc_1
+                                    : "Send Current\nLocation",
                                 image: ImageAssets.currentLocation),
-                            const ChatAddTile(
-                                title: "Choose From App",
+                            ChatAddTile(
+                                title: str.cp_choose,
                                 image: ImageAssets.chooseFromApp),
                             InkWell(
                               onTap: () {},
-                              child: const ChatAddTile(
-                                title: "Address Card",
+                              child: ChatAddTile(
+                                title: str.cp_address,
                                 image: ImageAssets.addressCard,
                               ),
                             )
@@ -338,7 +344,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             },
                             onTap: () {
                               Vibration.vibrate(duration: 200);
-                              showSnackBar("Long press to record", context);
+                              showSnackBar(str.cp_long_press, context);
                             },
                             child: const Icon(
                               Icons.mic_none_outlined,
@@ -579,7 +585,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 baseColor: ColorManager.primary,
                                 highlightColor: ColorManager.indicatorBorGreen,
                                 child: Text(
-                                  "Recording",
+                                  str.cp_re,
                                   style: getBoldtStyle(
                                       color: ColorManager.background,
                                       fontSize: 17),

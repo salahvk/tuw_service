@@ -19,7 +19,7 @@ class MonthlyPlan extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Container(
-        width: size.width * .45,
+        width: size.width * .44,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

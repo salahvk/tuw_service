@@ -15,6 +15,7 @@ import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:social_media_services/widgets/servicer_list_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ServicerPage extends StatefulWidget {
   const ServicerPage({super.key});
@@ -28,6 +29,7 @@ class _ServicerPageState extends State<ServicerPage> {
   final int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -41,6 +43,7 @@ class _ServicerPageState extends State<ServicerPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final mob = Responsive.isMobile(context);
+    final str = AppLocalizations.of(context)!;
     final List<String> items = [
       'Item1',
       'Item2',
@@ -211,7 +214,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                         ],
                                       ),
                                     ),
-                                    hintText: 'Servicer',
+                                    hintText: str.s_servicer,
                                     hintStyle: getRegularStyle(
                                         color: const Color.fromARGB(
                                             255, 173, 173, 173),
@@ -262,7 +265,7 @@ class _ServicerPageState extends State<ServicerPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const MandatoryHeader(heading: 'Country'),
+                          MandatoryHeader(heading: str.s_country),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -292,7 +295,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                         size: 35,
                                         color: ColorManager.black,
                                       ),
-                                      hint: Text('Country',
+                                      hint: Text(str.s_country,
                                           style: getRegularStyle(
                                               color: const Color.fromARGB(
                                                   255, 173, 173, 173),
@@ -336,7 +339,7 @@ class _ServicerPageState extends State<ServicerPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const MandatoryHeader(heading: 'Region'),
+                          MandatoryHeader(heading: str.s_region),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -355,7 +358,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                 // style: const TextStyle(),
                                 controller: stateController,
                                 decoration: InputDecoration(
-                                    hintText: 'Region',
+                                    hintText: str.s_region,
                                     hintStyle: getRegularStyle(
                                         color: const Color.fromARGB(
                                             255, 173, 173, 173),
@@ -376,7 +379,7 @@ class _ServicerPageState extends State<ServicerPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const MandatoryHeader(heading: 'Map'),
+                          MandatoryHeader(heading: str.s_map),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -424,7 +427,7 @@ class _ServicerPageState extends State<ServicerPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const MandatoryHeader(heading: 'Region'),
+                          MandatoryHeader(heading: str.s_state),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -450,7 +453,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                       size: 35,
                                       color: ColorManager.black,
                                     ),
-                                    hint: Text('State',
+                                    hint: Text(str.s_state,
                                         style: getRegularStyle(
                                             color: const Color.fromARGB(
                                                 255, 173, 173, 173),
@@ -518,7 +521,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                 padding:
                                     const EdgeInsets.fromLTRB(30, 0, 30, 0)),
                             child: Text(
-                              "Continue",
+                              str.s_continue,
                               style: getRegularStyle(
                                   color: ColorManager.whiteText, fontSize: 16),
                             ))
@@ -530,7 +533,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                 borderRadius: BorderRadius.circular(3)),
                             child: Center(
                               child: Text(
-                                "Continue",
+                                str.s_continue,
                                 style: getRegularStyle(
                                     color: ColorManager.whiteText,
                                     fontSize: 12),

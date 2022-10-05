@@ -340,7 +340,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                     MandatoryHeader(heading: str.p_region),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 15, 0),
+                                          0, 10, 0, 0),
                                       child: Container(
                                         width: size.width * .44,
                                         decoration: BoxDecoration(

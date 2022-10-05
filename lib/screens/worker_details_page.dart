@@ -4,6 +4,7 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WorkerDetailed extends StatelessWidget {
   const WorkerDetailed({super.key});
@@ -11,6 +12,7 @@ class WorkerDetailed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -122,7 +124,7 @@ class WorkerDetailed extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Description:',
+                        '${str.wd_desc}:',
                         style: getRegularStyle(
                             color: ColorManager.black, fontSize: 16),
                       ),
@@ -139,7 +141,7 @@ class WorkerDetailed extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Service Type:',
+                        '${str.wd_ser}:',
                         style: getRegularStyle(
                             color: ColorManager.black, fontSize: 16),
                       ),
@@ -167,7 +169,7 @@ class WorkerDetailed extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Transport:',
+                      '${str.wd_tran}:',
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: 16),
                     ),
@@ -189,7 +191,7 @@ class WorkerDetailed extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'More Details:',
+                        '${str.wd_more}:',
                         style: getRegularStyle(
                             color: ColorManager.black, fontSize: 16),
                       ),
@@ -214,7 +216,7 @@ class WorkerDetailed extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
                         child: Text(
-                          "REPORT",
+                          str.wd_report,
                           style: getMediumtStyle(
                               color: ColorManager.whiteText, fontSize: 14),
                         )),
@@ -228,7 +230,7 @@ class WorkerDetailed extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
                         child: Text(
-                          "BLOCK",
+                          str.wd_block,
                           style: getMediumtStyle(
                               color: ColorManager.whiteText, fontSize: 14),
                         ))

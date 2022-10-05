@@ -3,10 +3,10 @@ import 'package:pinput/pinput.dart';
 import 'package:social_media_services/components/color_manager.dart';
 
 final defaultPinTheme = PinTheme(
-  // width: 50,
-  // height: 57,
-  width: 70,
-  height: 67,
+  width: 55,
+  height: 55,
+  // width: 70,
+  // height: 67,
   // margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
   textStyle: const TextStyle(
       fontSize: 20,

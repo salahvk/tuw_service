@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -17,6 +18,15 @@ class StatusLIstTile extends StatefulWidget {
 }
 
 class _StatusLIstTileState extends State<StatusLIstTile> {
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -42,7 +52,8 @@ class _StatusLIstTileState extends State<StatusLIstTile> {
         ),
         Text(
           widget.title,
-          style: getRegularStyle(color: ColorManager.whiteColor, fontSize: 14),
+          style: getRegularStyle(
+              color: ColorManager.whiteColor, fontSize: lang == 'ar' ? 11 : 14),
         )
       ],
     );

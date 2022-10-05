@@ -11,6 +11,7 @@ import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/main.dart';
 import 'package:social_media_services/model/get_countries.dart';
+import 'package:social_media_services/model/get_otp.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
@@ -392,15 +393,17 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           .show(
         context,
       );
-    } else if (phoneNumber != '8089852417') {
-      AnimatedSnackBar.material('Enter a valid Number',
-              type: AnimatedSnackBarType.error,
-              borderRadius: BorderRadius.circular(6),
-              duration: const Duration(seconds: 1))
-          .show(
-        context,
-      );
-    } else {
+    }
+    // else if (phoneNumber != '8089852417') {
+    //   AnimatedSnackBar.material('Enter a valid Number',
+    //           type: AnimatedSnackBarType.error,
+    //           borderRadius: BorderRadius.circular(6),
+    //           duration: const Duration(seconds: 1))
+    //       .show(
+    //     context,
+    //   );
+    // }
+    else {
       OtpProvider.getPhoneNo(phoneNumCon.text);
       OtpProvider.getCountryCode(countryCode);
       getOtp();
@@ -413,6 +416,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     print(id);
     try {
       final provider = Provider.of<DataProvider>(context, listen: false);
+      final otpProvider = Provider.of<OTPProvider>(context, listen: false);
       var response = await http.post(
           Uri.parse(
               "$apiUser/request_otp?countrycode=$countryCode&phone=${phoneNumCon.text}&language_id=$id"),
@@ -424,6 +428,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       }
 
       var jsonResponse = jsonDecode(response.body);
+      var getOtpData = GetOtp.fromJson(jsonResponse);
+      otpProvider.getOtpData(getOtpData);
+
       print(jsonResponse);
       Navigator.push(context, MaterialPageRoute(builder: (ctx) {
         return const OTPscreen();
@@ -452,6 +459,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       ),
     );
   }
+
+//  * Country code search function
 
   _onSearchChanged(String query) {
     setState(() {

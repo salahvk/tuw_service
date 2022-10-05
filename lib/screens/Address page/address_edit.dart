@@ -15,6 +15,7 @@ import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserAddressEdit extends StatefulWidget {
   const UserAddressEdit({super.key});
@@ -38,6 +39,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     final List<String> items = [
       'Item1',
       'Item2',
@@ -211,7 +213,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                             color: ColorManager.whiteColor,
                                           ),
                                           Text(
-                                            "Home Locator",
+                                            str.ae_home_locator,
                                             style: getRegularStyle(
                                                 color: ColorManager.whiteColor),
                                           )
@@ -241,7 +243,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Address",
+                                str.ae_address,
                                 style: getBoldtStyle(
                                     color: ColorManager.black, fontSize: 14),
                               ),
@@ -261,7 +263,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         color: ColorManager.whiteColor,
                                       ),
                                       Text(
-                                        "Add",
+                                        str.ae_add,
                                         style: getRegularStyle(
                                             color: ColorManager.whiteColor),
                                       )
@@ -271,10 +273,9 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               )
                             ],
                           ),
-                          const MandatoryHeader(heading: 'Address Name'),
-                          const TextFieldProfileService(
-                              hintText: 'Enter Address Name'),
-                          const MandatoryHeader(heading: 'Address'),
+                          MandatoryHeader(heading: str.ae_address_n),
+                          TextFieldProfileService(hintText: str.ae_address_h),
+                          MandatoryHeader(heading: str.ae_address),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -296,7 +297,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                   decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(
                                           left: 10, right: 10, top: 10),
-                                      hintText: 'Enter Address',
+                                      hintText: str.ae_address_h,
                                       hintStyle: getRegularStyle(
                                           color: const Color.fromARGB(
                                               255, 173, 173, 173),
@@ -305,7 +306,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               ),
                             ),
                           ),
-                          const MandatoryHeader(heading: 'Country'),
+                          MandatoryHeader(heading: str.ae_country),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -334,7 +335,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         size: 35,
                                         color: ColorManager.black,
                                       ),
-                                      hint: Text('Enter Country',
+                                      hint: Text(str.ae_country_h,
                                           style: getRegularStyle(
                                               color: const Color.fromARGB(
                                                   255, 173, 173, 173),
@@ -376,7 +377,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const MandatoryHeader(heading: 'Region'),
+                                  MandatoryHeader(heading: str.ae_region),
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -395,7 +396,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         style: const TextStyle(),
                                         // controller: regionController,
                                         decoration: InputDecoration(
-                                            hintText: 'Enter Region',
+                                            hintText: str.ae_region_h,
                                             hintStyle: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),
@@ -408,7 +409,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const MandatoryHeader(heading: 'State'),
+                                  MandatoryHeader(heading: str.ae_state),
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -427,7 +428,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         style: const TextStyle(),
                                         // controller: stateController,
                                         decoration: InputDecoration(
-                                            hintText: 'Enter State',
+                                            hintText: str.ae_state_h,
                                             hintStyle: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),
@@ -439,9 +440,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               ),
                             ],
                           ),
-                          const MandatoryHeader(heading: 'Home/Flat no'),
-                          const TextFieldProfileService(
-                              hintText: 'Enter Number'),
+                          MandatoryHeader(heading: str.ae_home_flat),
+                          TextFieldProfileService(hintText: str.ae_no),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                             child: Row(
@@ -455,7 +455,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         padding: const EdgeInsets.fromLTRB(
                                             20, 0, 20, 0)),
                                     child: Text(
-                                      "SAVE",
+                                      str.ae_save,
                                       style: getMediumtStyle(
                                           color: ColorManager.whiteText,
                                           fontSize: 14),
@@ -469,7 +469,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         padding: const EdgeInsets.fromLTRB(
                                             20, 0, 20, 0)),
                                     child: Text(
-                                      "CANCEL",
+                                      str.ae_cancel,
                                       style: getMediumtStyle(
                                           color: ColorManager.whiteText,
                                           fontSize: 14),

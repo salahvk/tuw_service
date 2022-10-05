@@ -14,6 +14,6 @@ class TitleWidget extends StatelessWidget {
     return Text(name,
         style: getRegularStyle(
             color: const Color.fromARGB(255, 146, 145, 145),
-            fontSize: Responsive.isMobile(context) ? 15 : 10));
+            fontSize: Responsive.isMobile(context) ? 15 : 11));
   }
 }

@@ -1,17 +1,24 @@
+import 'dart:convert';
+
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/model/otp_verification.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/utils/pinTheme.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 
 class OTPscreen extends StatefulWidget {
   const OTPscreen({Key? key}) : super(key: key);
@@ -66,9 +73,9 @@ class _OTPscreenState extends State<OTPscreen> {
               child: Pinput(
                 defaultPinTheme: defaultPinTheme,
                 separator: const SizedBox(
-                  width: 20,
+                  width: 5,
                 ),
-                // length: 6,
+                length: 6,
                 controller: otpCon,
                 focusedPinTheme: focusedPinTheme,
                 // validator: (s) {
@@ -77,6 +84,7 @@ class _OTPscreenState extends State<OTPscreen> {
                 pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                 showCursor: true,
                 onCompleted: (pin) {
+                  print('object');
                   verifyNow();
                 },
               ),
@@ -130,7 +138,7 @@ class _OTPscreenState extends State<OTPscreen> {
   verifyNow() {
     FocusManager.instance.primaryFocus?.unfocus();
     final str = AppLocalizations.of(context)!;
-    if (otpCon.text.length < 4 || otpCon.text != '1234') {
+    if (otpCon.text.length < 6 || otpCon.text != '123456') {
       AnimatedSnackBar.material(str.o_snack,
               type: AnimatedSnackBarType.error,
               borderRadius: BorderRadius.circular(6),
@@ -140,9 +148,33 @@ class _OTPscreenState extends State<OTPscreen> {
         context,
       );
     } else {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
-        return const EditProfileScreen();
-      }), (route) => false);
+      verifyOtpApi();
+    }
+  }
+
+  verifyOtpApi() async {
+    final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    try {
+      var response = await http.post(
+          Uri.parse(
+              "$apiUser/otp_verification?countrycode=${otpProvider.countryCode}&phone=${otpProvider.phoneNo}&otp=${otpProvider.getOtp?.oTP.toString()}"),
+          headers: {"device-id": provider.deviceId ?? ''});
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        print("Otp Verified Response");
+        print(jsonResponse);
+        var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
+        otpProvider.getOtpVerifiedData(otpVerifiedData);
+
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
+          return const EditProfileScreen();
+        }), (route) => false);
+      } else {
+        print('Something went wrong');
+      }
+    } on Exception catch (_) {
+      showSnackBar("Something Went Wrong", context);
     }
   }
 }

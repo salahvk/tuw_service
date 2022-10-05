@@ -160,7 +160,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Container(
-                                  width: size.width * 0.45,
+                                  width: size.width * 0.44,
                                   decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
@@ -207,7 +207,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
-                                        width: size.width * .45,
+                                        width: size.width * .44,
                                         child: TextFieldProfileService(
                                             hintText: str.ps_cvv_h)),
                                   ],

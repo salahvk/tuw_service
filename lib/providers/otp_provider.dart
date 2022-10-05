@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:social_media_services/model/get_otp.dart';
+import 'package:social_media_services/model/otp_verification.dart';
 
 class OTPProvider with ChangeNotifier {
   String? countryCode;
@@ -12,6 +14,20 @@ class OTPProvider with ChangeNotifier {
 
   void getPhoneNo(value) {
     phoneNo = value;
+    notifyListeners();
+  }
+
+  GetOtp? getOtp;
+
+  void getOtpData(value) {
+    getOtp = value;
+    notifyListeners();
+  }
+
+  OtpVerification? otpVerification;
+
+  void getOtpVerifiedData(value) {
+    otpVerification = value;
     notifyListeners();
   }
 }
