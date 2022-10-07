@@ -7,8 +7,8 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/otp_verification.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
@@ -77,7 +77,7 @@ class _OTPscreenState extends State<OTPscreen> {
                   width: 5,
                 ),
                 length: 6,
-                controller: otpCon,
+                controller: PhoneNumberControllers.otpCon,
                 focusedPinTheme: focusedPinTheme,
                 // validator: (s) {
                 //   return s == '2222' ? null : 'Pin is incorrect';
@@ -139,7 +139,8 @@ class _OTPscreenState extends State<OTPscreen> {
   verifyNow() {
     FocusManager.instance.primaryFocus?.unfocus();
     final str = AppLocalizations.of(context)!;
-    if (otpCon.text.length < 6 || otpCon.text != '123456') {
+    if (PhoneNumberControllers.otpCon.text.length < 6 ||
+        PhoneNumberControllers.otpCon.text != '123456') {
       AnimatedSnackBar.material(str.o_snack,
               type: AnimatedSnackBarType.error,
               borderRadius: BorderRadius.circular(6),

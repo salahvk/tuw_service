@@ -87,7 +87,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       bottomNavigationBar: Stack(
         children: [
           Container(
-            height: h * .085,
+            height: 45,
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 blurRadius: 5.0,
@@ -97,7 +97,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
             ]),
           ),
           SizedBox(
-            height: h * .082,
+            height: 44,
             child: GNav(
               tabMargin: const EdgeInsets.symmetric(
                 vertical: 0,

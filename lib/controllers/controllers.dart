@@ -15,3 +15,8 @@ class EditProfileControllers {
   static TextEditingController stateController = TextEditingController();
   static TextEditingController aboutController = TextEditingController();
 }
+
+class PhoneNumberControllers {
+  static TextEditingController phoneNumCon = TextEditingController();
+  static TextEditingController otpCon = TextEditingController();
+}

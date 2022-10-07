@@ -7,8 +7,8 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/controllers.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/main.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/model/get_otp.dart';
@@ -40,6 +40,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   @override
   void initState() {
     super.initState();
+    PhoneNumberControllers.phoneNumCon.text = '';
     countryCode = "91";
     lang = Hive.box('LocalLan').get(
       'lang',
@@ -149,7 +150,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                   child: SizedBox(
                                 child: TextField(
                                   keyboardType: TextInputType.phone,
-                                  controller: phoneNumCon,
+                                  controller:
+                                      PhoneNumberControllers.phoneNumCon,
                                   style: const TextStyle(),
                                   maxLength: 10,
                                   decoration: InputDecoration(
@@ -376,7 +378,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     FocusManager.instance.primaryFocus?.unfocus();
     final OtpProvider = Provider.of<OTPProvider>(context, listen: false);
     final str = AppLocalizations.of(context)!;
-    final phoneNumber = phoneNumCon.text.trim();
+    final phoneNumber = PhoneNumberControllers.phoneNumCon.text.trim();
     if (phoneNumber.isEmpty) {
       AnimatedSnackBar.material(str.m_snack,
               type: AnimatedSnackBarType.error,
@@ -404,7 +406,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     //   );
     // }
     else {
-      OtpProvider.getPhoneNo(phoneNumCon.text);
+      OtpProvider.getPhoneNo(PhoneNumberControllers.phoneNumCon.text);
       OtpProvider.getCountryCode(countryCode);
       getOtp();
     }
@@ -419,7 +421,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       final otpProvider = Provider.of<OTPProvider>(context, listen: false);
       var response = await http.post(
           Uri.parse(
-              "$apiUser/request_otp?countrycode=$countryCode&phone=${phoneNumCon.text}&language_id=$id"),
+              "$apiUser/request_otp?countrycode=$countryCode&phone=${PhoneNumberControllers.phoneNumCon.text}&language_id=$id"),
           headers: {"device-id": provider.deviceId ?? ''});
       // print(response.body);
       if (response.statusCode != 200) {

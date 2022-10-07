@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
-import 'package:social_media_services/utils/initPlatformState.dart';
+import 'package:social_media_services/utils/diologue.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -81,16 +81,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   logOUtFunction() async {
-    await Hive.box("token").clear();
-    callInitFunction();
-  }
-
-  callInitFunction() async {
-    await initPlatformState(context);
-  }
-
-  navigateToIntroductionScreen() {
-    Navigator.pushNamedAndRemoveUntil(
-        context, Routes.introductionScreen, (route) => false);
+    showDialog(
+        context: context,
+        builder: (context) => const DialogueBox(),
+        barrierDismissible: false);
   }
 }
