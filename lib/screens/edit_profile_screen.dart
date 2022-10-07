@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -16,12 +18,15 @@ import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:social_media_services/utils/viewProfile.dart';
 import 'package:social_media_services/widgets/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -42,7 +47,8 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   Timer? _debounce;
 
   String lang = '';
-  String? countryid;
+  int? countryid;
+  String gender = 'male';
 
   List<Countries> r1 = [];
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
@@ -54,18 +60,22 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       'lang',
     );
     r1.clear();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = Provider.of<DataProvider>(context, listen: false);
       r1 = (provider.countriesModel!.countries)!;
+      viewProfile(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    print(size.height);
+    final h = MediaQuery.of(context).size.height;
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -77,7 +87,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       bottomNavigationBar: Stack(
         children: [
           Container(
-            height: 45,
+            height: h * .085,
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 blurRadius: 5.0,
@@ -87,7 +97,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
             ]),
           ),
           SizedBox(
-            height: 44,
+            height: h * .082,
             child: GNav(
               tabMargin: const EdgeInsets.symmetric(
                 vertical: 0,
@@ -150,523 +160,503 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
       body: _selectedIndex != 2
           ? _screens[_selectedIndex]
-          : SafeArea(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isPickerSelected = false;
-                  });
-                },
-                child: SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(builder: (ctx) {
-                                      return const HomePage();
-                                    }));
-                                  },
-                                  child: const Icon(
-                                    Icons.arrow_back_rounded,
-                                    size: 30,
-                                    color: ColorManager.primary,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: ProfileImage(
-                                    isNavigationActive: false,
-                                    iconSize: 12,
-                                    profileSize: 40.5,
-                                    iconRadius: 12,
-                                  ),
+          : GestureDetector(
+              // onTap: () {
+              //   setState(() {
+              //     isPickerSelected = false;
+              //   });
+              // },
+              child: SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(15, h * .05, 15, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (ctx) {
+                                    return const HomePage();
+                                  }));
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_rounded,
+                                  size: 30,
+                                  color: ColorManager.primary,
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: TitleWidget(name: str.e_name),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 10.0,
-                                      color: Colors.grey.shade300,
-                                      // offset: const Offset(5, 8.5),
-                                    ),
-                                  ],
-                                ),
-                                child: TextField(
-                                  focusNode: nfocus,
-                                  style: const TextStyle(),
-                                  controller:
-                                      EditProfileControllers.nameController,
-                                  decoration: InputDecoration(
-                                      hintText: str.e_name_h,
-                                      hintStyle: getRegularStyle(
-                                          color: const Color.fromARGB(
-                                              255, 173, 173, 173),
-                                          fontSize: Responsive.isMobile(context)
-                                              ? 15
-                                              : 10)),
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: ProfileImage(
+                                  // image: provider.viewProfileModel
+                                  //         ?.userdetails?.profilePic ??
+                                  //     '',
+                                  isNavigationActive: false,
+                                  iconSize: 12,
+                                  profileSize: 40.5,
+                                  iconRadius: 12,
                                 ),
                               ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: TitleWidget(name: str.e_name),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    // offset: const Offset(5, 8.5),
+                                  ),
+                                ],
+                              ),
+                              child: TextField(
+                                focusNode: nfocus,
+                                style: const TextStyle(),
+                                controller:
+                                    EditProfileControllers.nameController,
+                                decoration: InputDecoration(
+                                    hintText: str.e_name_h,
+                                    hintStyle: getRegularStyle(
+                                        color: const Color.fromARGB(
+                                            255, 173, 173, 173),
+                                        fontSize: Responsive.isMobile(context)
+                                            ? 15
+                                            : 10)),
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 15, 0, 0),
-                                      child: TitleWidget(name: str.e_dob),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 0),
-                                      child: Container(
-                                        width: size.width * 0.5,
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 10.0,
-                                              color: Colors.grey.shade300,
-                                              // offset: const Offset(5, 8.5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: TextField(
-                                          style: const TextStyle(),
-                                          readOnly: true,
-                                          controller: EditProfileControllers
-                                              .dateController,
-                                          decoration: InputDecoration(
-                                              suffixIcon: InkWell(
-                                                onTap: () =>
-                                                    _selectDate(context),
-                                                child: const Icon(
-                                                  Icons.calendar_month,
-                                                  color: ColorManager.primary,
-                                                ),
-                                              ),
-                                              hintText: str.e_dob_h,
-                                              hintStyle: getRegularStyle(
-                                                  color: const Color.fromARGB(
-                                                      255, 173, 173, 173),
-                                                  fontSize: Responsive.isMobile(
-                                                          context)
-                                                      ? 14
-                                                      : 10)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 0, 0),
-                                      child: TitleWidget(name: str.e_gender),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 15, 0, 0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                value = true;
-                                              });
-                                            },
-                                            child: CustomizedRadioButton(
-                                              gender: "MALE",
-                                              isMaleSelected: value,
-                                            ),
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                    child: TitleWidget(name: str.e_dob),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    child: Container(
+                                      width: mob
+                                          ? size.width * 0.5
+                                          : size.width * .45,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.grey.shade300,
+                                            // offset: const Offset(5, 8.5),
                                           ),
-                                          TitleWidget(name: str.e_male),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                value = false;
-                                              });
-                                            },
-                                            child: CustomizedRadioButton(
-                                              gender: "FEMALE",
-                                              isMaleSelected: value,
-                                            ),
-                                          ),
-                                          TitleWidget(name: str.e_female),
                                         ],
                                       ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: TitleWidget(name: str.e_country),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 10.0,
-                                      color: Colors.grey.shade300,
-                                      // offset: const Offset(5, 8.5),
+                                      child: TextField(
+                                        style: const TextStyle(),
+                                        readOnly: true,
+                                        controller: EditProfileControllers
+                                            .dateController,
+                                        decoration: InputDecoration(
+                                            suffixIcon: InkWell(
+                                              onTap: () => _selectDate(context),
+                                              child: const Icon(
+                                                Icons.calendar_month,
+                                                color: ColorManager.primary,
+                                              ),
+                                            ),
+                                            hintText: str.e_dob_h,
+                                            hintStyle: getRegularStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 173, 173, 173),
+                                                fontSize:
+                                                    Responsive.isMobile(context)
+                                                        ? 14
+                                                        : 10)),
+                                      ),
                                     ),
-                                  ],
-                                ),
-                                child: TextField(
-                                  // onTap: () {
-                                  //   setState(() {
-                                  //     isPickerSelected = true;
-                                  //   });
-                                  // },
-                                  onChanged: (value) async {
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: TitleWidget(name: str.e_gender),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              value = true;
+                                              gender = 'male';
+                                            });
+                                          },
+                                          child: CustomizedRadioButton(
+                                            gender: "MALE",
+                                            isMaleSelected: value,
+                                          ),
+                                        ),
+                                        TitleWidget(name: str.e_male),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              value = false;
+                                              gender = 'female';
+                                            });
+                                          },
+                                          child: CustomizedRadioButton(
+                                            gender: "FEMALE",
+                                            isMaleSelected: value,
+                                          ),
+                                        ),
+                                        TitleWidget(name: str.e_female),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: TitleWidget(name: str.e_country),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    // offset: const Offset(5, 8.5),
+                                  ),
+                                ],
+                              ),
+                              child: TextField(
+                                // onTap: () {
+                                //   setState(() {
+                                //     isPickerSelected = true;
+                                //   });
+                                // },
+                                onChanged: (value) async {
+                                  setState(() {
+                                    isPickerSelected = true;
+                                  });
+                                  String capitalize(String s) =>
+                                      s[0].toUpperCase() + s.substring(1);
+
+                                  if (value.isEmpty) {
+                                    r1 = [];
                                     setState(() {
-                                      isPickerSelected = true;
+                                      r1 =
+                                          (provider.countriesModel!.countries)!;
                                     });
-                                    String capitalize(String s) =>
-                                        s[0].toUpperCase() + s.substring(1);
+                                  } else {
+                                    final lower = capitalize(value);
 
-                                    if (value.isEmpty) {
-                                      r1 = [];
-                                      setState(() {
-                                        r1 = (provider
-                                            .countriesModel!.countries)!;
-                                      });
-                                    } else {
-                                      final lower = capitalize(value);
+                                    onSearchChanged(lower);
+                                  }
 
-                                      onSearchChanged(lower);
-                                    }
-
-                                    // print(r);
-                                  },
-                                  style: const TextStyle(),
-                                  controller: countryController,
-                                  decoration: InputDecoration(
-                                      hintText: str.e_country_h,
-                                      hintStyle: getRegularStyle(
-                                          color: const Color.fromARGB(
-                                              255, 173, 173, 173),
-                                          fontSize: Responsive.isMobile(context)
-                                              ? 15
-                                              : 10)),
-                                ),
+                                  // print(r);
+                                },
+                                style: const TextStyle(),
+                                controller:
+                                    EditProfileControllers.countryController,
+                                decoration: InputDecoration(
+                                    hintText: str.e_country_h,
+                                    hintStyle: getRegularStyle(
+                                        color: const Color.fromARGB(
+                                            255, 173, 173, 173),
+                                        fontSize: mob ? 15 : 10)),
                               ),
                             ),
-                            // * Region
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 15, 0, 0),
-                                      child: TitleWidget(name: str.e_region),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 0),
-                                      child: Container(
-                                        width: size.width * .45,
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 10.0,
-                                              color: Colors.grey.shade300,
-                                              // offset: const Offset(5, 8.5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: TextField(
-                                          style: const TextStyle(),
-                                          controller: regionController,
-                                          decoration: InputDecoration(
-                                              hintText: str.e_region_h,
-                                              hintStyle: getRegularStyle(
-                                                  color: const Color.fromARGB(
-                                                      255, 173, 173, 173),
-                                                  fontSize: Responsive.isMobile(
-                                                          context)
-                                                      ? 15
-                                                      : 10)),
-                                        ),
+                          ),
+                          // * Region
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                    child: TitleWidget(name: str.e_state),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    child: Container(
+                                      width: size.width * .45,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.grey.shade300,
+                                            // offset: const Offset(5, 8.5),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 15, 0, 0),
-                                      child: TitleWidget(name: str.e_state),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 0),
-                                      child: Container(
-                                        width: size.width * .44,
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 10.0,
-                                              color: Colors.grey.shade300,
-                                              // offset: const Offset(5, 8.5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: TextField(
-                                          style: const TextStyle(),
-                                          controller: stateController,
-                                          decoration: InputDecoration(
-                                              hintText: str.e_state_h,
-                                              hintStyle: getRegularStyle(
-                                                  color: const Color.fromARGB(
-                                                      255, 173, 173, 173),
-                                                  fontSize: Responsive.isMobile(
-                                                          context)
-                                                      ? 15
-                                                      : 10)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: TitleWidget(name: str.e_about),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 10.0,
-                                      color: Colors.grey.shade300,
-                                      offset: const Offset(4, 4.5),
-                                    ),
-                                  ],
-                                ),
-                                child: Container(
-                                  child: TextField(
-                                    minLines: 4,
-                                    maxLines: 5,
-                                    style: const TextStyle(),
-                                    controller: aboutController,
-                                    decoration: InputDecoration(
-                                            contentPadding: const EdgeInsets.only(
-                                                left: 10, right: 10, top: 10),
-                                            hintText: str.e_about_h,
+                                      child: TextField(
+                                        style: const TextStyle(),
+                                        controller: EditProfileControllers
+                                            .stateController,
+                                        decoration: InputDecoration(
+                                            hintText: str.e_state_h,
                                             hintStyle: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),
                                                 fontSize:
                                                     Responsive.isMobile(context)
                                                         ? 15
-                                                        : 10))
-                                        .copyWith(
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                borderSide: const BorderSide(
+                                                        : 10)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                    child: TitleWidget(name: str.e_region),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                    child: Container(
+                                      width: size.width * .44,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.grey.shade300,
+                                            // offset: const Offset(5, 8.5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: TextField(
+                                        style: const TextStyle(),
+                                        controller: EditProfileControllers
+                                            .regionController,
+                                        decoration: InputDecoration(
+                                            hintText: str.e_region_h,
+                                            hintStyle: getRegularStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 173, 173, 173),
+                                                fontSize:
+                                                    Responsive.isMobile(context)
+                                                        ? 15
+                                                        : 10)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: TitleWidget(name: str.e_about),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(4, 4.5),
+                                  ),
+                                ],
+                              ),
+                              child: Container(
+                                child: TextField(
+                                  minLines: 4,
+                                  maxLines: 5,
+                                  style: const TextStyle(),
+                                  controller:
+                                      EditProfileControllers.aboutController,
+                                  decoration: InputDecoration(
+                                          contentPadding: const EdgeInsets.only(
+                                              left: 10, right: 10, top: 10),
+                                          hintText: str.e_about_h,
+                                          hintStyle: getRegularStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 173, 173, 173),
+                                              fontSize: Responsive.isMobile(context)
+                                                  ? 15
+                                                  : 10))
+                                      .copyWith(
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: const BorderSide(
+                                                  color:
+                                                      ColorManager.whiteColor,
+                                                  width: .5)),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: const BorderSide(color: ColorManager.whiteColor, width: .5))),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(7, 0, 7, 5),
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 35,
+                                          vertical: mob ? 16 : 10),
+                                    ),
+                                    onPressed: updateProfileValidation,
+                                    child: Center(
+                                      child: Text(
+                                        str.e_save,
+                                        textAlign: TextAlign.justify,
+                                        style: getRegularStyle(
+                                            color: ColorManager.whiteText,
+                                            fontSize:
+                                                Responsive.isMobile(context)
+                                                    ? 15
+                                                    : 10),
+                                      ),
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    isPickerSelected
+                        ? Positioned(
+                            top: mob ? size.height * .53 : 410,
+                            // top: size.height * .458,
+                            right: lang == 'ar' ? size.width * .05 : null,
+                            left: lang != 'ar' ? size.width * .05 : null,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(3, 8.5),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: ColorManager.primary2,
+                                  ),
+                                  height: 110,
+                                  width: 160,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: ListView.builder(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 0, 0),
+                                            itemCount: r1.length,
+                                            itemBuilder: (ctx, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    countryid =
+                                                        r1[index].countryId;
+                                                    r1 = (provider
+                                                        .countriesModel!
+                                                        .countries)!;
+                                                    isPickerSelected = false;
+                                                  });
+                                                },
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      countryid =
+                                                          r1[index].countryId;
+                                                      EditProfileControllers
+                                                          .countryController
+                                                          .text = r1[index]
+                                                              .countryName ??
+                                                          '';
+                                                      isPickerSelected = false;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    height: 25,
                                                     color:
-                                                        ColorManager.whiteColor,
-                                                    width: .5)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10),
-                                                borderSide: const BorderSide(color: ColorManager.whiteColor, width: .5))),
+                                                        ColorManager.primary2,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          10, 0, 5, 0),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                              r1[index]
+                                                                      .countryName ??
+                                                                  '',
+                                                              style: getSemiBoldtStyle(
+                                                                  color: ColorManager.background,
+                                                                  fontSize: r1[index].countryName!.length < 12
+                                                                      ? 12
+                                                                      : r1[index].countryName!.length < 20
+                                                                          ? 10
+                                                                          : r1[index].countryName!.length > 25
+                                                                              ? 8
+                                                                              : 10)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(7, 0, 7, 5),
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 35,
-                                            vertical: mob ? 16 : 10),
-                                      ),
-                                      onPressed: updateProfile,
-                                      child: Center(
-                                        child: Text(
-                                          str.e_save,
-                                          textAlign: TextAlign.justify,
-                                          style: getRegularStyle(
-                                              color: ColorManager.whiteText,
-                                              fontSize:
-                                                  Responsive.isMobile(context)
-                                                      ? 15
-                                                      : 10),
-                                        ),
-                                      )),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      isPickerSelected
-                          ? Positioned(
-                              bottom:
-                                  mob ? size.height * .25 : size.height * .185,
-                              // top: size.height * .458,
-                              right: lang == 'ar' ? size.width * .05 : null,
-                              left: lang != 'ar' ? size.width * .05 : null,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 10.0,
-                                      color: Colors.grey.shade300,
-                                      offset: const Offset(3, 8.5),
-                                    ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: ColorManager.primary2,
-                                    ),
-                                    height: 110,
-                                    width: 200,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      child: Column(
-                                        children: [
-                                          // Padding(
-                                          //   padding: const EdgeInsets.all(8.0),
-                                          //   child: SizedBox(
-                                          //     height: 40,
-                                          //     child: TextField(
-                                          //     ),
-                                          //   ),
-                                          // ),
-
-                                          // Expanded(child: StreamBuilder<List<Countries>>(
-                                          //   stream: ,
-                                          // ))
-                                          Expanded(
-                                            child: ListView.builder(
-                                                itemCount:
-                                                    // r.isEmpty
-                                                    //     ? provider.countriesModel!.countries!.length
-                                                    //     :
-                                                    r1.length,
-                                                shrinkWrap: true,
-                                                itemBuilder: (ctx, index) {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        countryid = r1[index]
-                                                            .countryId
-                                                            .toString();
-                                                        r1 = (provider
-                                                            .countriesModel!
-                                                            .countries)!;
-                                                        isPickerSelected =
-                                                            false;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      width: 100,
-                                                      height: 35,
-                                                      color:
-                                                          ColorManager.primary2,
-                                                      // child: r.isEmpty
-                                                      //     ? Text(provider.countriesModel!.countries![index]
-                                                      //             .countryName ??
-                                                      //         '')
-                                                      // :
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                10, 0, 5, 0),
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                                "+${r1[index].phonecode.toString()}",
-                                                                style: getSemiBoldtStyle(
-                                                                    color: ColorManager
-                                                                        .background,
-                                                                    fontSize:
-                                                                        13)),
-                                                            const SizedBox(
-                                                              width: 8,
-                                                            ),
-                                                            Text(
-                                                                r1[index]
-                                                                        .countryName ??
-                                                                    '',
-                                                                style: getSemiBoldtStyle(
-                                                                    color: ColorManager.background,
-                                                                    fontSize: r1[index].countryName!.length < 12
-                                                                        ? 12
-                                                                        : r1[index].countryName!.length < 20
-                                                                            ? 10
-                                                                            : r1[index].countryName!.length > 25
-                                                                                ? 8
-                                                                                : 10)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container()
-                    ],
-                  ),
+                          )
+                        : Container()
+                  ],
                 ),
               ),
             ),
@@ -700,18 +690,57 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
   // * Update profile
 
-  updateProfile() {
+  updateProfileValidation() {
     final name = EditProfileControllers.nameController.text.trim();
-    final date = EditProfileControllers.dateController.text;
+    final dob = EditProfileControllers.dateController.text;
+    final country = EditProfileControllers.countryController.text;
     if (name.isEmpty) {
       showAnimatedSnackBar(context, "Name field can not be empty");
-    } else if (date.isEmpty) {
+    } else if (dob.isEmpty) {
       showAnimatedSnackBar(context, "DOB field can not be empty");
+    } else if (country.isEmpty) {
+      showAnimatedSnackBar(context, "Country field can not be empty");
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-        return const HomePage();
-      }));
+      updateProfile(name, dob);
     }
+  }
+
+  updateProfile(name, dob) async {
+    final apiToken = Hive.box("token").get('api_token');
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final about = EditProfileControllers.aboutController.text;
+    final region = EditProfileControllers.regionController.text;
+    print(countryid);
+    try {
+      var response = await http.post(
+          Uri.parse(
+              "$endPoint/api/update/userprofile?name=$name&gender=$gender&dob=$dob&about=$about&region=gfc&country_id=$countryid&state_id=12"),
+          headers: {
+            "device-id": provider.deviceId ?? '',
+            "api-token": apiToken
+          });
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+
+        // var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
+        // otpProvider.getOtpVerifiedData(otpVerifiedData);
+        navigateToNext();
+      } else {
+        print(response.statusCode);
+        print(response.body);
+        print('Something went wrong');
+      }
+    } on Exception catch (e) {
+      print(e);
+      showSnackBar("Something Went Wrong1", context);
+    }
+  }
+
+  navigateToNext() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+      return const HomePage();
+    }));
   }
 
   onSearchChanged(String query) {
@@ -746,4 +775,32 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       }
     });
   }
+
+  // viewProfile() async {
+  //   print("view profile");
+  //   final apiToken = Hive.box("token").get('api_token');
+  //   final provider = Provider.of<DataProvider>(context, listen: false);
+
+  //   try {
+  //     var response = await http.get(Uri.parse(viewUserProfileApi), headers: {
+  //       "device-id": provider.deviceId ?? '',
+  //       "api-token": apiToken
+  //     });
+  //     if (response.statusCode == 200) {
+  //       var jsonResponse = jsonDecode(response.body);
+  //       print(jsonResponse);
+
+  //       var viewProfileData = ViewProfileModel.fromJson(jsonResponse);
+  //       provider.viewProfileData(viewProfileData);
+  //       print(provider.viewProfileModel!.userdetails!.profilePic ?? '');
+  //     } else {
+  //       print(response.statusCode);
+  //       print(response.body);
+  //       print('Something went wrong');
+  //     }
+  //   } on Exception catch (e) {
+  //     print(e);
+  //     showSnackBar("Something Went Wrong1", context);
+  //   }
+  // }
 }

@@ -32,7 +32,7 @@ class _SerDrawerState extends State<SerDrawer> {
     final mob = Responsive.isMobile(context);
     return DrawerHeader(
         decoration: BoxDecoration(
-          color: ColorManager.primary2,
+          color: ColorManager.primary3,
           borderRadius: lang == 'ar'
               ? const BorderRadius.only(
                   topRight: Radius.circular(8), bottomRight: Radius.circular(8))

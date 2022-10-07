@@ -12,7 +12,7 @@ class CustomDrawerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: ColorManager.primary2,
+      color: ColorManager.primary3,
       child: InkWell(
         splashColor: ColorManager.whiteColor,
         // hoverColor: ColorManager.whiteColor,

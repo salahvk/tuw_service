@@ -9,6 +9,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_service_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -48,7 +49,10 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
   @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
-    final size = MediaQuery.of(context).size;
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+    final mob = Responsive.isMobile(context);
+
     final List<String> items = [
       'Item1',
       'Item2',
@@ -58,8 +62,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
-        height: size.height * 0.825,
-        width: size.width * 0.6,
+        height: h * 0.825,
+        width: w * 0.6,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -170,7 +174,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
                                       child: Container(
-                                        width: size.width * 0.5,
+                                        width: mob ? w * 0.5 : w * .45,
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
@@ -277,7 +281,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                   ],
                                 ),
                                 child: Container(
-                                  width: size.width,
+                                  width: w,
                                   height: 50,
                                   decoration: BoxDecoration(
                                       color: ColorManager.whiteColor,
@@ -342,7 +346,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
                                       child: Container(
-                                        width: size.width * .44,
+                                        width: w * .44,
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
@@ -374,7 +378,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
                                       child: Container(
-                                        width: size.width * .44,
+                                        width: w * .44,
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(

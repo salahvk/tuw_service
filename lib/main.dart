@@ -12,6 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox("LocalLan");
+  await Hive.openBox("token");
 
   runApp(const MyApp());
 }

@@ -375,8 +375,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                               });
                             },
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(15, 15, 10, 17),
+                              padding: const EdgeInsets.fromLTRB(5, 15, 10, 17),
                               child: Container(
                                 width: 15,
                                 height: 15,

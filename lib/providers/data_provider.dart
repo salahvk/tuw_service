@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/model/get_language.dart';
+import 'package:social_media_services/model/viewProfileModel.dart';
 
 class DataProvider with ChangeNotifier {
   LanguageModel? languageModel;
@@ -20,10 +21,10 @@ class DataProvider with ChangeNotifier {
 
   String? deviceId;
 
-  // ScalableImage? SIimage;
+  ViewProfileModel? viewProfileModel;
 
-  // void siImageData(value) {
-  //   SIimage = value;
-  //   notifyListeners();
-  // }
+  void viewProfileData(value) {
+    viewProfileModel = value;
+    notifyListeners();
+  }
 }

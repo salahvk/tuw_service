@@ -428,6 +428,12 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       }
 
       var jsonResponse = jsonDecode(response.body);
+      final result = jsonResponse["result"];
+      print(result);
+      if (result == false) {
+        print("result is false");
+        return;
+      }
       var getOtpData = GetOtp.fromJson(jsonResponse);
       otpProvider.getOtpData(getOtpData);
 

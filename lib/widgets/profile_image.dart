@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/worker_admin.dart';
+import 'package:http/http.dart' as http;
+
+// import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:social_media_services/utils/viewProfile.dart';
 
 class ProfileImage extends StatefulWidget {
   double profileSize = 0;
   double iconSize = 0;
   double iconRadius = 0;
   bool isNavigationActive = false;
+  // String? image;
   ProfileImage(
       {Key? key,
       required this.profileSize,
       required this.iconSize,
       required this.isNavigationActive,
+      // this.image,
       required this.iconRadius})
       : super(key: key);
 
@@ -24,7 +35,19 @@ class ProfileImage extends StatefulWidget {
 class _ProfileImageState extends State<ProfileImage> {
   final ImagePicker _picker = ImagePicker();
   @override
+  void initState() {
+    super.initState();
+    print("S");
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      viewProfile(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('build');
+
+    final provider = Provider.of<DataProvider>(context, listen: true);
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -42,11 +65,29 @@ class _ProfileImageState extends State<ProfileImage> {
           CircleAvatar(
             backgroundColor: ColorManager.whiteColor.withOpacity(0.8),
             radius: widget.profileSize,
-            child: Center(
-              child: Image.asset(
-                ImageAssets.profileIcon,
-              ),
-            ),
+            backgroundImage:
+                provider.viewProfileModel?.userdetails?.profilePic == null
+                    ? const AssetImage(ImageAssets.profileIcon) as ImageProvider
+                    : NetworkImage(
+                        "$profileImageApi/${provider.viewProfileModel?.userdetails?.profilePic}",
+                      ),
+            // child: Center(
+            //   child:
+            //       //  widget.image == ''
+            //       //     ? Image.asset(
+            //       //         ImageAssets.profileIcon,
+            //       //       )
+            //       //     :
+            //       CachedNetworkImage(
+            //     fit: BoxFit.contain,
+            //     imageUrl: "$profileImageApi/${widget.image}",
+            //     errorWidget: ((context, url, error) {
+            //       return Image.asset(
+            //         ImageAssets.profileIcon,
+            //       );
+            //     }),
+            //   ),
+            // ),
           ),
           Positioned(
               right: 0,
@@ -96,8 +137,55 @@ class _ProfileImageState extends State<ProfileImage> {
   selectImage() async {
     print("Img picker");
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final imagePath = image?.path;
+    final imageName = image?.name;
+    print(image?.name);
+    print(image?.path);
     // final XFile? photo =
     //     await _picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    // updateProfile(imageName);
+    upload(image);
+  }
+
+  // updateProfile(imageName) async {
+  //   final apiToken = Hive.box("token").get('api_token');
+  //   final provider = Provider.of<DataProvider>(context, listen: false);
+  //   var response = await http.post(Uri.parse(updateProfileApi),
+  //       headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken},
+  //       body: {"profile_image": imageName});
+  //   if (response.statusCode == 200) {
+  //     var jsonResponse = jsonDecode(response.body);
+  //     print(jsonResponse);
+  //   }
+  //   print(response.statusCode);
+  // }
+
+  upload(XFile imageFile) async {
+    var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
+    var length = await imageFile.length();
+    final apiToken = Hive.box("token").get('api_token');
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    var uri = Uri.parse(updateProfileApi);
+    var request = http.MultipartRequest(
+      "POST",
+      uri,
+    );
+    // "content-type": "multipart/form-data"
+    request.headers
+        .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
+    var multipartFile = http.MultipartFile(
+      'profile_image',
+      stream,
+      length,
+      filename: (imageFile.path),
+    );
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    viewProfile(context);
   }
 
   navigateToWorkersPage() {

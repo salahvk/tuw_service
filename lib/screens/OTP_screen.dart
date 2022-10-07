@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
@@ -162,11 +163,15 @@ class _OTPscreenState extends State<OTPscreen> {
           headers: {"device-id": provider.deviceId ?? ''});
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
-        print("Otp Verified Response");
-        print(jsonResponse);
+
         var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
         otpProvider.getOtpVerifiedData(otpVerifiedData);
+        final apitoken = otpProvider.otpVerification?.customerdetails?.apiToken;
+        print(apitoken);
 
+        Hive.box("token").put('api_token', apitoken ?? '');
+
+        // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
           return const EditProfileScreen();
         }), (route) => false);
