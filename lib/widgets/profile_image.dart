@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/worker_admin.dart';
@@ -67,27 +67,16 @@ class _ProfileImageState extends State<ProfileImage> {
             radius: widget.profileSize,
             backgroundImage:
                 provider.viewProfileModel?.userdetails?.profilePic == null
-                    ? const AssetImage(ImageAssets.profileIcon) as ImageProvider
+                    ? null
                     : NetworkImage(
                         "$profileImageApi/${provider.viewProfileModel?.userdetails?.profilePic}",
                       ),
-            // child: Center(
-            //   child:
-            //       //  widget.image == ''
-            //       //     ? Image.asset(
-            //       //         ImageAssets.profileIcon,
-            //       //       )
-            //       //     :
-            //       CachedNetworkImage(
-            //     fit: BoxFit.contain,
-            //     imageUrl: "$profileImageApi/${widget.image}",
-            //     errorWidget: ((context, url, error) {
-            //       return Image.asset(
-            //         ImageAssets.profileIcon,
-            //       );
-            //     }),
-            //   ),
-            // ),
+            child: provider.viewProfileModel?.userdetails?.profilePic == null
+                ? SvgPicture.asset(
+                    'assets/profileAvatar.svg',
+                    color: ColorManager.primary,
+                  )
+                : null,
           ),
           Positioned(
               right: 0,

@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -47,6 +49,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
       'Item4',
     ];
     final size = MediaQuery.of(context).size;
+    final provider = Provider.of<DataProvider>(context, listen: true);
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -150,7 +153,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             height: 5,
                           ),
                           Text(
-                            "Prithvina Raj",
+                            provider.viewProfileModel?.userdetails?.name ?? '',
                             style: getBoldtStyle(
                                 color: ColorManager.black, fontSize: 13),
                           ),

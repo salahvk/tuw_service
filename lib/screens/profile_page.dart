@@ -3,10 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
@@ -35,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final provider = Provider.of<DataProvider>(context, listen: true);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -137,7 +141,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   )),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                    child: Text('Prithvina Raj',
+                    child: Text(
+                        provider.viewProfileModel?.userdetails?.name ?? '',
                         style: getBoldtStyle(
                             color: ColorManager.black, fontSize: 20)),
                   ),
@@ -146,9 +151,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: const Color(0xff6e6e6e), fontSize: 14)),
                 ],
               )),
-          const ProfileTitleWidget(
-            name: 'My Profile',
-            icon: Icons.person_outline,
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                return const AddressPage();
+              })));
+            },
+            child: const ProfileTitleWidget(
+              name: 'My Profile',
+              icon: Icons.person_outline,
+            ),
           ),
           InkWell(
             onTap: () {

@@ -173,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ChatAddTile(
                                 title: lang == 'ar'
                                     ? str.cp_photo2
-                                    : "Photo & Video\nLibrary",
+                                    : "${str.cp_photo1}\n${str.cp_photo2}",
                                 image: ImageAssets.gallery),
                             ChatAddTile(
                                 title: str.cp_doc,
@@ -225,7 +225,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ChatAddTile(
                                 title: lang == 'ar'
                                     ? str.cp_s_loc_1
-                                    : "Send Current\nLocation",
+                                    : "${str.cp_s_loc_1}\n${str.cp_s_loc_2}",
                                 image: ImageAssets.currentLocation),
                             ChatAddTile(
                                 title: str.cp_choose,

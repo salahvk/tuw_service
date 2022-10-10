@@ -71,7 +71,6 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print(size.height);
     final h = MediaQuery.of(context).size.height;
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
@@ -161,11 +160,6 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       body: _selectedIndex != 2
           ? _screens[_selectedIndex]
           : GestureDetector(
-              // onTap: () {
-              //   setState(() {
-              //     isPickerSelected = false;
-              //   });
-              // },
               child: SingleChildScrollView(
                 child: Stack(
                   children: [

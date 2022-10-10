@@ -45,7 +45,7 @@ dependencies:
   animated_snack_bar: ^0.2.2
   file_picker: ^3.0.4
   flutter_rating_bar: ^4.0.1
-  simple_animations: ^5.0.0+2
+  simple_animations: ^4.1.0
   camera: ^0.10.0+1
   video_player: ^2.4.7
   path_provider: ^2.0.11

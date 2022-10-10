@@ -1,24 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_otp.dart';
+import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/main.dart';
 import 'package:social_media_services/model/get_countries.dart';
-import 'package:social_media_services/model/get_otp.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
-import 'package:social_media_services/screens/OTP_screen.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -36,6 +32,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   List<Countries> r = [];
   bool isPickerSelected = false;
   Timer? _debounce;
+  bool loading = false;
 
   @override
   void initState() {
@@ -149,39 +146,22 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                               Expanded(
                                   child: SizedBox(
                                 child: TextField(
-                                  keyboardType: TextInputType.phone,
-                                  controller:
-                                      PhoneNumberControllers.phoneNumCon,
-                                  style: const TextStyle(),
-                                  maxLength: 10,
-                                  decoration: InputDecoration(
-                                          counterText: '',
-                                          contentPadding: const EdgeInsets.only(
-                                              left: 0,
-                                              right: 10,
-                                              top: 0,
-                                              bottom: 0),
-                                          hintText: str.m_ent_mob_no,
-                                          hintStyle: getRegularStyle(
-                                              color: ColorManager.grayLight,
-                                              fontSize: 15))
-                                      .copyWith(
-                                          // enabledBorder: const OutlineInputBorder(
-                                          //     borderRadius: BorderRadius.only(
-                                          //         topRight: Radius.circular(5),
-                                          //         bottomRight: Radius.circular(5)),
-                                          //     borderSide: BorderSide(
-                                          //         color: ColorManager.whiteColor,
-                                          //         width: .5)),
-                                          // focusedBorder: const OutlineInputBorder(
-                                          //     borderRadius: BorderRadius.only(
-                                          //         topRight: Radius.circular(5),
-                                          //         bottomRight: Radius.circular(5)),
-                                          //     borderSide: BorderSide(
-                                          //         color: ColorManager.whiteColor,
-                                          //         width: .5))
-                                          ),
-                                ),
+                                    keyboardType: TextInputType.phone,
+                                    controller:
+                                        PhoneNumberControllers.phoneNumCon,
+                                    style: const TextStyle(),
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                        counterText: '',
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 0,
+                                            right: 10,
+                                            top: 0,
+                                            bottom: 0),
+                                        hintText: str.m_ent_mob_no,
+                                        hintStyle: getRegularStyle(
+                                            color: ColorManager.grayLight,
+                                            fontSize: 15))),
                               ))
                             ],
                           ),
@@ -212,11 +192,17 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(elevation: 0),
                           onPressed: onContinue,
-                          child: Text(
-                            str.m_continue,
-                            style: getRegularStyle(
-                                color: ColorManager.whiteText, fontSize: 18),
-                          ))),
+                          child: loading
+                              ? const CircularProgressIndicator(
+                                  color: ColorManager.primary,
+                                  backgroundColor: ColorManager.primary3,
+                                )
+                              : Text(
+                                  str.m_continue,
+                                  style: getRegularStyle(
+                                      color: ColorManager.whiteText,
+                                      fontSize: 18),
+                                ))),
                   // const TroubleSign(),
                   // const Spacer(),
                   SizedBox(
@@ -227,139 +213,123 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               ),
               isPickerSelected
                   ? Positioned(
-                      // bottom: 0,
                       top: size.height * .458,
                       right: lang == 'ar' ? size.width * .05 : null,
                       left: lang != 'ar' ? size.width * .05 : null,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 10.0,
-                              color: Colors.grey.shade300,
-                              offset: const Offset(3, 8.5),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: ColorManager.primary2,
-                            ),
-                            height: 200,
-                            width: 200,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: 40,
-                                      child: TextField(
-                                        onChanged: (value) async {
-                                          String capitalize(String s) =>
-                                              s[0].toUpperCase() +
-                                              s.substring(1);
+                      child: FadeCustomAnimation(
+                        delay: .005,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 10.0,
+                                color: Colors.grey.shade300,
+                                offset: const Offset(3, 8.5),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: ColorManager.primary2,
+                              ),
+                              height: 200,
+                              width: 200,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: TextField(
+                                          onChanged: (value) async {
+                                            String capitalize(String s) =>
+                                                s[0].toUpperCase() +
+                                                s.substring(1);
 
-                                          if (value.isEmpty) {
-                                            print('empty');
-                                            r = [];
-                                            setState(() {
-                                              r = (provider
-                                                  .countriesModel!.countries)!;
-                                            });
-
-                                            print(r.length);
-                                          } else {
-                                            final lower = capitalize(value);
-                                            print(lower);
-
-                                            _onSearchChanged(lower);
-                                            print(r.length);
-                                          }
-
-                                          // print(r);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-
-                                  // Expanded(child: StreamBuilder<List<Countries>>(
-                                  //   stream: ,
-                                  // ))
-                                  Expanded(
-                                    child: ListView.builder(
-                                        itemCount:
-                                            // r.isEmpty
-                                            //     ? provider.countriesModel!.countries!.length
-                                            //     :
-                                            r.length,
-                                        shrinkWrap: true,
-                                        itemBuilder: (ctx, index) {
-                                          return InkWell(
-                                            onTap: () {
+                                            if (value.isEmpty) {
+                                              print('empty');
+                                              r = [];
                                               setState(() {
-                                                countryCode = r[index]
-                                                    .phonecode
-                                                    .toString();
                                                 r = (provider.countriesModel!
                                                     .countries)!;
-                                                isPickerSelected = false;
                                               });
-                                            },
-                                            child: Container(
-                                              width: 100,
-                                              height: 35,
-                                              color: ColorManager.primary2,
-                                              // child: r.isEmpty
-                                              //     ? Text(provider.countriesModel!.countries![index]
-                                              //             .countryName ??
-                                              //         '')
-                                              // :
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        10, 0, 5, 0),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                        "+${r[index].phonecode.toString()}",
-                                                        style: getSemiBoldtStyle(
-                                                            color: ColorManager
-                                                                .background,
-                                                            fontSize: 13)),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Text(
-                                                        r[index].countryName ??
-                                                            '',
-                                                        style:
-                                                            getSemiBoldtStyle(
-                                                                color: ColorManager
-                                                                    .background,
-                                                                fontSize: r[index]
-                                                                            .countryName!
-                                                                            .length <
-                                                                        12
-                                                                    ? 12
-                                                                    : r[index].countryName!.length <
-                                                                            20
-                                                                        ? 10
-                                                                        : r[index].countryName!.length >
-                                                                                25
-                                                                            ? 8
-                                                                            : 10)),
-                                                  ],
+                                            } else {
+                                              final lower = capitalize(value);
+
+                                              _onSearchChanged(lower);
+                                            }
+
+                                            // print(r);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                          itemCount: r.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (ctx, index) {
+                                            return InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  countryCode = r[index]
+                                                      .phonecode
+                                                      .toString();
+                                                  r = (provider.countriesModel!
+                                                      .countries)!;
+                                                  isPickerSelected = false;
+                                                });
+                                              },
+                                              child: Container(
+                                                width: 100,
+                                                height: 35,
+                                                color: ColorManager.primary2,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 0, 5, 0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                          "+${r[index].phonecode.toString()}",
+                                                          style: getSemiBoldtStyle(
+                                                              color: ColorManager
+                                                                  .background,
+                                                              fontSize: 13)),
+                                                      const SizedBox(
+                                                        width: 8,
+                                                      ),
+                                                      Text(
+                                                          r[index].countryName ??
+                                                              '',
+                                                          style:
+                                                              getSemiBoldtStyle(
+                                                                  color: ColorManager
+                                                                      .background,
+                                                                  fontSize: r[index]
+                                                                              .countryName!
+                                                                              .length <
+                                                                          12
+                                                                      ? 12
+                                                                      : r[index].countryName!.length <
+                                                                              20
+                                                                          ? 10
+                                                                          : r[index].countryName!.length > 25
+                                                                              ? 8
+                                                                              : 10)),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                ],
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -406,46 +376,16 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     //   );
     // }
     else {
-      OtpProvider.getPhoneNo(PhoneNumberControllers.phoneNumCon.text);
+      final phoneNo = PhoneNumberControllers.phoneNumCon.text;
+      OtpProvider.getPhoneNo(phoneNo);
       OtpProvider.getCountryCode(countryCode);
-      getOtp();
-    }
-  }
-
-  getOtp() async {
-    print("getting otp");
-    final String id = Hive.box("LocalLan").get('lang_id');
-    print(id);
-    try {
-      final provider = Provider.of<DataProvider>(context, listen: false);
-      final otpProvider = Provider.of<OTPProvider>(context, listen: false);
-      var response = await http.post(
-          Uri.parse(
-              "$apiUser/request_otp?countrycode=$countryCode&phone=${PhoneNumberControllers.phoneNumCon.text}&language_id=$id"),
-          headers: {"device-id": provider.deviceId ?? ''});
-      // print(response.body);
-      if (response.statusCode != 200) {
-        showSnackBar("Something Went Wrong", context);
-        return;
-      }
-
-      var jsonResponse = jsonDecode(response.body);
-      final result = jsonResponse["result"];
-      print(result);
-      if (result == false) {
-        print("result is false");
-        return;
-      }
-      var getOtpData = GetOtp.fromJson(jsonResponse);
-      otpProvider.getOtpData(getOtpData);
-
-      print(jsonResponse);
-      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-        return const OTPscreen();
-      }));
-    } on Exception catch (e) {
-      showSnackBar("Something Went Wrong", context);
-      print(e);
+      setState(() {
+        loading = true;
+      });
+      await getOtp(context, countryCode, phoneNo, false);
+      setState(() {
+        loading = false;
+      });
     }
   }
 

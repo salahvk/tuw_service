@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_edit.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -40,6 +42,7 @@ class _AddressPageState extends State<AddressPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final provider = Provider.of<DataProvider>(context, listen: false);
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -152,7 +155,7 @@ class _AddressPageState extends State<AddressPage> {
                             height: 5,
                           ),
                           Text(
-                            "Prithvina Raj",
+                            provider.viewProfileModel?.userdetails?.name ?? '',
                             style: getBoldtStyle(
                                 color: ColorManager.black, fontSize: 13),
                           ),

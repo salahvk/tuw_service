@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
-import 'package:social_media_services/utils/diologue.dart';
+import 'package:social_media_services/utils/initPlatformState.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -18,6 +18,7 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   String lang = '';
+  bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -69,10 +70,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pushNamed(context, Routes.privacyPolicy);
               },
             ),
-            CustomDrawerList(
-              title: str.d_logout,
-              onTap: logOUtFunction,
-            ),
+            loading
+                ? Container(
+                    alignment: Alignment.topCenter,
+                    margin: const EdgeInsets.all(10),
+                    child: const LinearProgressIndicator(
+                        // value: 0.7,
+                        ))
+                : CustomDrawerList(
+                    title: str.d_logout,
+                    onTap: logOUtFunction,
+                  ),
             const SizedBox(
               height: 150,
             )
@@ -81,9 +89,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   logOUtFunction() async {
-    showDialog(
-        context: context,
-        builder: (context) => const DialogueBox(),
-        barrierDismissible: false);
+    allowfunction(context);
+    // showDialog(
+    //     context: context,
+    //     builder: (context) => const DialogueBox(),
+    //     barrierDismissible: false);
+  }
+
+  allowfunction(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
+    await Hive.box("token").clear();
+    callInitFunction(context);
+  }
+
+  callInitFunction(context) async {
+    await initPlatformState(context);
   }
 }

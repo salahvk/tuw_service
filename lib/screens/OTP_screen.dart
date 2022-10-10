@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
@@ -6,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_otp.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
@@ -29,15 +31,22 @@ class OTPscreen extends StatefulWidget {
 }
 
 class _OTPscreenState extends State<OTPscreen> {
-  // final defaultPinTheme = pintheme;
+  bool isResendButtonClicked = false;
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    PhoneNumberControllers.otpCon.text = '';
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final focusedPinTheme = focusedTheme;
     final h = MediaQuery.of(context).size.height;
-    final OtpProvider = Provider.of<OTPProvider>(context, listen: false);
+    final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
+
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -61,7 +70,7 @@ class _OTPscreenState extends State<OTPscreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Text(
-                          "${str.o_pls_type} \n+${OtpProvider.countryCode} ${OtpProvider.phoneNo}",
+                          "${str.o_pls_type} \n+${otpProvider.countryCode} ${otpProvider.phoneNo}",
                           textAlign: TextAlign.center,
                           style: getRegularStyle(
                               color: const Color(0xff9f9f9f),
@@ -85,7 +94,6 @@ class _OTPscreenState extends State<OTPscreen> {
                 pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                 showCursor: true,
                 onCompleted: (pin) {
-                  print('object');
                   verifyNow();
                 },
               ),
@@ -98,9 +106,30 @@ class _OTPscreenState extends State<OTPscreen> {
                   Text(str.o_dont,
                       style: getRegularStyle(
                           color: const Color(0xff9f9f9f), fontSize: 15)),
-                  Text(str.o_resend,
-                      style: getRegularStyle(
-                          color: ColorManager.primary, fontSize: 15)),
+                  InkWell(
+                    onTap: () async {
+                      getOtp(context, {otpProvider.countryCode},
+                          {otpProvider.phoneNo}, true);
+                      setState(() {
+                        isResendButtonClicked = true;
+                      });
+                      await Future.delayed(const Duration(seconds: 2));
+                      setState(() {
+                        isResendButtonClicked = false;
+                      });
+                    },
+                    child: isResendButtonClicked
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(str.o_resend,
+                            style: getRegularStyle(
+                                color: ColorManager.primary, fontSize: 15)),
+                  ),
                 ],
               ),
             ),
@@ -119,13 +148,16 @@ class _OTPscreenState extends State<OTPscreen> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(elevation: 0),
                     onPressed: verifyNow,
-                    child: Text(
-                      str.o_verify,
-                      style: getRegularStyle(
-                          color: ColorManager.whiteText, fontSize: 18),
-                    ))),
-            // const TroubleSign(),
-            // const Spacer(),
+                    child: loading
+                        ? const CircularProgressIndicator(
+                            color: ColorManager.primary,
+                            backgroundColor: ColorManager.primary3,
+                          )
+                        : Text(
+                            str.o_verify,
+                            style: getRegularStyle(
+                                color: ColorManager.whiteText, fontSize: 18),
+                          ))),
             SizedBox(
               height: Responsive.isMobile(context) ? h * .24 : h * .04,
             ),
@@ -136,7 +168,7 @@ class _OTPscreenState extends State<OTPscreen> {
     );
   }
 
-  verifyNow() {
+  verifyNow() async {
     FocusManager.instance.primaryFocus?.unfocus();
     final str = AppLocalizations.of(context)!;
     if (PhoneNumberControllers.otpCon.text.length < 6 ||
@@ -150,7 +182,14 @@ class _OTPscreenState extends State<OTPscreen> {
         context,
       );
     } else {
-      verifyOtpApi();
+      setState(() {
+        loading = true;
+      });
+      await verifyOtpApi();
+
+      setState(() {
+        loading = false;
+      });
     }
   }
 

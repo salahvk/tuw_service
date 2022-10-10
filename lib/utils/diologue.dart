@@ -16,7 +16,6 @@ class _DialogueBoxState extends State<DialogueBox> {
   bool loading = false;
   @override
   Widget build(context) {
-    print('object');
     return Dialog(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
