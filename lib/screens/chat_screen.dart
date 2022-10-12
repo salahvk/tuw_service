@@ -171,11 +171,13 @@ class _ChatScreenState extends State<ChatScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ChatAddTile(
+                                svg: false,
                                 title: lang == 'ar'
                                     ? str.cp_photo2
                                     : "${str.cp_photo1}\n${str.cp_photo2}",
                                 image: ImageAssets.gallery),
                             ChatAddTile(
+                                svg: false,
                                 title: str.cp_doc,
                                 image: ImageAssets.documents),
                             // const SizedBox(
@@ -193,6 +195,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ? ColorManager.selectedGreen
                                     : ColorManager.primary,
                                 child: ChatAddTile(
+                                  svg: false,
                                   title: str.cp_loc,
                                   image: ImageAssets.map,
                                 ),
@@ -223,18 +226,21 @@ class _ChatScreenState extends State<ChatScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ChatAddTile(
+                                svg: true,
                                 title: lang == 'ar'
                                     ? str.cp_s_loc_1
                                     : "${str.cp_s_loc_1}\n${str.cp_s_loc_2}",
-                                image: ImageAssets.currentLocation),
+                                image: ImageAssets.currentLocationSvg),
                             ChatAddTile(
+                                svg: true,
                                 title: str.cp_choose,
-                                image: ImageAssets.chooseFromApp),
+                                image: ImageAssets.chooseFromAppSvg),
                             InkWell(
                               onTap: () {},
                               child: ChatAddTile(
+                                svg: true,
                                 title: str.cp_address,
-                                image: ImageAssets.addressCard,
+                                image: ImageAssets.addressCardSvg,
                               ),
                             )
                           ],

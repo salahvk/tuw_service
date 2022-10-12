@@ -6,6 +6,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/widgets/Ser_button.dart';
 import 'package:social_media_services/widgets/ser_drawer_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SerDrawer extends StatefulWidget {
   const SerDrawer({
@@ -30,6 +31,7 @@ class _SerDrawerState extends State<SerDrawer> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final mob = Responsive.isMobile(context);
+    final str = AppLocalizations.of(context)!;
     return DrawerHeader(
         decoration: BoxDecoration(
           color: ColorManager.primary3,
@@ -51,7 +53,7 @@ class _SerDrawerState extends State<SerDrawer> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Available Transport:',
+                    str.sd_available,
                     style: getSemiBoldtStyle(
                         color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
                   ),
@@ -70,7 +72,7 @@ class _SerDrawerState extends State<SerDrawer> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Service Type:',
+                    str.sd_type,
                     style: getSemiBoldtStyle(
                         color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
                   ),
@@ -105,7 +107,7 @@ class _SerDrawerState extends State<SerDrawer> {
                       backgroundColor: ColorManager.whiteColor,
                       padding: const EdgeInsets.fromLTRB(40, 0, 40, 0)),
                   child: Text(
-                    " Reset ",
+                    str.sd_reset,
                     style: getSemiBoldtStyle(
                         color: ColorManager.primary, fontSize: 16),
                   )),

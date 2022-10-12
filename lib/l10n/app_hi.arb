@@ -174,5 +174,10 @@
     "wd_report":"Report",
     "wd_online":"Online",
     "wd_offline":"Offline",
-    "wd_busy":"Busy"
+    "wd_busy":"Busy",
+
+    "sd_status":"सेवा की स्थिति",  
+    "sd_available":"Available Transport:",
+    "sd_type":"Service Type:",
+    "sd_reset":"Reset"
 }

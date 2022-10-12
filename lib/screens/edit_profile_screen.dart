@@ -53,6 +53,8 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   List<Countries> r1 = [];
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
 
+  bool loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -538,16 +540,22 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                     ),
                                     onPressed: updateProfileValidation,
                                     child: Center(
-                                      child: Text(
-                                        str.e_save,
-                                        textAlign: TextAlign.justify,
-                                        style: getRegularStyle(
-                                            color: ColorManager.whiteText,
-                                            fontSize:
-                                                Responsive.isMobile(context)
-                                                    ? 15
-                                                    : 10),
-                                      ),
+                                      child: loading
+                                          ? const CircularProgressIndicator(
+                                              color: ColorManager.primary,
+                                              backgroundColor:
+                                                  ColorManager.primary3,
+                                            )
+                                          : Text(
+                                              str.e_save,
+                                              textAlign: TextAlign.justify,
+                                              style: getRegularStyle(
+                                                  color: ColorManager.whiteText,
+                                                  fontSize: Responsive.isMobile(
+                                                          context)
+                                                      ? 15
+                                                      : 10),
+                                            ),
                                     )),
                               )
                             ],
@@ -684,7 +692,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
   // * Update profile
 
-  updateProfileValidation() {
+  updateProfileValidation() async {
     final name = EditProfileControllers.nameController.text.trim();
     final dob = EditProfileControllers.dateController.text;
     final country = EditProfileControllers.countryController.text;
@@ -695,7 +703,13 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     } else if (country.isEmpty) {
       showAnimatedSnackBar(context, "Country field can not be empty");
     } else {
-      updateProfile(name, dob);
+      setState(() {
+        loading = true;
+      });
+      await updateProfile(name, dob);
+      setState(() {
+        loading = false;
+      });
     }
   }
 

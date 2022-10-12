@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ServiceStatusButton extends StatelessWidget {
   const ServiceStatusButton({
@@ -12,6 +13,7 @@ class ServiceStatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return Container(
       height: 30,
       width: size.width * .48,
@@ -29,7 +31,7 @@ class ServiceStatusButton extends StatelessWidget {
       ),
       child: Center(
           child: Text(
-        "Service Status",
+        str.sd_status,
         style: getSemiBoldtStyle(color: ColorManager.whiteText, fontSize: 16),
       )),
     );

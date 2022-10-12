@@ -176,5 +176,10 @@
     "wd_report":"إبلاغ",
     "wd_online":"متاح",
     "wd_offline":"غير مناح",
-    "wd_busy":"مشغول"
+    "wd_busy":"مشغول",
+
+    "sd_status":"حالة الخدمة",  
+    "sd_available":"النقل المتوفرة:",
+    "sd_type":"نوع الخدمة:",
+    "sd_reset":"إعادة ضبط"
 }
