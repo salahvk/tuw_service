@@ -10,6 +10,7 @@ import 'package:social_media_services/API/get_language.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/getLocalLanguage.dart';
+import 'package:social_media_services/utils/viewProfile.dart';
 
 Future<void> initPlatformState(BuildContext context) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
@@ -26,6 +27,8 @@ Future<void> initPlatformState(BuildContext context) async {
   if (apiToken == null) {
     gotoNextPage(context);
   } else {
+    await viewProfile(context);
+    await getCountriesData(context);
     gotoHomePage(context);
   }
   print(provider.deviceId);

@@ -11,6 +11,7 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/worker_admin.dart';
@@ -163,7 +164,7 @@ class _AddressPageState extends State<AddressPage> {
                             height: 2,
                           ),
                           Text(
-                            "PrithvinaRaj@gmail.com",
+                            "mail@gmail.com",
                             style: getRegularStyle(
                                 color: ColorManager.grayLight, fontSize: 13),
                           ),
@@ -171,7 +172,7 @@ class _AddressPageState extends State<AddressPage> {
                             height: 2,
                           ),
                           Text(
-                            "+967 123 456 789",
+                            provider.viewProfileModel?.userdetails?.phone ?? '',
                             style: getRegularStyle(
                                 color: ColorManager.grayLight, fontSize: 13),
                           ),
@@ -208,21 +209,30 @@ class _AddressPageState extends State<AddressPage> {
                                         borderRadius: BorderRadius.circular(5)),
 
                                     // width: 30,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(5, 2, 5, 5),
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.location_on,
-                                            color: ColorManager.whiteColor,
-                                          ),
-                                          Text(
-                                            str.a_home_locator,
-                                            style: getRegularStyle(
-                                                color: ColorManager.whiteColor),
-                                          )
-                                        ],
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return CustomizeMarkerExample();
+                                        }));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 2, 5, 5),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on,
+                                              color: ColorManager.whiteColor,
+                                            ),
+                                            Text(
+                                              str.a_home_locator,
+                                              style: getRegularStyle(
+                                                  color:
+                                                      ColorManager.whiteColor),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )

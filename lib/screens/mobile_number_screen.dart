@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -294,6 +295,49 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                                           10, 0, 5, 0),
                                                   child: Row(
                                                     children: [
+                                                      // SizedBox(
+                                                      //     width: 23,
+                                                      //     height: 15,
+                                                      //     child: ScalableImageWidget
+                                                      //         .fromSISource(
+                                                      //             scale: 5,
+                                                      //             onLoading:
+                                                      //                 (p0) {
+                                                      //               return Shimmer
+                                                      //                   .fromColors(
+                                                      //                 baseColor:
+                                                      //                     ColorManager
+                                                      //                         .whiteColor,
+                                                      //                 highlightColor:
+                                                      //                     ColorManager
+                                                      //                         .grayLight,
+                                                      //                 child:
+                                                      //                     Container(
+                                                      //                   color: ColorManager
+                                                      //                       .whiteColor,
+                                                      //                   child:
+                                                      //                       const SizedBox(
+                                                      //                     width:
+                                                      //                         23,
+                                                      //                     height:
+                                                      //                         14,
+                                                      //                   ),
+                                                      //                 ),
+                                                      //               );
+                                                      //             },
+                                                      //             reload: false,
+                                                      //             cache: ScalableImageCache(
+                                                      //                 size: r
+                                                      //                     .length),
+                                                      //             si: ScalableImageSource.fromSvgHttpUrl(
+                                                      //                 compact: true,
+                                                      //                 // currentColor: ColorManager.whiteColor,
+                                                      //                 // bigFloats:
+                                                      //                 //     true,
+                                                      //                 Uri.parse('$endPoint${r[index].countryflag}')))),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
                                                       Text(
                                                           "+${r[index].phonecode.toString()}",
                                                           style: getSemiBoldtStyle(

@@ -356,7 +356,7 @@ class _ServicerPageState extends State<ServicerPage> {
                               ),
                               child: TextField(
                                 // style: const TextStyle(),
-                                controller: stateController,
+                                controller: ServiceControllers.stateController,
                                 decoration: InputDecoration(
                                     hintText: str.s_region,
                                     hintStyle: getRegularStyle(

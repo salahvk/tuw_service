@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
 import 'package:social_media_services/screens/Terms&Conditions.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_service_page.dart';
@@ -33,6 +34,7 @@ class Routes {
   static const String privacyPolicy = '/privacyPolicy';
   static const String termsAndConditions = '/termsAndConditions';
   static const String wishList = '/wishList';
+  static const String addressPage = '/addressPage';
 }
 
 class RouteGenerator {
@@ -68,6 +70,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const TermsAndConditionPage());
       case Routes.wishList:
         return MaterialPageRoute(builder: (_) => const WishList());
+      case Routes.addressPage:
+        return MaterialPageRoute(builder: (_) => const AddressPage());
       default:
         return unDefinedRoute();
     }

@@ -15,9 +15,11 @@ import 'package:social_media_services/model/otp_verification.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/utils/pinTheme.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:social_media_services/utils/viewProfile.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -210,11 +212,12 @@ class _OTPscreenState extends State<OTPscreen> {
         print(apitoken);
 
         Hive.box("token").put('api_token', apitoken ?? '');
+        await viewProfile(context);
 
         // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
-          return const EditProfileScreen();
-        }), (route) => false);
+        otpProvider.getOtp!.message!.contains('Successfully Registered')
+            ? navigateToEdit(context)
+            : navigateToHome(context);
       } else {
         print('Something went wrong');
       }
@@ -222,4 +225,16 @@ class _OTPscreenState extends State<OTPscreen> {
       showSnackBar("Something Went Wrong", context);
     }
   }
+}
+
+navigateToHome(BuildContext context) {
+  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
+    return const HomePage();
+  }), (route) => false);
+}
+
+navigateToEdit(BuildContext context) {
+  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
+    return const EditProfileScreen();
+  }), (route) => false);
 }

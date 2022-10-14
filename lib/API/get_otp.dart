@@ -33,7 +33,9 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
       print("result is false");
       return;
     }
+
     var getOtpData = GetOtp.fromJson(jsonResponse);
+
     otpProvider.getOtpData(getOtpData);
 
     if (resend == true) {

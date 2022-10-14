@@ -9,15 +9,16 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/messagePage.dart';
-import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/textField_Profile.dart';
 
 class UserAddressEdit extends StatefulWidget {
   const UserAddressEdit({super.key});
@@ -31,23 +32,28 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
+  List<String> r2 = [];
   @override
   void initState() {
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      int? n = provider.countriesModel?.countries?.length;
+      int i = 0;
+      while (i < n!.toInt()) {
+        r2.add(provider.countriesModel!.countries![i].countryName!);
+        i++;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
-    final List<String> items = [
-      'Item1',
-      'Item2',
-      'Item3',
-      'Item4',
-    ];
+
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
     return Scaffold(
@@ -137,6 +143,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
             ? _screens[_selectedIndex]
             : SafeArea(
                 child: SingleChildScrollView(
+                  reverse: true,
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
@@ -161,7 +168,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             height: 2,
                           ),
                           Text(
-                            "PrithvinaRaj@gmail.com",
+                            "mail @gmail.com",
                             style: getRegularStyle(
                                 color: ColorManager.grayLight, fontSize: 13),
                           ),
@@ -169,7 +176,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             height: 2,
                           ),
                           Text(
-                            "+967 123 456 789",
+                            provider.viewProfileModel?.userdetails?.phone ?? '',
                             style: getRegularStyle(
                                 color: ColorManager.grayLight, fontSize: 13),
                           ),
@@ -333,42 +340,87 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                       const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton2(
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 35,
-                                        color: ColorManager.black,
-                                      ),
-                                      hint: Text(str.ae_country_h,
-                                          style: getRegularStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 173, 173, 173),
-                                              fontSize: 15)),
-                                      items: items
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(item,
-                                                    style: getRegularStyle(
-                                                        color:
-                                                            ColorManager.black,
-                                                        fontSize: 15)),
-                                              ))
-                                          .toList(),
-                                      value: selectedValue,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedValue = value as String;
-                                        });
-                                      },
-                                      buttonHeight: 40,
-                                      // buttonWidth: 140,
-                                      itemHeight: 40,
-                                      buttonPadding: const EdgeInsets.fromLTRB(
-                                          12, 0, 8, 0),
-                                      // dropdownWidth: size.width,
-                                      itemPadding: const EdgeInsets.fromLTRB(
-                                          12, 0, 12, 0),
-                                    ),
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: 35,
+                                          color: ColorManager.black,
+                                        ),
+                                        hint: Text(str.ae_country_h,
+                                            style: getRegularStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 173, 173, 173),
+                                                fontSize: 15)),
+                                        items: r2
+                                            .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(item,
+                                                      style: getRegularStyle(
+                                                          color: ColorManager
+                                                              .black,
+                                                          fontSize: 15)),
+                                                ))
+                                            .toList(),
+                                        value: selectedValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedValue = value as String;
+                                          });
+                                        },
+                                        buttonHeight: 40,
+                                        dropdownMaxHeight: 170,
+                                        // buttonWidth: 140,
+                                        itemHeight: 40,
+                                        buttonPadding:
+                                            const EdgeInsets.fromLTRB(
+                                                12, 0, 8, 0),
+                                        // dropdownWidth: size.width,
+                                        itemPadding: const EdgeInsets.fromLTRB(
+                                            12, 0, 12, 0),
+                                        searchController: AddressEditControllers
+                                            .searchController,
+                                        searchInnerWidget: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: TextFormField(
+                                            controller: AddressEditControllers
+                                                .searchController,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10,
+                                                vertical: 8,
+                                              ),
+                                              // TODO: localisation
+                                              hintText: 'Search a country',
+                                              hintStyle:
+                                                  const TextStyle(fontSize: 12),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return (item.value
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(searchValue));
+                                        },
+                                        //This to clear the search value when you close the menu
+                                        onMenuStateChange: (isOpen) {
+                                          if (!isOpen) {
+                                            AddressEditControllers
+                                                .searchController
+                                                .clear();
+                                          }
+                                        }),
                                   ),
                                 ),
                               ),

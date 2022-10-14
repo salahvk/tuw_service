@@ -15,6 +15,7 @@ import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/textField_Profile.dart';
 
 class PaymentServicePage extends StatefulWidget {
   const PaymentServicePage({Key? key}) : super(key: key);
@@ -145,9 +146,13 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                     children: [
                       const CustomStepper(num: 3),
                       MandatoryHeader(heading: str.ps_card),
-                      TextFieldProfileService(hintText: str.ps_card_h),
+                      TextFieldProfileService(
+                        hintText: str.ps_card_h,
+                      ),
                       MandatoryHeader(heading: str.ps_card_no),
-                      TextFieldProfileService(hintText: str.ps_card_no_h),
+                      TextFieldProfileService(
+                          hintText: str.ps_card_no_h,
+                          type: TextInputType.number),
 
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +178,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                   child: TextField(
                                     style: const TextStyle(),
                                     readOnly: true,
-                                    controller: payDateController,
+                                    controller: PaymentServiceControllers
+                                        .dateController,
                                     decoration: InputDecoration(
                                         suffixIcon: InkWell(
                                           onTap: () => _selectDate(context),
@@ -209,7 +215,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                     SizedBox(
                                         width: size.width * .44,
                                         child: TextFieldProfileService(
-                                            hintText: str.ps_cvv_h)),
+                                            hintText: str.ps_cvv_h,
+                                            type: TextInputType.number)),
                                   ],
                                 ),
                               )
@@ -219,7 +226,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                       ),
 
                       MandatoryHeader(heading: str.ps_coupon),
-                      TextFieldProfileService(hintText: str.ps_coupon_h),
+                      TextFieldProfileService(
+                          hintText: str.ps_coupon_h,
+                          type: TextInputType.number),
 
                       // * Region
                       Padding(
@@ -349,44 +358,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+        PaymentServiceControllers.dateController.text =
+            selectedDate.toLocal().toString().split(' ')[0];
       });
     }
-  }
-}
-
-class TextFieldProfileService extends StatelessWidget {
-  final String hintText;
-  const TextFieldProfileService({
-    Key? key,
-    required this.hintText,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10.0,
-              color: Colors.grey.shade300,
-              // offset: const Offset(5, 8.5),
-            ),
-          ],
-        ),
-        child: TextField(
-          // focusNode: nfocus,
-          style: const TextStyle(),
-          // controller: nameController,
-          decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: getRegularStyle(
-                  color: const Color.fromARGB(255, 173, 173, 173),
-                  fontSize: 15)),
-        ),
-      ),
-    );
   }
 }

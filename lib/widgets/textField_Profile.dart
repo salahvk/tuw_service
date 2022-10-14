@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 
-class CustomTextField extends StatelessWidget {
+class TextFieldProfileService extends StatelessWidget {
   final String hintText;
   TextInputType? type;
-  final TextEditingController controller;
-  CustomTextField({
+  TextFieldProfileService({
     Key? key,
-    required this.controller,
     this.type,
     required this.hintText,
   }) : super(key: key);
@@ -29,7 +27,7 @@ class CustomTextField extends StatelessWidget {
         child: TextField(
           // focusNode: nfocus,
           style: const TextStyle(),
-          controller: controller,
+          // controller: nameController,
           keyboardType: type,
           decoration: InputDecoration(
               hintText: hintText,

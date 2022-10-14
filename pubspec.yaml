@@ -66,6 +66,10 @@ dependencies:
   flutter_svg: ^1.1.5
   carousel_slider: ^4.1.1
   dropdown_search: ^5.0.3
+  flutter_map: ^3.0.0
+  flutter_map_location_marker: ^5.0.0+1
+  latlong2: ^0.8.1
+  geolocator: ^9.0.2
 
 
 

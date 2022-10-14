@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
@@ -47,7 +48,7 @@ class _ProfileImageState extends State<ProfileImage> {
   Widget build(BuildContext context) {
     print('build');
 
-    final provider = Provider.of<DataProvider>(context, listen: true);
+    final provider = Provider.of<DataProvider>(context, listen: false);
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -68,7 +69,7 @@ class _ProfileImageState extends State<ProfileImage> {
             backgroundImage:
                 provider.viewProfileModel?.userdetails?.profilePic == null
                     ? null
-                    : NetworkImage(
+                    : CachedNetworkImageProvider(
                         "$profileImageApi/${provider.viewProfileModel?.userdetails?.profilePic}",
                       ),
             child: provider.viewProfileModel?.userdetails?.profilePic == null

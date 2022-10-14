@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
+import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/utils/initPlatformState.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
@@ -53,6 +54,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 }),
             CustomDrawerList(
               title: str.d_address,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                  return const AddressPage();
+                }));
+              },
             ),
             CustomDrawerList(
               title: str.d_become,

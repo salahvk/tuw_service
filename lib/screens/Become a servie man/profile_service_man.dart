@@ -39,7 +39,6 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
@@ -158,11 +157,21 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             MandatoryHeader(heading: str.p_first_name),
-                            CustomTextField(hintText: str.p_first_name_h),
+                            CustomTextField(
+                                hintText: str.p_first_name_h,
+                                controller: ProfileServiceControllers
+                                    .firstNameController),
                             MandatoryHeader(heading: str.p_last_name),
-                            CustomTextField(hintText: str.p_last_name_h),
+                            CustomTextField(
+                                hintText: str.p_last_name_h,
+                                controller: ProfileServiceControllers
+                                    .lastNameController),
                             MandatoryHeader(heading: str.p_civil),
-                            CustomTextField(hintText: str.p_civil_h),
+                            CustomTextField(
+                                hintText: str.p_civil_h,
+                                controller: ProfileServiceControllers
+                                    .civilCardController,
+                                type: TextInputType.number),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -187,7 +196,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                         child: TextField(
                                           style: const TextStyle(),
                                           readOnly: true,
-                                          controller: payDateController,
+                                          controller: ProfileServiceControllers
+                                              .dateController,
                                           decoration: InputDecoration(
                                               suffixIcon: InkWell(
                                                 onTap: () =>
@@ -358,7 +368,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                         ),
                                         child: TextField(
                                           style: const TextStyle(),
-                                          controller: regionController,
+                                          controller: ProfileServiceControllers
+                                              .regionController,
                                           decoration: InputDecoration(
                                               hintText: str.p_region_h,
                                               hintStyle: getRegularStyle(
@@ -390,7 +401,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                         ),
                                         child: TextField(
                                           style: const TextStyle(),
-                                          controller: stateController,
+                                          controller: ProfileServiceControllers
+                                              .stateController,
                                           decoration: InputDecoration(
                                               hintText: str.p_state_h,
                                               hintStyle: getRegularStyle(
@@ -422,7 +434,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                     minLines: 4,
                                     maxLines: 5,
                                     style: const TextStyle(),
-                                    controller: aboutController,
+                                    controller: ProfileServiceControllers
+                                        .addressController,
                                     decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(
                                             left: 10, right: 10, top: 10),
@@ -486,7 +499,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+        ProfileServiceControllers.dateController.text =
+            selectedDate.toLocal().toString().split(' ')[0];
       });
     }
   }

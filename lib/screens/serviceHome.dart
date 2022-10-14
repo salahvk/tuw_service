@@ -95,7 +95,7 @@ class ServiceHomePage extends StatelessWidget {
                           crossAxisSpacing: 14,
                           mainAxisExtent: mob ? 123 : 100,
                           mainAxisSpacing: 20),
-                      itemCount: 30,
+                      itemCount: 130,
                       itemBuilder: (BuildContext ctx, index) {
                         return InkWell(
                           onTap: () {

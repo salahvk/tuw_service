@@ -180,9 +180,14 @@ class _ProfilePageState extends State<ProfilePage> {
               icon: Icons.favorite_border,
             ),
           ),
-          const ProfileTitleWidget(
-            name: 'Address Book',
-            icon: Icons.pin_drop_outlined,
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, Routes.addressPage);
+            },
+            child: const ProfileTitleWidget(
+              name: 'Address Book',
+              icon: Icons.pin_drop_outlined,
+            ),
           ),
           const ProfileTitleWidget(
             name: 'Settings',
