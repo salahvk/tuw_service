@@ -38,7 +38,7 @@ class _ProfileImageState extends State<ProfileImage> {
   @override
   void initState() {
     super.initState();
-    print("S");
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       viewProfile(context);
     });
@@ -46,8 +46,6 @@ class _ProfileImageState extends State<ProfileImage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
-
     final provider = Provider.of<DataProvider>(context, listen: false);
     return Container(
       decoration: BoxDecoration(

@@ -15,6 +15,7 @@ import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/profile_tile_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -39,6 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -157,8 +159,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 return const AddressPage();
               })));
             },
-            child: const ProfileTitleWidget(
-              name: 'My Profile',
+            child: ProfileTitleWidget(
+              name: str.pp_my_profile,
               icon: Icons.person_outline,
             ),
           ),
@@ -166,8 +168,8 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               Navigator.pushNamed(context, Routes.chatScreen);
             },
-            child: const ProfileTitleWidget(
-              name: 'Message',
+            child: ProfileTitleWidget(
+              name: str.pp_message,
               icon: FontAwesomeIcons.message,
             ),
           ),
@@ -175,8 +177,8 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               Navigator.pushNamed(context, Routes.wishList);
             },
-            child: const ProfileTitleWidget(
-              name: 'Favourites',
+            child: ProfileTitleWidget(
+              name: str.pp_favourites,
               icon: Icons.favorite_border,
             ),
           ),
@@ -184,13 +186,13 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               Navigator.pushNamed(context, Routes.addressPage);
             },
-            child: const ProfileTitleWidget(
-              name: 'Address Book',
+            child: ProfileTitleWidget(
+              name: str.pp_address,
               icon: Icons.pin_drop_outlined,
             ),
           ),
-          const ProfileTitleWidget(
-            name: 'Settings',
+          ProfileTitleWidget(
+            name: str.pp_settings,
             icon: Icons.settings_outlined,
           )
         ],

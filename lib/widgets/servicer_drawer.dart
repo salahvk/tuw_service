@@ -19,6 +19,7 @@ class SerDrawer extends StatefulWidget {
 
 class _SerDrawerState extends State<SerDrawer> {
   String lang = '';
+  bool isResetSelected = false;
   @override
   void initState() {
     super.initState();
@@ -32,6 +33,7 @@ class _SerDrawerState extends State<SerDrawer> {
     final size = MediaQuery.of(context).size;
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
+    print("new build ____________");
     return DrawerHeader(
         decoration: BoxDecoration(
           color: ColorManager.primary3,
@@ -60,11 +62,15 @@ class _SerDrawerState extends State<SerDrawer> {
                 ],
               ),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.scooter,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.car,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 30, 16, 0.0),
@@ -79,20 +85,30 @@ class _SerDrawerState extends State<SerDrawer> {
                 ],
               ),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.fuel,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.disc,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.repair,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.engine,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
-            const SerDrawerList(
+            SerDrawerList(
               image: ImageAssets.truck,
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
             ),
             const Spacer(),
             Padding(
@@ -100,8 +116,10 @@ class _SerDrawerState extends State<SerDrawer> {
                   ? const EdgeInsets.fromLTRB(0, 15, 0, 30)
                   : const EdgeInsets.fromLTRB(0, 5, 0, 10),
               child: ElevatedButton(
-                  onPressed: () {
-                    // player.stop();
+                  onPressed: () async {
+                    setState(() {
+                      // isResetSelected = true;
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.whiteColor,

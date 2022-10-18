@@ -32,7 +32,6 @@ class _AddressPageState extends State<AddressPage> {
   String lang = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',

@@ -401,8 +401,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           .show(
         context,
       );
-    } else if (phoneNumber.length > 10) {
-      AnimatedSnackBar.material('Mobile Number must not be above 10 digits',
+    } else if (phoneNumber.length < 5) {
+      AnimatedSnackBar.material('Mobile Number must not be below 5 digits',
               type: AnimatedSnackBarType.error,
               borderRadius: BorderRadius.circular(6),
               duration: const Duration(seconds: 1))

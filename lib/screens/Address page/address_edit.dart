@@ -12,6 +12,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
@@ -213,21 +214,30 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         borderRadius: BorderRadius.circular(5)),
 
                                     // width: 30,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(5, 2, 5, 5),
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.location_on,
-                                            color: ColorManager.whiteColor,
-                                          ),
-                                          Text(
-                                            str.ae_home_locator,
-                                            style: getRegularStyle(
-                                                color: ColorManager.whiteColor),
-                                          )
-                                        ],
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return CustomizeMarkerExample();
+                                        }));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 2, 5, 5),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on,
+                                              color: ColorManager.whiteColor,
+                                            ),
+                                            Text(
+                                              str.ae_home_locator,
+                                              style: getRegularStyle(
+                                                  color:
+                                                      ColorManager.whiteColor),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )
@@ -340,6 +350,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                       const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton2(
+                                        isExpanded: true,
                                         icon: const Icon(
                                           Icons.keyboard_arrow_down,
                                           size: 35,
@@ -368,7 +379,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                           });
                                         },
                                         buttonHeight: 40,
-                                        dropdownMaxHeight: 170,
+                                        dropdownMaxHeight: size.height * .6,
                                         // buttonWidth: 140,
                                         itemHeight: 40,
                                         buttonPadding:

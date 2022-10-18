@@ -9,6 +9,7 @@ import 'package:social_media_services/model/get_otp.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getOtp(BuildContext context, countryCode, phoneNo, resend) async {
@@ -30,7 +31,8 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
     final result = jsonResponse["result"];
 
     if (result == false) {
-      print("result is false");
+      final errorMessage = jsonResponse["message"]["phone"][0];
+      showAnimatedSnackBar(context, errorMessage);
       return;
     }
 

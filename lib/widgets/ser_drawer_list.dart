@@ -4,6 +4,7 @@ import 'package:social_media_services/components/color_manager.dart';
 
 class SerDrawerList extends StatefulWidget {
   final String image;
+  // bool isResetSelected = false;
   // GestureTapCallback? onTap;
 
   const SerDrawerList({
@@ -17,9 +18,23 @@ class SerDrawerList extends StatefulWidget {
 
 class _SerDrawerListState extends State<SerDrawerList> {
   bool isTickSelected = false;
+  @override
+  void initState() {
+    super.initState();
+
+    // if (widget.isResetSelected == true) {
+    //   setState(() {
+    //     widget.isResetSelected = false;
+    //   });
+    // }
+    print(isTickSelected);
+  }
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.isResetSelected);
+
+    widget.key;
     return SizedBox(
       height: 30,
       child: InkWell(
@@ -46,8 +61,9 @@ class _SerDrawerListState extends State<SerDrawerList> {
                   ],
                   color: Colors.white.withOpacity(0.5),
                 ),
-                child:
-                    isTickSelected ? Image.asset(ImageAssets.blackTick) : null,
+                child: isTickSelected == true
+                    ? Image.asset(ImageAssets.blackTick)
+                    : null,
               ),
               Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),

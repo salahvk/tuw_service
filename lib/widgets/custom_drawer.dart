@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:social_media_services/API/logout.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
@@ -107,6 +108,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     setState(() {
       loading = true;
     });
+    await logoutFun(context);
     await Hive.box("token").clear();
     callInitFunction(context);
   }

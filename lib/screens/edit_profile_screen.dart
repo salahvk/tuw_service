@@ -20,7 +20,7 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/utils/viewProfile.dart';
-import 'package:social_media_services/widgets/animatedSnackBar.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
@@ -734,11 +734,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         // var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
         // otpProvider.getOtpVerifiedData(otpVerifiedData);
         navigateToNext();
-      } else {
-        print(response.statusCode);
-        print(response.body);
-        print('Something went wrong');
-      }
+      } else {}
     } on Exception catch (e) {
       print(e);
       showSnackBar("Something Went Wrong1", context);
