@@ -1,6 +1,6 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -8,13 +8,13 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/camera_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -33,6 +33,9 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
   String lang = '';
+  VideoPlayerController? _controller;
+  VideoPlayerController? _toBeDisposed;
+  final ImagePicker _picker = ImagePicker();
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
@@ -315,16 +318,18 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     InkWell(
                       onTap: () async {
-                        print('Icon pressed');
-                        late List<CameraDescription> cameras;
-                        cameras = await availableCameras();
+                        _onImageButtonPressed(ImageSource.camera,
+                            context: context);
+                        // print('Icon pressed');
+                        // late List<CameraDescription> cameras;
+                        // cameras = await availableCameras();
 
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (ctx) {
-                          return CameraApp(
-                            cameras: cameras,
-                          );
-                        }));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (ctx) {
+                        //   return CameraApp(
+                        //     cameras: cameras,
+                        //   );
+                        // }));
                       },
                       child: const Icon(
                         Icons.camera_alt,
@@ -626,9 +631,55 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-}
 
-bool isVib() {
-  final vib = Vibration.hasVibrator() != null ? true : false;
-  return vib;
+  Future<void> _onImageButtonPressed(ImageSource source,
+      {BuildContext? context}) async {
+    if (_controller != null) {
+      await _controller!.setVolume(0.0);
+    }
+    // if (isVideo) {
+    //   final XFile? file = await _picker.pickVideo(
+    //       source: source, maxDuration: const Duration(seconds: 10));
+    //   await _playVideo(file);
+    // } else
+    //  if (isMultiImage) {
+    //   await _displayPickImageDialog(context!,
+    //       (double? maxWidth, double? maxHeight, int? quality) async {
+    //     try {
+    //       final List<XFile> pickedFileList = await _picker.pickMultiImage(
+    //         maxWidth: maxWidth,
+    //         maxHeight: maxHeight,
+    //         imageQuality: quality,
+    //       );
+    //       setState(() {
+    //         _imageFileList = pickedFileList;
+    //       });
+    //     } catch (e) {
+    //       setState(() {
+    //         _pickImageError = e;
+    //       });
+    //     }
+    //   });
+    // }
+    // if {
+    // await _displayPickImageDialog(context!,
+    //     (double? maxWidth, double? maxHeight, int? quality) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        // maxWidth: maxWidth,
+        // maxHeight: maxHeight,
+        // imageQuality: quality,
+      );
+      setState(() {
+        // _setImageFileListFromFile(pickedFile);
+      });
+    } catch (e) {
+      setState(() {
+        // _pickImageError = e;
+      });
+    }
+    // });
+    // }
+  }
 }
