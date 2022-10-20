@@ -294,7 +294,10 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             ],
                           ),
                           MandatoryHeader(heading: str.ae_address_n),
-                          TextFieldProfileService(hintText: str.ae_address_h),
+                          TextFieldProfileService(
+                              hintText: str.ae_address_h,
+                              controller:
+                                  AddressEditControllers.addressNameController),
                           MandatoryHeader(heading: str.ae_address),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -507,7 +510,10 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             ],
                           ),
                           MandatoryHeader(heading: str.ae_home_flat),
-                          TextFieldProfileService(hintText: str.ae_no),
+                          TextFieldProfileService(
+                              hintText: str.ae_no,
+                              controller:
+                                  AddressEditControllers.flatNoController),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                             child: Row(

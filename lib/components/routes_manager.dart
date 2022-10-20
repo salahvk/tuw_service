@@ -7,6 +7,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/screens/payment_successfull_page.dart';
 import 'package:social_media_services/screens/privacy_policy.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
@@ -72,6 +73,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const WishList());
       case Routes.addressPage:
         return MaterialPageRoute(builder: (_) => const AddressPage());
+      case Routes.paymentSuccessfull:
+        return MaterialPageRoute(builder: (_) => const PaymentSuccessPage());
       default:
         return unDefinedRoute();
     }

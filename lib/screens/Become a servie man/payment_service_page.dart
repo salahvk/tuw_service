@@ -5,11 +5,12 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/screens/messagePage.dart';
-import 'package:social_media_services/screens/payment_successfull_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
@@ -147,10 +148,14 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                       const CustomStepper(num: 3),
                       MandatoryHeader(heading: str.ps_card),
                       TextFieldProfileService(
+                        controller:
+                            PaymentServiceControllers.cardHolderController,
                         hintText: str.ps_card_h,
                       ),
                       MandatoryHeader(heading: str.ps_card_no),
                       TextFieldProfileService(
+                          controller:
+                              PaymentServiceControllers.cardNumberController,
                           hintText: str.ps_card_no_h,
                           type: TextInputType.number),
 
@@ -215,6 +220,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                     SizedBox(
                                         width: size.width * .44,
                                         child: TextFieldProfileService(
+                                            controller:
+                                                PaymentServiceControllers
+                                                    .cvvCodeController,
                                             hintText: str.ps_cvv_h,
                                             type: TextInputType.number)),
                                   ],
@@ -227,6 +235,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
 
                       MandatoryHeader(heading: str.ps_coupon),
                       TextFieldProfileService(
+                          controller:
+                              PaymentServiceControllers.couponController,
                           hintText: str.ps_coupon_h,
                           type: TextInputType.number),
 
@@ -321,12 +331,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                               style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.fromLTRB(28, 0, 28, 0)),
-                              onPressed: () {
-                                Navigator.pushAndRemoveUntil(context,
-                                    MaterialPageRoute(builder: (ctx) {
-                                  return const PaymentSuccessPage();
-                                }), (route) => false);
-                              },
+                              onPressed: onContinue,
                               child: Text(str.ps_pay,
                                   style: getRegularStyle(
                                       color: ColorManager.whiteText,
@@ -361,6 +366,16 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         PaymentServiceControllers.dateController.text =
             selectedDate.toLocal().toString().split(' ')[0];
       });
+    }
+  }
+
+  onContinue() {
+    if (PaymentServiceControllers.cardHolderController.text.isEmpty) {
+      showAnimatedSnackBar(context, "Please Enter A Card Holder Name");
+    } else {
+      FocusManager.instance.primaryFocus?.unfocus();
+      Navigator.pushNamedAndRemoveUntil(
+          context, Routes.paymentSuccessfull, (route) => false);
     }
   }
 }

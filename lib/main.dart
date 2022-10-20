@@ -13,7 +13,6 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox("LocalLan");
   await Hive.openBox("token");
-
   runApp(const MyApp());
 }
 
@@ -21,8 +20,9 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyAppState createState() => _MyAppState();
-
+// ignore: library_private_types_in_public_api
   static _MyAppState of(BuildContext context) =>
       context.findAncestorStateOfType<_MyAppState>()!;
 }
@@ -35,20 +35,10 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       locale = value;
     });
-    // await Hive.box("LocalLan").put('lang', value);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // lang = Hive.box('LocalLan').get('lang', defaultValue: 'en') as String;
   }
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<DataProvider>(context, listen: false);
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DataProvider()),
@@ -56,7 +46,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         supportedLocales: const [
-          Locale('en', ''), // English, no country code
+          Locale('en', ''), // English
           Locale('hi', ''), // Hindi
           Locale('ar', ''), // arabic
         ],

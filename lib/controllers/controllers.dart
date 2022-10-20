@@ -25,7 +25,11 @@ class ProfileServiceControllers {
 }
 
 class PaymentServiceControllers {
+  static TextEditingController cardHolderController = TextEditingController();
+  static TextEditingController cardNumberController = TextEditingController();
   static TextEditingController dateController = TextEditingController();
+  static TextEditingController cvvCodeController = TextEditingController();
+  static TextEditingController couponController = TextEditingController();
 }
 
 class ServiceControllers {
@@ -33,5 +37,9 @@ class ServiceControllers {
 }
 
 class AddressEditControllers {
+  static TextEditingController addressNameController = TextEditingController();
+  static TextEditingController regionController = TextEditingController();
+  static TextEditingController stateController = TextEditingController();
+  static TextEditingController flatNoController = TextEditingController();
   static TextEditingController searchController = TextEditingController();
 }

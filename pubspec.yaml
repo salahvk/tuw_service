@@ -68,6 +68,9 @@ dependencies:
   # dropdown_search: ^5.0.3
   flutter_map: ^3.0.0
   flutter_map_location_marker: ^5.0.0+1
+  screenshot: ^1.2.3
+  open_filex: ^4.1.1
+  pdf: ^3.8.3
   # latlong2: ^0.8.1
   # geolocator: ^9.0.2
 

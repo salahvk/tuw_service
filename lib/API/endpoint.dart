@@ -8,3 +8,4 @@ const String updateProfileApi = "$api/update/profileimage";
 const String profileImageApi = "$endPoint/assets/uploads/profile";
 const String viewUserProfileApi = "$api/view/userprofile";
 const String logout = "$apiUser/logout";
+const String home = "$api/home";

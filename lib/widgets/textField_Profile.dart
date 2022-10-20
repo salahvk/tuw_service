@@ -4,10 +4,12 @@ import 'package:social_media_services/components/styles_manager.dart';
 class TextFieldProfileService extends StatelessWidget {
   final String hintText;
   TextInputType? type;
+  final TextEditingController controller;
   TextFieldProfileService({
     Key? key,
     this.type,
     required this.hintText,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class TextFieldProfileService extends StatelessWidget {
         child: TextField(
           // focusNode: nfocus,
           style: const TextStyle(),
-          // controller: nameController,
+          controller: controller,
           keyboardType: type,
           decoration: InputDecoration(
               hintText: hintText,

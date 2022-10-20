@@ -10,9 +10,9 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_service_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
@@ -456,12 +456,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                     style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.fromLTRB(
                                             28, 0, 28, 0)),
-                                    onPressed: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (ctx) {
-                                        return const ChooseServicePage();
-                                      }));
-                                    },
+                                    onPressed: onContinue,
                                     child: Text(str.p_continue,
                                         style: getRegularStyle(
                                             color: ColorManager.whiteText,
@@ -502,6 +497,14 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
         ProfileServiceControllers.dateController.text =
             selectedDate.toLocal().toString().split(' ')[0];
       });
+    }
+  }
+
+  onContinue() {
+    if (ProfileServiceControllers.firstNameController.text.isEmpty) {
+      showAnimatedSnackBar(context, "Please Enter Your First Name");
+    } else {
+      Navigator.pushNamed(context, Routes.chooseService);
     }
   }
 }

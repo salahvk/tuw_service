@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -7,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_home.dart';
 import 'package:social_media_services/API/get_otp.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -213,8 +216,8 @@ class _OTPscreenState extends State<OTPscreen> {
 
         Hive.box("token").put('api_token', apitoken ?? '');
         await viewProfile(context);
+        await getHome(context);
 
-        // ignore: use_build_context_synchronously
         otpProvider.getOtp!.message!.contains('Successfully Registered')
             ? navigateToEdit(context)
             : navigateToHome(context);

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_services/components/assets_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/screens/servicer.dart';
@@ -20,6 +22,8 @@ class ServiceHomePage extends StatelessWidget {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final w = MediaQuery.of(context).size.width;
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final homeData = provider.homeModel?.services;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -95,7 +99,7 @@ class ServiceHomePage extends StatelessWidget {
                           crossAxisSpacing: 14,
                           mainAxisExtent: mob ? 123 : 100,
                           mainAxisSpacing: 20),
-                      itemCount: 130,
+                      itemCount: homeData?.length ?? 0,
                       itemBuilder: (BuildContext ctx, index) {
                         return InkWell(
                           onTap: () {
@@ -118,19 +122,42 @@ class ServiceHomePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(5)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Image.asset(ImageAssets.profileIcon),
-                                Text(myProducts[index + 1]["name"],
+                                // const SizedBox(
+                                //   height: 5,
+                                // ),
+                                // Image.asset(ImageAssets.profileIcon),
+                                CachedNetworkImage(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          width: mob ? 70.0 : 50,
+                                          height: mob ? 70.0 : 50,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                    // width: 90,
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) {
+                                      return Container(
+                                        color: ColorManager.black,
+                                      );
+                                    },
+                                    imageUrl:
+                                        '$endPoint${homeData?[index].image}'),
+                                Text(homeData![index].service ?? '',
+                                    textAlign: TextAlign.center,
                                     style: getRegularStyle(
                                         color: ColorManager.serviceHomeGrey,
                                         fontSize: mob ? 16 : 12)),
-                                Text("100+ Profiles",
-                                    style: getRegularStyle(
-                                        color: const Color(0xffbababa),
-                                        fontSize: mob ? 14 : 10)),
+                                // Text("100+ Profiles",
+                                //     style: getRegularStyle(
+                                //         color: const Color(0xffbababa),
+                                //         fontSize: mob ? 14 : 10)),
                               ],
                             ),
                           ),
