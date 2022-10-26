@@ -31,6 +31,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   bool isProgress = true;
   String lang = '';
   ScreenshotController screenshotController = ScreenshotController();
+  bool isLoading = false;
 
   paySuccessSound() async {
     final duration = await player.setAsset('assets/Gpay.mp3');
@@ -275,12 +276,17 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                               style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.fromLTRB(13, 0, 13, 0)),
-                              child: Text(
-                                "SAVE PDF",
-                                style: getMediumtStyle(
-                                    color: ColorManager.whiteText,
-                                    fontSize: 14),
-                              ))
+                              child: isLoading
+                                  ? const CircularProgressIndicator(
+                                      color: ColorManager.primary,
+                                      backgroundColor: ColorManager.primary3,
+                                    )
+                                  : Text(
+                                      "SAVE PDF",
+                                      style: getMediumtStyle(
+                                          color: ColorManager.whiteText,
+                                          fontSize: 14),
+                                    ))
                         ],
                       )
                     ],
@@ -292,6 +298,9 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   }
 
   generatePdf() {
+    setState(() {
+      isLoading = true;
+    });
     screenshotController
         .capture(delay: const Duration(milliseconds: 10))
         .then((capturedImage) async {
@@ -299,6 +308,9 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
         capturedImage,
       );
       await PdfApi.openFile(pdfFile);
+      setState(() {
+        isLoading = false;
+      });
     }).catchError((onError) {
       print(onError);
     });

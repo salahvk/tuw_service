@@ -7,9 +7,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media_services/API/becomeServiceMan/customerParent.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/model/get_child_service.dart';
+import 'package:social_media_services/model/get_home.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -27,12 +32,15 @@ class ChooseServicePage extends StatefulWidget {
 }
 
 class _ChooseServicePageState extends State<ChooseServicePage> {
-  String? selectedValue;
+  Childservices? childSelectedValue;
+  Services? selectedValue;
   bool isTickSelected = false;
   String? fileName;
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
+  List<Services> sGroup = [];
+  List<Childservices> childGroup = [];
 
   @override
   void initState() {
@@ -41,18 +49,34 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      int? n = provider.customerParentSer?.services?.length;
+      int i = 0;
+      while (i < n!.toInt()) {
+        sGroup.add(provider.customerParentSer!.services![i]);
+        i++;
+      }
+      // print(sGroup[0]);
+
+      setState(() {});
+      // getCustomerChild(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
-    final List<String> items = [
-      'Item1',
-      'Item2',
-      'Item3',
-      'Item4',
-    ];
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    // final List<String> items = [
+    //   'Item1',
+    //   'Item2',
+    //   'Item3',
+    //   'Item4',
+    // ];
+    //  final List<String> items2 = provider.customerParentSer.services[0].service ?? '';
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -190,20 +214,30 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                           color: const Color.fromARGB(
                                               255, 173, 173, 173),
                                           fontSize: 15)),
-                                  items: items
-                                      .map((item) => DropdownMenuItem<String>(
+                                  items: sGroup
+                                      .map((item) => DropdownMenuItem<Services>(
                                             value: item,
-                                            child: Text(item,
+                                            child: Text(item.service ?? '',
                                                 style: getRegularStyle(
                                                     color: ColorManager.black,
                                                     fontSize: 15)),
                                           ))
                                       .toList(),
-                                  value: selectedValue,
+                                  // value: selectedValue,
+                                  customButton: selectedValue == null
+                                      ? null
+                                      : Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 10, 10, 10),
+                                          child: Text(
+                                              selectedValue?.service ?? ''),
+                                        ),
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedValue = value as String;
+                                      print(value);
+                                      selectedValue = value as Services;
                                     });
+                                    getChildData();
                                   },
                                   buttonHeight: 40,
                                   // buttonWidth: 140,
@@ -264,19 +298,21 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                           color: const Color.fromARGB(
                                               255, 173, 173, 173),
                                           fontSize: 15)),
-                                  items: items
-                                      .map((item) => DropdownMenuItem<String>(
+                                  items: childGroup
+                                      .map((item) =>
+                                          DropdownMenuItem<Childservices>(
                                             value: item,
-                                            child: Text(item,
+                                            child: Text(item.service ?? 'null',
                                                 style: getRegularStyle(
                                                     color: ColorManager.black,
                                                     fontSize: 15)),
                                           ))
                                       .toList(),
-                                  value: selectedValue,
+                                  // value: selectedValue,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedValue = value as String;
+                                      childSelectedValue =
+                                          value as Childservices;
                                     });
                                   },
                                   buttonHeight: 40,
@@ -346,11 +382,6 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                           setState(() {
                                             fileName = file.name;
                                           });
-                                          print(file.name);
-                                          print(file.bytes);
-                                          print(file.size);
-                                          print(file.extension);
-                                          print(file.path);
                                         } else {}
                                       },
                                       child: Text(str.c_browse,
@@ -438,35 +469,41 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
             context,
           );
   }
+
+  getChildData() async {
+    await getCustomerChild(context, selectedValue?.id);
+    getDropDownData();
+  }
+
+  getDropDownData() {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    int? n = provider.customerChildSer?.childservices?.length;
+    int i = 0;
+    while (i < n!.toInt()) {
+      childGroup.add(provider.customerChildSer!.childservices![i]);
+      i++;
+    }
+    // print(sGroup[0]);
+
+    setState(() {});
+  }
 }
 
-// https://stackoverflow.com/questions/51161862/how-to-send-an-image-to-an-api-in-dart-flutter
+ //   if (isTickSelected) {
+    //   if (ChooseServiceControllers.serviceGroupController.text.isEmpty) {
+    //   showAnimatedSnackBar(context, "Please Enter Service");
+    // }
+    //   Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+    //     return const PaymentServicePage();
+    //   }));
+    // } else {
+    //   AnimatedSnackBar.material(str.c_snack,
+    //           type: AnimatedSnackBarType.warning,
+    //           borderRadius: BorderRadius.circular(6),
+    //           // brightness: Brightness.dark,
+    //           duration: const Duration(seconds: 1))
+    //       .show(
+    //     context,
+    //   );
+    // }
 
-// upload(File imageFile) async {    
-//       // open a bytestream
-//       var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-//       // get file length
-//       var length = await imageFile.length();
-
-//       // string to uri
-//       var uri = Uri.parse("http://ip:8082/composer/predict");
-
-//       // create multipart request
-//       var request = new http.MultipartRequest("POST", uri);
-
-//       // multipart that takes file
-//       var multipartFile = new http.MultipartFile('file', stream, length,
-//           filename: basename(imageFile.path));
-
-//       // add file to multipart
-//       request.files.add(multipartFile);
-
-//       // send
-//       var response = await request.send();
-//       print(response.statusCode);
-
-//       // listen for response
-//       response.stream.transform(utf8.decoder).listen((value) {
-//         print(value);
-//       });
-//     }

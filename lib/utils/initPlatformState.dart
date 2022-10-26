@@ -25,13 +25,16 @@ Future<void> initPlatformState(BuildContext context) async {
   } on PlatformException {
     deviceId = 'Failed to get deviceId.';
   }
+  await getHome(context);
   final apiToken = Hive.box("token").get('api_token');
+
   print(apiToken);
+
   if (apiToken == null) {
     gotoNextPage(context);
   } else {
     await viewProfile(context);
-    await getHome(context);
+    // await getHome(context);
     await getCountriesData(context);
     gotoHomePage(context);
   }

@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_otp.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -294,77 +296,89 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           10, 0, 5, 0),
                                                   child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      // SizedBox(
-                                                      //     width: 23,
-                                                      //     height: 15,
-                                                      //     child: ScalableImageWidget
-                                                      //         .fromSISource(
-                                                      //             scale: 5,
-                                                      //             onLoading:
-                                                      //                 (p0) {
-                                                      //               return Shimmer
-                                                      //                   .fromColors(
-                                                      //                 baseColor:
-                                                      //                     ColorManager
-                                                      //                         .whiteColor,
-                                                      //                 highlightColor:
-                                                      //                     ColorManager
-                                                      //                         .grayLight,
-                                                      //                 child:
-                                                      //                     Container(
-                                                      //                   color: ColorManager
-                                                      //                       .whiteColor,
-                                                      //                   child:
-                                                      //                       const SizedBox(
-                                                      //                     width:
-                                                      //                         23,
-                                                      //                     height:
-                                                      //                         14,
-                                                      //                   ),
-                                                      //                 ),
-                                                      //               );
-                                                      //             },
-                                                      //             reload: false,
-                                                      //             cache: ScalableImageCache(
-                                                      //                 size: r
-                                                      //                     .length),
-                                                      //             si: ScalableImageSource.fromSvgHttpUrl(
-                                                      //                 compact: true,
-                                                      //                 // currentColor: ColorManager.whiteColor,
-                                                      //                 // bigFloats:
-                                                      //                 //     true,
-                                                      //                 Uri.parse('$endPoint${r[index].countryflag}')))),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                          "+${r[index].phonecode.toString()}",
-                                                          style: getSemiBoldtStyle(
-                                                              color: ColorManager
-                                                                  .background,
-                                                              fontSize: 13)),
-                                                      const SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Text(
-                                                          r[index].countryName ??
-                                                              '',
-                                                          style:
-                                                              getSemiBoldtStyle(
+                                                      Row(
+                                                        children: [
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Text(
+                                                              "+${r[index].phonecode.toString()}",
+                                                              style: getSemiBoldtStyle(
                                                                   color: ColorManager
                                                                       .background,
-                                                                  fontSize: r[index]
-                                                                              .countryName!
-                                                                              .length <
-                                                                          12
+                                                                  fontSize:
+                                                                      13)),
+                                                          const SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Text(
+                                                              overflow: TextOverflow
+                                                                  .fade,
+                                                              // softWrap: true,
+                                                              r[index]
+                                                                          .countryName!
+                                                                          .length >
+                                                                      22
+                                                                  ? r[index]
+                                                                          .countryName
+                                                                          ?.substring(
+                                                                              0,
+                                                                              22) ??
+                                                                      ''
+                                                                  : r[index]
+                                                                          .countryName ??
+                                                                      '',
+                                                              style: getSemiBoldtStyle(
+                                                                  color: ColorManager.background,
+                                                                  fontSize: r[index].countryName!.length < 12
                                                                       ? 12
-                                                                      : r[index].countryName!.length <
-                                                                              20
+                                                                      : r[index].countryName!.length < 20
                                                                           ? 10
                                                                           : r[index].countryName!.length > 25
-                                                                              ? 8
+                                                                              ? 10
                                                                               : 10)),
+                                                        ],
+                                                      ),
+                                                      CachedNetworkImage(
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Container(
+                                                                width: 25,
+                                                                height: 20,
+                                                                color: ColorManager
+                                                                    .whiteColor,
+                                                              ),
+                                                          imageBuilder: (context,
+                                                                  imageProvider) =>
+                                                              Container(
+                                                                width: 25,
+                                                                height: 20,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  // shape: BoxShape.circle,
+                                                                  image: DecorationImage(
+                                                                      image:
+                                                                          imageProvider,
+                                                                      fit: BoxFit
+                                                                          .cover),
+                                                                ),
+                                                              ),
+                                                          // width: 90,
+                                                          progressIndicatorBuilder:
+                                                              (context, url,
+                                                                  progress) {
+                                                            return Container(
+                                                              color:
+                                                                  ColorManager
+                                                                      .black,
+                                                            );
+                                                          },
+                                                          imageUrl:
+                                                              '$endPoint${r[index].countryflag}'),
                                                     ],
                                                   ),
                                                 ),

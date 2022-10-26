@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -173,16 +174,22 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ChatAddTile(
-                                svg: false,
-                                title: lang == 'ar'
-                                    ? str.cp_photo2
-                                    : "${str.cp_photo1}\n${str.cp_photo2}",
-                                image: ImageAssets.gallery),
-                            ChatAddTile(
-                                svg: false,
-                                title: str.cp_doc,
-                                image: ImageAssets.documents),
+                            InkWell(
+                              onTap: pickGallery,
+                              child: ChatAddTile(
+                                  svg: false,
+                                  title: lang == 'ar'
+                                      ? str.cp_photo2
+                                      : "${str.cp_photo1}\n${str.cp_photo2}",
+                                  image: ImageAssets.gallery),
+                            ),
+                            InkWell(
+                              onTap: pickDoc,
+                              child: ChatAddTile(
+                                  svg: false,
+                                  title: str.cp_doc,
+                                  image: ImageAssets.documents),
+                            ),
                             // const SizedBox(
                             //   height: 3,
                             // ),
@@ -681,5 +688,41 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     // });
     // }
+  }
+
+  pickGallery() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowMultiple: true,
+      allowedExtensions: ['jpg', 'mp4', 'png'],
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      setState(() {
+        // fileName = file.name;
+      });
+    } else {}
+    setState(() {
+      ismenuVisible = false;
+    });
+  }
+
+  pickDoc() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowMultiple: true,
+      allowedExtensions: ['pdf', 'txt'],
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      setState(() {
+        // fileName = file.name;
+      });
+    } else {}
+    setState(() {
+      ismenuVisible = false;
+    });
   }
 }

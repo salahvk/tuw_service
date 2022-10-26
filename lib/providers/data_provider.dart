@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:social_media_services/model/coupenCode.dart';
+import 'package:social_media_services/model/get_child_service.dart';
 
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/model/get_home.dart';
@@ -33,6 +35,27 @@ class DataProvider with ChangeNotifier {
 
   void homeModelData(value) {
     homeModel = value;
+    notifyListeners();
+  }
+
+  HomeModel? customerParentSer;
+
+  void parentModelData(value) {
+    customerParentSer = value;
+    notifyListeners();
+  }
+
+  ChildServiceModel? customerChildSer;
+
+  void childModelData(value) {
+    customerChildSer = value;
+    notifyListeners();
+  }
+
+  CoupenCode? coupenCodeModel;
+
+  void coupenCodeData(value) {
+    coupenCodeModel = value;
     notifyListeners();
   }
 }

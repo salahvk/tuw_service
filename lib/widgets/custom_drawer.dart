@@ -64,12 +64,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             CustomDrawerList(
               title: str.d_become,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                  return const ProfileServicePage();
-                }));
-              },
+              onTap: becomeService,
             ),
             CustomDrawerList(
               title: str.d_privacy,
@@ -115,5 +110,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   callInitFunction(context) async {
     await initPlatformState(context);
+  }
+
+  becomeService() {
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const ProfileServicePage();
+    }));
   }
 }

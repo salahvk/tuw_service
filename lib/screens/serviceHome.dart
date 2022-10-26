@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:jovial_svg/jovial_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -128,27 +129,44 @@ class ServiceHomePage extends StatelessWidget {
                                 //   height: 5,
                                 // ),
                                 // Image.asset(ImageAssets.profileIcon),
-                                CachedNetworkImage(
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                          width: mob ? 70.0 : 50,
-                                          height: mob ? 70.0 : 50,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover),
-                                          ),
-                                        ),
-                                    // width: 90,
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) {
-                                      return Container(
-                                        color: ColorManager.black,
-                                      );
-                                    },
-                                    imageUrl:
-                                        '$endPoint${homeData?[index].image}'),
+                                // CachedNetworkImage(
+                                //     imageBuilder: (context, imageProvider) =>
+                                //         Container(
+                                //           width: mob ? 70.0 : 50,
+                                //           height: mob ? 70.0 : 50,
+                                //           decoration: BoxDecoration(
+                                //             shape: BoxShape.circle,
+                                //             image: DecorationImage(
+                                //                 image: imageProvider,
+                                //                 fit: BoxFit.cover),
+                                //           ),
+                                //         ),
+                                //     // width: 90,
+                                //     progressIndicatorBuilder:
+                                //         (context, url, progress) {
+                                //       return Container(
+                                //         color: ColorManager.black,
+                                //       );
+                                //     },
+                                //     imageUrl:
+                                //         '$endPoint${homeData?[index].image}'),
+                                SizedBox(
+                                    width: mob ? 70.0 : 50,
+                                    height: mob ? 70.0 : 50,
+                                    child: ScalableImageWidget.fromSISource(
+                                        onLoading: (p0) {
+                                          return Container(
+                                            child:
+                                                const CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                            ),
+                                          );
+                                        },
+                                        cache: ScalableImageCache(size: 210),
+                                        si: ScalableImageSource.fromSvgHttpUrl(
+                                            bigFloats: true,
+                                            Uri.parse(
+                                                '$endPoint${homeData?[index].image}')))),
                                 Text(homeData![index].service ?? '',
                                     textAlign: TextAlign.center,
                                     style: getRegularStyle(

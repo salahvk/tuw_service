@@ -29,7 +29,7 @@ class PdfApi {
   }) async {
     final bytes = await pdf.save();
 
-    final dir = await getApplicationDocumentsDirectory();
+    // final dir = await getApplicationDocumentsDirectory();
     final dir2 = await getExternalStorageDirectory();
     final file = File('${dir2!.path}/$name');
 
@@ -40,8 +40,7 @@ class PdfApi {
 
   static Future openFile(File file) async {
     final url = file.path;
-    print(url);
+
     await OpenFilex.open(url);
-    print("Opened");
   }
 }

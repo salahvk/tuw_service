@@ -24,6 +24,12 @@ class ProfileServiceControllers {
   static TextEditingController addressController = TextEditingController();
 }
 
+class ChooseServiceControllers {
+  static TextEditingController serviceGroupController = TextEditingController();
+  static TextEditingController serviceListController = TextEditingController();
+  static TextEditingController registrationController = TextEditingController();
+}
+
 class PaymentServiceControllers {
   static TextEditingController cardHolderController = TextEditingController();
   static TextEditingController cardNumberController = TextEditingController();
