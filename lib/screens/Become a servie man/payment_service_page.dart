@@ -3,12 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+
+import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/coupenCode.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -28,9 +31,13 @@ class PaymentServicePage extends StatefulWidget {
 
 class _PaymentServicePageState extends State<PaymentServicePage> {
   String? selectedValue;
+
   bool isTickSelected = false;
-  DateTime selectedDate = DateTime.now();
+  bool isCodeAvailable = false;
   bool value = true;
+
+  DateTime selectedDate = DateTime.now();
+
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
@@ -238,11 +245,55 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                       ),
 
                       MandatoryHeader(heading: str.ps_coupon),
-                      TextFieldProfileService(
-                          controller:
-                              PaymentServiceControllers.couponController,
-                          hintText: str.ps_coupon_h,
-                          type: TextInputType.number),
+                      // TextFieldProfileService(
+                      //     controller:
+                      //         PaymentServiceControllers.couponController,
+                      //     hintText: str.ps_coupon_h,
+                      //     type: TextInputType.number),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 10.0,
+                                color: Colors.grey.shade300,
+                                // offset: const Offset(5, 8.5),
+                              ),
+                            ],
+                          ),
+                          child: TextField(
+                            // focusNode: nfocus,
+                            style: const TextStyle(),
+                            onChanged: (value) {
+                              searchCoupenCode(value);
+                            },
+                            controller:
+                                PaymentServiceControllers.couponController,
+                            // keyboardType: type,
+                            decoration: InputDecoration(
+                                suffix: isCodeAvailable
+                                    ? const SizedBox(
+                                        width: 25,
+                                        height: 25,
+                                        child: Icon(
+                                          Icons.done,
+                                          color: ColorManager.primary,
+                                        ))
+                                    : const SizedBox(
+                                        width: 25,
+                                        height: 25,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 3,
+                                        )),
+                                hintText: str.ps_coupon_h,
+                                hintStyle: getRegularStyle(
+                                    color: const Color.fromARGB(
+                                        255, 173, 173, 173),
+                                    fontSize: 15)),
+                          ),
+                        ),
+                      ),
 
                       // * Region
                       Padding(
@@ -369,6 +420,30 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         selectedDate = picked;
         PaymentServiceControllers.dateController.text =
             selectedDate.toLocal().toString().split(' ')[0];
+      });
+    }
+  }
+
+  searchCoupenCode(value) {
+    setState(() {
+      isCodeAvailable = false;
+    });
+    print('searching');
+    if (value.length >= 6) {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      // print(value);
+      provider.coupenCodeModel?.coupons?.forEach((element) {
+        final isIncluded = element.code?.contains(value);
+        if (isIncluded == true) {
+          setState(() {
+            isCodeAvailable = true;
+          });
+          print(isIncluded);
+          final data = element.code;
+          print(data);
+        } else {
+          print("No data Included");
+        }
       });
     }
   }
