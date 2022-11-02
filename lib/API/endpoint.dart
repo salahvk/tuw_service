@@ -5,6 +5,7 @@ const String apiGet = "$endPoint/api/getall";
 const String apiUser = "$endPoint/api/user";
 const String languagesApi = "$apiGet/languages";
 const String countriesApi = "$apiGet/countries";
+const String imageApi = "$endPoint/assets/uploads/service";
 const String updateProfileApi = "$api/update/profileimage";
 const String profileImageApi = "$endPoint/assets/uploads/profile";
 const String viewUserProfileApi = "$api/view/userprofile";

@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:jovial_svg/jovial_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -70,7 +69,7 @@ class ServiceHomePage extends StatelessWidget {
                 //   ),
                 // ),
                 SizedBox(
-                  height: mob ? 120 : 100,
+                  height: mob ? 150 : 110,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -79,13 +78,15 @@ class ServiceHomePage extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: CachedNetworkImage(
-                            imageUrl: switzeland,
+                            imageUrl:
+                                "$endPoint${provider.homeModel?.homebanner?[index].image}",
                             width: w * .95,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                           ),
                         ),
                       );
                     },
+                    itemCount: provider.homeModel?.homebanner?.length ?? 0,
                   ),
                 ),
 
@@ -150,28 +151,44 @@ class ServiceHomePage extends StatelessWidget {
                                 //     },
                                 //     imageUrl:
                                 //         '$endPoint${homeData?[index].image}'),
+                                // SizedBox(
+                                //     width: mob ? 70.0 : 50,
+                                //     height: mob ? 70.0 : 50,
+                                //     child: ScalableImageWidget.fromSISource(
+                                //         onLoading: (p0) {
+                                //           return Container(
+                                //             child:
+                                //                 const CircularProgressIndicator(
+                                //               strokeWidth: 2,
+                                //             ),
+                                //           );
+                                //         },
+                                //         cache: ScalableImageCache(
+                                //             size: homeData?.length ?? 0),
+                                //         si: ScalableImageSource.fromSvgHttpUrl(
+                                //             bigFloats: true,
+                                //             Uri.parse(
+                                //                 '$endPoint${homeData?[index].image}')))),
                                 SizedBox(
                                     width: mob ? 70.0 : 50,
                                     height: mob ? 70.0 : 50,
-                                    child: ScalableImageWidget.fromSISource(
-                                        onLoading: (p0) {
-                                          return Container(
-                                            child:
-                                                const CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
-                                          );
-                                        },
-                                        cache: ScalableImageCache(size: 210),
-                                        si: ScalableImageSource.fromSvgHttpUrl(
-                                            bigFloats: true,
-                                            Uri.parse(
-                                                '$endPoint${homeData?[index].image}')))),
+                                    child: SvgPicture.network(
+                                      '$endPoint${homeData?[index].image}',
+                                      color: ColorManager.primary2,
+                                    )),
+
                                 Text(homeData![index].service ?? '',
                                     textAlign: TextAlign.center,
                                     style: getRegularStyle(
                                         color: ColorManager.serviceHomeGrey,
-                                        fontSize: mob ? 16 : 12)),
+                                        fontSize:
+                                            homeData[index].service!.length > 13
+                                                ? mob
+                                                    ? 12
+                                                    : 10
+                                                : mob
+                                                    ? 16
+                                                    : 12)),
                                 // Text("100+ Profiles",
                                 //     style: getRegularStyle(
                                 //         color: const Color(0xffbababa),

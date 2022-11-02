@@ -15,6 +15,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/get_child_service.dart';
 import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -34,7 +35,10 @@ class ChooseServicePage extends StatefulWidget {
 class _ChooseServicePageState extends State<ChooseServicePage> {
   Childservices? childSelectedValue;
   Services? selectedValue;
+  Childservices? selectedChildServices;
   bool isTickSelected = false;
+  bool isChild = false;
+
   String? fileName;
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
@@ -44,7 +48,6 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
@@ -58,6 +61,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
         sGroup.add(provider.customerParentSer!.services![i]);
         i++;
       }
+      provider.customerChildSer!.documents!.clear();
       // print(sGroup[0]);
 
       setState(() {});
@@ -70,13 +74,9 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
     final str = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: false);
-    // final List<String> items = [
-    //   'Item1',
-    //   'Item2',
-    //   'Item3',
-    //   'Item4',
-    // ];
-    //  final List<String> items2 = provider.customerParentSer.services[0].service ?? '';
+    final mob = Responsive.isMobile(context);
+
+    var isNotEmpty;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -232,87 +232,16 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                           child: Text(
                                               selectedValue?.service ?? ''),
                                         ),
-                                  onChanged: (value) {
+                                  onChanged: (value) async {
                                     setState(() {
-                                      print(value);
                                       selectedValue = value as Services;
+                                      childGroup.clear();
+                                      childSelectedValue = null;
                                     });
-                                    getChildData();
-                                  },
-                                  buttonHeight: 40,
-                                  // buttonWidth: 140,
-                                  itemHeight: 40,
-                                  buttonPadding:
-                                      const EdgeInsets.fromLTRB(12, 0, 8, 0),
-                                  // dropdownWidth: size.width,
-                                  itemPadding:
-                                      const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        child: Row(
-                          children: [
-                            TitleWidget(name: str.c_service_list),
-                            const Icon(
-                              Icons.star_outlined,
-                              size: 10,
-                              color: ColorManager.errorRed,
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10.0,
-                                color: Colors.grey.shade300,
-                                // offset: const Offset(5, 8.5),
-                              ),
-                            ],
-                          ),
-                          child: Container(
-                            height: 60,
-                            width: size.width,
-                            decoration: BoxDecoration(
-                                color: ColorManager.whiteColor,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton2(
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 35,
-                                    color: ColorManager.black,
-                                  ),
-                                  hint: Text('Enter Group',
-                                      style: getRegularStyle(
-                                          color: const Color.fromARGB(
-                                              255, 173, 173, 173),
-                                          fontSize: 15)),
-                                  items: childGroup
-                                      .map((item) =>
-                                          DropdownMenuItem<Childservices>(
-                                            value: item,
-                                            child: Text(item.service ?? 'null',
-                                                style: getRegularStyle(
-                                                    color: ColorManager.black,
-                                                    fontSize: 15)),
-                                          ))
-                                      .toList(),
-                                  // value: selectedValue,
-                                  onChanged: (value) {
+                                    await getChildData();
                                     setState(() {
-                                      childSelectedValue =
-                                          value as Childservices;
+                                      isChild = provider.customerChildSer!
+                                          .childservices!.isNotEmpty;
                                     });
                                   },
                                   buttonHeight: 40,
@@ -329,71 +258,269 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        child: Row(
-                          children: [
-                            TitleWidget(name: str.c_vehicle),
-                            const Icon(
-                              Icons.star_outlined,
-                              size: 10,
-                              color: ColorManager.errorRed,
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10.0,
-                                color: Colors.grey.shade300,
-                                // offset: const Offset(5, 8.5),
-                              ),
-                            ],
-                          ),
-                          child: Container(
-                            width: size.width,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: ColorManager.whiteColor,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 13, 10, 13),
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              13, 0, 13, 0)),
-                                      onPressed: () async {
-                                        FilePickerResult? result =
-                                            await FilePicker.platform.pickFiles(
-                                          type: FileType.custom,
-                                          allowedExtensions: ['pdf', 'doc'],
-                                        );
 
-                                        if (result != null) {
-                                          PlatformFile file =
-                                              result.files.first;
-                                          setState(() {
-                                            fileName = file.name;
-                                          });
-                                        } else {}
-                                      },
-                                      child: Text(str.c_browse,
-                                          style: getLightStyle(
-                                              color: ColorManager.whiteText,
-                                              fontSize: 18))),
-                                ),
-                                Text(fileName ?? '')
-                              ],
-                            ),
-                          ),
-                        ),
+                      // childSelectedValue != null
+                      //     ? childSelectedValue!.childServices!.isNotEmpty
+                      //         ?
+
+                      // * Service Group
+                      provider.customerChildSer != null
+                          ? isChild
+                              ? Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 20, 0, 0),
+                                      child: Row(
+                                        children: [
+                                          TitleWidget(name: str.c_service_list),
+                                          const Icon(
+                                            Icons.star_outlined,
+                                            size: 10,
+                                            color: ColorManager.errorRed,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 10.0,
+                                              color: Colors.grey.shade300,
+                                              // offset: const Offset(5, 8.5),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Container(
+                                          height: 60,
+                                          width: size.width,
+                                          decoration: BoxDecoration(
+                                              color: ColorManager.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 10, 0, 10),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                icon: const Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  size: 35,
+                                                  color: ColorManager.black,
+                                                ),
+                                                hint: Text('Enter List',
+                                                    style: getRegularStyle(
+                                                        color: const Color
+                                                                .fromARGB(
+                                                            255, 173, 173, 173),
+                                                        fontSize: 15)),
+                                                items: childGroup
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            Childservices>(
+                                                          value: item,
+                                                          child: Text(
+                                                              item.serviceName ??
+                                                                  'null',
+                                                              style: getRegularStyle(
+                                                                  color:
+                                                                      ColorManager
+                                                                          .black,
+                                                                  fontSize:
+                                                                      15)),
+                                                        ))
+                                                    .toList(),
+                                                // value: selectedValue,
+                                                onChanged: (value) async {
+                                                  setState(() {
+                                                    childSelectedValue =
+                                                        value as Childservices;
+                                                  });
+                                                  await getCustomerChild(
+                                                      context,
+                                                      childSelectedValue?.id);
+                                                  setState(() {});
+                                                },
+                                                customButton:
+                                                    childSelectedValue == null
+                                                        ? null
+                                                        : Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    10,
+                                                                    5,
+                                                                    10,
+                                                                    5),
+                                                            child: Text(
+                                                                childSelectedValue
+                                                                        ?.serviceName ??
+                                                                    'null'),
+                                                          ),
+                                                buttonHeight: 40,
+                                                // buttonWidth: 140,
+                                                itemHeight: 40,
+                                                buttonPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 8, 0),
+                                                // dropdownWidth: size.width,
+                                                itemPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container()
+                          : Container(),
+
+// * Browse feature
+
+                      provider.customerChildSer != null
+                          ? provider.customerChildSer!.documents!.isNotEmpty
+                              ? Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 20, 0, 0),
+                                      child: Row(
+                                        children: [
+                                          TitleWidget(
+                                              name: provider
+                                                      .customerChildSer
+                                                      ?.documents![0]
+                                                      .document ??
+                                                  ''),
+                                          const Icon(
+                                            Icons.star_outlined,
+                                            size: 10,
+                                            color: ColorManager.errorRed,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 10.0,
+                                              color: Colors.grey.shade300,
+                                              // offset: const Offset(5, 8.5),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Container(
+                                          width: size.width,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              color: ColorManager.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 13, 10, 13),
+                                                child: ElevatedButton(
+                                                    style:
+                                                        ElevatedButton.styleFrom(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    13,
+                                                                    0,
+                                                                    13,
+                                                                    0)),
+                                                    onPressed: () async {
+                                                      FilePickerResult? result =
+                                                          await FilePicker
+                                                              .platform
+                                                              .pickFiles(
+                                                        type: FileType.custom,
+                                                        allowedExtensions: [
+                                                          'pdf',
+                                                          'doc'
+                                                        ],
+                                                      );
+
+                                                      if (result != null) {
+                                                        PlatformFile file =
+                                                            result.files.first;
+                                                        setState(() {
+                                                          fileName = file.name;
+                                                        });
+                                                      } else {}
+                                                    },
+                                                    child: Text(
+                                                        str.c_browse,
+                                                        style: getLightStyle(
+                                                            color: ColorManager
+                                                                .whiteText,
+                                                            fontSize: 18))),
+                                              ),
+                                              Text(fileName ?? '')
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container()
+                          : Container(),
+
+// * Selected List Image
+                      // childSelectedValue != null
+                      //     ? childSelectedValue?.image != ''
+                      //         ? Row(
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: [
+                      //               SizedBox(
+                      //                   width: mob ? 70.0 : 50,
+                      //                   height: mob ? 70.0 : 50,
+                      //                   child:
+                      //  ScalableImageWidget.fromSISource(
+                      //     onLoading: (p0) {
+                      //       return Container(
+                      //         child:
+                      //             const CircularProgressIndicator(
+                      //           strokeWidth: 2,
+                      //         ),
+                      //       );
+                      //     },
+                      //     cache: ScalableImageCache(size: 1),
+                      //     si: ScalableImageSource.fromSvgHttpUrl(
+                      //         bigFloats: true,
+                      //         Uri.parse(
+                      //             '$imageApi/${childSelectedValue?.image}')))
+                      //                       SvgPicture.network(
+                      //                     '$imageApi/${childSelectedValue?.image}',
+                      //                     color: ColorManager.primary,
+                      //                   )),
+                      //             ],
+                      //           )
+                      //         : const SizedBox()
+                      //     : const SizedBox(),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
+
+                      // * Terms and condition
+
+                      const SizedBox(
+                        height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -454,6 +581,8 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
     );
   }
 
+  // * Fuctions
+
   continueToPay() {
     final str = AppLocalizations.of(context)!;
     isTickSelected
@@ -463,7 +592,6 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
         : AnimatedSnackBar.material(str.c_snack,
                 type: AnimatedSnackBarType.warning,
                 borderRadius: BorderRadius.circular(6),
-                // brightness: Brightness.dark,
                 duration: const Duration(seconds: 1))
             .show(
             context,
@@ -483,27 +611,6 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
       childGroup.add(provider.customerChildSer!.childservices![i]);
       i++;
     }
-    // print(sGroup[0]);
-
     setState(() {});
   }
 }
-
- //   if (isTickSelected) {
-    //   if (ChooseServiceControllers.serviceGroupController.text.isEmpty) {
-    //   showAnimatedSnackBar(context, "Please Enter Service");
-    // }
-    //   Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-    //     return const PaymentServicePage();
-    //   }));
-    // } else {
-    //   AnimatedSnackBar.material(str.c_snack,
-    //           type: AnimatedSnackBarType.warning,
-    //           borderRadius: BorderRadius.circular(6),
-    //           // brightness: Brightness.dark,
-    //           duration: const Duration(seconds: 1))
-    //       .show(
-    //     context,
-    //   );
-    // }
-

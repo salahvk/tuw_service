@@ -296,52 +296,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                                       const EdgeInsets.fromLTRB(
                                                           10, 0, 5, 0),
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
                                                     children: [
-                                                      Row(
-                                                        children: [
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Text(
-                                                              "+${r[index].phonecode.toString()}",
-                                                              style: getSemiBoldtStyle(
-                                                                  color: ColorManager
-                                                                      .background,
-                                                                  fontSize:
-                                                                      13)),
-                                                          const SizedBox(
-                                                            width: 8,
-                                                          ),
-                                                          Text(
-                                                              overflow: TextOverflow
-                                                                  .fade,
-                                                              // softWrap: true,
-                                                              r[index]
-                                                                          .countryName!
-                                                                          .length >
-                                                                      22
-                                                                  ? r[index]
-                                                                          .countryName
-                                                                          ?.substring(
-                                                                              0,
-                                                                              22) ??
-                                                                      ''
-                                                                  : r[index]
-                                                                          .countryName ??
-                                                                      '',
-                                                              style: getSemiBoldtStyle(
-                                                                  color: ColorManager.background,
-                                                                  fontSize: r[index].countryName!.length < 12
-                                                                      ? 12
-                                                                      : r[index].countryName!.length < 20
-                                                                          ? 10
-                                                                          : r[index].countryName!.length > 25
-                                                                              ? 10
-                                                                              : 10)),
-                                                        ],
+                                                      const SizedBox(
+                                                        width: 2,
                                                       ),
                                                       CachedNetworkImage(
                                                           errorWidget: (context,
@@ -379,6 +336,50 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                                           },
                                                           imageUrl:
                                                               '$endPoint${r[index].countryflag}'),
+                                                      const SizedBox(
+                                                        width: 2,
+                                                      ),
+                                                      Text(
+                                                          "+${r[index].phonecode.toString()}",
+                                                          style: getSemiBoldtStyle(
+                                                              color: ColorManager
+                                                                  .background,
+                                                              fontSize: 13)),
+                                                      const SizedBox(
+                                                        width: 8,
+                                                      ),
+                                                      Text(
+                                                          overflow: TextOverflow
+                                                              .fade,
+                                                          // softWrap: true,
+                                                          r[index]
+                                                                      .countryName!
+                                                                      .length >
+                                                                  22
+                                                              ? r[index]
+                                                                      .countryName
+                                                                      ?.substring(
+                                                                          0,
+                                                                          22) ??
+                                                                  ''
+                                                              : r[index]
+                                                                      .countryName ??
+                                                                  '',
+                                                          style:
+                                                              getSemiBoldtStyle(
+                                                                  color: ColorManager
+                                                                      .background,
+                                                                  fontSize: r[index]
+                                                                              .countryName!
+                                                                              .length <
+                                                                          12
+                                                                      ? 12
+                                                                      : r[index].countryName!.length <
+                                                                              20
+                                                                          ? 10
+                                                                          : r[index].countryName!.length > 25
+                                                                              ? 10
+                                                                              : 10)),
                                                     ],
                                                   ),
                                                 ),

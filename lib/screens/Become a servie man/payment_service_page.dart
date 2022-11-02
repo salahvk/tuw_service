@@ -21,6 +21,7 @@ import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
+import 'package:social_media_services/widgets/title_widget.dart';
 
 class PaymentServicePage extends StatefulWidget {
   const PaymentServicePage({Key? key}) : super(key: key);
@@ -33,7 +34,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   String? selectedValue;
 
   bool isTickSelected = false;
-  bool isCodeAvailable = false;
+  // bool isCodeAvailable = false;
+  IsCodeAvailable status = IsCodeAvailable.none;
+  PackageStatus packageStatus = PackageStatus.none;
   bool value = true;
 
   DateTime selectedDate = DateTime.now();
@@ -56,6 +59,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DataProvider>(context, listen: true);
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final List<String> items = [
@@ -244,7 +248,10 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                         ],
                       ),
 
-                      MandatoryHeader(heading: str.ps_coupon),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: TitleWidget(name: str.ps_coupon),
+                      ),
                       // TextFieldProfileService(
                       //     controller:
                       //         PaymentServiceControllers.couponController,
@@ -272,20 +279,30 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                 PaymentServiceControllers.couponController,
                             // keyboardType: type,
                             decoration: InputDecoration(
-                                suffix: isCodeAvailable
+                                suffix: status == IsCodeAvailable.searching
                                     ? const SizedBox(
-                                        width: 25,
-                                        height: 25,
-                                        child: Icon(
-                                          Icons.done,
-                                          color: ColorManager.primary,
-                                        ))
-                                    : const SizedBox(
                                         width: 25,
                                         height: 25,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 3,
-                                        )),
+                                        ))
+                                    : status == IsCodeAvailable.available
+                                        ? const SizedBox(
+                                            width: 25,
+                                            height: 25,
+                                            child: Icon(
+                                              Icons.done,
+                                              color: ColorManager.primary,
+                                            ))
+                                        : status == IsCodeAvailable.notAvailable
+                                            ? const SizedBox(
+                                                width: 25,
+                                                height: 30,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: ColorManager.errorRed,
+                                                ))
+                                            : null,
                                 hintText: str.ps_coupon_h,
                                 hintStyle: getRegularStyle(
                                     color: const Color.fromARGB(
@@ -296,88 +313,152 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                       ),
 
                       // * Region
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MonthlyPlan(
-                                  size: size,
-                                  plan: str.ps_monthly,
-                                  amount: '\$135.00',
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MonthlyPlan(
-                                    size: size,
-                                    plan: str.ps_yearly,
-                                    amount: '\$207.00')
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 25),
-                        child: Container(
-                          width: size.width,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10.0,
-                                color: Colors.grey.shade300,
-                                // offset: const Offset(5, 8.5),
-                              ),
-                            ],
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: ColorManager.whiteColor,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(14, 20, 14, 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      provider.customerChildSer!.packages!.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(str.ps_monthly,
-                                      style: getBoldtStyle(
-                                          color: ColorManager.black,
-                                          fontSize: 18)),
-                                  const SizedBox(
-                                    height: 10,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            packageStatus = PackageStatus.first;
+                                          });
+                                          print(packageStatus);
+                                        },
+                                        child: MonthlyPlan(
+                                          size: size,
+                                          plan: provider.customerChildSer
+                                                  ?.packages![0].packageName ??
+                                              '',
+                                          amount: provider.customerChildSer
+                                                  ?.packages![0].amount
+                                                  .toString() ??
+                                              '',
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text("Service Fee : \$135.00 OMR",
-                                      style: getRegularStyle(
-                                          color: const Color.fromARGB(
-                                              255, 173, 173, 173),
-                                          fontSize: 16)),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text(
-                                        "Discount      : \$7.00 OMR = 5%",
-                                        style: getRegularStyle(
-                                            color: const Color.fromARGB(
-                                                255, 173, 173, 173),
-                                            fontSize: 16)),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            packageStatus =
+                                                PackageStatus.second;
+                                          });
+                                          print(packageStatus);
+                                        },
+                                        child: MonthlyPlan(
+                                          size: size,
+                                          plan: provider.customerChildSer
+                                                  ?.packages![1].packageName ??
+                                              '',
+                                          amount: provider.customerChildSer
+                                                  ?.packages![1].amount
+                                                  .toString() ??
+                                              '',
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Text("VAT               : \$12.00 OMR = 8%",
-                                      style: getRegularStyle(
-                                          color: const Color.fromARGB(
-                                              255, 173, 173, 173),
-                                          fontSize: 16)),
                                 ],
                               ),
-                            ),
-                          ),
-                        ),
+                            )
+                          : Container(),
+                      packageStatus != PackageStatus.none
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Container(
+                                width: size.width,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 10.0,
+                                      color: Colors.grey.shade300,
+                                      // offset: const Offset(5, 8.5),
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.whiteColor,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        14, 20, 14, 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            provider
+                                                    .customerChildSer
+                                                    ?.packages![packageStatus ==
+                                                            PackageStatus.first
+                                                        ? 0
+                                                        : packageStatus ==
+                                                                PackageStatus
+                                                                    .second
+                                                            ? 1
+                                                            : 0]
+                                                    .packageName ??
+                                                '',
+                                            style: getBoldtStyle(
+                                                color: ColorManager.black,
+                                                fontSize: 18)),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                            "Service Fee : ${provider.customerChildSer?.packages![packageStatus == PackageStatus.first ? 0 : packageStatus == PackageStatus.second ? 1 : 0].amount ?? ''} OMR",
+                                            style: getRegularStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 173, 173, 173),
+                                                fontSize: 16)),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 5, 0, 5),
+                                          child: Text(
+                                              "Discount      : ${provider.customerChildSer?.packages![packageStatus == PackageStatus.first ? 0 : packageStatus == PackageStatus.second ? 1 : 0].offerPrice ?? ''} OMR ",
+                                              style: getRegularStyle(
+                                                  color: const Color.fromARGB(
+                                                      255, 173, 173, 173),
+                                                  fontSize: 16)),
+                                        ),
+                                        Text(
+                                            provider
+                                                    .customerChildSer
+                                                    ?.packages![packageStatus ==
+                                                            PackageStatus.first
+                                                        ? 0
+                                                        : packageStatus ==
+                                                                PackageStatus
+                                                                    .second
+                                                            ? 1
+                                                            : 0]
+                                                    .packageDescription ??
+                                                '',
+                                            style: getRegularStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 173, 173, 173),
+                                                fontSize: 16)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(
+                        height: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -424,11 +505,20 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     }
   }
 
+// * Search Coupon Function
+
   searchCoupenCode(value) {
-    setState(() {
-      isCodeAvailable = false;
-    });
-    print('searching');
+    if (value.length > 0) {
+      setState(() {
+        status = IsCodeAvailable.searching;
+      });
+    } else {
+      setState(() {
+        status = IsCodeAvailable.none;
+      });
+      return;
+    }
+
     if (value.length >= 6) {
       final provider = Provider.of<DataProvider>(context, listen: false);
       // print(value);
@@ -436,13 +526,12 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         final isIncluded = element.code?.contains(value);
         if (isIncluded == true) {
           setState(() {
-            isCodeAvailable = true;
+            status = IsCodeAvailable.available;
           });
-          print(isIncluded);
-          final data = element.code;
-          print(data);
         } else {
-          print("No data Included");
+          setState(() {
+            status = IsCodeAvailable.notAvailable;
+          });
         }
       });
     }
@@ -458,3 +547,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     }
   }
 }
+
+enum IsCodeAvailable { none, searching, available, notAvailable }
+
+enum PackageStatus { none, first, second }

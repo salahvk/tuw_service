@@ -19,6 +19,7 @@ class _CustomizeMarkerExampleState extends State<CustomizeMarkerExample> {
     super.initState();
 
     requestPermission();
+    setState(() {});
   }
 
   @override

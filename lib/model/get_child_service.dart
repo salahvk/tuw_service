@@ -2,8 +2,8 @@ class ChildServiceModel {
   bool? result;
   String? message;
   List<Childservices>? childservices;
-  List<void>? documents;
-  List<void>? packages;
+  List<Document>? documents;
+  List<Packages>? packages;
 
   ChildServiceModel(
       {this.result,
@@ -21,18 +21,18 @@ class ChildServiceModel {
         childservices!.add(Childservices.fromJson(v));
       });
     }
-    // if (json['documents'] != null) {
-    //   documents = <Null>[];
-    //   json['documents'].forEach((v) {
-    //     documents!.add(void.fromJson(v));
-    //   });
-    // }
-    // if (json['packages'] != null) {
-    //   packages = <Null>[];
-    //   json['packages'].forEach((v) {
-    //     packages!.add(void.fromJson(v));
-    //   });
-    // }
+    if (json['documents'] != null) {
+      documents = <Document>[];
+      json['documents'].forEach((v) {
+        documents!.add(Document.fromJson(v));
+      });
+    }
+    if (json['packages'] != null) {
+      packages = <Packages>[];
+      json['packages'].forEach((v) {
+        packages!.add(Packages.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -42,72 +42,135 @@ class ChildServiceModel {
     if (childservices != null) {
       data['childservices'] = childservices!.map((v) => v.toJson()).toList();
     }
-    // if (documents != null) {
-    //   data['documents'] = documents!.map((v) => v.toJson()).toList();
-    // }
-    // if (packages != null) {
-    //   data['packages'] = packages!.map((v) => v.toJson()).toList();
-    // }
+    if (documents != null) {
+      data['documents'] = documents!.map((v) => v.toJson()).toList();
+    }
+    if (packages != null) {
+      data['packages'] = packages!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
 class Childservices {
   int? id;
-  String? service;
+  String? serviceName;
   String? image;
-  String? countryIds;
-  String? status;
   int? parentId;
-  // void? serviceLanguageId;
-  String? createdAt;
-  String? updatedAt;
+  String? status;
+  String? serviceImage;
   List<Childservices>? childServices;
 
   Childservices(
       {this.id,
-      this.service,
+      this.serviceName,
       this.image,
-      this.countryIds,
-      this.status,
       this.parentId,
-      // this.serviceLanguageId,
-      this.createdAt,
-      this.updatedAt,
+      this.status,
+      this.serviceImage,
       this.childServices});
 
   Childservices.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    service = json['service'];
+    serviceName = json['service_name'];
     image = json['image'];
-    countryIds = json['country_ids'];
-    status = json['status'];
     parentId = json['parent_id'];
-    // serviceLanguageId = json['service_language_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    if (json['child_services'] != null) {
-      childServices = <Childservices>[];
-      json['child_services'].forEach((v) {
-        childServices!.add(Childservices.fromJson(v));
-      });
-    }
+    status = json['status'];
+    serviceImage = json['service_image'];
+    // if (json['child_services'] != null) {
+    //   childServices = <Null>[];
+    //   json['child_services'].forEach((v) {
+    //     childServices!.add(void.fromJson(v));
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['service'] = service;
+    data['service_name'] = serviceName;
     data['image'] = image;
-    data['country_ids'] = countryIds;
-    data['status'] = status;
     data['parent_id'] = parentId;
-    // data['service_language_id'] = serviceLanguageId;
+    data['status'] = status;
+    data['service_image'] = serviceImage;
+    // if (childServices != null) {
+    //   data['child_services'] =
+    //       childServices!.map((v) => v.toJson()).toList();
+    // }
+    return data;
+  }
+}
+
+class Document {
+  int? id;
+  int? serviceId;
+  String? document;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+
+  Document(
+      {this.id,
+      this.serviceId,
+      this.document,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
+
+  Document.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    serviceId = json['service_id'];
+    document = json['document'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['service_id'] = serviceId;
+    data['document'] = document;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    if (childServices != null) {
-      data['child_services'] = childServices!.map((v) => v.toJson()).toList();
-    }
+    data['deleted_at'] = deletedAt;
+    return data;
+  }
+}
+
+class Packages {
+  int? id;
+  String? packageName;
+  String? packageDescription;
+  String? validity;
+  int? amount;
+  int? offerPrice;
+
+  Packages(
+      {this.id,
+      this.packageName,
+      this.packageDescription,
+      this.validity,
+      this.amount,
+      this.offerPrice});
+
+  Packages.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    packageName = json['package_name'];
+    packageDescription = json['package_description'];
+    validity = json['validity'];
+    amount = json['amount'];
+    offerPrice = json['offer_price'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['package_name'] = packageName;
+    data['package_description'] = packageDescription;
+    data['validity'] = validity;
+    data['amount'] = amount;
+    data['offer_price'] = offerPrice;
     return data;
   }
 }

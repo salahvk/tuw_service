@@ -182,7 +182,10 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 hintText: str.p_first_name_h,
                                 controller: ProfileServiceControllers
                                     .firstNameController),
-                            MandatoryHeader(heading: str.p_last_name),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: TitleWidget(name: str.p_last_name),
+                            ),
                             CustomTextField(
                                 hintText: str.p_last_name_h,
                                 controller: ProfileServiceControllers
@@ -199,7 +202,11 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    MandatoryHeader(heading: str.p_dob),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: TitleWidget(name: str.p_dob),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
@@ -244,9 +251,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 0, 0),
-                                      child: MandatoryHeader(
-                                          heading: str.p_gender),
+                                          10, 10, 0, 0),
+                                      child: TitleWidget(name: str.p_gender),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -551,7 +557,10 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 ),
                               ],
                             ),
-                            MandatoryHeader(heading: str.p_address),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: TitleWidget(name: str.p_address),
+                            ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
                               child: Container(
@@ -642,15 +651,17 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     }
     //  else if (ProfileServiceControllers.lastNameController.text.isEmpty) {
     //   showAnimatedSnackBar(context, "Please Enter Your Last Name");
-    // } else if (ProfileServiceControllers.civilCardController.text.isEmpty) {
-    //   showAnimatedSnackBar(context, "Please Enter Your Civil Card Number");
-    // } else if (ProfileServiceControllers.dateController.text.isEmpty) {
-    //   showAnimatedSnackBar(context, "Please Enter Your Date of birth");
-    // } else if (ProfileServiceControllers.regionController.text.isEmpty) {
-    //   showAnimatedSnackBar(context, "Please Enter Your Region");
-    // } else if (ProfileServiceControllers.stateController.text.isEmpty) {
-    //   showAnimatedSnackBar(context, "Please Enter Your State");
-    // } else if (ProfileServiceControllers.addressController.text.isEmpty) {
+    // }
+    else if (ProfileServiceControllers.civilCardController.text.isEmpty) {
+      showAnimatedSnackBar(context, "Please Enter Your Civil Card Number");
+    } else if (selectedValue == null) {
+      showAnimatedSnackBar(context, "Please Select your country");
+    } else if (ProfileServiceControllers.regionController.text.isEmpty) {
+      showAnimatedSnackBar(context, "Please Enter Your Region");
+    } else if (ProfileServiceControllers.stateController.text.isEmpty) {
+      showAnimatedSnackBar(context, "Please Enter Your State");
+    }
+    // else if (ProfileServiceControllers.addressController.text.isEmpty) {
     //   showAnimatedSnackBar(context, "Please Enter Your Address");
     // }
     else {
