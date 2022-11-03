@@ -19,7 +19,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
-import 'package:social_media_services/utils/viewProfile.dart';
+import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
@@ -204,9 +204,42 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                               ),
                             ],
                           ),
+
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: TitleWidget(name: str.e_name),
+                            child: TitleWidget(name: str.p_first_name),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    // offset: const Offset(5, 8.5),
+                                  ),
+                                ],
+                              ),
+                              child: TextField(
+                                // focusNode: nfocus,
+                                style: const TextStyle(),
+                                controller:
+                                    EditProfileControllers.firstNameController,
+                                decoration: InputDecoration(
+                                    hintText: str.p_first_name_h,
+                                    hintStyle: getRegularStyle(
+                                        color: const Color.fromARGB(
+                                            255, 173, 173, 173),
+                                        fontSize: Responsive.isMobile(context)
+                                            ? 15
+                                            : 10)),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: TitleWidget(name: str.p_last_name),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -224,9 +257,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                 focusNode: nfocus,
                                 style: const TextStyle(),
                                 controller:
-                                    EditProfileControllers.nameController,
+                                    EditProfileControllers.lastNameController,
                                 decoration: InputDecoration(
-                                    hintText: str.e_name_h,
+                                    hintText: str.p_last_name_h,
                                     hintStyle: getRegularStyle(
                                         color: const Color.fromARGB(
                                             255, 173, 173, 173),
@@ -693,11 +726,15 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   // * Update profile
 
   updateProfileValidation() async {
-    final name = EditProfileControllers.nameController.text.trim();
+    // ! Trim removed
+    final firstname = EditProfileControllers.firstNameController.text;
+    final lastname = EditProfileControllers.lastNameController.text;
     final dob = EditProfileControllers.dateController.text;
     final country = EditProfileControllers.countryController.text;
-    if (name.isEmpty) {
-      showAnimatedSnackBar(context, "Name field can not be empty");
+    if (firstname.isEmpty) {
+      showAnimatedSnackBar(context, "First Name field is requires");
+    } else if (lastname.isEmpty) {
+      showAnimatedSnackBar(context, "Last Name field is requires");
     } else if (dob.isEmpty) {
       showAnimatedSnackBar(context, "DOB field can not be empty");
     } else if (country.isEmpty) {
@@ -706,23 +743,24 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       setState(() {
         loading = true;
       });
-      await updateProfile(name, dob);
+      await updateProfile(firstname, lastname, dob);
       setState(() {
         loading = false;
       });
     }
   }
 
-  updateProfile(name, dob) async {
+  updateProfile(firstname, lastname, dob) async {
     final apiToken = Hive.box("token").get('api_token');
     final provider = Provider.of<DataProvider>(context, listen: false);
     final about = EditProfileControllers.aboutController.text;
     final region = EditProfileControllers.regionController.text;
-    print(countryid);
+    final state = EditProfileControllers.stateController.text;
+
     try {
       var response = await http.post(
           Uri.parse(
-              "$endPoint/api/update/userprofile?name=$name&gender=$gender&dob=$dob&about=$about&region=gfc&country_id=$countryid&state_id=12"),
+              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$state&country_id=$countryid&state=$region&lastname=$lastname"),
           headers: {
             "device-id": provider.deviceId ?? '',
             "api-token": apiToken
@@ -733,6 +771,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
         // var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
         // otpProvider.getOtpVerifiedData(otpVerifiedData);
+        await viewProfile(context);
         navigateToNext();
       } else {}
     } on Exception catch (e) {

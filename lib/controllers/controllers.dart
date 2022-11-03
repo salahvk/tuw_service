@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class EditProfileControllers {
-  static TextEditingController nameController = TextEditingController();
+  static TextEditingController firstNameController = TextEditingController();
+  static TextEditingController lastNameController = TextEditingController();
   static TextEditingController dateController = TextEditingController();
   static TextEditingController countryController = TextEditingController();
   static TextEditingController regionController = TextEditingController();

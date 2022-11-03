@@ -26,14 +26,15 @@ class ViewProfileModel {
 
 class Userdetails {
   int? id;
-  String? name;
+  String? firstname;
+  String? lastname;
   String? dob;
   String? gender;
   // void? email;
   // void? emailVerifiedAt;
   String? phone;
   int? countryId;
-  int? stateId;
+  String? state;
   String? region;
   String? profilePic;
   String? deviceId;
@@ -50,14 +51,15 @@ class Userdetails {
 
   Userdetails(
       {this.id,
-      this.name,
+      this.firstname,
+      this.lastname,
       this.dob,
       this.gender,
       // this.email,
       // this.emailVerifiedAt,
       this.phone,
       this.countryId,
-      this.stateId,
+      this.state,
       this.region,
       this.profilePic,
       this.deviceId,
@@ -74,14 +76,15 @@ class Userdetails {
 
   Userdetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    firstname = json['firstname'];
+    lastname = json['lastname'];
     dob = json['dob'];
     gender = json['gender'];
     // email = json['email'];
     // emailVerifiedAt = json['email_verified_at'];
     phone = json['phone'];
     countryId = json['country_id'];
-    stateId = json['state_id'];
+    state = json['state'];
     region = json['region'];
     profilePic = json['profile_pic'];
     deviceId = json['device_id'];
@@ -100,14 +103,15 @@ class Userdetails {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['name'] = name;
+    data['firstname'] = firstname;
+    data['lastname'] = lastname;
     data['dob'] = dob;
     data['gender'] = gender;
     // data['email'] = email;
     // data['email_verified_at'] = emailVerifiedAt;
     data['phone'] = phone;
     data['country_id'] = countryId;
-    data['state_id'] = stateId;
+    data['state'] = state;
     data['region'] = region;
     data['profile_pic'] = profilePic;
     data['device_id'] = deviceId;

@@ -14,3 +14,7 @@ const String home = "$api/home";
 const String customerCoupenList = '$api/couponlist';
 const String customerParentService = '$api/parentservices';
 const String customerChildService = '$api/childservices';
+const String subServices = '$api/subservices';
+const String servicemanList = '$api/servicemanlist';
+const String placeOrder = '$api/place-order';
+const String paymentSuccess = '$api/update/payment-status';

@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 
 // import 'package:path/path.dart';
 import 'package:async/async.dart';
-import 'package:social_media_services/utils/viewProfile.dart';
+import 'package:social_media_services/API/viewProfile.dart';
 
 class ProfileImage extends StatefulWidget {
   double profileSize = 0;

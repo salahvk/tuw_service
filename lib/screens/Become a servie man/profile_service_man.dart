@@ -58,8 +58,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
       while (i < n!.toInt()) {
         r3.add(provider.countriesModel!.countries![i].countryName!);
         i++;
-        print(timeStamp);
       }
+      fillFields(provider);
 
       setState(() {});
       getCustomerParent(context);
@@ -73,12 +73,6 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     final h = MediaQuery.of(context).size.height;
     final mob = Responsive.isMobile(context);
 
-    final List<String> items = [
-      'Item1',
-      'Item2',
-      'Item3',
-      'Item4',
-    ];
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -667,5 +661,21 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     else {
       Navigator.pushNamed(context, Routes.chooseService);
     }
+  }
+
+  fillFields(DataProvider provider) {
+    final fieldData = provider.viewProfileModel?.userdetails;
+    ProfileServiceControllers.firstNameController.text =
+        fieldData?.firstname ?? '';
+
+    ProfileServiceControllers.lastNameController.text =
+        fieldData?.lastname ?? '';
+
+    ProfileServiceControllers.dateController.text = fieldData?.dob ?? '';
+    selectedValue = fieldData?.countryName ?? '';
+
+    ProfileServiceControllers.stateController.text = fieldData?.state ?? '';
+
+    ProfileServiceControllers.regionController.text = fieldData?.region ?? '';
   }
 }

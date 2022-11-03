@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -10,12 +9,8 @@ import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/screens/servicer.dart';
 
-class ServiceHomePage extends StatelessWidget {
-  ServiceHomePage({Key? key}) : super(key: key);
-
-  final List<Map> myProducts =
-      List.generate(100000, (index) => {"id": index, "name": "Service $index"})
-          .toList();
+class SubServicesPage extends StatelessWidget {
+  const SubServicesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,57 +34,6 @@ class ServiceHomePage extends StatelessWidget {
                         getBoldtStyle(color: ColorManager.black, fontSize: 20),
                   ),
                 ),
-                // * carousel
-                // CarouselSlider.builder(
-                //   itemCount: 10,
-                //   itemBuilder:
-                //       (BuildContext context, int itemIndex, int pageViewIndex) {
-                //     return Container(
-                //       decoration: const BoxDecoration(
-                //         color: ColorManager.whiteColor,
-                //       ),
-                //       // width: 250,
-                //       child: ClipRRect(
-                //         borderRadius: BorderRadius.circular(5),
-                //         child: CachedNetworkImage(
-                //           imageUrl: switzeland,
-                //           fit: BoxFit.cover,
-                //         ),
-                //       ),
-                //     );
-                //   },
-                //   options: CarouselOptions(
-                //     autoPlay: false,
-                //     height: mob ? 110 : 60,
-                //     onPageChanged: (index, reason) {},
-                //     enlargeCenterPage: true,
-                //     viewportFraction: 0.3,
-                //     aspectRatio: 2.0,
-                //     initialPage: 0,
-                //   ),
-                // ),
-                SizedBox(
-                  height: mob ? 150 : 110,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "$endPoint${provider.homeModel?.homebanner?[index].image}",
-                            width: w * .95,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: provider.homeModel?.homebanner?.length ?? 0,
-                  ),
-                ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
                   child: GridView.builder(
@@ -126,24 +70,6 @@ class ServiceHomePage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                // SizedBox(
-                                //     width: mob ? 70.0 : 50,
-                                //     height: mob ? 70.0 : 50,
-                                //     child: ScalableImageWidget.fromSISource(
-                                //         onLoading: (p0) {
-                                //           return Container(
-                                //             child:
-                                //                 const CircularProgressIndicator(
-                                //               strokeWidth: 2,
-                                //             ),
-                                //           );
-                                //         },
-                                //         cache: ScalableImageCache(
-                                //             size: homeData?.length ?? 0),
-                                //         si: ScalableImageSource.fromSvgHttpUrl(
-                                //             bigFloats: true,
-                                //             Uri.parse(
-                                //                 '$endPoint${homeData?[index].image}')))),
                                 SizedBox(
                                     width: mob ? 70.0 : 50,
                                     height: mob ? 70.0 : 50,
@@ -151,7 +77,6 @@ class ServiceHomePage extends StatelessWidget {
                                       '$endPoint${homeData?[index].image}',
                                       color: ColorManager.primary2,
                                     )),
-
                                 Text(homeData![index].service ?? '',
                                     textAlign: TextAlign.center,
                                     style: getRegularStyle(
@@ -164,10 +89,6 @@ class ServiceHomePage extends StatelessWidget {
                                                 : mob
                                                     ? 16
                                                     : 12)),
-                                // Text("100+ Profiles",
-                                //     style: getRegularStyle(
-                                //         color: const Color(0xffbababa),
-                                //         fontSize: mob ? 14 : 10)),
                               ],
                             ),
                           ),

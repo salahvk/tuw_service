@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
                     child: Text(
-                        provider.viewProfileModel?.userdetails?.name ?? '',
+                        '${provider.viewProfileModel?.userdetails?.firstname ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
                         style: getBoldtStyle(
                             color: ColorManager.black, fontSize: 20)),
                   ),

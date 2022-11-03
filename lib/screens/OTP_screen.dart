@@ -22,7 +22,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/utils/pinTheme.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
-import 'package:social_media_services/utils/viewProfile.dart';
+import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

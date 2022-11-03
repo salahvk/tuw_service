@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -18,7 +19,7 @@ viewProfile(BuildContext context) async {
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-
+      log(response.body);
       var viewProfileData = ViewProfileModel.fromJson(jsonResponse);
       print('finished');
       provider.viewProfileData(viewProfileData);

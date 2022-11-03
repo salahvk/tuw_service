@@ -160,10 +160,26 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                           const SizedBox(
                             height: 5,
                           ),
-                          Text(
-                            provider.viewProfileModel?.userdetails?.name ?? '',
-                            style: getBoldtStyle(
-                                color: ColorManager.black, fontSize: 13),
+                          Row(
+                            children: [
+                              Text(
+                                provider.viewProfileModel?.userdetails
+                                        ?.firstname ??
+                                    '',
+                                style: getBoldtStyle(
+                                    color: ColorManager.black, fontSize: 13),
+                              ),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Text(
+                                provider.viewProfileModel?.userdetails
+                                        ?.lastname ??
+                                    '',
+                                style: getBoldtStyle(
+                                    color: ColorManager.black, fontSize: 13),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 2,
