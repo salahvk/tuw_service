@@ -28,12 +28,10 @@ class _CustomizeMarkerExampleState extends State<CustomizeMarkerExample> {
       appBar: AppBar(
         title: InkWell(
             onTap: () async {
-              print('object');
               Position position = await Geolocator.getCurrentPosition(
                   desiredAccuracy: LocationAccuracy.high);
               print(position.longitude); //Output: 80.24599079
               print(position.latitude); //Output: 29.6593457
-              print('obje');
             },
             child: const Text('Your Location')),
       ),

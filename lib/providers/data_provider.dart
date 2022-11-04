@@ -5,6 +5,7 @@ import 'package:social_media_services/model/get_child_service.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/model/get_language.dart';
+import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
 
 class DataProvider with ChangeNotifier {
@@ -56,6 +57,13 @@ class DataProvider with ChangeNotifier {
 
   void coupenCodeData(value) {
     coupenCodeModel = value;
+    notifyListeners();
+  }
+
+  SubServicesModel? subServicesModel;
+
+  void subServicesModelData(value) {
+    subServicesModel = value;
     notifyListeners();
   }
 }

@@ -12,7 +12,6 @@ import 'package:social_media_services/API/get_home.dart';
 import 'package:social_media_services/API/get_language.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/getLocalLanguage.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 
 Future<void> initPlatformState(BuildContext context) async {
@@ -42,7 +41,7 @@ Future<void> initPlatformState(BuildContext context) async {
 }
 
 gotoNextPage(BuildContext context) async {
-  getlocalLanguage(context);
+  // getlocalLanguage(context);
   await getLanguageData(context);
   await getCountriesData(context);
 

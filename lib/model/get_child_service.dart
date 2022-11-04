@@ -145,6 +145,8 @@ class Packages {
   String? validity;
   int? amount;
   int? offerPrice;
+  String? taxIds;
+  List<TaxDetails>? taxDetails;
 
   Packages(
       {this.id,
@@ -152,7 +154,9 @@ class Packages {
       this.packageDescription,
       this.validity,
       this.amount,
-      this.offerPrice});
+      this.offerPrice,
+      this.taxIds,
+      this.taxDetails});
 
   Packages.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -161,6 +165,13 @@ class Packages {
     validity = json['validity'];
     amount = json['amount'];
     offerPrice = json['offer_price'];
+    taxIds = json['tax_ids'];
+    if (json['tax_details'] != null) {
+      taxDetails = <TaxDetails>[];
+      json['tax_details'].forEach((v) {
+        taxDetails!.add(TaxDetails.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -171,6 +182,47 @@ class Packages {
     data['validity'] = validity;
     data['amount'] = amount;
     data['offer_price'] = offerPrice;
+    data['tax_ids'] = taxIds;
+    if (taxDetails != null) {
+      data['tax_details'] = taxDetails!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class TaxDetails {
+  int? id;
+  String? taxName;
+  int? percentage;
+  String? status;
+  String? createdAt;
+  String? updatedAt;
+
+  TaxDetails(
+      {this.id,
+      this.taxName,
+      this.percentage,
+      this.status,
+      this.createdAt,
+      this.updatedAt});
+
+  TaxDetails.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    taxName = json['tax_name'];
+    percentage = json['percentage'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['tax_name'] = taxName;
+    data['percentage'] = percentage;
+    data['status'] = status;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

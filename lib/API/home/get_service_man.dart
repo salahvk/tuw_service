@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'dart:developer';
 
@@ -8,13 +6,11 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/API/home/get_service_man.dart';
-import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/sub_service.dart';
+import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
-getSubService(BuildContext context, id) async {
+getServiceMan(BuildContext context, id) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
@@ -22,20 +18,21 @@ getSubService(BuildContext context, id) async {
   if (apiToken == null) return;
   try {
     var response = await http.post(
-        Uri.parse('$subServices?parent_service_id=$id'),
+        Uri.parse('$servicemanList?service_id=$id&page=1'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
+      navToServiceMan(context);
       if (jsonResponse['result'] == false) {
         await Hive.box("token").clear();
 
         return;
       }
 
-      final subServicesData = SubServicesModel.fromJson(jsonResponse);
-      provider.subServicesModelData(subServicesData);
-      selectServiceType(context, id);
+      // final subServicesData = SubServicesModel.fromJson(jsonResponse);
+      // provider.subServicesModelData(subServicesData);
+
     } else {
       // print(response.statusCode);
       // print(response.body);
@@ -46,13 +43,8 @@ getSubService(BuildContext context, id) async {
   }
 }
 
-selectServiceType(context, id) {
-  final provider = Provider.of<DataProvider>(context, listen: false);
-  if (provider.subServicesModel?.type == 'service') {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-      return const SubServicesPage();
-    }));
-  } else {
-    getServiceMan(context, id);
-  }
+navToServiceMan(context) {
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+    return const ServicerPage();
+  }));
 }

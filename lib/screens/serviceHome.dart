@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/home/get_subService.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:social_media_services/screens/servicer.dart';
+import 'package:social_media_services/utils/loading_page.dart';
 
 class ServiceHomePage extends StatelessWidget {
   ServiceHomePage({Key? key}) : super(key: key);
@@ -107,8 +108,14 @@ class ServiceHomePage extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (ctx) {
-                              return const ServicerPage();
+                              return LoadingListPage();
                             }));
+                            final id = homeData![index].id;
+                            getSubService(context, id);
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (ctx) {
+                            //   return const ServicerPage();
+                            // }));
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -181,4 +188,8 @@ class ServiceHomePage extends StatelessWidget {
       ),
     );
   }
+
+  // getSubServices() {
+  //   getSubServices();
+  // }
 }

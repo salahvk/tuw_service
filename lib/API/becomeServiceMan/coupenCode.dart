@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/coupenCode.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getCoupenCodeList(BuildContext context) async {
@@ -22,6 +23,31 @@ getCoupenCodeList(BuildContext context) async {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
+
+      final coupenCodeData = CoupenCode.fromJson(jsonResponse);
+      provider.coupenCodeData(coupenCodeData);
+      if (coupenCodeData.coupons!.isEmpty) {
+        showAnimatedSnackBar(context, 'No Coupen code available');
+      }
+    } else {}
+  } on Exception catch (_) {
+    showSnackBar("Something Went Wrong1", context);
+  }
+}
+
+checkCoupenCode(BuildContext context, code) async {
+  final provider = Provider.of<DataProvider>(context, listen: false);
+  final apiToken = Hive.box("token").get('api_token');
+  if (apiToken == null) return;
+  try {
+    var response = await http.post(Uri.parse('$checkCoupen$code'),
+        headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      log(response.body);
+      if (jsonResponse['result'] == false) {
+        showAnimatedSnackBar(context, jsonResponse['toast']);
+      }
 
       final coupenCodeData = CoupenCode.fromJson(jsonResponse);
       provider.coupenCodeData(coupenCodeData);

@@ -19,6 +19,7 @@ import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
@@ -582,20 +583,24 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
   }
 
   // * Fuctions
-
+// TODO Localistion add
   continueToPay() {
     final str = AppLocalizations.of(context)!;
-    isTickSelected
-        ? Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-            return const PaymentServicePage();
-          }))
-        : AnimatedSnackBar.material(str.c_snack,
-                type: AnimatedSnackBarType.warning,
-                borderRadius: BorderRadius.circular(6),
-                duration: const Duration(seconds: 1))
-            .show(
-            context,
-          );
+    if (!isTickSelected) {
+      AnimatedSnackBar.material(str.c_snack,
+              type: AnimatedSnackBarType.warning,
+              borderRadius: BorderRadius.circular(6),
+              duration: const Duration(seconds: 1))
+          .show(
+        context,
+      );
+    } else if (selectedValue == null) {
+      showAnimatedSnackBar(context, 'Please Choose a Service Group');
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+        return const PaymentServicePage();
+      }));
+    }
   }
 
   getChildData() async {

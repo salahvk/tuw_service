@@ -18,7 +18,7 @@ class SubServicesPage extends StatelessWidget {
     final str = AppLocalizations.of(context)!;
     final w = MediaQuery.of(context).size.width;
     final provider = Provider.of<DataProvider>(context, listen: false);
-    final homeData = provider.homeModel?.services;
+    final homeData = provider.subServicesModel?.subservices;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
