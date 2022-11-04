@@ -66,4 +66,8 @@ class DataProvider with ChangeNotifier {
     subServicesModel = value;
     notifyListeners();
   }
+
+  String gender = 'male';
+  int? serviceId;
+  // String country
 }

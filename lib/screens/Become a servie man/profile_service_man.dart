@@ -72,6 +72,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     final mob = Responsive.isMobile(context);
+    final provider = Provider.of<DataProvider>(context, listen: false);
 
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -257,6 +258,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                         children: [
                                           InkWell(
                                             onTap: () {
+                                              provider.gender = 'male';
+                                              print(provider.gender);
                                               setState(() {
                                                 value = true;
                                               });
@@ -269,6 +272,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                           TitleWidget(name: str.p_male),
                                           InkWell(
                                             onTap: () {
+                                              provider.gender = 'female';
+                                              print(provider.gender);
                                               setState(() {
                                                 value = false;
                                               });

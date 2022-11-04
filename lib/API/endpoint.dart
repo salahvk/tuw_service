@@ -19,5 +19,5 @@ const String customerParentService = '$api/parentservices';
 const String customerChildService = '$api/childservices';
 const String subServices = '$api/subservices';
 const String servicemanList = '$api/servicemanlist';
-const String placeOrder = '$api/place-order?';
+const String placeOrderApi = '$api/place-order?';
 const String paymentSuccess = '$api/update/payment-status';

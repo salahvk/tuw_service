@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,14 +9,17 @@ import 'package:hive/hive.dart';
 
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/coupenCode.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/demo/payment_selection.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
@@ -21,6 +27,7 @@ import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
+import 'package:http/http.dart' as http;
 
 class PaymentServicePage extends StatefulWidget {
   const PaymentServicePage({Key? key}) : super(key: key);
@@ -675,9 +682,11 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
       showAnimatedSnackBar(context, "Please Enter Card Expiry Date");
     } else if (PaymentServiceControllers.cvvCodeController.text.isEmpty) {
       showAnimatedSnackBar(context, "Please Enter Your CVV Number");
+    } else if (packageStatus == PackageStatus.none) {
+      showAnimatedSnackBar(context, "Please Choose a package to continue");
     } else {
       FocusManager.instance.primaryFocus?.unfocus();
-
+      placeOrder(context);
       // Navigator.pushNamedAndRemoveUntil(
       //     context, Routes.paymentSuccessfull, (route) => false);
     }
@@ -699,6 +708,50 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     setState(() {
       coupenLoading = false;
     });
+  }
+
+  placeOrder(BuildContext context) async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final apiToken = Hive.box("token").get('api_token');
+    if (apiToken == null) return;
+    // final url =
+    //     "${paymentSuccess}firstname=${ProfileServiceControllers.firstNameController}&lastname=${ProfileServiceControllers.lastNameController}&civil_card_no=${ProfileServiceControllers.civilCardController}&dob=${ProfileServiceControllers.dateController}&gender=female&country_id=101&state=kerala&region=sdf&address=dfsdf&package_id=40&service_id=12&coupon_code=ABC&total_amount=100.00&total_tax_amount=0.00&coupon_discount=0.00&grand_total=100.00";
+    final firstName = ProfileServiceControllers.firstNameController.text;
+    final lastName = ProfileServiceControllers.lastNameController.text;
+    final civilCardNo = ProfileServiceControllers.civilCardController.text;
+    final dob = ProfileServiceControllers.dateController.text;
+    final gender = provider.gender;
+    final state = ProfileServiceControllers.stateController.text;
+    final region = ProfileServiceControllers.regionController.text;
+    final address = ProfileServiceControllers.addressController.text;
+    final serviceId = provider.serviceId;
+    final coupenCode = PaymentServiceControllers.couponController.text;
+    final url =
+        '${placeOrderApi}firstname=$firstName&lastname=$lastName&civil_card_no=$civilCardNo&dob=$dob&gender=$gender&country_id=101&state=$state&region=$region&address=$address&package_id=40&service_id=$serviceId&coupon_code=$coupenCode&total_amount=100.00&total_tax_amount=0.00&coupon_discount=0.00&grand_total=$grandTotal';
+    try {
+      print(url);
+      var response = await http.post(Uri.parse(url), headers: {
+        "device-id": provider.deviceId ?? '',
+        "api-token": apiToken
+      });
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        log(response.body);
+        if (jsonResponse['result'] == true) {
+          print('true');
+          showSnackBar(jsonResponse['message'], context);
+          Navigator.push(context, MaterialPageRoute(builder: ((context) {
+            return const PaymentSelection();
+          })));
+        }
+        // final childData = ChildServiceModel.fromJson(jsonResponse);
+        // provider.childModelData(childData);
+      } else {
+        showSnackBar("Something Went Wrong2", context);
+      }
+    } on Exception catch (_) {
+      showSnackBar("Something Went Wrong1", context);
+    }
   }
 }
 

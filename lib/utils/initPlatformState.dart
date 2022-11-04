@@ -13,6 +13,7 @@ import 'package:social_media_services/API/get_language.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/API/viewProfile.dart';
+import 'package:social_media_services/utils/getLocalLanguage.dart';
 
 Future<void> initPlatformState(BuildContext context) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
@@ -51,6 +52,7 @@ gotoNextPage(BuildContext context) async {
 }
 
 gotoHomePage(BuildContext context) async {
+  getlocalLanguage(context);
   Timer(const Duration(seconds: 1), () {
     Navigator.pushReplacementNamed(context, Routes.homePage);
   });

@@ -3,6 +3,7 @@ class ImageAssets {
   static const String paperPlaneSvg = 'assets/paper-plane.svg';
   static const String profileIcon = 'assets/profile_icon.png';
   static const String paymentSuccess = 'assets/payment_success.json';
+  static const String paymentFailure = 'assets/payment_failure.json';
   static const String tools = 'assets/tools.png';
   static const String car = 'assets/car.png';
   static const String scooter = 'assets/scooter.png';

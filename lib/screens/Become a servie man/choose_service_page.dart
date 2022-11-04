@@ -234,11 +234,15 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                               selectedValue?.service ?? ''),
                                         ),
                                   onChanged: (value) async {
+                                    // provider.serviceId =
+
                                     setState(() {
                                       selectedValue = value as Services;
                                       childGroup.clear();
                                       childSelectedValue = null;
                                     });
+                                    provider.serviceId = selectedValue?.id;
+                                    print(provider.serviceId);
                                     await getChildData();
                                     setState(() {
                                       isChild = provider.customerChildSer!
