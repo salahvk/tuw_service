@@ -5,7 +5,9 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -57,6 +59,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final provider = Provider.of<DataProvider>(context, listen: false);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -191,13 +194,13 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                                 const SizedBox(
                                                   height: 8,
                                                 ),
-                                                Text(
-                                                  "Transaction no : #123456789",
-                                                  style: getRegularStyle(
-                                                      color: ColorManager
-                                                          .paymentPageColor1,
-                                                      fontSize: 16),
-                                                ),
+                                                // Text(
+                                                //   "Transaction no : #123456789",
+                                                //   style: getRegularStyle(
+                                                //       color: ColorManager
+                                                //           .paymentPageColor1,
+                                                //       fontSize: 16),
+                                                // ),
                                               ],
                                             )),
                                       ],
@@ -223,7 +226,17 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                               height: 30,
                             ),
                             PaymentListTile(
-                                text1: str.su_date, text2: '25/08/2022'),
+                                text1: "Subscription Date",
+                                text2: provider.paymentSuccess?.subscription
+                                        ?.subscriptionDate ??
+                                    ''),
+                            PaymentListTile(
+                              text1: str.su_exp,
+                              text2: provider.paymentSuccess?.subscription
+                                      ?.expiryDate ??
+                                  '',
+                            ),
+// str.su_date
                             PaymentListTile(
                                 text1: str.su_service_fee,
                                 text2: "\$135.00 OMR"),
@@ -236,12 +249,11 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                             ),
                             PaymentListTile(
                               text1: str.su_mobile,
-                              text2: '+968 9526 123456',
+                              text2: provider
+                                      .viewProfileModel?.userdetails?.phone ??
+                                  '',
                             ),
-                            PaymentListTile(
-                              text1: str.su_exp,
-                              text2: '25/09/2022',
-                            ),
+
                             const SizedBox(
                               height: 30,
                             ),

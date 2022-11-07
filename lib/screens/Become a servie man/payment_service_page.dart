@@ -15,6 +15,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/demo/payment_selection.dart';
+import 'package:social_media_services/model/place_order.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -45,6 +46,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
 
   bool coupenLoading = false;
   bool value = true;
+  bool isPaymentLoading = false;
 
   DateTime selectedDate = DateTime.now();
 
@@ -52,6 +54,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   int taxTotal = 0;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   double grandTotal = 0;
+  double taxTotalAmount = 0;
+
   String lang = '';
 
   @override
@@ -387,12 +391,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            packageStatus = PackageStatus.first;
-                                          });
-                                          print(packageStatus);
-                                        },
+                                        onTap: chooseFirstPackage,
                                         child: MonthlyPlan(
                                           size: size,
                                           plan: provider.customerChildSer
@@ -411,13 +410,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            packageStatus =
-                                                PackageStatus.second;
-                                          });
-                                          print(packageStatus);
-                                        },
+                                        onTap: chooseSecondPackage,
                                         child: MonthlyPlan(
                                           size: size,
                                           plan: provider.customerChildSer
@@ -514,9 +507,13 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                       .percentage ??
                                                   0;
                                               grandTotal =
-                                                  (package?.offerPrice)! -
+                                                  (package?.offerPrice)! +
                                                       ((package?.offerPrice)! /
                                                           taxTotal);
+                                              taxTotalAmount =
+                                                  (package?.offerPrice)! /
+                                                      taxTotal;
+
                                               setState(() {});
                                             });
                                             return Padding(
@@ -604,10 +601,15 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                   padding:
                                       const EdgeInsets.fromLTRB(28, 0, 28, 0)),
                               onPressed: onContinue,
-                              child: Text(str.ps_pay,
-                                  style: getRegularStyle(
-                                      color: ColorManager.whiteText,
-                                      fontSize: 16))),
+                              child: !isPaymentLoading
+                                  ? Text(str.ps_pay,
+                                      style: getRegularStyle(
+                                          color: ColorManager.whiteText,
+                                          fontSize: 16))
+                                  : const SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: CircularProgressIndicator())),
                         ],
                       )
                     ],
@@ -673,6 +675,29 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     }
   }
 
+// * Functions
+
+  chooseFirstPackage() {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+
+    setState(() {
+      packageStatus = PackageStatus.first;
+    });
+    provider.packageId = provider.customerChildSer?.packages![0].id;
+    print(provider.customerChildSer?.packages![0].id);
+    provider.packageAmount = provider.customerChildSer?.packages![0].amount;
+  }
+
+  chooseSecondPackage() {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    setState(() {
+      packageStatus = PackageStatus.second;
+    });
+    provider.packageId = provider.customerChildSer?.packages![1].id;
+    print(provider.customerChildSer?.packages![1].id);
+    provider.packageAmount = provider.customerChildSer?.packages![1].amount;
+  }
+
   onContinue() {
     if (PaymentServiceControllers.cardHolderController.text.isEmpty) {
       showAnimatedSnackBar(context, "Please Enter A Card Holder Name");
@@ -711,6 +736,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   }
 
   placeOrder(BuildContext context) async {
+    setState(() {
+      isPaymentLoading = true;
+    });
     final provider = Provider.of<DataProvider>(context, listen: false);
     final apiToken = Hive.box("token").get('api_token');
     if (apiToken == null) return;
@@ -726,8 +754,11 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     final address = ProfileServiceControllers.addressController.text;
     final serviceId = provider.serviceId;
     final coupenCode = PaymentServiceControllers.couponController.text;
+    final countryId = provider.selectedCountryId ??
+        provider.viewProfileModel?.userdetails?.countryId;
+    final packageId = provider.packageId;
     final url =
-        '${placeOrderApi}firstname=$firstName&lastname=$lastName&civil_card_no=$civilCardNo&dob=$dob&gender=$gender&country_id=101&state=$state&region=$region&address=$address&package_id=40&service_id=$serviceId&coupon_code=$coupenCode&total_amount=100.00&total_tax_amount=0.00&coupon_discount=0.00&grand_total=$grandTotal';
+        '${placeOrderApi}firstname=$firstName&lastname=$lastName&civil_card_no=$civilCardNo&dob=$dob&gender=$gender&country_id=${countryId.toString()}&state=$state&region=$region&address=$address&package_id=$packageId&service_id=$serviceId&coupon_code=$coupenCode&total_amount=${provider.packageAmount}&total_tax_amount=$taxTotalAmount&coupon_discount=0.00&grand_total=$grandTotal';
     try {
       print(url);
       var response = await http.post(Uri.parse(url), headers: {
@@ -739,10 +770,22 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         log(response.body);
         if (jsonResponse['result'] == true) {
           print('true');
+
           showSnackBar(jsonResponse['message'], context);
           Navigator.push(context, MaterialPageRoute(builder: ((context) {
             return const PaymentSelection();
           })));
+          setState(() {
+            isPaymentLoading = false;
+          });
+
+          final placeOrderData = PlaceOrder.fromJson(jsonResponse);
+          provider.getPlaceOrderData(placeOrderData);
+        } else {
+          showSnackBar("Something Went Wrong", context);
+          setState(() {
+            isPaymentLoading = false;
+          });
         }
         // final childData = ChildServiceModel.fromJson(jsonResponse);
         // provider.childModelData(childData);

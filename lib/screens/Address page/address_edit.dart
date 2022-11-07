@@ -161,6 +161,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             height: 5,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 provider.viewProfileModel?.userdetails

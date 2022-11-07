@@ -11,6 +11,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/messagePage.dart';
@@ -41,6 +42,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
   String lang = '';
   List<String> r3 = [];
   FocusNode nfocus = FocusNode();
+  List<Countries> r = [];
 
   @override
   void initState() {
@@ -355,6 +357,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                             setState(() {
                                               selectedValue = value as String;
                                             });
+                                            s(selectedValue);
                                           },
                                           buttonHeight: 40,
                                           dropdownMaxHeight: h * .6,
@@ -682,5 +685,29 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     ProfileServiceControllers.stateController.text = fieldData?.state ?? '';
 
     ProfileServiceControllers.regionController.text = fieldData?.region ?? '';
+  }
+
+  s(filter) {
+    setState(() {
+      r = [];
+    });
+    // print(filter);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    provider.countriesModel?.countries?.forEach((element) {
+      final m = element.countryName?.contains(filter);
+
+      if (m == true) {
+        if (selectedValue != element.countryName) {
+          return;
+        }
+        setState(() {
+          // r = [];
+          r.add(element);
+        });
+        print(r[0].countryId);
+        print(r[0].countryName);
+        provider.selectedCountryId = r[0].countryId;
+      }
+    });
   }
 }

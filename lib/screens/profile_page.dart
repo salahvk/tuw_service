@@ -148,9 +148,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: getBoldtStyle(
                             color: ColorManager.black, fontSize: 20)),
                   ),
-                  // Text('#1845678',
-                  //     style: getRegularStyle(
-                  //         color: const Color(0xff6e6e6e), fontSize: 14)),
+                  Text(provider.viewProfileModel?.userdetails?.phone ?? '',
+                      style: getRegularStyle(
+                          color: const Color(0xff6e6e6e), fontSize: 14)),
                 ],
               )),
           InkWell(

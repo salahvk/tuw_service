@@ -155,6 +155,7 @@ class _AddressPageState extends State<AddressPage> {
                             height: 5,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 provider.viewProfileModel?.userdetails
