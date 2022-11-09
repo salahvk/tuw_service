@@ -48,6 +48,7 @@ class Userdetails {
   String? createdAt;
   String? updatedAt;
   String? countryName;
+  String? userType;
 
   Userdetails(
       {this.id,
@@ -72,7 +73,8 @@ class Userdetails {
       this.languageId,
       this.createdAt,
       this.updatedAt,
-      this.countryName});
+      this.countryName,
+      this.userType});
 
   Userdetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -98,6 +100,7 @@ class Userdetails {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     countryName = json['country_name'];
+    userType = json['user_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -125,6 +128,7 @@ class Userdetails {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['country_name'] = countryName;
+    data['user_type'] = userType;
     return data;
   }
 }

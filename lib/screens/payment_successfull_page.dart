@@ -236,21 +236,39 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                       ?.expiryDate ??
                                   '',
                             ),
+                            PaymentListTile(
+                              text1: 'Order Id',
+                              text2: provider.paymentSuccess?.subscription?.id
+                                      .toString() ??
+                                  '',
+                            ),
+                            PaymentListTile(
+                              text1: 'Package Id',
+                              text2: provider.paymentSuccess?.packageInfo?.id
+                                      .toString() ??
+                                  '',
+                            ),
 // str.su_date
                             PaymentListTile(
                                 text1: str.su_service_fee,
-                                text2: "\$135.00 OMR"),
+                                text2: provider.paymentSuccess?.orderDetails
+                                        ?.totalAmount ??
+                                    ''),
                             PaymentListTile(
-                                text1: str.su_discount,
-                                text2: '\$7.00 OMR = 5%'),
+                                text1: 'Tax Amount',
+                                text2: provider.paymentSuccess?.orderDetails
+                                        ?.totalTaxAmount ??
+                                    ''),
                             PaymentListTile(
-                              text1: str.su_vat,
-                              text2: '\$12.00 OMR = 8%',
+                              text1: 'Coupen Discount',
+                              text2: provider.paymentSuccess?.orderDetails
+                                      ?.couponDiscount ??
+                                  '',
                             ),
                             PaymentListTile(
-                              text1: str.su_mobile,
-                              text2: provider
-                                      .viewProfileModel?.userdetails?.phone ??
+                              text1: 'Grand Total (With discount)',
+                              text2: provider.paymentSuccess?.orderDetails
+                                      ?.grandTotal ??
                                   '',
                             ),
 

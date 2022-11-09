@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/API/logout.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/utils/initPlatformState.dart';
@@ -32,6 +34,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
+    final provider = Provider.of<DataProvider>(context, listen: false);
 
     return DrawerHeader(
         decoration: BoxDecoration(
@@ -62,10 +65,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 }));
               },
             ),
-            CustomDrawerList(
-              title: str.d_become,
-              onTap: becomeService,
-            ),
+            provider.viewProfileModel?.userdetails?.userType == 'customer'
+                ? CustomDrawerList(
+                    title: str.d_become,
+                    onTap: becomeService,
+                  )
+                : Container(),
             CustomDrawerList(
               title: str.d_privacy,
               onTap: () {

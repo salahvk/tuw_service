@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -64,9 +66,6 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   getCoupenCodeList(context);
-    // });
   }
 
   @override
@@ -345,30 +344,6 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                     ],
                                   ),
                                 ),
-                                // suffix: status == IsCodeAvailable.searching
-                                //     ? const SizedBox(
-                                //         width: 25,
-                                //         height: 25,
-                                //         child: CircularProgressIndicator(
-                                //           strokeWidth: 3,
-                                //         ))
-                                //     : status == IsCodeAvailable.available
-                                //         ? const SizedBox(
-                                //             width: 25,
-                                //             height: 25,
-                                //             child: Icon(
-                                //               Icons.done,
-                                //               color: ColorManager.primary,
-                                //             ))
-                                //         : status == IsCodeAvailable.notAvailable
-                                //             ? const SizedBox(
-                                //                 width: 25,
-                                //                 height: 30,
-                                //                 child: Icon(
-                                //                   Icons.close,
-                                //                   color: ColorManager.errorRed,
-                                //                 ))
-                                //             : null,
                                 hintText: str.ps_coupon_h,
                                 hintStyle: getRegularStyle(
                                     color: const Color.fromARGB(

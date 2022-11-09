@@ -6,11 +6,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
@@ -29,11 +31,11 @@ class UserAddressEdit extends StatefulWidget {
 }
 
 class _UserAddressEditState extends State<UserAddressEdit> {
-  String? selectedValue;
+  Countries? selectedValue;
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
-  List<String> r2 = [];
+  List<Countries> r2 = [];
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
       int? n = provider.countriesModel?.countries?.length;
       int i = 0;
       while (i < n!.toInt()) {
-        r2.add(provider.countriesModel!.countries![i].countryName!);
+        r2.add(provider.countriesModel!.countries![i]);
         i++;
       }
     });
@@ -369,7 +371,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 10, 0, 10),
                                   child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2(
+                                    child: DropdownButton2<Countries>(
                                         isExpanded: true,
                                         icon: const Icon(
                                           Icons.keyboard_arrow_down,
@@ -383,19 +385,65 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                                 fontSize: 15)),
                                         items: r2
                                             .map((item) =>
-                                                DropdownMenuItem<String>(
+                                                DropdownMenuItem<Countries>(
                                                   value: item,
-                                                  child: Text(item,
-                                                      style: getRegularStyle(
-                                                          color: ColorManager
-                                                              .black,
-                                                          fontSize: 15)),
+                                                  child: Row(
+                                                    children: [
+                                                      CachedNetworkImage(
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Container(
+                                                                width: 25,
+                                                                height: 20,
+                                                                color: ColorManager
+                                                                    .whiteColor,
+                                                              ),
+                                                          imageBuilder: (context,
+                                                                  imageProvider) =>
+                                                              Container(
+                                                                width: 25,
+                                                                height: 20,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  // shape: BoxShape.circle,
+                                                                  image: DecorationImage(
+                                                                      image:
+                                                                          imageProvider,
+                                                                      fit: BoxFit
+                                                                          .cover),
+                                                                ),
+                                                              ),
+                                                          // width: 90,
+                                                          progressIndicatorBuilder:
+                                                              (context, url,
+                                                                  progress) {
+                                                            return Container(
+                                                              color:
+                                                                  ColorManager
+                                                                      .black,
+                                                            );
+                                                          },
+                                                          imageUrl:
+                                                              '$endPoint${item.countryflag}'),
+                                                      const SizedBox(
+                                                        width: 4,
+                                                      ),
+                                                      Text(
+                                                          item.countryName ??
+                                                              '',
+                                                          style: getRegularStyle(
+                                                              color:
+                                                                  ColorManager
+                                                                      .black,
+                                                              fontSize: 15)),
+                                                    ],
+                                                  ),
                                                 ))
                                             .toList(),
-                                        value: selectedValue,
+                                        // value: selectedValue,
                                         onChanged: (value) {
                                           setState(() {
-                                            selectedValue = value as String;
+                                            selectedValue = value as Countries;
                                           });
                                         },
                                         buttonHeight: 40,
@@ -438,8 +486,24 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                             ),
                                           ),
                                         ),
+                                        customButton: selectedValue == null
+                                            ? null
+                                            : Row(
+                                                children: [
+                                                  Center(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          10, 0, 10, 0),
+                                                      child: Text(selectedValue
+                                                              ?.countryName ??
+                                                          ''),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                         searchMatchFn: (item, searchValue) {
-                                          return (item.value
+                                          return (item.value.countryName
                                               .toString()
                                               .toLowerCase()
                                               .contains(searchValue));

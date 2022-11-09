@@ -21,7 +21,6 @@ viewProfile(BuildContext context) async {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
       var viewProfileData = ViewProfileModel.fromJson(jsonResponse);
-      print('finished');
       provider.viewProfileData(viewProfileData);
     } else {
       // ignore: use_build_context_synchronously

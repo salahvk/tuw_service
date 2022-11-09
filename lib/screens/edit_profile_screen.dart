@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -44,13 +45,15 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   FocusNode dobfocus = FocusNode();
 
   int _selectedIndex = 2;
-  Timer? _debounce;
 
   String lang = '';
   int? countryid;
   String gender = 'male';
 
-  List<Countries> r1 = [];
+  List<Countries> r = [];
+
+  String? selectedValue;
+  List<String> r3 = [];
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
 
   bool loading = false;
@@ -61,12 +64,20 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    r1.clear();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // print(timeStamp);
       final provider = Provider.of<DataProvider>(context, listen: false);
-      r1 = (provider.countriesModel!.countries)!;
+      int? n = provider.countriesModel?.countries?.length;
+      int i = 0;
+      while (i < n!.toInt()) {
+        r3.add(provider.countriesModel!.countries![i].countryName!);
+        i++;
+      }
+      // fillFields(provider);
       viewProfile(context);
+      setState(() {});
+      // getCustomerParent(context);
     });
   }
 
@@ -374,6 +385,57 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: TitleWidget(name: str.e_country),
                           ),
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          //   child: Container(
+                          //     decoration: BoxDecoration(
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           blurRadius: 10.0,
+                          //           color: Colors.grey.shade300,
+                          //           // offset: const Offset(5, 8.5),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     child: TextField(
+                          //       // onTap: () {
+                          //       //   setState(() {
+                          //       //     isPickerSelected = true;
+                          //       //   });
+                          //       // },
+                          //       onChanged: (value) async {
+                          //         setState(() {
+                          //           isPickerSelected = true;
+                          //         });
+                          //         String capitalize(String s) =>
+                          //             s[0].toUpperCase() + s.substring(1);
+
+                          //         if (value.isEmpty) {
+                          //           r1 = [];
+                          //           setState(() {
+                          //             r1 =
+                          //                 (provider.countriesModel!.countries)!;
+                          //           });
+                          //         } else {
+                          //           final lower = capitalize(value);
+
+                          //           onSearchChanged(lower);
+                          //         }
+
+                          //         // print(r);
+                          //       },
+                          //       style: const TextStyle(),
+                          //       controller:
+                          //           EditProfileControllers.countryController,
+                          //       decoration: InputDecoration(
+                          //           hintText: str.e_country_h,
+                          //           hintStyle: getRegularStyle(
+                          //               color: const Color.fromARGB(
+                          //                   255, 173, 173, 173),
+                          //               fontSize: mob ? 15 : 10)),
+                          //     ),
+                          //   ),
+                          // ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -386,42 +448,103 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                   ),
                                 ],
                               ),
-                              child: TextField(
-                                // onTap: () {
-                                //   setState(() {
-                                //     isPickerSelected = true;
-                                //   });
-                                // },
-                                onChanged: (value) async {
-                                  setState(() {
-                                    isPickerSelected = true;
-                                  });
-                                  String capitalize(String s) =>
-                                      s[0].toUpperCase() + s.substring(1);
-
-                                  if (value.isEmpty) {
-                                    r1 = [];
-                                    setState(() {
-                                      r1 =
-                                          (provider.countriesModel!.countries)!;
-                                    });
-                                  } else {
-                                    final lower = capitalize(value);
-
-                                    onSearchChanged(lower);
-                                  }
-
-                                  // print(r);
-                                },
-                                style: const TextStyle(),
-                                controller:
-                                    EditProfileControllers.countryController,
-                                decoration: InputDecoration(
-                                    hintText: str.e_country_h,
-                                    hintStyle: getRegularStyle(
-                                        color: const Color.fromARGB(
-                                            255, 173, 173, 173),
-                                        fontSize: mob ? 15 : 10)),
+                              child: Container(
+                                width: size.width,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    color: ColorManager.whiteColor,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2(
+                                        isExpanded: true,
+                                        focusNode: nfocus,
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: 35,
+                                          color: ColorManager.black,
+                                        ),
+                                        hint: Text(str.ae_country_h,
+                                            style: getRegularStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 173, 173, 173),
+                                                fontSize: 15)),
+                                        items: r3
+                                            .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(item,
+                                                      style: getRegularStyle(
+                                                          color: ColorManager
+                                                              .black,
+                                                          fontSize: 15)),
+                                                ))
+                                            .toList(),
+                                        value: selectedValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedValue = value as String;
+                                          });
+                                          s(selectedValue);
+                                        },
+                                        buttonHeight: 40,
+                                        dropdownMaxHeight: h * .6,
+                                        // buttonWidth: 140,
+                                        itemHeight: 40,
+                                        buttonPadding:
+                                            const EdgeInsets.fromLTRB(
+                                                12, 0, 8, 0),
+                                        // dropdownWidth: size.width,
+                                        itemPadding: const EdgeInsets.fromLTRB(
+                                            12, 0, 12, 0),
+                                        searchController: AddressEditControllers
+                                            .searchController,
+                                        searchInnerWidget: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 4,
+                                            right: 8,
+                                            left: 8,
+                                          ),
+                                          child: TextFormField(
+                                            controller: AddressEditControllers
+                                                .searchController,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10,
+                                                vertical: 8,
+                                              ),
+                                              // TODO: localisation
+                                              hintText: 'Search a country',
+                                              hintStyle:
+                                                  const TextStyle(fontSize: 12),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        searchMatchFn: (item, searchValue) {
+                                          return (item.value
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(searchValue));
+                                        },
+                                        //This to clear the search value when you close the menu
+                                        onMenuStateChange: (isOpen) {
+                                          if (!isOpen) {
+                                            AddressEditControllers
+                                                .searchController
+                                                .clear();
+                                          }
+                                        }),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -596,101 +719,101 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                         ],
                       ),
                     ),
-                    isPickerSelected
-                        ? Positioned(
-                            top: mob ? size.height * .53 : 410,
-                            // top: size.height * .458,
-                            right: lang == 'ar' ? size.width * .05 : null,
-                            left: lang != 'ar' ? size.width * .05 : null,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.grey.shade300,
-                                    offset: const Offset(3, 8.5),
-                                  ),
-                                ],
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(6),
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: ColorManager.primary2,
-                                  ),
-                                  height: 110,
-                                  width: 160,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: ListView.builder(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 0, 0),
-                                            itemCount: r1.length,
-                                            itemBuilder: (ctx, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    countryid =
-                                                        r1[index].countryId;
-                                                    r1 = (provider
-                                                        .countriesModel!
-                                                        .countries)!;
-                                                    isPickerSelected = false;
-                                                  });
-                                                },
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      countryid =
-                                                          r1[index].countryId;
-                                                      EditProfileControllers
-                                                          .countryController
-                                                          .text = r1[index]
-                                                              .countryName ??
-                                                          '';
-                                                      isPickerSelected = false;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    height: 25,
-                                                    color:
-                                                        ColorManager.primary2,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          10, 0, 5, 0),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                              r1[index]
-                                                                      .countryName ??
-                                                                  '',
-                                                              style: getSemiBoldtStyle(
-                                                                  color: ColorManager.background,
-                                                                  fontSize: r1[index].countryName!.length < 12
-                                                                      ? 12
-                                                                      : r1[index].countryName!.length < 20
-                                                                          ? 10
-                                                                          : r1[index].countryName!.length > 25
-                                                                              ? 8
-                                                                              : 10)),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container()
+                    // isPickerSelected
+                    //     ? Positioned(
+                    //         top: mob ? size.height * .53 : 410,
+                    //         // top: size.height * .458,
+                    //         right: lang == 'ar' ? size.width * .05 : null,
+                    //         left: lang != 'ar' ? size.width * .05 : null,
+                    //         child: Container(
+                    //           decoration: BoxDecoration(
+                    //             boxShadow: [
+                    //               BoxShadow(
+                    //                 blurRadius: 10.0,
+                    //                 color: Colors.grey.shade300,
+                    //                 offset: const Offset(3, 8.5),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //           child: ClipRRect(
+                    //             borderRadius: BorderRadius.circular(6),
+                    //             child: Container(
+                    //               decoration: const BoxDecoration(
+                    //                 color: ColorManager.primary2,
+                    //               ),
+                    //               height: 110,
+                    //               width: 160,
+                    //               child: Column(
+                    //                 mainAxisAlignment: MainAxisAlignment.start,
+                    //                 children: [
+                    //                   Expanded(
+                    //                     child: ListView.builder(
+                    //                         padding: const EdgeInsets.fromLTRB(
+                    //                             0, 0, 0, 0),
+                    //                         itemCount: r1.length,
+                    //                         itemBuilder: (ctx, index) {
+                    //                           return InkWell(
+                    //                             onTap: () {
+                    //                               setState(() {
+                    //                                 countryid =
+                    //                                     r1[index].countryId;
+                    //                                 r1 = (provider
+                    //                                     .countriesModel!
+                    //                                     .countries)!;
+                    //                                 isPickerSelected = false;
+                    //                               });
+                    //                             },
+                    //                             child: InkWell(
+                    //                               onTap: () {
+                    //                                 setState(() {
+                    //                                   countryid =
+                    //                                       r1[index].countryId;
+                    //                                   EditProfileControllers
+                    //                                       .countryController
+                    //                                       .text = r1[index]
+                    //                                           .countryName ??
+                    //                                       '';
+                    //                                   isPickerSelected = false;
+                    //                                 });
+                    //                               },
+                    //                               child: Container(
+                    //                                 height: 25,
+                    //                                 color:
+                    //                                     ColorManager.primary2,
+                    //                                 child: Padding(
+                    //                                   padding: const EdgeInsets
+                    //                                           .fromLTRB(
+                    //                                       10, 0, 5, 0),
+                    //                                   child: Row(
+                    //                                     children: [
+                    //                                       Text(
+                    //                                           r1[index]
+                    //                                                   .countryName ??
+                    //                                               '',
+                    //                                           style: getSemiBoldtStyle(
+                    //                                               color: ColorManager.background,
+                    //                                               fontSize: r1[index].countryName!.length < 12
+                    //                                                   ? 12
+                    //                                                   : r1[index].countryName!.length < 20
+                    //                                                       ? 10
+                    //                                                       : r1[index].countryName!.length > 25
+                    //                                                           ? 8
+                    //                                                           : 10)),
+                    //                                     ],
+                    //                                   ),
+                    //                                 ),
+                    //                               ),
+                    //                             ),
+                    //                           );
+                    //                         }),
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : Container()
                   ],
                 ),
               ),
@@ -732,12 +855,14 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     final dob = EditProfileControllers.dateController.text;
     final country = EditProfileControllers.countryController.text;
     if (firstname.isEmpty) {
-      showAnimatedSnackBar(context, "First Name field is requires");
-    } else if (lastname.isEmpty) {
-      showAnimatedSnackBar(context, "Last Name field is requires");
-    } else if (dob.isEmpty) {
+      showAnimatedSnackBar(context, "The name field is required");
+    }
+    //  else if (lastname.isEmpty) {
+    //   showAnimatedSnackBar(context, "Last Name field is requires");
+    // }
+    else if (dob.isEmpty) {
       showAnimatedSnackBar(context, "DOB field can not be empty");
-    } else if (country.isEmpty) {
+    } else if (countryid == null) {
       showAnimatedSnackBar(context, "Country field can not be empty");
     } else {
       setState(() {
@@ -760,7 +885,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     try {
       var response = await http.post(
           Uri.parse(
-              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$state&country_id=$countryid&state=$region&lastname=$lastname"),
+              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$state&country_id=${countryid.toString()}&state=$region&lastname=$lastname"),
           headers: {
             "device-id": provider.deviceId ?? '',
             "api-token": apiToken
@@ -786,38 +911,38 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     }));
   }
 
-  onSearchChanged(String query) {
-    setState(() {
-      r1 = [];
-    });
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(microseconds: 200), () {
-      s(query);
-    });
-  }
+  // onSearchChanged(String query) {
+  //   setState(() {
+  //     r1 = [];
+  //   });
+  //   if (_debounce?.isActive ?? false) _debounce?.cancel();
+  //   _debounce = Timer(const Duration(microseconds: 200), () {
+  //     s(query);
+  //   });
+  // }
 
-  s(filter) {
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    provider.countriesModel?.countries?.forEach((element) {
-      final m = element.countryName?.contains(filter);
+  // s(filter) {
+  //   final provider = Provider.of<DataProvider>(context, listen: false);
+  //   provider.countriesModel?.countries?.forEach((element) {
+  //     final m = element.countryName?.contains(filter);
 
-      if (m == true) {
-        setState(() {
-          // r = [];
-          r1.add(element);
-        });
-      }
+  //     if (m == true) {
+  //       setState(() {
+  //         // r = [];
+  //         r1.add(element);
+  //       });
+  //     }
 
-      final phoneCode = element.phonecode?.toString().contains(filter);
+  //     final phoneCode = element.phonecode?.toString().contains(filter);
 
-      if (phoneCode == true) {
-        setState(() {
-          // r = [];
-          r1.add(element);
-        });
-      }
-    });
-  }
+  //     if (phoneCode == true) {
+  //       setState(() {
+  //         // r = [];
+  //         r1.add(element);
+  //       });
+  //     }
+  //   });
+  // }
 
   // viewProfile() async {
   //   print("view profile");
@@ -846,4 +971,30 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   //     showSnackBar("Something Went Wrong1", context);
   //   }
   // }
+
+  s(filter) {
+    setState(() {
+      r = [];
+    });
+    // print(filter);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    provider.countriesModel?.countries?.forEach((element) {
+      final m = element.countryName?.contains(filter);
+
+      if (m == true) {
+        if (selectedValue != element.countryName) {
+          return;
+        }
+        setState(() {
+          // r = [];
+          r.add(element);
+        });
+        countryid = r[0].countryId;
+
+        print(countryid);
+        print(r[0].countryName);
+        provider.selectedCountryId = r[0].countryId;
+      }
+    });
+  }
 }

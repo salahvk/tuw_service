@@ -179,5 +179,12 @@
     "sd_status":"Service Status",  
     "sd_available":"Available Transport:",
     "sd_type":"Service Type:",
-    "sd_reset":"Reset"
+    "sd_reset":"Reset",
+
+    "ps_snack_card":"Please Enter A Card Holder Name",
+    "ps_snack_card_no":"Please Enter A Card Number",
+    "ps_snack_expiry":"Please Enter Card Expiry Date",
+    "ps_snack_cvv":"Please Enter Your CVV Number",
+    "ps_snack_package":"Please Choose a package to continue",
+    "ps_snack_coupen":"Please Enter a Coupen code to redeem"
 }
