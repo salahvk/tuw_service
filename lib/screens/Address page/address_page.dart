@@ -4,7 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/viewProfile.dart';
+import 'package:social_media_services/model/viewProfileModel.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_edit.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -18,6 +22,8 @@ import 'package:social_media_services/screens/worker_admin.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({super.key});
@@ -30,6 +36,8 @@ class _AddressPageState extends State<AddressPage> {
   int _selectedIndex = 2;
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
+  final ImagePicker _picker = ImagePicker();
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -43,6 +51,8 @@ class _AddressPageState extends State<AddressPage> {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final userDetails = provider.viewProfileModel?.userdetails;
+    final userAddress = provider.userAddressShow?.userAddress;
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -194,16 +204,56 @@ class _AddressPageState extends State<AddressPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: SizedBox(
-                                height: 100,
-                                width: size.width,
-                                child: CachedNetworkImage(
-                                  imageUrl: houseImage,
-                                  fit: BoxFit.cover,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: SizedBox(
+                                    height: 100,
+                                    width: size.width,
+                                    child: isLoading
+                                        ? Container(
+                                            height: 20,
+                                            color: ColorManager.whiteColor,
+                                            child: const Center(
+                                                child:
+                                                    CircularProgressIndicator()))
+                                        : CoverImageWidget(
+                                            userDetails: userDetails),
+                                  ),
                                 ),
-                              ),
+                                Positioned(
+                                  right: 5,
+                                  top: 5,
+                                  child: InkWell(
+                                    onTap: () {
+                                      selectImage();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.shade300,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            // offset: const Offset(2, 2.5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const CircleAvatar(
+                                        radius: 16,
+                                        backgroundColor: Colors.white,
+                                        child: Icon(
+                                          Icons.edit,
+                                          size: 14,
+                                          color: ColorManager.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Container(
@@ -324,29 +374,39 @@ class _AddressPageState extends State<AddressPage> {
                               ],
                             ),
                           ),
-                          Container(
-                            width: size.width,
-                            decoration: BoxDecoration(
-                              color: ColorManager.whiteColor,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.grey.shade300,
-                                  offset: const Offset(5, 8.5),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Container(
+                                  width: size.width,
+                                  decoration: BoxDecoration(
+                                    color: ColorManager.whiteColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Colors.grey.shade300,
+                                        offset: const Offset(5, 8.5),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15, 15, 15, 20),
+                                    child: Text(
+                                      "${userAddress![index].addressName}\n${userAddress[index].address}\n${userAddress[index].homeNo}\n${userAddress[index].region}, ${userAddress[index].state}, ${userAddress[index].country}",
+                                      style: getRegularStyle(
+                                          color: ColorManager.grayLight,
+                                          fontSize: 14),
+                                    ),
+                                  ),
                                 ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(15, 15, 15, 20),
-                              child: Text(
-                                "Knowledge Oasis Muscat\nRusayl Housing Complex \nP.O Box:308, PC 124\nMuscat, Sultanate of Oman",
-                                style: getRegularStyle(
-                                    color: ColorManager.grayLight,
-                                    fontSize: 14),
-                              ),
-                            ),
+                              );
+                            },
+                            itemCount: userAddress?.length ?? 0,
                           )
                         ],
                       ),
@@ -354,5 +414,80 @@ class _AddressPageState extends State<AddressPage> {
                   ),
                 ),
               ));
+  }
+
+  selectImage() async {
+    print("Img picker");
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final imagePath = image?.path;
+    final imageName = image?.name;
+    print(image?.name);
+    print(image?.path);
+    // final XFile? photo =
+    //     await _picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    // updateProfile(imageName);
+    setState(() {
+      isLoading = true;
+    });
+    await upload(image);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  upload(XFile imageFile) async {
+    var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
+    var length = await imageFile.length();
+    final apiToken = Hive.box("token").get('api_token');
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    var uri = Uri.parse(updateCoverPictureApi);
+    var request = http.MultipartRequest(
+      "POST",
+      uri,
+    );
+    // "content-type": "multipart/form-data"
+    request.headers
+        .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
+    var multipartFile = http.MultipartFile(
+      'cover_image',
+      stream,
+      length,
+      filename: (imageFile.path),
+    );
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    await viewProfile(context);
+    setState(() {});
+  }
+}
+
+class CoverImageWidget extends StatelessWidget {
+  const CoverImageWidget({
+    Key? key,
+    required this.userDetails,
+  }) : super(key: key);
+
+  final Userdetails? userDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: '$endPoint/assets/uploads/cover_image/${userDetails?.coverPic}',
+      fit: BoxFit.cover,
+      errorWidget: (context, url, error) => Container(
+        height: 20,
+        color: ColorManager.whiteColor,
+        child: Center(
+          child: Text(
+            "Please choose an cover photo",
+            style: getRegularStyle(color: ColorManager.black, fontSize: 14),
+          ),
+        ),
+      ),
+    );
   }
 }

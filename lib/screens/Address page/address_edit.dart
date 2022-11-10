@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +8,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -14,6 +19,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -22,6 +28,10 @@ import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+
+import 'package:social_media_services/utils/snack_bar.dart';
 
 class UserAddressEdit extends StatefulWidget {
   const UserAddressEdit({super.key});
@@ -36,6 +46,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
   String lang = '';
   List<Countries> r2 = [];
+  final ImagePicker _picker = ImagePicker();
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -59,6 +71,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
 
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
+    final userDetails = provider.viewProfileModel?.userdetails;
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -202,16 +215,56 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: SizedBox(
-                                height: 100,
-                                width: size.width,
-                                child: CachedNetworkImage(
-                                  imageUrl: houseImage,
-                                  fit: BoxFit.cover,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: SizedBox(
+                                    height: 100,
+                                    width: size.width,
+                                    child: isLoading
+                                        ? Container(
+                                            height: 20,
+                                            color: ColorManager.whiteColor,
+                                            child: const Center(
+                                                child:
+                                                    CircularProgressIndicator()))
+                                        : CoverImageWidget(
+                                            userDetails: userDetails),
+                                  ),
                                 ),
-                              ),
+                                Positioned(
+                                  right: 5,
+                                  top: 5,
+                                  child: InkWell(
+                                    onTap: () {
+                                      selectImage();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.shade300,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            // offset: const Offset(2, 2.5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const CircleAvatar(
+                                        radius: 16,
+                                        backgroundColor: Colors.white,
+                                        child: Icon(
+                                          Icons.edit,
+                                          size: 14,
+                                          color: ColorManager.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Container(
@@ -278,6 +331,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               ),
                             ),
                           ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -475,7 +529,6 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                                 horizontal: 10,
                                                 vertical: 8,
                                               ),
-                                              // TODO: localisation
                                               hintText: 'Search a country',
                                               hintStyle:
                                                   const TextStyle(fontSize: 12),
@@ -602,7 +655,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               children: [
                                 ElevatedButton(
                                     onPressed: () {
-                                      // player.stop();
+                                      addressCreateFun(context);
                                     },
                                     style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.fromLTRB(
@@ -636,5 +689,90 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                   ),
                 ),
               ));
+  }
+
+  addressCreateFun(BuildContext context) async {
+    //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    provider.subServicesModel = null;
+    final apiToken = Hive.box("token").get('api_token');
+    if (apiToken == null) return;
+    try {
+      var response = await http.post(
+          Uri.parse(
+              'http://projects.techoriz.in/serviceapp/public/api/address/create?address_name=malappuram&address=parammal&country_id=101&state=kerala&region=ramanattukara&home_no=111111'),
+          headers: {
+            "device-id": provider.deviceId ?? '',
+            "api-token": apiToken
+          });
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        log(response.body);
+
+        if (jsonResponse['result'] == false) {
+          await Hive.box("token").clear();
+
+          return;
+        }
+
+        // final subServicesData = SubServicesModel.fromJson(jsonResponse);
+        // provider.subServicesModelData(subServicesData);
+
+      } else {
+        // print(response.statusCode);
+        // print(response.body);
+        // print('Something went wrong');
+      }
+    } on Exception catch (_) {
+      showSnackBar("Something Went Wrong1", context);
+    }
+  }
+
+  selectImage() async {
+    print("Img picker");
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final imagePath = image?.path;
+    final imageName = image?.name;
+    print(image?.name);
+    print(image?.path);
+    // final XFile? photo =
+    //     await _picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    // updateProfile(imageName);
+    setState(() {
+      isLoading = true;
+    });
+    await upload(image);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  upload(XFile imageFile) async {
+    var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
+    var length = await imageFile.length();
+    final apiToken = Hive.box("token").get('api_token');
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    var uri = Uri.parse(updateCoverPictureApi);
+    var request = http.MultipartRequest(
+      "POST",
+      uri,
+    );
+    // "content-type": "multipart/form-data"
+    request.headers
+        .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
+    var multipartFile = http.MultipartFile(
+      'cover_image',
+      stream,
+      length,
+      filename: (imageFile.path),
+    );
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    await viewProfile(context);
+    setState(() {});
   }
 }

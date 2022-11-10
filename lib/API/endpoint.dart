@@ -6,7 +6,10 @@ const String apiUser = "$endPoint/api/user";
 const String languagesApi = "$apiGet/languages";
 const String countriesApi = "$apiGet/countries";
 const String imageApi = "$endPoint/assets/uploads/service";
+
 const String updateProfileApi = "$api/update/profileimage";
+const String updateCoverPictureApi = "$api/update/coverimage";
+
 const String profileImageApi = "$endPoint/assets/uploads/profile";
 const String viewUserProfileApi = "$api/view/userprofile";
 const String logout = "$apiUser/logout";
@@ -21,3 +24,5 @@ const String subServices = '$api/subservices';
 const String servicemanList = '$api/servicemanlist';
 const String placeOrderApi = '$api/place-order?';
 const String paymentSuccess = '$api/update/payment-status';
+const String userAddressCreate = '$api/address/create';
+const String getUserAddressApi = '$api/address/list';

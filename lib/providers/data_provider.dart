@@ -8,6 +8,7 @@ import 'package:social_media_services/model/get_language.dart';
 import 'package:social_media_services/model/payment_success.dart';
 import 'package:social_media_services/model/place_order.dart';
 import 'package:social_media_services/model/sub_services_model.dart';
+import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
 
 class DataProvider with ChangeNotifier {
@@ -80,6 +81,13 @@ class DataProvider with ChangeNotifier {
 
   void getPaymentSuccessData(value) {
     paymentSuccess = value;
+    notifyListeners();
+  }
+
+  UserAddressShow? userAddressShow;
+
+  void getUserAddressData(value) {
+    userAddressShow = value;
     notifyListeners();
   }
 

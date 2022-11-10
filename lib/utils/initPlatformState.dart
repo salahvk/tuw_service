@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/get_countries.dart';
 import 'package:social_media_services/API/get_home.dart';
 import 'package:social_media_services/API/get_language.dart';
@@ -34,6 +35,7 @@ Future<void> initPlatformState(BuildContext context) async {
     gotoNextPage(context);
   } else {
     await viewProfile(context);
+    await getUserAddress(context);
     // await getHome(context);
     await getCountriesData(context);
     gotoHomePage(context);
