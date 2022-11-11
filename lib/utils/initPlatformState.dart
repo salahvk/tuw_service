@@ -9,7 +9,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/get_countries.dart';
-import 'package:social_media_services/API/get_home.dart';
+import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/API/get_language.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';

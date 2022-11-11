@@ -1,15 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 
 class ServicerListTile extends StatelessWidget {
-  const ServicerListTile({super.key});
+  Serviceman? serviceman;
+  ServicerListTile({super.key, required this.serviceman});
 
   @override
   Widget build(BuildContext context) {
+    final s = serviceman?.distance.toString().split('.');
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
     return Container(
@@ -49,10 +53,29 @@ class ServicerListTile extends StatelessWidget {
                       child: CircleAvatar(
                         radius: mob ? 40 : 20,
                         // backgroundColor: ColorManager.grayDark,
-                        child: Image.asset(
-                          ImageAssets.profileIcon,
-                          fit: BoxFit.cover,
-                        ),
+                        backgroundImage: serviceman?.profilePic == null
+                            ? const AssetImage(ImageAssets.profileIcon)
+                                as ImageProvider
+                            : CachedNetworkImageProvider(
+                                '$endPoint${serviceman?.profilePic}'),
+
+                        // CachedNetworkImage(
+                        //     imageUrl: '$endPoint${serviceman?.profilePic}',
+                        //     imageBuilder: (context, imageProvider) => Container(
+                        //           // width: 25,
+                        //           // height: 20,
+                        //           decoration: BoxDecoration(
+                        //             // shape: BoxShape.circle,
+                        //             image: DecorationImage(
+                        //                 image: imageProvider,
+                        //                 fit: BoxFit.cover),
+                        //           ),
+                        //         ),
+                        //     fit: BoxFit.cover,
+                        //     errorWidget: (context, url, error) => Image.asset(
+                        //           ImageAssets.profileIcon,
+                        //           fit: BoxFit.cover,
+                        //         )),
                       ),
                     ),
                   ),
@@ -76,84 +99,94 @@ class ServicerListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Akhil Mahesh',
+                  Text('${serviceman?.firstname} ${serviceman?.lastname}',
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: mob ? 16 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text('Car Servicer',
+                  Text(serviceman?.phone ?? '',
                       style: getRegularStyle(
                           color: const Color.fromARGB(255, 173, 173, 173),
                           fontSize: mob ? 15 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      RatingBar.builder(
-                        initialRating: 4,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 4,
-                        itemSize: mob ? 20 : 12,
-                        ignoreGestures: true,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2.50),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                    ],
+                  Text(serviceman?.about ?? '',
+                      style: getRegularStyle(
+                          color: const Color.fromARGB(255, 173, 173, 173),
+                          fontSize: mob ? 15 : 10)),
+                  const SizedBox(
+                    height: 4,
                   ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(ImageAssets.tools),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text("Engin Worker",
-                          style: getRegularStyle(
-                              color: const Color.fromARGB(255, 173, 173, 173),
-                              fontSize: mob ? 15 : 10))
-                    ],
-                  )
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     RatingBar.builder(
+                  //       initialRating: 4,
+                  //       minRating: 1,
+                  //       direction: Axis.horizontal,
+                  //       allowHalfRating: true,
+                  //       itemCount: 4,
+                  //       itemSize: mob ? 20 : 12,
+                  //       ignoreGestures: true,
+                  //       itemPadding:
+                  //           const EdgeInsets.symmetric(horizontal: 2.50),
+                  //       itemBuilder: (context, _) => const Icon(
+                  //         Icons.star,
+                  //         color: Colors.amber,
+                  //       ),
+                  //       onRatingUpdate: (rating) {
+                  //         print(rating);
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   // mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Image.asset(ImageAssets.tools),
+                  //     const SizedBox(
+                  //       width: 5,
+                  //     ),
+                  //     Text("Engin Worker",
+                  //         style: getRegularStyle(
+                  //             color: const Color.fromARGB(255, 173, 173, 173),
+                  //             fontSize: mob ? 15 : 10))
+                  //   ],
+                  // )
                 ],
               ),
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: SizedBox(
-                width: size.width * 0.1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      Icons.favorite,
-                      size: mob ? 23 : 15,
-                      color: ColorManager.primary,
+            serviceman?.distance == null
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: SizedBox(
+                      width: size.width * 0.1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            Icons.favorite,
+                            size: mob ? 23 : 15,
+                            color: ColorManager.primary,
+                          ),
+                          Column(
+                            children: [
+                              Image.asset(ImageAssets.car),
+                              Text('${s![0]} km',
+                                  style: getMediumtStyle(
+                                      color: const Color.fromARGB(
+                                          255, 173, 173, 173),
+                                      fontSize: 12))
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    Column(
-                      children: [
-                        Image.asset(ImageAssets.car),
-                        Text("30 KM",
-                            style: getMediumtStyle(
-                                color: const Color.fromARGB(255, 173, 173, 173),
-                                fontSize: 10))
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),

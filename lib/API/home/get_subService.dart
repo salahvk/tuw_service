@@ -15,7 +15,6 @@ import 'package:social_media_services/screens/sub_service.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getSubService(BuildContext context, id) async {
-  //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');

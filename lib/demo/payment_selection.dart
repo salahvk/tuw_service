@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/payment_success.dart';
+import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/demo/payment_failed.dart';
@@ -60,6 +61,7 @@ class _PaymentSelectionState extends State<PaymentSelection> {
     });
     await getPaymentSuccess(
         context, 'success', provider.placeOrder?.orderId.toString());
+    await viewProfile(context);
     setState(() {
       isLoading = false;
     });

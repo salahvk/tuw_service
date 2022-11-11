@@ -1,40 +1,32 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
-getServiceMan(BuildContext context, id) async {
-  //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+updateLocationFunction(BuildContext context, List latLon) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
-  final userDetails = provider.viewProfileModel?.userdetails;
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
   try {
     var response = await http.post(
         Uri.parse(
-            '$servicemanList?service_id=$id&page=1&latitude=${userDetails?.latitude}&longitude=${userDetails?.longitude}'),
+            '$updateLocationApi&latitude=${latLon[0]}&longitude=${latLon[1]}'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
-      navToServiceMan(context);
       if (jsonResponse['result'] == false) {
         await Hive.box("token").clear();
 
         return;
       }
-
-      final serviceManListData = ServiceManListModel.fromJson(jsonResponse);
-      provider.getServiceManData(serviceManListData);
     } else {
       // print(response.statusCode);
       // print(response.body);
@@ -43,10 +35,4 @@ getServiceMan(BuildContext context, id) async {
   } on Exception catch (_) {
     showSnackBar("Something Went Wrong1", context);
   }
-}
-
-navToServiceMan(context) {
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-    return const ServicerPage();
-  }));
 }

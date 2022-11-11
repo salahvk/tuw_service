@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:social_media_services/components/color_manager.dart';
 
@@ -20,8 +19,8 @@ class _CustomizeMarkerExampleState extends State<CustomizeMarkerExample> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    requestPermission();
+    searchController.text = '';
+    // requestPermission();
     setState(() {});
   }
 
@@ -111,23 +110,6 @@ class _CustomizeMarkerExampleState extends State<CustomizeMarkerExample> {
     );
   }
 
-  requestPermission() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        print('Location permissions are denied');
-      } else if (permission == LocationPermission.deniedForever) {
-        print("'Location permissions are permanently denied");
-      } else {
-        print("GPS Location service is granted");
-      }
-    } else {
-      print("GPS Location permission granted.");
-    }
-    searchController.text.isEmpty ? getCurrentLocation() : null;
-  }
-
   searchLocation() async {
     FocusManager.instance.primaryFocus?.unfocus();
     print('Location searching');
@@ -140,14 +122,5 @@ class _CustomizeMarkerExampleState extends State<CustomizeMarkerExample> {
     mapController.move(LatLng(latitude ?? 0, longitude ?? 0), 5);
     print(longitude);
     print(locations);
-  }
-
-  getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    longitude = position.longitude;
-    latitude = position.latitude;
-    print(position.longitude); //Output: 80.24599079
-    print(position.latitude); //Output: 29.6593457
   }
 }

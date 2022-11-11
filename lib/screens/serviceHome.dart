@@ -9,14 +9,31 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/loading_page.dart';
 
-class ServiceHomePage extends StatelessWidget {
-  ServiceHomePage({Key? key}) : super(key: key);
+class ServiceHomePage extends StatefulWidget {
+  const ServiceHomePage({Key? key}) : super(key: key);
 
+  @override
+  State<ServiceHomePage> createState() => _ServiceHomePageState();
+}
+
+class _ServiceHomePageState extends State<ServiceHomePage> {
   final List<Map> myProducts =
       List.generate(100000, (index) => {"id": index, "name": "Service $index"})
           .toList();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      provider.viewProfileModel?.userdetails?.latitude == null
+          ? requestLocationPermission(context)
+          : null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +125,7 @@ class ServiceHomePage extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (ctx) {
-                              return LoadingListPage();
+                              return const LoadingListPage();
                             }));
                             final id = homeData![index].id;
                             getSubService(context, id);
@@ -188,8 +205,4 @@ class ServiceHomePage extends StatelessWidget {
       ),
     );
   }
-
-  // getSubServices() {
-  //   getSubServices();
-  // }
 }

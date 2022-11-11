@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:social_media_services/model/get_otp.dart';
-import 'package:social_media_services/model/otp_verification.dart';
+import 'package:social_media_services/model/otp/get_otp.dart';
+import 'package:social_media_services/model/otp/otp_verification.dart';
 
 class OTPProvider with ChangeNotifier {
   String? countryCode;

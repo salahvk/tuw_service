@@ -690,6 +690,23 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                 ),
               ));
   }
+  // validateAddressFields(){
+  //     final addressName = EditProfileControllers.firstNameController.text;
+  //   final lastname = EditProfileControllers.lastNameController.text;
+  //   final dob = EditProfileControllers.dateController.text;
+  //   final country = EditProfileControllers.countryController.text;
+  //   if (firstname.isEmpty) {
+  //     showAnimatedSnackBar(context, "The name field is required");
+  //   }
+  //   //  else if (lastname.isEmpty) {
+  //   //   showAnimatedSnackBar(context, "Last Name field is requires");
+  //   // }
+  //   else if (dob.isEmpty) {
+  //     showAnimatedSnackBar(context, "DOB field can not be empty");
+  //   } else if (countryid == null) {
+  //     showAnimatedSnackBar(context, "Country field can not be empty");
+  //   }
+  // }
 
   addressCreateFun(BuildContext context) async {
     //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);

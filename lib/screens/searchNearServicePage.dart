@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
-import 'package:social_media_services/widgets/servicer_list_tile.dart';
 
 class SearchNearService extends StatefulWidget {
   const SearchNearService({super.key});
@@ -173,21 +171,21 @@ class _SearchNearServiceState extends State<SearchNearService> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: ((context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
-                    child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, Routes.chatScreen);
-                        },
-                        child: const ServicerListTile()),
-                  );
-                }),
-                itemCount: 3,
-              ),
-            ),
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemBuilder: ((context, index) {
+            //       return Padding(
+            //         padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
+            //         child: InkWell(
+            //             onTap: () {
+            //               Navigator.pushNamed(context, Routes.chatScreen);
+            //             },
+            //             child: const ServicerListTile()),
+            //       );
+            //     }),
+            //     itemCount: 3,
+            //   ),
+            // ),
             // Padding(
             //   padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
             //   child: ElevatedButton(

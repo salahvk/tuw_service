@@ -31,7 +31,7 @@ class ServicerPage extends StatefulWidget {
 class _ServicerPageState extends State<ServicerPage> {
   String? selectedValue;
   final int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   bool isPickerSelected = false;
   List<Countries> r2 = [];
@@ -65,6 +65,7 @@ class _ServicerPageState extends State<ServicerPage> {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final serviceManData = provider.serviceManListModel?.serviceman;
 
     final List<String> items = [
       'Item1',
@@ -663,46 +664,51 @@ class _ServicerPageState extends State<ServicerPage> {
                                     Navigator.pushNamed(
                                         context, Routes.chatScreen);
                                   },
-                                  child: const ServicerListTile()),
+                                  child: ServicerListTile(
+                                    serviceman: serviceManData![index],
+                                  )),
                             );
                           }),
-                          itemCount: 6,
+                          itemCount: serviceManData?.length ?? 0,
                         ),
                       ),
-                      Padding(
-                        padding: mob
-                            ? const EdgeInsets.fromLTRB(0, 5, 0, 10)
-                            : const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                        child: mob
-                            ? ElevatedButton(
-                                onPressed: () {
-                                  // player.stop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        30, 0, 30, 0)),
-                                child: Text(
-                                  str.s_continue,
-                                  style: getRegularStyle(
-                                      color: ColorManager.whiteText,
-                                      fontSize: 16),
-                                ))
-                            : Container(
-                                width: 100,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                    color: ColorManager.primary,
-                                    borderRadius: BorderRadius.circular(3)),
-                                child: Center(
-                                  child: Text(
-                                    str.s_continue,
-                                    style: getRegularStyle(
-                                        color: ColorManager.whiteText,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                      ),
+                      // Padding(
+                      //   padding: mob
+                      //       ? const EdgeInsets.fromLTRB(0, 5, 0, 10)
+                      //       : const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                      //   child: mob
+                      //       ? ElevatedButton(
+                      //           onPressed: () {
+                      //             // player.stop();
+                      //           },
+                      //           style: ElevatedButton.styleFrom(
+                      //               padding: const EdgeInsets.fromLTRB(
+                      //                   30, 0, 30, 0)),
+                      //           child: Text(
+                      //             str.s_continue,
+                      //             style: getRegularStyle(
+                      //                 color: ColorManager.whiteText,
+                      //                 fontSize: 16),
+                      //           ))
+                      //       : Container(
+                      //           width: 100,
+                      //           height: 25,
+                      //           decoration: BoxDecoration(
+                      //               color: ColorManager.primary,
+                      //               borderRadius: BorderRadius.circular(3)),
+                      //           child: Center(
+                      //             child: Text(
+                      //               str.s_continue,
+                      //               style: getRegularStyle(
+                      //                   color: ColorManager.whiteText,
+                      //                   fontSize: 12),
+                      //             ),
+                      //           ),
+                      //         ),
+                      // ),
+                      const SizedBox(
+                        height: 15,
+                      )
                     ],
                   ),
                 ),

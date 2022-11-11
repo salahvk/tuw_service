@@ -50,6 +50,8 @@ class Userdetails {
   String? countryName;
   String? userType;
   String? coverPic;
+  String? latitude;
+  String? longitude;
 
   Userdetails(
       {this.id,
@@ -76,7 +78,9 @@ class Userdetails {
       this.updatedAt,
       this.countryName,
       this.userType,
-      this.coverPic});
+      this.coverPic,
+      this.latitude,
+      this.longitude});
 
   Userdetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -104,6 +108,8 @@ class Userdetails {
     countryName = json['country_name'];
     userType = json['user_type'];
     coverPic = json['cover_pic'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
   }
 
   Map<String, dynamic> toJson() {
@@ -132,6 +138,8 @@ class Userdetails {
     data['updated_at'] = updatedAt;
     data['country_name'] = countryName;
     data['cover_pic'] = coverPic;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }

@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/routes_manager.dart';
-import 'package:social_media_services/model/get_otp.dart';
+import 'package:social_media_services/model/otp/get_otp.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:http/http.dart' as http;
