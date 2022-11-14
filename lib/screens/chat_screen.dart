@@ -1,13 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
@@ -18,7 +21,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  Serviceman? serviceman;
+  ChatScreen({super.key, required this.serviceman});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -78,13 +82,11 @@ class _ChatScreenState extends State<ChatScreen> {
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: CircleAvatar(
-              radius: 14,
-              child: CircleAvatar(
-                radius: 16,
-                child: Image.asset(
-                  ImageAssets.profileIcon,
-                ),
-              ),
+              radius: 16,
+              backgroundImage: widget.serviceman?.profilePic == null
+                  ? const AssetImage(ImageAssets.profileIcon) as ImageProvider
+                  : CachedNetworkImageProvider(
+                      '$endPoint${widget.serviceman?.profilePic}'),
             ),
           ),
           title: InkWell(
@@ -95,18 +97,18 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Akhil Mahesh',
+                  '${widget.serviceman?.firstname} ${widget.serviceman?.lastname}',
                   style:
                       getRegularStyle(color: ColorManager.black, fontSize: 16),
                 ),
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(ImageAssets.tools),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text("Engin Worker",
+                    // Image.asset(ImageAssets.tools),
+                    // const SizedBox(
+                    //   width: 5,
+                    // ),
+                    Text(widget.serviceman?.about ?? '',
                         style: getRegularStyle(
                             color: const Color.fromARGB(255, 173, 173, 173),
                             fontSize: 15))

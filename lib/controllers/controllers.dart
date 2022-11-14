@@ -45,6 +45,8 @@ class ServiceControllers {
 
 class AddressEditControllers {
   static TextEditingController addressNameController = TextEditingController();
+  static TextEditingController addressController = TextEditingController();
+  static TextEditingController countryController = TextEditingController();
   static TextEditingController regionController = TextEditingController();
   static TextEditingController stateController = TextEditingController();
   static TextEditingController flatNoController = TextEditingController();

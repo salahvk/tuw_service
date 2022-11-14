@@ -19,6 +19,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/get_countries.dart';
+import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
@@ -36,14 +37,15 @@ import 'package:async/async.dart';
 
 import 'package:social_media_services/utils/snack_bar.dart';
 
-class UserAddressEdit extends StatefulWidget {
-  const UserAddressEdit({super.key});
+class UserAddressUpdate extends StatefulWidget {
+  final UserAddress userAddress;
+  const UserAddressUpdate({super.key, required this.userAddress});
 
   @override
-  State<UserAddressEdit> createState() => _UserAddressEditState();
+  State<UserAddressUpdate> createState() => _UserAddressUpdateState();
 }
 
-class _UserAddressEditState extends State<UserAddressEdit> {
+class _UserAddressUpdateState extends State<UserAddressUpdate> {
   Countries? selectedValue;
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
@@ -58,6 +60,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    fillFields();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = Provider.of<DataProvider>(context, listen: false);
       int? n = provider.countriesModel?.countries?.length;
@@ -298,7 +301,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         // }));
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return GoogleMapScreen();
+                                          return const GoogleMapScreen();
                                         }));
                                       },
                                       child: Padding(
@@ -730,17 +733,18 @@ class _UserAddressEditState extends State<UserAddressEdit> {
       setState(() {
         isSaveAddressLoading = true;
       });
-      addressCreateFun(context);
+      addressUpdaeFun(context);
     }
   }
 
-  addressCreateFun(BuildContext context) async {
+  addressUpdaeFun(BuildContext context) async {
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
     final country = selectedValue?.countryId;
     final region = AddressEditControllers.regionController.text;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
+    final id = widget.userAddress.id;
     //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     final provider = Provider.of<DataProvider>(context, listen: false);
     provider.subServicesModel = null;
@@ -749,7 +753,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     try {
       var response = await http.post(
           Uri.parse(
-              '$userAddressCreate?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat'),
+              '$updateUserAddressApi?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat&address_id=$id'),
           headers: {
             "device-id": provider.deviceId ?? '',
             "api-token": apiToken
@@ -784,6 +788,10 @@ class _UserAddressEditState extends State<UserAddressEdit> {
 
   navigateToAddressPage() {
     Navigator.pop(context);
+    clearFields();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+      return const AddressPage();
+    }));
   }
 
   selectImage() async {
@@ -832,5 +840,26 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     print(response.statusCode);
     await viewProfile(context);
     setState(() {});
+  }
+
+  fillFields() {
+    AddressEditControllers.addressNameController.text =
+        widget.userAddress.addressName ?? '';
+    AddressEditControllers.addressController.text =
+        widget.userAddress.address ?? '';
+    AddressEditControllers.regionController.text =
+        widget.userAddress.region ?? '';
+    AddressEditControllers.stateController.text =
+        widget.userAddress.state ?? '';
+    AddressEditControllers.flatNoController.text =
+        widget.userAddress.homeNo ?? '';
+  }
+
+  clearFields() {
+    AddressEditControllers.addressNameController.text = '';
+    AddressEditControllers.addressController.text = '';
+    AddressEditControllers.regionController.text = '';
+    AddressEditControllers.stateController.text = '';
+    AddressEditControllers.flatNoController.text = '';
   }
 }

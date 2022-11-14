@@ -14,6 +14,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
@@ -661,8 +662,11 @@ class _ServicerPageState extends State<ServicerPage> {
                               padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
                               child: InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, Routes.chatScreen);
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (ctx) {
+                                      return ChatScreen(
+                                          serviceman: serviceManData![index]);
+                                    }));
                                   },
                                   child: ServicerListTile(
                                     serviceman: serviceManData![index],

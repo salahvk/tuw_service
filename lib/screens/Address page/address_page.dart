@@ -15,6 +15,8 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/screens/Address%20page/address_update.dart';
+import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
 import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -34,7 +36,7 @@ class AddressPage extends StatefulWidget {
 
 class _AddressPageState extends State<AddressPage> {
   int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
@@ -277,9 +279,13 @@ class _AddressPageState extends State<AddressPage> {
                                     // width: 30,
                                     child: InkWell(
                                       onTap: () {
+                                        // Navigator.push(context,
+                                        //     MaterialPageRoute(builder: (ctx) {
+                                        //   return CustomizeMarkerExample();
+                                        // }));
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return CustomizeMarkerExample();
+                                          return const GoogleMapScreen();
                                         }));
                                       },
                                       child: Padding(
@@ -380,29 +386,70 @@ class _AddressPageState extends State<AddressPage> {
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Container(
-                                  width: size.width,
-                                  decoration: BoxDecoration(
-                                    color: ColorManager.whiteColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 10.0,
-                                        color: Colors.grey.shade300,
-                                        offset: const Offset(5, 8.5),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: size.width,
+                                      decoration: BoxDecoration(
+                                        color: ColorManager.whiteColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.grey.shade300,
+                                            offset: const Offset(5, 8.5),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15, 15, 15, 20),
-                                    child: Text(
-                                      "${userAddress![index].addressName}\n${userAddress[index].address}\n${userAddress[index].homeNo}\n${userAddress[index].region}, ${userAddress[index].state}, ${userAddress[index].country}",
-                                      style: getRegularStyle(
-                                          color: ColorManager.grayLight,
-                                          fontSize: 14),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 15, 15, 20),
+                                        child: Text(
+                                          "${userAddress![index].addressName}\n${userAddress[index].address}\n${userAddress[index].homeNo}\n${userAddress[index].region}, ${userAddress[index].state}, ${userAddress[index].country}",
+                                          style: getRegularStyle(
+                                              color: ColorManager.grayLight,
+                                              fontSize: 14),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      right: 5,
+                                      top: 5,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (ctx) {
+                                            return UserAddressUpdate(
+                                              userAddress: userAddress[index],
+                                            );
+                                          }));
+                                          // selectImage();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.shade300,
+                                                spreadRadius: 1,
+                                                blurRadius: 3,
+                                                // offset: const Offset(2, 2.5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: const CircleAvatar(
+                                            radius: 14,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 12,
+                                              color: ColorManager.primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                             },

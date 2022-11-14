@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/widgets/Ser_button.dart';
+import 'package:social_media_services/widgets/serType_drawer_list.dart';
 import 'package:social_media_services/widgets/ser_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,7 +36,9 @@ class _SerDrawerState extends State<SerDrawer> {
     final size = MediaQuery.of(context).size;
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
-    print("new build ____________");
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final homeData = provider.homeModel?.services;
+
     return DrawerHeader(
         decoration: BoxDecoration(
           color: ColorManager.primary3,
@@ -64,11 +69,19 @@ class _SerDrawerState extends State<SerDrawer> {
             ),
             SerDrawerList(
               image: ImageAssets.scooter,
+              title: 'Two-Wheeler',
               // isResetSelected: isResetSelected,
               key: UniqueKey(),
             ),
             SerDrawerList(
               image: ImageAssets.car,
+              title: 'Four-Wheeler',
+              // isResetSelected: isResetSelected,
+              key: UniqueKey(),
+            ),
+            SerDrawerList(
+              image: ImageAssets.truck,
+              title: 'Truck',
               // isResetSelected: isResetSelected,
               key: UniqueKey(),
             ),
@@ -85,32 +98,45 @@ class _SerDrawerState extends State<SerDrawer> {
                 ],
               ),
             ),
-            SerDrawerList(
-              image: ImageAssets.fuel,
-              // isResetSelected: isResetSelected,
-              key: UniqueKey(),
+            // SerDrawerList(
+            //   image: ImageAssets.fuel,
+            //   // isResetSelected: isResetSelected,
+            //   key: UniqueKey(),
+            // ),
+            // SerDrawerList(
+            //   image: ImageAssets.disc,
+            //   // isResetSelected: isResetSelected,
+            //   key: UniqueKey(),
+            // ),
+            // SerDrawerList(
+            //   image: ImageAssets.repair,
+            //   // isResetSelected: isResetSelected,
+            //   key: UniqueKey(),
+            // ),
+            // SerDrawerList(
+            //   image: ImageAssets.engine,
+            //   // isResetSelected: isResetSelected,
+            //   key: UniqueKey(),
+            // ),
+            // SerDrawerList(
+            //   image: ImageAssets.truck,
+            //   // isResetSelected: isResetSelected,
+            //   key: UniqueKey(),
+            // ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return SerTypeDrawerList(
+                    image: homeData![index].image ?? '',
+                    title: homeData[index].service ?? '',
+                    key: UniqueKey(),
+                  );
+                },
+                itemCount: homeData?.length ?? 0,
+              ),
             ),
-            SerDrawerList(
-              image: ImageAssets.disc,
-              // isResetSelected: isResetSelected,
-              key: UniqueKey(),
-            ),
-            SerDrawerList(
-              image: ImageAssets.repair,
-              // isResetSelected: isResetSelected,
-              key: UniqueKey(),
-            ),
-            SerDrawerList(
-              image: ImageAssets.engine,
-              // isResetSelected: isResetSelected,
-              key: UniqueKey(),
-            ),
-            SerDrawerList(
-              image: ImageAssets.truck,
-              // isResetSelected: isResetSelected,
-              key: UniqueKey(),
-            ),
-            const Spacer(),
+            // const Spacer(),
             Padding(
               padding: mob
                   ? const EdgeInsets.fromLTRB(0, 15, 0, 30)

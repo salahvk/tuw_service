@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 
-class SerDrawerList extends StatefulWidget {
+class SerTypeDrawerList extends StatefulWidget {
   final String image;
   final String title;
   // bool isResetSelected = false;
   // GestureTapCallback? onTap;
 
-  const SerDrawerList({
+  const SerTypeDrawerList({
     Key? key,
     required this.image,
     required this.title,
   }) : super(key: key);
 
   @override
-  State<SerDrawerList> createState() => _SerDrawerListState();
+  State<SerTypeDrawerList> createState() => _SerDrawerListState();
 }
 
-class _SerDrawerListState extends State<SerDrawerList> {
+class _SerDrawerListState extends State<SerTypeDrawerList> {
   bool isTickSelected = false;
   @override
   void initState() {
@@ -69,18 +71,20 @@ class _SerDrawerListState extends State<SerDrawerList> {
                     : null,
               ),
               Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 10),
-                  child: SizedBox(
+                padding: const EdgeInsets.only(left: 8, right: 10),
+                child: SizedBox(
                     width: 20,
-                    child: Image.asset(
-                      widget.image,
+                    child: SvgPicture.network(
+                      '$endPoint${widget.image}',
                       color: ColorManager.whiteColor,
-                    ),
-                  )),
-              Text(widget.title,
-                  style: getRegularStyle(
+                    )),
+              ),
+              Text(
+                widget.title,
+                style: getRegularStyle(
                     color: ColorManager.whiteColor,
-                  ))
+                    fontSize: widget.title.length > 12 ? 10 : 12),
+              )
             ],
           ),
         ),

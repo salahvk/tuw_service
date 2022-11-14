@@ -12,7 +12,6 @@ import 'package:social_media_services/screens/privacy_policy.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/screens/servicer.dart';
-import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/screens/splash_screen.dart';
 import 'package:social_media_services/screens/wishlist.dart';
 import 'package:social_media_services/screens/worker_details_page.dart';
@@ -61,8 +60,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ChooseServicePage());
       case Routes.servicerPage:
         return MaterialPageRoute(builder: (_) => const ServicerPage());
-      case Routes.chatScreen:
-        return MaterialPageRoute(builder: (_) => const ChatScreen());
+      // case Routes.chatScreen:
+      //   return MaterialPageRoute(builder: (_) => const ChatScreen());
       case Routes.workerDetails:
         return MaterialPageRoute(builder: (_) => const WorkerDetailed());
       case Routes.privacyPolicy:

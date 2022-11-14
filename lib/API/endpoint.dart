@@ -25,6 +25,9 @@ const String subServices = '$api/subservices';
 const String servicemanList = '$api/servicemanlist';
 const String placeOrderApi = '$api/place-order?';
 const String paymentSuccess = '$api/update/payment-status';
+
 const String userAddressCreate = '$api/address/create';
 const String getUserAddressApi = '$api/address/list';
+const String updateUserAddressApi = '$api/address/update';
+
 const String updateLocationApi = '$api/update/location?home_location=calicut';
