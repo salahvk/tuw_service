@@ -30,6 +30,10 @@ Future<void> initPlatformState(BuildContext context) async {
   final apiToken = Hive.box("token").get('api_token');
 
   print(apiToken);
+  if (provider.isInternetConnected == false) {
+    Navigator.pushNamed(context, Routes.noConnectionPage);
+    return;
+  }
 
   if (apiToken == null) {
     gotoNextPage(context);

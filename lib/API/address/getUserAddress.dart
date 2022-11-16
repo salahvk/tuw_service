@@ -13,15 +13,18 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getUserAddress(BuildContext context) async {
+  print('getting user address');
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
   try {
+    provider.userAddressShow = null;
     var response = await http.get(Uri.parse(getUserAddressApi),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       log(response.body);
+      print('getting user address');
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
       if (jsonResponse['result'] == false) {
@@ -36,7 +39,7 @@ getUserAddress(BuildContext context) async {
     } else {
       // print(response.statusCode);
       // print(response.body);
-      // print('Something went wrong');
+      print('Something went wrong');
     }
   } on Exception catch (_) {
     showSnackBar("Something Went Wrong1", context);

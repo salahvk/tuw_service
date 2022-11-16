@@ -1,14 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/model/serviceManLIst.dart';
 
-class WorkerDetailed extends StatelessWidget {
-  const WorkerDetailed({super.key});
+class WorkerDetailed extends StatefulWidget {
+  Serviceman? serviceman;
+  WorkerDetailed({super.key, this.serviceman});
 
+  @override
+  State<WorkerDetailed> createState() => _WorkerDetailedState();
+}
+
+class _WorkerDetailedState extends State<WorkerDetailed> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -21,13 +29,18 @@ class WorkerDetailed extends StatelessWidget {
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 40,
+                  backgroundImage: widget.serviceman?.profilePic == null
+                      ? const AssetImage(ImageAssets.profileIcon)
+                          as ImageProvider
+                      : CachedNetworkImageProvider(
+                          '$endPoint${widget.serviceman?.profilePic}'),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 5, 0, 4),
                   child: Text(
-                    'Akhil Mahesh',
+                    '${widget.serviceman?.firstname} ${widget.serviceman?.lastname}',
                     style: getRegularStyle(
                         color: ColorManager.black, fontSize: 16),
                   ),
@@ -39,7 +52,7 @@ class WorkerDetailed extends StatelessWidget {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text("Engin Worker",
+                    Text(widget.serviceman?.about ?? '',
                         style: getRegularStyle(
                             color: ColorManager.engineWorkerColor,
                             fontSize: 15)),

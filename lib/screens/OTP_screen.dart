@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/API/get_otp.dart';
@@ -216,6 +217,7 @@ class _OTPscreenState extends State<OTPscreen> {
 
         Hive.box("token").put('api_token', apitoken ?? '');
         await viewProfile(context);
+        await getUserAddress(context);
         await getHome(context);
 
         otpProvider.getOtp!.message!.contains('Successfully Registered')

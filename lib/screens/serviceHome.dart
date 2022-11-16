@@ -20,10 +20,6 @@ class ServiceHomePage extends StatefulWidget {
 }
 
 class _ServiceHomePageState extends State<ServiceHomePage> {
-  final List<Map> myProducts =
-      List.generate(100000, (index) => {"id": index, "name": "Service $index"})
-          .toList();
-
   @override
   void initState() {
     super.initState();
@@ -42,6 +38,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
     final w = MediaQuery.of(context).size.width;
     final provider = Provider.of<DataProvider>(context, listen: false);
     final homeData = provider.homeModel?.services;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

@@ -7,6 +7,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/introduction_screen.dart';
 import 'package:social_media_services/screens/mobile_number_screen.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/screens/no_connection_screen.dart';
 import 'package:social_media_services/screens/payment_successfull_page.dart';
 import 'package:social_media_services/screens/privacy_policy.dart';
 import 'package:social_media_services/screens/profile_page.dart';
@@ -14,7 +15,6 @@ import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_
 import 'package:social_media_services/screens/servicer.dart';
 import 'package:social_media_services/screens/splash_screen.dart';
 import 'package:social_media_services/screens/wishlist.dart';
-import 'package:social_media_services/screens/worker_details_page.dart';
 
 class Routes {
   static const String splashScreen = '/';
@@ -35,6 +35,7 @@ class Routes {
   static const String termsAndConditions = '/termsAndConditions';
   static const String wishList = '/wishList';
   static const String addressPage = '/addressPage';
+  static const String noConnectionPage = '/noConnection';
 }
 
 class RouteGenerator {
@@ -62,8 +63,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ServicerPage());
       // case Routes.chatScreen:
       //   return MaterialPageRoute(builder: (_) => const ChatScreen());
-      case Routes.workerDetails:
-        return MaterialPageRoute(builder: (_) => const WorkerDetailed());
+      // case Routes.workerDetails:
+      //   return MaterialPageRoute(builder: (_) => const WorkerDetailed());
       case Routes.privacyPolicy:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
       case Routes.termsAndConditions:
@@ -74,6 +75,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const AddressPage());
       case Routes.paymentSuccessfull:
         return MaterialPageRoute(builder: (_) => const PaymentSuccessPage());
+      case Routes.noConnectionPage:
+        return MaterialPageRoute(builder: (_) => NoConnectionScreen());
       default:
         return unDefinedRoute();
     }

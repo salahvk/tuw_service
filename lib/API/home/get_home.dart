@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 getHome(BuildContext context) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
@@ -37,6 +36,6 @@ getHome(BuildContext context) async {
       // print('Something went wrong');
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+    // showSnackBar("Something Went Wrong1", context);
   }
 }

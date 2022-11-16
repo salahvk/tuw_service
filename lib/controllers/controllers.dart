@@ -41,6 +41,9 @@ class PaymentServiceControllers {
 
 class ServiceControllers {
   static TextEditingController stateController = TextEditingController();
+  static TextEditingController regionController = TextEditingController();
+  static TextEditingController mapController = TextEditingController();
+  //  static TextEditingController stateController = TextEditingController();
 }
 
 class AddressEditControllers {

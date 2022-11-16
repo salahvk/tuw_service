@@ -99,6 +99,8 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isInternetConnected = false;
+
   String gender = 'male';
   int? serviceId;
   int? selectedCountryId;

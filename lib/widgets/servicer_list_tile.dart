@@ -22,7 +22,7 @@ class ServicerListTile extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             blurRadius: 10.0,
-            color: Colors.grey.shade300,
+            color: Colors.grey.shade200,
             offset: const Offset(5, 8.5),
           ),
         ],

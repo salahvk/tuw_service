@@ -7,11 +7,11 @@ import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/worker_details_page.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
@@ -91,7 +91,11 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           title: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Routes.workerDetails);
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                return WorkerDetailed(
+                  serviceman: widget.serviceman,
+                );
+              }));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

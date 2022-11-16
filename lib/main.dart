@@ -20,6 +20,7 @@ void main() async {
   if (mapsImplementation is GoogleMapsFlutterAndroid) {
     mapsImplementation.useAndroidViewSurface = true;
   }
+
   runApp(const MyApp());
 }
 
@@ -69,7 +70,7 @@ class _MyAppState extends State<MyApp> {
         theme: getApplicationTheme(context).copyWith(useMaterial3: true),
         initialRoute: Routes.splashScreen,
         onGenerateRoute: RouteGenerator.getRoute,
-        // home: const EditProfileScreen(),
+        // home: const NoConnectionScreen(),
       ),
     );
   }

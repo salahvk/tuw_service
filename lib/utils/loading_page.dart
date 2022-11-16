@@ -25,6 +25,7 @@ class _LoadingListPageState extends State<LoadingListPage> {
     // final str = AppLocalizations.of(context)!;
 
     return Scaffold(
+      backgroundColor: ColorManager.background,
       body: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
@@ -33,7 +34,7 @@ class _LoadingListPageState extends State<LoadingListPage> {
           children: <Widget>[
             Expanded(
               child: Shimmer.fromColors(
-                baseColor: Colors.grey,
+                baseColor: ColorManager.whiteColor,
                 highlightColor: Colors.green,
                 enabled: _enabled,
                 period: const Duration(milliseconds: 1500),
@@ -64,7 +65,7 @@ class _LoadingListPageState extends State<LoadingListPage> {
                                     offset: const Offset(2, 2.5),
                                   ),
                                 ],
-                                color: ColorManager.whiteColor,
+                                color: ColorManager.grayDark,
                                 borderRadius: BorderRadius.circular(5)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

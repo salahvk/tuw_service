@@ -26,7 +26,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
   bool isStatusVisible = false;
   String checkBoxValue = '';
   int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   @override
   void initState() {
@@ -520,7 +520,7 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                 print("Save pdf");
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (ctx) {
-                                  return const WorkerDetailed();
+                                  return WorkerDetailed();
                                 }));
                               },
                               style: ElevatedButton.styleFrom(

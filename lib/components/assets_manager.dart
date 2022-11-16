@@ -29,4 +29,5 @@ class ImageAssets {
   static const String currentLocationSvg = 'assets/location.svg';
   static const String chooseFromAppSvg = 'assets/choose_from_app.svg';
   static const String addressCardSvg = 'assets/address_card.svg';
+  static const String noConnection = 'assets/connection_failed.json';
 }
