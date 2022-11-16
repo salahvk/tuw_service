@@ -48,6 +48,7 @@ class Userdetails {
   String? createdAt;
   String? updatedAt;
   String? countryName;
+  String? homeLocation;
   String? userType;
   String? coverPic;
   String? latitude;
@@ -77,6 +78,7 @@ class Userdetails {
       this.createdAt,
       this.updatedAt,
       this.countryName,
+      this.homeLocation,
       this.userType,
       this.coverPic,
       this.latitude,
@@ -106,6 +108,7 @@ class Userdetails {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     countryName = json['country_name'];
+    homeLocation = json['home_location'];
     userType = json['user_type'];
     coverPic = json['cover_pic'];
     latitude = json['latitude'];
@@ -137,6 +140,7 @@ class Userdetails {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['country_name'] = countryName;
+    data['home_location'] = homeLocation;
     data['cover_pic'] = coverPic;
     data['latitude'] = latitude;
     data['longitude'] = longitude;

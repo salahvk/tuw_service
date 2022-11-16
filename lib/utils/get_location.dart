@@ -23,7 +23,7 @@ requestLocationPermission(BuildContext context) async {
   final latLon = await getCurrentLocation();
   print('return');
   print(latLon);
-  await updateLocationFunction(context, latLon);
+  await updateLocationFunction(context, latLon, '');
   await viewProfile(context);
 }
 

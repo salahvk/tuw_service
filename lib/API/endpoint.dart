@@ -30,4 +30,4 @@ const String userAddressCreate = '$api/address/create';
 const String getUserAddressApi = '$api/address/list';
 const String updateUserAddressApi = '$api/address/update';
 
-const String updateLocationApi = '$api/update/location?home_location=calicut';
+const String updateLocationApi = '$api/update/location?home_location=';

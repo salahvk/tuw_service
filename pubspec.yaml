@@ -71,7 +71,7 @@ dependencies:
   screenshot: ^1.2.3
   open_filex: ^4.1.1
   pdf: ^3.8.3
-  # geocoding: ^2.0.5
+  geocoding: ^2.0.5
   google_maps_flutter: ^2.2.1
   # latlong2: ^0.8.1
   geolocator: ^9.0.2

@@ -89,7 +89,7 @@ class _ServicerPageState extends State<ServicerPage> {
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: size.height * 0.825,
-          width: size.width * 0.54,
+          width: isSerDrawerOpened ? size.width * 0.54 : size.width * 0.6,
           child: isSerDrawerOpened ? const SerDrawer() : const CustomDrawer(),
         ),
         //   drawerEnableOpenDragGesture: false,

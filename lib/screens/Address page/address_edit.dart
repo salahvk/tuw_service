@@ -6,6 +6,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -76,6 +77,9 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
     final userDetails = provider.viewProfileModel?.userdetails;
+    final currentLocator = LatLng(
+        double.parse(userDetails?.latitude ?? '41.612849'),
+        double.parse(userDetails?.longitude ?? '13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -283,7 +287,16 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text("Oman | Sohar"),
+                                  Text(
+                                    userDetails!.homeLocation ?? '',
+                                    style: getRegularStyle(
+                                        color: ColorManager.black,
+                                        fontSize:
+                                            userDetails.homeLocation!.length >
+                                                    10
+                                                ? 10
+                                                : 12),
+                                  ),
                                   Container(
                                     decoration: BoxDecoration(
                                         color: ColorManager.primary,
@@ -298,7 +311,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         // }));
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return GoogleMapScreen();
+                                          return const GoogleMapScreen();
                                         }));
                                       },
                                       child: Padding(
@@ -332,9 +345,23 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                               child: SizedBox(
                                 height: 100,
                                 width: size.width,
-                                child: CachedNetworkImage(
-                                  imageUrl: googleMap,
-                                  fit: BoxFit.cover,
+                                child: GoogleMap(
+                                  myLocationEnabled: true,
+                                  initialCameraPosition: CameraPosition(
+                                    target: currentLocator,
+                                    zoom: 4.0,
+                                  ),
+                                  markers: <Marker>{
+                                    Marker(
+                                      markerId:
+                                          const MarkerId('test_marker_id'),
+                                      position: currentLocator,
+                                      infoWindow: const InfoWindow(
+                                        title: 'Home locator',
+                                        snippet: '*',
+                                      ),
+                                    ),
+                                  },
                                 ),
                               ),
                             ),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,10 +15,8 @@ import 'package:social_media_services/screens/Address%20page/address_edit.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/screens/Address%20page/address_update.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
-import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/worker_admin.dart';
@@ -52,9 +51,12 @@ class _AddressPageState extends State<AddressPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
     final userDetails = provider.viewProfileModel?.userdetails;
     final userAddress = provider.userAddressShow?.userAddress;
+    final currentLocator = LatLng(
+        double.parse(userDetails?.latitude ?? '41.612849'),
+        double.parse(userDetails?.longitude ?? '13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -270,7 +272,16 @@ class _AddressPageState extends State<AddressPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text("Oman | Sohar"),
+                                  Text(
+                                    userDetails!.homeLocation ?? '',
+                                    style: getRegularStyle(
+                                        color: ColorManager.black,
+                                        fontSize:
+                                            userDetails.homeLocation!.length >
+                                                    20
+                                                ? 10
+                                                : 12),
+                                  ),
                                   Container(
                                     decoration: BoxDecoration(
                                         color: ColorManager.primary,
@@ -319,9 +330,23 @@ class _AddressPageState extends State<AddressPage> {
                               child: SizedBox(
                                 height: 100,
                                 width: size.width,
-                                child: CachedNetworkImage(
-                                  imageUrl: googleMap,
-                                  fit: BoxFit.cover,
+                                child: GoogleMap(
+                                  myLocationEnabled: true,
+                                  initialCameraPosition: CameraPosition(
+                                    target: currentLocator,
+                                    zoom: 4.0,
+                                  ),
+                                  markers: <Marker>{
+                                    Marker(
+                                      markerId:
+                                          const MarkerId('test_marker_id'),
+                                      position: currentLocator,
+                                      infoWindow: const InfoWindow(
+                                        title: 'Home locator',
+                                        snippet: '*',
+                                      ),
+                                    ),
+                                  },
                                 ),
                               ),
                             ),
