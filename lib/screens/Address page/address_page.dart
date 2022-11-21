@@ -19,7 +19,6 @@ import 'package:social_media_services/screens/Address%20page/address_update.dart
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
-import 'package:social_media_services/screens/worker_admin.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -150,20 +149,11 @@ class _AddressPageState extends State<AddressPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (ctx) {
-                                return const WorkerDetailedAdmin();
-                              }));
-                            },
-                            // * ProfileImage
-                            child: ProfileImage(
-                              isNavigationActive: true,
-                              iconSize: 12,
-                              profileSize: 40.5,
-                              iconRadius: 12,
-                            ),
+                          ProfileImage(
+                            isNavigationActive: false,
+                            iconSize: 12,
+                            profileSize: 40.5,
+                            iconRadius: 12,
                           ),
                           const SizedBox(
                             height: 5,
@@ -272,16 +262,19 @@ class _AddressPageState extends State<AddressPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    userDetails!.homeLocation ?? '',
-                                    style: getRegularStyle(
-                                        color: ColorManager.black,
-                                        fontSize:
-                                            userDetails.homeLocation!.length >
-                                                    20
-                                                ? 10
-                                                : 12),
-                                  ),
+                                  userDetails?.homeLocation != null
+                                      ? Text(
+                                          userDetails?.homeLocation ?? '',
+                                          style: getRegularStyle(
+                                              color: ColorManager.black,
+                                              fontSize: userDetails!
+                                                          .homeLocation!
+                                                          .length >
+                                                      20
+                                                  ? 10
+                                                  : 12),
+                                        )
+                                      : Container(),
                                   Container(
                                     decoration: BoxDecoration(
                                         color: ColorManager.primary,
@@ -430,7 +423,7 @@ class _AddressPageState extends State<AddressPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             15, 15, 15, 20),
                                         child: Text(
-                                          "${userAddress![index].addressName}\n${userAddress[index].address}\n${userAddress[index].homeNo}\n${userAddress[index].region}, ${userAddress[index].state}, ${userAddress[index].country}",
+                                          "${userAddress?[index].addressName}\n${userAddress?[index].address}\n${userAddress?[index].homeNo}\n${userAddress?[index].region}, ${userAddress?[index].state}, ${userAddress?[index].country}",
                                           style: getRegularStyle(
                                               color: ColorManager.grayLight,
                                               fontSize: 14),
@@ -440,38 +433,80 @@ class _AddressPageState extends State<AddressPage> {
                                     Positioned(
                                       right: 5,
                                       top: 5,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(builder: (ctx) {
-                                            return UserAddressUpdate(
-                                              userAddress: userAddress[index],
-                                            );
-                                          }));
-                                          // selectImage();
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey.shade300,
-                                                spreadRadius: 1,
-                                                blurRadius: 3,
-                                                // offset: const Offset(2, 2.5),
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (ctx) {
+                                                return UserAddressUpdate(
+                                                  userAddress:
+                                                      userAddress![index],
+                                                );
+                                              }));
+                                              // selectImage();
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.shade300,
+                                                    spreadRadius: 1,
+                                                    blurRadius: 3,
+                                                    // offset: const Offset(2, 2.5),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          child: const CircleAvatar(
-                                            radius: 14,
-                                            backgroundColor: Colors.white,
-                                            child: Icon(
-                                              Icons.edit,
-                                              size: 12,
-                                              color: ColorManager.primary,
+                                              child: const CircleAvatar(
+                                                radius: 14,
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  size: 12,
+                                                  color: ColorManager.primary,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              // Navigator.push(context,
+                                              //     MaterialPageRoute(builder: (ctx) {
+                                              //   return UserAddressUpdate(
+                                              //     userAddress: userAddress[index],
+                                              //   );
+                                              // }));
+                                              // selectImage();
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.shade300,
+                                                    spreadRadius: 1,
+                                                    blurRadius: 3,
+                                                    // offset: const Offset(2, 2.5),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: const CircleAvatar(
+                                                radius: 14,
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  size: 12,
+                                                  color: ColorManager.primary,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

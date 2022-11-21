@@ -7,7 +7,6 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/widgets/Ser_button.dart';
-import 'package:social_media_services/widgets/serType_drawer_list.dart';
 import 'package:social_media_services/widgets/ser_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -79,25 +78,25 @@ class _SerDrawerState extends State<SerDrawer> {
               // isResetSelected: isResetSelected,
               key: UniqueKey(),
             ),
-            SerDrawerList(
-              image: ImageAssets.truck,
-              title: 'Truck',
-              // isResetSelected: isResetSelected,
-              key: UniqueKey(),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 30, 16, 0.0),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    str.sd_type,
-                    style: getSemiBoldtStyle(
-                        color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
-                  ),
-                ],
-              ),
-            ),
+            // SerDrawerList(
+            //   image: ImageAssets.truck,
+            //   title: 'Truck',
+            //   // isResetSelected: isResetSelected,
+            //   key: UniqueKey(),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(16.0, 30, 16, 0.0),
+            //   child: Row(
+            //     // mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text(
+            //         str.sd_type,
+            //         style: getSemiBoldtStyle(
+            //             color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             // SerDrawerList(
             //   image: ImageAssets.fuel,
             //   // isResetSelected: isResetSelected,
@@ -123,20 +122,20 @@ class _SerDrawerState extends State<SerDrawer> {
             //   // isResetSelected: isResetSelected,
             //   key: UniqueKey(),
             // ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return SerTypeDrawerList(
-                    image: homeData![index].image ?? '',
-                    title: homeData[index].service ?? '',
-                    key: UniqueKey(),
-                  );
-                },
-                itemCount: homeData?.length ?? 0,
-              ),
-            ),
-            // const Spacer(),
+            // Expanded(
+            //   child: ListView.builder(
+            //     shrinkWrap: true,
+            //     itemBuilder: (context, index) {
+            //       return SerTypeDrawerList(
+            //         image: homeData![index].image ?? '',
+            //         title: homeData[index].service ?? '',
+            //         key: UniqueKey(),
+            //       );
+            //     },
+            //     itemCount: homeData?.length ?? 0,
+            //   ),
+            // ),
+            const Spacer(),
             Padding(
               padding: mob
                   ? const EdgeInsets.fromLTRB(0, 15, 0, 30)
@@ -146,6 +145,8 @@ class _SerDrawerState extends State<SerDrawer> {
                     setState(() {
                       // isResetSelected = true;
                     });
+                    provider.isFourWheelerSelected = false;
+                    provider.isTwoWheelerSelected = false;
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.whiteColor,

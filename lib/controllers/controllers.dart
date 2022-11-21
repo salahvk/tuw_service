@@ -55,3 +55,8 @@ class AddressEditControllers {
   static TextEditingController flatNoController = TextEditingController();
   static TextEditingController searchController = TextEditingController();
 }
+
+class GoogleMapControllers {
+  static TextEditingController googleMapSearchController =
+      TextEditingController();
+}

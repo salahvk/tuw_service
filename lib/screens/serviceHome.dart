@@ -178,13 +178,16 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                     style: getRegularStyle(
                                         color: ColorManager.serviceHomeGrey,
                                         fontSize:
+                                            // homeData[index].service!.length > 13
+                                            //     ? mob
+                                            //         ? 12
+                                            //         : 10
+                                            //     : mob
+                                            //         ? 16
+                                            //         : 12)),
                                             homeData[index].service!.length > 13
-                                                ? mob
-                                                    ? 12
-                                                    : 10
-                                                : mob
-                                                    ? 16
-                                                    : 12)),
+                                                ? 10
+                                                : 12)),
                                 // Text("100+ Profiles",
                                 //     style: getRegularStyle(
                                 //         color: const Color(0xffbababa),

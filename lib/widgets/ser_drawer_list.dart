@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 
 class SerDrawerList extends StatefulWidget {
   final String image;
@@ -30,11 +32,11 @@ class _SerDrawerListState extends State<SerDrawerList> {
     //     widget.isResetSelected = false;
     //   });
     // }
-    print(isTickSelected);
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DataProvider>(context, listen: false);
     // print(widget.isResetSelected);
 
     widget.key;
@@ -45,6 +47,24 @@ class _SerDrawerListState extends State<SerDrawerList> {
           setState(() {
             isTickSelected = !isTickSelected;
           });
+          print(isTickSelected);
+
+          // }
+          if (isTickSelected == false) {
+            widget.title.contains('Four')
+                ? provider.isFourWheelerSelected = false
+                : true;
+            widget.title.contains('Two')
+                ? provider.isTwoWheelerSelected = false
+                : true;
+          } else {
+            widget.title.contains('Four')
+                ? provider.isFourWheelerSelected = true
+                : false;
+            widget.title.contains('Two')
+                ? provider.isTwoWheelerSelected = true
+                : false;
+          }
         },
         child: ListTile(
           title: Row(
@@ -64,7 +84,11 @@ class _SerDrawerListState extends State<SerDrawerList> {
                   ],
                   color: Colors.white.withOpacity(0.5),
                 ),
-                child: isTickSelected == true
+                child: isTickSelected == true ||
+                        (provider.isFourWheelerSelected &&
+                            widget.title.contains('Four')) ||
+                        (provider.isTwoWheelerSelected &&
+                            widget.title.contains('Two'))
                     ? Image.asset(ImageAssets.blackTick)
                     : null,
               ),

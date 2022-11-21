@@ -7,13 +7,19 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 
-class ServicerListTile extends StatelessWidget {
+class ServicerListTile extends StatefulWidget {
   Serviceman? serviceman;
   ServicerListTile({super.key, required this.serviceman});
 
   @override
+  State<ServicerListTile> createState() => _ServicerListTileState();
+}
+
+class _ServicerListTileState extends State<ServicerListTile> {
+  bool isFavorite = false;
+  @override
   Widget build(BuildContext context) {
-    final s = serviceman?.distance.toString().split('.');
+    final s = widget.serviceman?.distance.toString().split('.');
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
     return Container(
@@ -53,11 +59,11 @@ class ServicerListTile extends StatelessWidget {
                       child: CircleAvatar(
                         radius: mob ? 40 : 20,
                         // backgroundColor: ColorManager.grayDark,
-                        backgroundImage: serviceman?.profilePic == null
+                        backgroundImage: widget.serviceman?.profilePic == null
                             ? const AssetImage(ImageAssets.profileIcon)
                                 as ImageProvider
                             : CachedNetworkImageProvider(
-                                '$endPoint${serviceman?.profilePic}'),
+                                '$endPoint${widget.serviceman?.profilePic}'),
 
                         // CachedNetworkImage(
                         //     imageUrl: '$endPoint${serviceman?.profilePic}',
@@ -99,20 +105,21 @@ class ServicerListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${serviceman?.firstname} ${serviceman?.lastname}',
+                  Text(
+                      '${widget.serviceman?.firstname} ${widget.serviceman?.lastname}',
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: mob ? 16 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(serviceman?.phone ?? '',
+                  Text(widget.serviceman?.phone ?? '',
                       style: getRegularStyle(
                           color: const Color.fromARGB(255, 173, 173, 173),
                           fontSize: mob ? 15 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(serviceman?.about ?? '',
+                  Text(widget.serviceman?.about ?? '',
                       style: getRegularStyle(
                           color: const Color.fromARGB(255, 173, 173, 173),
                           fontSize: mob ? 15 : 10)),
@@ -159,7 +166,7 @@ class ServicerListTile extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            serviceman?.distance == null
+            widget.serviceman?.distance == null
                 ? Container()
                 : Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -168,10 +175,26 @@ class ServicerListTile extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.favorite,
-                            size: mob ? 23 : 15,
-                            color: ColorManager.primary,
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                isFavorite = !isFavorite;
+                              });
+                            },
+                            child: Icon(
+                              Icons.favorite,
+                              shadows: const [
+                                Shadow(
+                                  blurRadius: 5.0,
+                                  color: Colors.black12,
+                                  offset: Offset(0, 3.5),
+                                ),
+                              ],
+                              size: mob ? 23 : 15,
+                              color: isFavorite
+                                  ? ColorManager.primary2
+                                  : Colors.black12,
+                            ),
                           ),
                           Column(
                             children: [

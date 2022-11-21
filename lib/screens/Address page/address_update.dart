@@ -46,6 +46,8 @@ class UserAddressUpdate extends StatefulWidget {
 
 class _UserAddressUpdateState extends State<UserAddressUpdate> {
   Countries? selectedValue;
+  String? countryValue;
+
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
@@ -576,7 +578,19 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                           ),
                                         ),
                                         customButton: selectedValue == null
-                                            ? null
+                                            ? Row(
+                                                children: [
+                                                  Center(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          10, 0, 10, 0),
+                                                      child: Text(
+                                                          countryValue ?? ''),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
                                             : Row(
                                                 children: [
                                                   Center(
@@ -745,7 +759,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
       showAnimatedSnackBar(context, "Address name field is required");
     } else if (address.isEmpty) {
       showAnimatedSnackBar(context, "Address field is required");
-    } else if (selectedValue == null) {
+    } else if (selectedValue == null && countryValue == null) {
       showAnimatedSnackBar(context, "Select a country");
     } else if (region.isEmpty) {
       showAnimatedSnackBar(context, "Region is required");
@@ -764,7 +778,9 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
   addressUpdaeFun(BuildContext context) async {
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
-    final country = selectedValue?.countryId;
+    final country = selectedValue != null
+        ? (selectedValue?.countryId)
+        : widget.userAddress.countryId;
     final region = AddressEditControllers.regionController.text;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
@@ -877,6 +893,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
         widget.userAddress.state ?? '';
     AddressEditControllers.flatNoController.text =
         widget.userAddress.homeNo ?? '';
+    countryValue = widget.userAddress.country;
   }
 
   clearFields() {

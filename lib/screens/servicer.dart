@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
@@ -39,6 +40,7 @@ class _ServicerPageState extends State<ServicerPage> {
 
   bool isPickerSelected = false;
   bool isSerDrawerOpened = false;
+  bool isAdvancedSearchEnabled = false;
 
   List<Countries> r2 = [];
   Timer? _debounce;
@@ -309,428 +311,452 @@ class _ServicerPageState extends State<ServicerPage> {
                               )
                             ],
                           ),
-                          // * Region
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: TitleWidget(name: str.s_country),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            // offset: const Offset(5, 8.5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Container(
-                                        width: size.width * .44,
-                                        height: mob ? 50 : 35,
-                                        decoration: BoxDecoration(
-                                            color: ColorManager.whiteColor,
-                                            borderRadius:
-                                                BorderRadius.circular(4)),
-                                        child:
-                                            //  Padding(
-                                            //   padding: mob
-                                            //       ? const EdgeInsets.fromLTRB(
-                                            //           0, 10, 0, 10)
-                                            //       : const EdgeInsets.fromLTRB(
-                                            //           0, 0, 0, 0),
-                                            //   child: DropdownButtonHideUnderline(
-                                            //     child: DropdownButton2(
-                                            //         icon: const Icon(
-                                            //           Icons.keyboard_arrow_down,
-                                            //           size: 35,
-                                            //           color: ColorManager.black,
-                                            //         ),
-                                            //         hint: Text(str.s_country,
-                                            //             style: getRegularStyle(
-                                            //                 color: const Color.fromARGB(
-                                            //                     255, 173, 173, 173),
-                                            //                 fontSize:
-                                            //                     Responsive.isMobile(context)
-                                            //                         ? 15
-                                            //                         : 10)),
-                                            //         items: items
-                                            //             .map((item) =>
-                                            //                 DropdownMenuItem<String>(
-                                            //                   value: item,
-                                            //                   child: Text(item,
-                                            //                       style: getRegularStyle(
-                                            //                           color:
-                                            //                               ColorManager
-                                            //                                   .black,
-                                            //                           fontSize: 15)),
-                                            //                 ))
-                                            //             .toList(),
-                                            //         value: selectedValue,
-                                            //         onChanged: (value) {
-                                            //           setState(() {
-                                            //             selectedValue = value as String;
-                                            //           });
-                                            //         },
-                                            //         buttonHeight: 40,
-                                            //         // buttonWidth: 140,
-                                            //         dropdownMaxHeight: size.height * .3,
-                                            //         dropdownWidth: size.width * .44,
-                                            //         itemHeight: 40,
-                                            //         buttonPadding:
-                                            //             const EdgeInsets.fromLTRB(
-                                            //                 12, 0, 8, 0),
-                                            //         // dropdownWidth: size.width,
-                                            //         itemPadding:
-                                            //             const EdgeInsets.fromLTRB(
-                                            //                 12, 0, 12, 0),
-                                            //         searchController:
-                                            //             AddressEditControllers
-                                            //                 .searchController,
-                                            //         searchInnerWidget: Padding(
-                                            //           padding: const EdgeInsets.only(
-                                            //             top: 8,
-                                            //             bottom: 4,
-                                            //             right: 8,
-                                            //             left: 8,
-                                            //           ),
-                                            //           child: TextFormField(
-                                            //             controller:
-                                            //                 AddressEditControllers
-                                            //                     .searchController,
-                                            //             decoration: InputDecoration(
-                                            //               isDense: true,
-                                            //               contentPadding:
-                                            //                   const EdgeInsets
-                                            //                       .symmetric(
-                                            //                 horizontal: 10,
-                                            //                 vertical: 8,
-                                            //               ),
-                                            //               // TODO: localisation
-                                            //               hintText: 'Search a country',
-                                            //               hintStyle: const TextStyle(
-                                            //                   fontSize: 12),
-                                            //               border: OutlineInputBorder(
-                                            //                 borderRadius:
-                                            //                     BorderRadius.circular(
-                                            //                         8),
-                                            //               ),
-                                            //             ),
-                                            //           ),
-                                            //         ),
-                                            //         searchMatchFn: (item, searchValue) {
-                                            //           return (item.value
-                                            //               .toString()
-                                            //               .toLowerCase()
-                                            //               .contains(searchValue));
-                                            //         },
-                                            //         //This to clear the search value when you close the menu
-                                            //         onMenuStateChange: (isOpen) {
-                                            //           if (!isOpen) {
-                                            //             AddressEditControllers
-                                            //                 .searchController
-                                            //                 .clear();
-                                            //           }
-                                            //         }),
-                                            //   ),
-                                            // ),
-
-                                            TextField(
-                                          // onTap: () {
-                                          //   setState(() {
-                                          //     isPickerSelected = true;
-                                          //   });
-                                          // },
-                                          onChanged: (value) async {
-                                            setState(() {
-                                              isPickerSelected = true;
-                                            });
-                                            String capitalize(String s) =>
-                                                s[0].toUpperCase() +
-                                                s.substring(1);
-
-                                            if (value.isEmpty) {
-                                              r2 = [];
-                                              setState(() {
-                                                r2 = (provider.countriesModel!
-                                                    .countries)!;
-                                              });
-                                            } else {
-                                              final lower = capitalize(value);
-
-                                              onSearchChanged(lower);
-                                            }
-
-                                            // print(r);
-                                          },
-                                          style: const TextStyle(),
-                                          controller: EditProfileControllers
-                                              .countryController,
-                                          decoration: InputDecoration(
-                                              hintText: str.e_country_h,
-                                              hintStyle: getRegularStyle(
-                                                  color: const Color.fromARGB(
-                                                      255, 173, 173, 173),
-                                                  fontSize: mob ? 15 : 10)),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: TitleWidget(name: str.s_region),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Container(
-                                      width: size.width * .44,
-                                      height: mob ? 50 : 35,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            // offset: const Offset(5, 8.5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: TextField(
-                                        // style: const TextStyle(),
-                                        controller:
-                                            ServiceControllers.regionController,
-                                        decoration: InputDecoration(
-                                            hintText: str.s_region,
-                                            hintStyle: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize:
-                                                    Responsive.isMobile(context)
-                                                        ? 15
-                                                        : 10)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          // * Google map
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: TitleWidget(name: str.s_map),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Container(
-                                      width: size.width * .44,
-                                      height: mob ? 50 : 35,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            // offset: const Offset(5, 8.5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: TextField(
-                                        // style: const TextStyle(),
-                                        controller:
-                                            ServiceControllers.mapController,
-                                        decoration: InputDecoration(
-                                            suffixIcon: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (ctx) {
-                                                    return const GoogleMapScreen();
-                                                  }));
-                                                },
-                                                child: Container(
-                                                    width: mob ? 30 : 20,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      color:
-                                                          ColorManager.primary,
-                                                    ),
-                                                    height: mob ? 30 : 25,
-                                                    child: Icon(
-                                                      Icons
-                                                          .add_location_alt_outlined,
-                                                      color: ColorManager
-                                                          .whiteColor,
-                                                      size: mob ? 20 : 15,
-                                                    )),
+                          // * Country & Region
+                          isAdvancedSearchEnabled
+                              ? FadeCustomAnimation(
+                                  delay: .1,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: TitleWidget(
+                                                    name: str.s_country),
                                               ),
-                                            ),
-                                            hintText: 'Map',
-                                            hintStyle: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize:
-                                                    Responsive.isMobile(context)
-                                                        ? 15
-                                                        : 10)),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 10.0,
+                                                        color: Colors
+                                                            .grey.shade300,
+                                                        // offset: const Offset(5, 8.5),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Container(
+                                                    width: size.width * .44,
+                                                    height: mob ? 50 : 35,
+                                                    decoration: BoxDecoration(
+                                                        color: ColorManager
+                                                            .whiteColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4)),
+                                                    child: TextField(
+                                                      // onTap: () {
+                                                      //   setState(() {
+                                                      //     isPickerSelected = true;
+                                                      //   });
+                                                      // },
+                                                      onChanged: (value) async {
+                                                        setState(() {
+                                                          isPickerSelected =
+                                                              true;
+                                                        });
+                                                        String capitalize(
+                                                                String s) =>
+                                                            s[0].toUpperCase() +
+                                                            s.substring(1);
+
+                                                        if (value.isEmpty) {
+                                                          r2 = [];
+                                                          setState(() {
+                                                            r2 = (provider
+                                                                .countriesModel!
+                                                                .countries)!;
+                                                          });
+                                                        } else {
+                                                          final lower =
+                                                              capitalize(value);
+
+                                                          onSearchChanged(
+                                                              lower);
+                                                        }
+
+                                                        // print(r);
+                                                      },
+                                                      style: const TextStyle(),
+                                                      controller:
+                                                          EditProfileControllers
+                                                              .countryController,
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                              str.e_country_h,
+                                                          hintStyle: getRegularStyle(
+                                                              color: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  173,
+                                                                  173,
+                                                                  173),
+                                                              fontSize: mob
+                                                                  ? 15
+                                                                  : 10)),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: TitleWidget(
+                                                    name: str.s_region),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: Container(
+                                                  width: size.width * .44,
+                                                  height: mob ? 50 : 35,
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 10.0,
+                                                        color: Colors
+                                                            .grey.shade300,
+                                                        // offset: const Offset(5, 8.5),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: TextField(
+                                                    // style: const TextStyle(),
+                                                    controller:
+                                                        ServiceControllers
+                                                            .regionController,
+                                                    decoration: InputDecoration(
+                                                        hintText: str.s_region,
+                                                        hintStyle: getRegularStyle(
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                173,
+                                                                173,
+                                                                173),
+                                                            fontSize: Responsive
+                                                                    .isMobile(
+                                                                        context)
+                                                                ? 15
+                                                                : 10)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      // * Google map
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: TitleWidget(
+                                                    name: str.s_map),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 10, 0, 0),
+                                                child: Container(
+                                                  width: size.width * .44,
+                                                  height: mob ? 50 : 35,
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 10.0,
+                                                        color: Colors
+                                                            .grey.shade300,
+                                                        // offset: const Offset(5, 8.5),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: TextField(
+                                                    // style: const TextStyle(),
+                                                    controller:
+                                                        ServiceControllers
+                                                            .mapController,
+                                                    decoration: InputDecoration(
+                                                        suffixIcon: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(6.0),
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (ctx) {
+                                                                return const GoogleMapScreen();
+                                                              }));
+                                                            },
+                                                            child: Container(
+                                                                width: mob
+                                                                    ? 30
+                                                                    : 20,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                  color: ColorManager
+                                                                      .primary,
+                                                                ),
+                                                                height: mob
+                                                                    ? 30
+                                                                    : 25,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .add_location_alt_outlined,
+                                                                  color: ColorManager
+                                                                      .whiteColor,
+                                                                  size: mob
+                                                                      ? 20
+                                                                      : 15,
+                                                                )),
+                                                          ),
+                                                        ),
+                                                        hintText: 'Map',
+                                                        hintStyle: getRegularStyle(
+                                                            color: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                173,
+                                                                173,
+                                                                173),
+                                                            fontSize: Responsive
+                                                                    .isMobile(
+                                                                        context)
+                                                                ? 15
+                                                                : 10)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          // Column(
+                                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                                          //   children: [
+                                          //     MandatoryHeader(heading: str.s_state),
+                                          //     Padding(
+                                          //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                          //       child: Container(
+                                          //         decoration: BoxDecoration(
+                                          //           boxShadow: [
+                                          //             BoxShadow(
+                                          //               blurRadius: 10.0,
+                                          //               color: Colors.grey.shade300,
+                                          //               // offset: const Offset(5, 8.5),
+                                          //             ),
+                                          //           ],
+                                          //         ),
+                                          //         child: Container(
+                                          //           width: size.width * .44,
+                                          //           height: mob ? 50 : 35,
+                                          //           decoration: BoxDecoration(
+                                          //               color: ColorManager.whiteColor,
+                                          //               borderRadius: BorderRadius.circular(4)),
+                                          //           child: DropdownButtonHideUnderline(
+                                          //             child: DropdownButton2(
+                                          //               icon: const Icon(
+                                          //                 Icons.keyboard_arrow_down,
+                                          //                 size: 35,
+                                          //                 color: ColorManager.black,
+                                          //               ),
+                                          //               hint: Text(str.s_state,
+                                          //                   style: getRegularStyle(
+                                          //                       color: const Color.fromARGB(
+                                          //                           255, 173, 173, 173),
+                                          //                       fontSize:
+                                          //                           Responsive.isMobile(context)
+                                          //                               ? 15
+                                          //                               : 10)),
+                                          //               items: items
+                                          //                   .map((item) =>
+                                          //                       DropdownMenuItem<String>(
+                                          //                         value: item,
+                                          //                         child: Text(item,
+                                          //                             style: getRegularStyle(
+                                          //                                 color: ColorManager
+                                          //                                     .black,
+                                          //                                 fontSize: 15)),
+                                          //                       ))
+                                          //                   .toList(),
+                                          //               value: selectedValue,
+                                          //               onChanged: (value) {
+                                          //                 setState(() {
+                                          //                   selectedValue = value as String;
+                                          //                 });
+                                          //               },
+                                          //               buttonHeight: 40,
+                                          //               // buttonWidth: 140,
+                                          //               itemHeight: 40,
+                                          //               buttonPadding:
+                                          //                   const EdgeInsets.fromLTRB(
+                                          //                       12, 0, 8, 0),
+                                          //               // dropdownWidth: size.width,
+                                          //               itemPadding: const EdgeInsets.fromLTRB(
+                                          //                   12, 0, 12, 0),
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 10, 0, 0),
+                                                  child: TitleWidget(
+                                                      name: str.s_state),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 10, 0, 0),
+                                                  child: Container(
+                                                    width: size.width * .44,
+                                                    height: mob ? 50 : 35,
+                                                    decoration: BoxDecoration(
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          // offset: const Offset(5, 8.5),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: TextField(
+                                                      // style: const TextStyle(),
+                                                      controller:
+                                                          ServiceControllers
+                                                              .stateController,
+                                                      decoration: InputDecoration(
+                                                          hintText: str.s_state,
+                                                          hintStyle: getRegularStyle(
+                                                              color: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  173,
+                                                                  173,
+                                                                  173),
+                                                              fontSize: Responsive
+                                                                      .isMobile(
+                                                                          context)
+                                                                  ? 15
+                                                                  : 10)),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ])
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      SizedBox(
+                                        width: size.width,
+                                        child: ElevatedButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              "Search",
+                                              style: getSemiBoldtStyle(
+                                                  color:
+                                                      ColorManager.whiteColor,
+                                                  fontSize: 15),
+                                            )),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            isAdvancedSearchEnabled = false;
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: ColorManager.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                          width: size.width,
+                                          height: 30,
+                                          child: const Icon(
+                                              Icons.keyboard_arrow_up),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isAdvancedSearchEnabled = true;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: ColorManager.whiteColor,
+                                          borderRadius:
+                                              BorderRadius.circular(6)),
+                                      width: size.width,
+                                      height: 30,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Advanced Search',
+                                            style: getRegularStyle(
+                                                color: ColorManager.black,
+                                                fontSize: 12),
+                                          ),
+                                          const Icon(Icons.keyboard_arrow_down),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              // Column(
-                              //   crossAxisAlignment: CrossAxisAlignment.start,
-                              //   children: [
-                              //     MandatoryHeader(heading: str.s_state),
-                              //     Padding(
-                              //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              //       child: Container(
-                              //         decoration: BoxDecoration(
-                              //           boxShadow: [
-                              //             BoxShadow(
-                              //               blurRadius: 10.0,
-                              //               color: Colors.grey.shade300,
-                              //               // offset: const Offset(5, 8.5),
-                              //             ),
-                              //           ],
-                              //         ),
-                              //         child: Container(
-                              //           width: size.width * .44,
-                              //           height: mob ? 50 : 35,
-                              //           decoration: BoxDecoration(
-                              //               color: ColorManager.whiteColor,
-                              //               borderRadius: BorderRadius.circular(4)),
-                              //           child: DropdownButtonHideUnderline(
-                              //             child: DropdownButton2(
-                              //               icon: const Icon(
-                              //                 Icons.keyboard_arrow_down,
-                              //                 size: 35,
-                              //                 color: ColorManager.black,
-                              //               ),
-                              //               hint: Text(str.s_state,
-                              //                   style: getRegularStyle(
-                              //                       color: const Color.fromARGB(
-                              //                           255, 173, 173, 173),
-                              //                       fontSize:
-                              //                           Responsive.isMobile(context)
-                              //                               ? 15
-                              //                               : 10)),
-                              //               items: items
-                              //                   .map((item) =>
-                              //                       DropdownMenuItem<String>(
-                              //                         value: item,
-                              //                         child: Text(item,
-                              //                             style: getRegularStyle(
-                              //                                 color: ColorManager
-                              //                                     .black,
-                              //                                 fontSize: 15)),
-                              //                       ))
-                              //                   .toList(),
-                              //               value: selectedValue,
-                              //               onChanged: (value) {
-                              //                 setState(() {
-                              //                   selectedValue = value as String;
-                              //                 });
-                              //               },
-                              //               buttonHeight: 40,
-                              //               // buttonWidth: 140,
-                              //               itemHeight: 40,
-                              //               buttonPadding:
-                              //                   const EdgeInsets.fromLTRB(
-                              //                       12, 0, 8, 0),
-                              //               // dropdownWidth: size.width,
-                              //               itemPadding: const EdgeInsets.fromLTRB(
-                              //                   12, 0, 12, 0),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 0),
-                                      child: TitleWidget(name: str.s_state),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 0),
-                                      child: Container(
-                                        width: size.width * .44,
-                                        height: mob ? 50 : 35,
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 10.0,
-                                              color: Colors.grey.shade300,
-                                              // offset: const Offset(5, 8.5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: TextField(
-                                          // style: const TextStyle(),
-                                          controller: ServiceControllers
-                                              .stateController,
-                                          decoration: InputDecoration(
-                                              hintText: str.s_state,
-                                              hintStyle: getRegularStyle(
-                                                  color: const Color.fromARGB(
-                                                      255, 173, 173, 173),
-                                                  fontSize: Responsive.isMobile(
-                                                          context)
-                                                      ? 15
-                                                      : 10)),
-                                        ),
-                                      ),
-                                    ),
-                                  ])
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          SizedBox(
-                            width: size.width,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Search",
-                                  style: getSemiBoldtStyle(
-                                      color: ColorManager.whiteColor,
-                                      fontSize: 15),
-                                )),
-                          ),
+                                ),
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

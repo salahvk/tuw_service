@@ -20,10 +20,13 @@ class ProfileTitleWidget extends StatelessWidget {
           const SizedBox(
             width: 60,
           ),
-          Icon(
-            icon,
-            color: ColorManager.primary,
-            size: 22,
+          SizedBox(
+            width: 25,
+            child: Icon(
+              icon,
+              color: ColorManager.primary,
+              size: 22,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),

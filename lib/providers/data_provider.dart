@@ -100,6 +100,8 @@ class DataProvider with ChangeNotifier {
   }
 
   bool isInternetConnected = false;
+  bool isTwoWheelerSelected = false;
+  bool isFourWheelerSelected = false;
 
   String gender = 'male';
   int? serviceId;

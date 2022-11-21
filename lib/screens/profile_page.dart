@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -12,6 +13,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/screens/worker_admin.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/profile_tile_widget.dart';
@@ -26,7 +28,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   @override
   void initState() {
@@ -131,27 +133,30 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           SizedBox(
               height: size.height * 0.36,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                      child: ProfileImage(
-                    isNavigationActive: false,
-                    iconSize: 18,
-                    profileSize: 60,
-                    iconRadius: 17,
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                    child: Text(
-                        '${provider.viewProfileModel?.userdetails?.firstname ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
-                        style: getBoldtStyle(
-                            color: ColorManager.black, fontSize: 20)),
-                  ),
-                  Text(provider.viewProfileModel?.userdetails?.phone ?? '',
-                      style: getRegularStyle(
-                          color: const Color(0xff6e6e6e), fontSize: 14)),
-                ],
+              child: FadeCustomAnimation(
+                delay: .1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                        child: ProfileImage(
+                      isNavigationActive: false,
+                      iconSize: 18,
+                      profileSize: 60,
+                      iconRadius: 17,
+                    )),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                      child: Text(
+                          '${provider.viewProfileModel?.userdetails?.firstname ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
+                          style: getBoldtStyle(
+                              color: ColorManager.black, fontSize: 20)),
+                    ),
+                    Text(provider.viewProfileModel?.userdetails?.phone ?? '',
+                        style: getRegularStyle(
+                            color: const Color(0xff6e6e6e), fontSize: 14)),
+                  ],
+                ),
               )),
           InkWell(
             onTap: () {
@@ -159,44 +164,72 @@ class _ProfilePageState extends State<ProfilePage> {
                 return const AddressPage();
               })));
             },
-            child: ProfileTitleWidget(
-              name: str.pp_my_profile,
-              icon: Icons.person_outline,
+            child: FadeSlideCustomAnimation(
+              delay: .1,
+              child: ProfileTitleWidget(
+                name: str.pp_my_profile,
+                icon: Icons.person_outline,
+              ),
             ),
           ),
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, Routes.chatScreen);
             },
-            child: ProfileTitleWidget(
-              name: str.pp_message,
-              icon: FontAwesomeIcons.message,
+            child: FadeSlideCustomAnimation(
+              delay: .2,
+              child: ProfileTitleWidget(
+                name: str.pp_message,
+                icon: FontAwesomeIcons.message,
+              ),
             ),
           ),
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, Routes.wishList);
             },
-            child: ProfileTitleWidget(
-              name: str.pp_favourites,
-              icon: Icons.favorite_border,
+            child: FadeSlideCustomAnimation(
+              delay: .3,
+              child: ProfileTitleWidget(
+                name: str.pp_favourites,
+                icon: Icons.favorite_border,
+              ),
             ),
           ),
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, Routes.addressPage);
             },
-            child: ProfileTitleWidget(
-              name: str.pp_address,
-              icon: Icons.pin_drop_outlined,
+            child: FadeSlideCustomAnimation(
+              delay: .4,
+              child: ProfileTitleWidget(
+                name: str.pp_address,
+                icon: Icons.pin_drop_outlined,
+              ),
             ),
           ),
-          ProfileTitleWidget(
-            name: str.pp_settings,
-            icon: Icons.settings_outlined,
-          )
+          provider.viewProfileModel?.userdetails?.userType == 'customer'
+              ? Container()
+              : InkWell(
+                  onTap: () {
+                    navigateToWorkersPage();
+                  },
+                  child: FadeSlideCustomAnimation(
+                    delay: .5,
+                    child: ProfileTitleWidget(
+                      name: str.pp_settings,
+                      icon: Icons.settings_outlined,
+                    ),
+                  ),
+                )
         ],
       )),
     );
+  }
+
+  navigateToWorkersPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const WorkerDetailedAdmin();
+    }));
   }
 }
