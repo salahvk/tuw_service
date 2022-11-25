@@ -18,12 +18,10 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
-import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
-import 'package:social_media_services/screens/geoLocator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -696,10 +694,21 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                       validateAddressFields();
                                     },
                                     style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            20, 0, 20, 0)),
+                                        padding: isSaveAddressLoading
+                                            ? const EdgeInsets.fromLTRB(
+                                                40, 0, 40, 0)
+                                            : const EdgeInsets.fromLTRB(
+                                                20, 0, 20, 0)),
                                     child: isSaveAddressLoading
-                                        ? const CircularProgressIndicator()
+                                        ? const SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 3,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      ColorManager.whiteColor),
+                                            ))
                                         : Text(
                                             str.ae_save,
                                             style: getMediumtStyle(

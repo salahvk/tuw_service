@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/worker_admin.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/worker_admin.dart';
 import 'package:http/http.dart' as http;
 
 // import 'package:path/path.dart';
@@ -123,33 +123,12 @@ class _ProfileImageState extends State<ProfileImage> {
   }
 
   selectImage() async {
-    print("Img picker");
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    final imagePath = image?.path;
-    final imageName = image?.name;
-    print(image?.name);
-    print(image?.path);
-    // final XFile? photo =
-    //     await _picker.pickImage(source: ImageSource.camera);
     if (image == null) {
       return;
     }
-    // updateProfile(imageName);
     upload(image);
   }
-
-  // updateProfile(imageName) async {
-  //   final apiToken = Hive.box("token").get('api_token');
-  //   final provider = Provider.of<DataProvider>(context, listen: false);
-  //   var response = await http.post(Uri.parse(updateProfileApi),
-  //       headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken},
-  //       body: {"profile_image": imageName});
-  //   if (response.statusCode == 200) {
-  //     var jsonResponse = jsonDecode(response.body);
-  //     print(jsonResponse);
-  //   }
-  //   print(response.statusCode);
-  // }
 
   upload(XFile imageFile) async {
     var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));

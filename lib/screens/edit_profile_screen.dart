@@ -54,7 +54,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
   String? selectedValue;
   List<String> r3 = [];
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
 
   bool loading = false;
 

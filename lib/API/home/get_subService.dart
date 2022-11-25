@@ -12,6 +12,7 @@ import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/sub_service.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getSubService(BuildContext context, id) async {
@@ -47,10 +48,13 @@ getSubService(BuildContext context, id) async {
 
 selectServiceType(context, id) {
   final provider = Provider.of<DataProvider>(context, listen: false);
+  // print(provider.viewProfileModel?.userdetails?.latitude);
   if (provider.subServicesModel?.type == 'service') {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
       return const SubServicesPage();
     }));
+  } else if (provider.viewProfileModel?.userdetails?.latitude == null) {
+    requestLocationPermission(context);
   } else {
     getServiceMan(context, id);
   }

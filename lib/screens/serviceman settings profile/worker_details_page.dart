@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/custom/links.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
+import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/widgets/profile_image.dart';
 
 class WorkerDetailed extends StatefulWidget {
   Serviceman? serviceman;
@@ -19,6 +21,9 @@ class WorkerDetailed extends StatefulWidget {
 class _WorkerDetailedState extends State<WorkerDetailed> {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DataProvider>(context, listen: true);
+
+    final userData = provider.serviceManProfile?.userData;
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     return Scaffold(
@@ -30,38 +35,40 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  radius: 40,
-                  backgroundImage: widget.serviceman?.profilePic == null
-                      ? const AssetImage(ImageAssets.profileIcon)
-                          as ImageProvider
-                      : CachedNetworkImageProvider(
-                          '$endPoint${widget.serviceman?.profilePic}'),
+                  radius: 45,
+                  backgroundColor: ColorManager.background,
+                  child: ProfileImage(
+                    isNavigationActive: false,
+                    iconSize: 0,
+                    profileSize: 60,
+                    iconRadius: 0,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 5, 0, 4),
                   child: Text(
-                    '${widget.serviceman?.firstname} ${widget.serviceman?.lastname}',
+                    '${userData?.firstname ?? ''} ${userData?.lastname ?? ''}',
                     style: getRegularStyle(
                         color: ColorManager.black, fontSize: 16),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(ImageAssets.tools),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(widget.serviceman?.about ?? '',
-                        style: getRegularStyle(
-                            color: ColorManager.engineWorkerColor,
-                            fontSize: 15)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text("Sohar | Oman",
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Image.asset(ImageAssets.tools),
+                //     const SizedBox(
+                //       width: 5,
+                //     ),
+                //     Text(widget.serviceman?.about ?? '',
+                //         style: getRegularStyle(
+                //             color: ColorManager.engineWorkerColor,
+                //             fontSize: 15)),
+                //   ],
+                // ),
+                // const SizedBox(
+                //   height: 5,
+                // ),
+                Text('${userData?.state ?? ''} | ${userData?.region ?? ''}',
                     style: getRegularStyle(
                         color: ColorManager.engineWorkerColor, fontSize: 15)),
                 Row(
@@ -91,46 +98,47 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                 const SizedBox(
                   height: 5,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 80,
-                      width: size.width * .28,
-                      color: ColorManager.grayLight,
-                      child: CachedNetworkImage(
-                        imageUrl: engineWorker1,
-                        fit: BoxFit.cover,
-                        // cacheManager: customCacheManager,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Container(
-                      height: 80,
-                      width: size.width * .3,
-                      color: ColorManager.grayLight,
-                      child: CachedNetworkImage(
-                        imageUrl: engineWorker1,
-                        fit: BoxFit.cover,
-                        // cacheManager: customCacheManager,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 3,
-                    ),
-                    Container(
-                      height: 80,
-                      width: size.width * .28,
-                      color: ColorManager.grayLight,
-                      child: CachedNetworkImage(
-                        imageUrl: engineWorker1,
-                        fit: BoxFit.cover,
-                        // cacheManager: customCacheManager,
-                      ),
-                    ),
-                  ],
+                SizedBox(
+                  height: 80,
+                  child: ListView.builder(
+                    itemCount:
+                        provider.serviceManProfile!.galleryImages!.isEmpty
+                            ? 4
+                            : provider.serviceManProfile?.galleryImages?.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final galleryImages =
+                          provider.serviceManProfile?.galleryImages;
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+                        child: Container(
+                          height: 80,
+                          width: size.width * .3,
+                          color: ColorManager.grayLight,
+                          child: galleryImages!.isEmpty
+                              ? Center(
+                                  child: Text(
+                                  "Add an Image",
+                                  style: getRegularStyle(
+                                      color: ColorManager.black),
+                                ))
+                              : CachedNetworkImage(
+                                  errorWidget: (context, url, error) {
+                                    return Container(
+                                      height: 80,
+                                      width: size.width * .3,
+                                      color: ColorManager.grayLight,
+                                    );
+                                  },
+                                  imageUrl:
+                                      "$endPoint${galleryImages[index].galleryImage ?? ''}",
+                                  fit: BoxFit.cover,
+                                  // cacheManager: customCacheManager,
+                                ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
@@ -144,10 +152,14 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                     ],
                   ),
                 ),
-                Text(
-                  "Lorem Ipsum has been the industry's standard dummy Lorem Ipsum has been the industry's standard dummy.",
-                  style: getRegularStyle(
-                      color: ColorManager.engineWorkerColor, fontSize: 16),
+                Row(
+                  children: [
+                    Text(
+                      userData?.about ?? '',
+                      style: getRegularStyle(
+                          color: ColorManager.engineWorkerColor, fontSize: 16),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
@@ -189,11 +201,13 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Image.asset(ImageAssets.car),
+                    userData?.transport == 'two wheeler'
+                        ? Image.asset(ImageAssets.scooter)
+                        : Image.asset(ImageAssets.car),
                     const SizedBox(
                       width: 5,
                     ),
-                    Text("Car",
+                    Text(userData?.transport ?? '',
                         style: getRegularStyle(
                             color: ColorManager.engineWorkerColor,
                             fontSize: 15)),
@@ -211,10 +225,14 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                     ],
                   ),
                 ),
-                Text(
-                  "Lorem Ipsum has been the industry's standard dummy Lorem Ipsum has been the industry's standard dummy",
-                  style: getRegularStyle(
-                      color: ColorManager.engineWorkerColor, fontSize: 16),
+                Row(
+                  children: [
+                    Text(
+                      userData?.profile ?? '',
+                      style: getRegularStyle(
+                          color: ColorManager.engineWorkerColor, fontSize: 16),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 30,
@@ -229,24 +247,13 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
                         child: Text(
-                          str.wd_report,
+                          'Edit Profile',
                           style: getMediumtStyle(
                               color: ColorManager.whiteText, fontSize: 14),
                         )),
                     const SizedBox(
                       width: 15,
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          print("Save pdf");
-                        },
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
-                        child: Text(
-                          str.wd_block,
-                          style: getMediumtStyle(
-                              color: ColorManager.whiteText, fontSize: 14),
-                        ))
                   ],
                 ),
               ],

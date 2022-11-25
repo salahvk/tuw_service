@@ -33,9 +33,9 @@ getHome(BuildContext context) async {
     } else {
       // print(response.statusCode);
       // print(response.body);
-      // print('Something went wrong');
+      // print('// went wrong');
     }
   } on Exception catch (_) {
-    // showSnackBar("Something Went Wrong1", context);
+    // Print("// Went Wrong1", context);
   }
 }

@@ -29,5 +29,10 @@ const String paymentSuccess = '$api/update/payment-status';
 const String userAddressCreate = '$api/address/create';
 const String getUserAddressApi = '$api/address/list';
 const String updateUserAddressApi = '$api/address/update';
+const String deleteUserAddressApi = '$api/address/delete?address_id=';
 
 const String updateLocationApi = '$api/update/location?home_location=';
+
+const String updateServiceManApi = '$api/update/serviceman-profile';
+
+const String serviceManProfileApi = '$api/serviceman-profile';

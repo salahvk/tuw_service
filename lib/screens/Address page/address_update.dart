@@ -713,7 +713,15 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                         padding: const EdgeInsets.fromLTRB(
                                             20, 0, 20, 0)),
                                     child: isSaveAddressLoading
-                                        ? const CircularProgressIndicator()
+                                        ? const SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 3,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      ColorManager.whiteColor),
+                                            ))
                                         : Text(
                                             str.ae_save,
                                             style: getMediumtStyle(

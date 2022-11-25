@@ -72,7 +72,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           alignment: AlignmentDirectional.bottomCenter,
           children: [
             GoogleMap(
-              myLocationEnabled: true,
+              myLocationEnabled: true, buildingsEnabled: true,
               // compassEnabled: true,
 
               onTap: (LatLng pos) async {

@@ -3,6 +3,7 @@ class GetOtp {
   String? message;
   int? oTP;
   String? phone;
+  String? action;
 
   GetOtp({this.result, this.message, this.oTP, this.phone});
 
@@ -11,6 +12,7 @@ class GetOtp {
     message = json['message'];
     oTP = json['OTP'];
     phone = json['Phone'];
+    action = json['action'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class GetOtp {
     data['message'] = message;
     data['OTP'] = oTP;
     data['Phone'] = phone;
+    data['action'] = action;
     return data;
   }
 }

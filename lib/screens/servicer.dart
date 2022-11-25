@@ -314,7 +314,7 @@ class _ServicerPageState extends State<ServicerPage> {
                           // * Country & Region
                           isAdvancedSearchEnabled
                               ? FadeCustomAnimation(
-                                  delay: .1,
+                                  delay: .001,
                                   child: Column(
                                     children: [
                                       Row(
@@ -765,6 +765,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: InkWell(
                                     onTap: () {
+                                      print(serviceManData?[index].toJson());
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (ctx) {
                                         return ChatScreen(

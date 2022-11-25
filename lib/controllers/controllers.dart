@@ -60,3 +60,10 @@ class GoogleMapControllers {
   static TextEditingController googleMapSearchController =
       TextEditingController();
 }
+
+class ServiceManProfileEdit {
+  static TextEditingController stateController = TextEditingController();
+  static TextEditingController searchController = TextEditingController();
+  static TextEditingController descriptionController = TextEditingController();
+  static TextEditingController detailsController = TextEditingController();
+}

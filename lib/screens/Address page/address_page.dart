@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +9,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
@@ -15,10 +18,10 @@ import 'package:social_media_services/screens/Address%20page/address_edit.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/screens/Address%20page/address_update.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/widgets/AddressBox/addressPage_box.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -37,13 +40,16 @@ class _AddressPageState extends State<AddressPage> {
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   final ImagePicker _picker = ImagePicker();
+
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    getUserAddress(context);
   }
 
   @override
@@ -402,115 +408,8 @@ class _AddressPageState extends State<AddressPage> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      width: size.width,
-                                      decoration: BoxDecoration(
-                                        color: ColorManager.whiteColor,
-                                        borderRadius: BorderRadius.circular(5),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            offset: const Offset(5, 8.5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 15, 15, 20),
-                                        child: Text(
-                                          "${userAddress?[index].addressName}\n${userAddress?[index].address}\n${userAddress?[index].homeNo}\n${userAddress?[index].region}, ${userAddress?[index].state}, ${userAddress?[index].country}",
-                                          style: getRegularStyle(
-                                              color: ColorManager.grayLight,
-                                              fontSize: 14),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 5,
-                                      top: 5,
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (ctx) {
-                                                return UserAddressUpdate(
-                                                  userAddress:
-                                                      userAddress![index],
-                                                );
-                                              }));
-                                              // selectImage();
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.shade300,
-                                                    spreadRadius: 1,
-                                                    blurRadius: 3,
-                                                    // offset: const Offset(2, 2.5),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: const CircleAvatar(
-                                                radius: 14,
-                                                backgroundColor: Colors.white,
-                                                child: Icon(
-                                                  Icons.edit,
-                                                  size: 12,
-                                                  color: ColorManager.primary,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              // Navigator.push(context,
-                                              //     MaterialPageRoute(builder: (ctx) {
-                                              //   return UserAddressUpdate(
-                                              //     userAddress: userAddress[index],
-                                              //   );
-                                              // }));
-                                              // selectImage();
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.shade300,
-                                                    spreadRadius: 1,
-                                                    blurRadius: 3,
-                                                    // offset: const Offset(2, 2.5),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: const CircleAvatar(
-                                                radius: 14,
-                                                backgroundColor: Colors.white,
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  size: 12,
-                                                  color: ColorManager.primary,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              return AddressBox(
+                                userAddress: userAddress?[index],
                               );
                             },
                             itemCount: userAddress?.length ?? 0,

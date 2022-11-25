@@ -27,6 +27,7 @@ class FadeCustomAnimation extends StatelessWidget {
       delay: Duration(milliseconds: (500 * delay).round()),
       duration: tween.duration,
       tween: tween,
+      // curve: Curves.easeInExpo,
       child: child,
       builder: (context, child, animation) => Opacity(
         opacity: animation.get(AniProps.opacity),
@@ -42,18 +43,29 @@ class FadeCustomAnimation extends StatelessWidget {
 class FadeSlideCustomAnimation extends StatelessWidget {
   final double delay;
   final Widget? child;
+  bool isRight;
 
-  const FadeSlideCustomAnimation({this.delay = 1, this.child});
+  FadeSlideCustomAnimation({this.delay = 1, this.child, this.isRight = false});
 
   @override
   Widget build(BuildContext context) {
-    final tween = TimelineTween<AniProps>()
-      ..addScene(
-              begin: const Duration(milliseconds: 0),
-              duration: const Duration(milliseconds: 500))
-          .animate(AniProps.opacity, tween: Tween<double>(begin: 0.0, end: 1.0))
-          .animate(AniProps.translateY,
-              tween: Tween<double>(begin: -30.0, end: 0.0));
+    final tween = isRight
+        ? (TimelineTween<AniProps>()
+          ..addScene(
+                  begin: const Duration(milliseconds: 0),
+                  duration: const Duration(milliseconds: 500))
+              .animate(AniProps.opacity,
+                  tween: Tween<double>(end: 1.0, begin: 0.0))
+              .animate(AniProps.translateY,
+                  tween: Tween<double>(end: 0.0, begin: 30.0)))
+        : (TimelineTween<AniProps>()
+          ..addScene(
+                  begin: const Duration(milliseconds: 0),
+                  duration: const Duration(milliseconds: 500))
+              .animate(AniProps.opacity,
+                  tween: Tween<double>(begin: 0.0, end: 1.0))
+              .animate(AniProps.translateY,
+                  tween: Tween<double>(begin: -30.0, end: 0.0)));
 
     return PlayAnimation<TimelineValue<AniProps>>(
       delay: Duration(milliseconds: (500 * delay).round()),

@@ -31,5 +31,5 @@ class ColorManager {
   static const paymentPageColor2 = Color(0xff404340);
 
   // * Engine worker color
-  static const engineWorkerColor = Color.fromARGB(255, 173, 173, 173);
+  static const engineWorkerColor = Color.fromARGB(255, 158, 156, 156);
 }

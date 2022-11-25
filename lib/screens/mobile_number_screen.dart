@@ -81,131 +81,147 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: size.height * 0.36,
-                    child: Center(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.fromLTRB(0, 0, 0, size.height * .04),
-                        child: const IntroductionLogo(),
+                  FadeCustomAnimation(
+                    delay: .1,
+                    child: SizedBox(
+                      height: size.height * 0.36,
+                      child: Center(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.fromLTRB(0, 0, 0, size.height * .04),
+                          child: const IntroductionLogo(),
+                        ),
                       ),
                     ),
                   ),
 
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, size.height * .025, 20, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 10.0,
-                            color: Colors.grey.shade300,
-                            offset: const Offset(5, 8.5),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: ColorManager.whiteColor,
-                          ),
-                          // width: 500,
-                          height: size.height * .07,
+                  FadeSlideCustomAnimation(
+                    isRight: lang == 'ar' ? true : false,
+                    delay: .1,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(20, size.height * .025, 20, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 10.0,
+                              color: Colors.grey.shade300,
+                              offset: const Offset(5, 8.5),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: ColorManager.whiteColor,
+                            ),
+                            // width: 500,
+                            height: size.height * .07,
 
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isPickerSelected = true;
-                                  });
-                                },
-                                child: SizedBox(
-                                    width: size.width * .18,
-                                    height: size.height * .07,
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 3, 0),
-                                        child: Text(
-                                          "+${countryCode.toString()}",
-                                          style: getRegularStyle(
-                                              color: ColorManager
-                                                  .paymentPageColor2,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                    )),
-                              ),
-                              Container(
-                                height: 40,
-                                width: .6,
-                                color: ColorManager.grayLight,
-                              ),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Expanded(
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isPickerSelected = true;
+                                    });
+                                  },
                                   child: SizedBox(
-                                child: TextField(
-                                    keyboardType: TextInputType.phone,
-                                    controller:
-                                        PhoneNumberControllers.phoneNumCon,
-                                    style: const TextStyle(),
-                                    maxLength: 10,
-                                    decoration: InputDecoration(
-                                        counterText: '',
-                                        contentPadding: const EdgeInsets.only(
-                                            left: 0,
-                                            right: 10,
-                                            top: 0,
-                                            bottom: 0),
-                                        hintText: str.m_ent_mob_no,
-                                        hintStyle: getRegularStyle(
-                                            color: ColorManager.grayLight,
-                                            fontSize: 15))),
-                              ))
-                            ],
+                                      width: size.width * .18,
+                                      height: size.height * .07,
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 3, 0),
+                                          child: Text(
+                                            "+${countryCode.toString()}",
+                                            style: getRegularStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor2,
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      )),
+                                ),
+                                Container(
+                                  height: 40,
+                                  width: .6,
+                                  color: ColorManager.grayLight,
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                    child: SizedBox(
+                                  child: TextField(
+                                      keyboardType: TextInputType.phone,
+                                      controller:
+                                          PhoneNumberControllers.phoneNumCon,
+                                      style: const TextStyle(),
+                                      maxLength: 10,
+                                      decoration: InputDecoration(
+                                          counterText: '',
+                                          contentPadding: const EdgeInsets.only(
+                                              left: 0,
+                                              right: 10,
+                                              top: 0,
+                                              bottom: 0),
+                                          hintText: str.m_ent_mob_no,
+                                          hintStyle: getRegularStyle(
+                                              color: ColorManager.grayLight,
+                                              fontSize: 15))),
+                                ))
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
 
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 40, 40, 30),
-                    child: Text(str.m_sub1,
-                        textAlign: TextAlign.center,
-                        style: getRegularStyle(
-                            color: ColorManager.grayLight, fontSize: 15)),
+                  FadeSlideCustomAnimation(
+                    isRight: lang == 'ar' ? true : false,
+                    delay: .1,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 40, 40, 30),
+                      child: Text(str.m_sub1,
+                          textAlign: TextAlign.center,
+                          style: getRegularStyle(
+                              color: ColorManager.grayLight, fontSize: 15)),
+                    ),
                   ),
-                  Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 4.5,
-                            color: Colors.grey.shade400,
-                            offset: const Offset(6, 6),
-                          ),
-                        ],
-                      ),
-                      width: 220,
-                      height: 50,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(elevation: 0),
-                          onPressed: onContinue,
-                          child: loading
-                              ? const CircularProgressIndicator(
-                                  color: ColorManager.primary,
-                                  backgroundColor: ColorManager.primary3,
-                                )
-                              : Text(
-                                  str.m_continue,
-                                  style: getRegularStyle(
-                                      color: ColorManager.whiteText,
-                                      fontSize: 18),
-                                ))),
+                  FadeSlideCustomAnimation(
+                    isRight: lang == 'ar' ? true : false,
+                    delay: .1,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4.5,
+                              color: Colors.grey.shade400,
+                              offset: const Offset(6, 6),
+                            ),
+                          ],
+                        ),
+                        width: 220,
+                        height: 50,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(elevation: 0),
+                            onPressed: onContinue,
+                            child: loading
+                                ? const CircularProgressIndicator(
+                                    color: ColorManager.primary3,
+                                    backgroundColor: ColorManager.whiteColor,
+                                  )
+                                : Text(
+                                    str.m_continue,
+                                    style: getRegularStyle(
+                                        color: ColorManager.whiteText,
+                                        fontSize: 18),
+                                  ))),
+                  ),
                   // const TroubleSign(),
                   // const Spacer(),
                   SizedBox(

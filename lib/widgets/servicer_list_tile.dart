@@ -106,9 +106,16 @@ class _ServicerListTileState extends State<ServicerListTile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${widget.serviceman?.firstname} ${widget.serviceman?.lastname}',
+                      '${widget.serviceman?.firstname} ${widget.serviceman?.lastname ?? ''}',
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: mob ? 16 : 10)),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(widget.serviceman?.countryname ?? '',
+                      style: getRegularStyle(
+                          color: const Color.fromARGB(255, 173, 173, 173),
+                          fontSize: mob ? 12 : 8)),
                   const SizedBox(
                     height: 4,
                   ),
@@ -119,13 +126,13 @@ class _ServicerListTileState extends State<ServicerListTile> {
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(widget.serviceman?.about ?? '',
-                      style: getRegularStyle(
-                          color: const Color.fromARGB(255, 173, 173, 173),
-                          fontSize: mob ? 15 : 10)),
-                  const SizedBox(
-                    height: 4,
-                  ),
+                  // Text(widget.serviceman?.about ?? '',
+                  //     style: getRegularStyle(
+                  //         color: const Color.fromARGB(255, 173, 173, 173),
+                  //         fontSize: mob ? 15 : 10)),
+                  // const SizedBox(
+                  //   height: 4,
+                  // ),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.start,
                   //   children: [

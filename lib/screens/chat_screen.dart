@@ -11,7 +11,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/worker_details_page.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/worker_details_page.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';

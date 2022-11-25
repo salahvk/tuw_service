@@ -13,7 +13,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
-import 'package:social_media_services/screens/worker_admin.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/worker_details_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/profile_tile_widget.dart';
@@ -212,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ? Container()
               : InkWell(
                   onTap: () {
-                    navigateToWorkersPage();
+                    navigateToServiceManProfile();
                   },
                   child: FadeSlideCustomAnimation(
                     delay: .5,
@@ -227,9 +227,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  navigateToWorkersPage() {
+  navigateToServiceManProfile() {
     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-      return const WorkerDetailedAdmin();
+      return WorkerDetailed();
     }));
   }
 }
