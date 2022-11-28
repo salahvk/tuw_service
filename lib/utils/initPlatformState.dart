@@ -9,6 +9,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/get_countries.dart';
+import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/API/get_language.dart';
 import 'package:social_media_services/components/routes_manager.dart';
@@ -42,6 +43,10 @@ Future<void> initPlatformState(BuildContext context) async {
     await getUserAddress(context);
     // await getHome(context);
     await getCountriesData(context);
+    provider.viewProfileModel?.userdetails?.userType == 'customer'
+        ? null
+        : await getServiceManProfileFun(context);
+
     gotoHomePage(context);
   }
   print(provider.deviceId);

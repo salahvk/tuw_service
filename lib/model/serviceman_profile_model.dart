@@ -69,6 +69,7 @@ class UserData {
   String? transport;
   String? profile;
   String? onlineStatus;
+  String? countryName;
 
   UserData(
       {this.id,
@@ -104,7 +105,8 @@ class UserData {
       this.longitude,
       this.transport,
       this.profile,
-      this.onlineStatus});
+      this.onlineStatus,
+      this.countryName});
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -141,6 +143,7 @@ class UserData {
     transport = json['transport'];
     profile = json['profile'];
     onlineStatus = json['online_status'];
+    countryName = json['country_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -179,6 +182,7 @@ class UserData {
     data['transport'] = transport;
     data['profile'] = profile;
     data['online_status'] = onlineStatus;
+    data['country_name'] = countryName;
     return data;
   }
 }

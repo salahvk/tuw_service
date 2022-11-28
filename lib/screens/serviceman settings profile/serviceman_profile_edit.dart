@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
@@ -18,20 +22,25 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
+import 'package:social_media_services/widgets/description_edit_widget.dart';
+import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/statusListTile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
 
-class WorkerDetailedAdmin extends StatefulWidget {
-  const WorkerDetailedAdmin({super.key});
+class ServiceManProfileEditPage extends StatefulWidget {
+  const ServiceManProfileEditPage({super.key});
 
   @override
-  State<WorkerDetailedAdmin> createState() => _WorkerDetailedAdminState();
+  State<ServiceManProfileEditPage> createState() =>
+      _ServiceManProfileEditPageState();
 }
 
-class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
-  bool isStatusVisible = false;
+class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
   String checkBoxValue = '';
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
@@ -39,10 +48,13 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
   String? selectedValue;
   int? countryid;
 
+  final ImagePicker _picker = ImagePicker();
+
   String? selectedCountry;
   List<Countries> r = [];
 
   bool isCountryEditEnabled = false;
+  bool isStatusVisible = false;
 
   List<String> r3 = [];
   final List<String> items = [
@@ -68,9 +80,12 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
       await getServiceManProfileFun(context);
       ServiceManProfileEdit.descriptionController.text = userData?.about ?? '';
       ServiceManProfileEdit.detailsController.text = userData?.profile ?? '';
-      print(ServiceManProfileEdit.descriptionController.text);
-      print(userData?.about);
-      setState(() {});
+      // print('object');
+      // print(userData?.transport ?? 's');
+      setState(() {
+        checkBoxValue = userData?.onlineStatus ?? '';
+        selectedValue = userData?.transport;
+      });
     });
   }
 
@@ -236,7 +251,8 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                           InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  checkBoxValue = 'Online';
+                                                  checkBoxValue = 'online';
+                                                  isStatusVisible = false;
                                                 });
                                               },
                                               child: StatusLIstTile(
@@ -246,7 +262,8 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                           InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  checkBoxValue = 'Offline';
+                                                  checkBoxValue = 'offline';
+                                                  isStatusVisible = false;
                                                 });
                                               },
                                               child: StatusLIstTile(
@@ -256,7 +273,8 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                                           InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  checkBoxValue = 'Busy';
+                                                  checkBoxValue = 'busy';
+                                                  isStatusVisible = false;
                                                 });
                                               },
                                               child: StatusLIstTile(
@@ -332,29 +350,37 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  '${userData?.state ?? ''} | ${userData?.region ?? ''}',
-                                  style: getRegularStyle(
-                                      color: ColorManager.engineWorkerColor,
-                                      fontSize: userData!.state!.length > 20
-                                          ? 10
-                                          : 12),
-                                )),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      isCountryEditEnabled =
-                                          !isCountryEditEnabled;
-                                    });
-                                  },
-                                  child: isCountryEditEnabled
-                                      ? const Icon(Icons.arrow_drop_up_outlined)
-                                      : Image.asset(ImageAssets.penEdit)),
+                            SizedBox(
+                              width: 140,
+                              child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
+                                    style: getRegularStyle(
+                                        color: ColorManager.engineWorkerColor,
+                                        fontSize:
+                                            userData!.countryName!.length > 10
+                                                ? 10
+                                                : 12),
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 30,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        isCountryEditEnabled =
+                                            !isCountryEditEnabled;
+                                      });
+                                    },
+                                    child: isCountryEditEnabled
+                                        ? const Icon(
+                                            Icons.arrow_drop_up_outlined)
+                                        : Image.asset(ImageAssets.penEdit)),
+                              ),
                             )
                           ],
                         ),
@@ -526,27 +552,32 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           // * Add image start
-                          Container(
-                              width: 30,
-                              height: 21,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 9.5,
-                                    color: Colors.grey.shade400,
-                                    offset: const Offset(6, 6),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(5),
-                                color: ColorManager.whiteColor,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Image.asset(
-                                  ImageAssets.addImage,
-                                  fit: BoxFit.contain,
+                          InkWell(
+                            onTap: () {
+                              selectImage();
+                            },
+                            child: Container(
+                                width: 30,
+                                height: 21,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 9.5,
+                                      color: Colors.grey.shade400,
+                                      offset: const Offset(6, 6),
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: ColorManager.whiteColor,
                                 ),
-                              )),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Image.asset(
+                                    ImageAssets.addImage,
+                                    fit: BoxFit.contain,
+                                  ),
+                                )),
+                          ),
                           const SizedBox(
                             width: 3,
                           ),
@@ -581,31 +612,51 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
                       SizedBox(
                         height: 80,
                         child: ListView.builder(
-                          itemCount: provider
-                                  .serviceManProfile?.galleryImages?.length ??
-                              0,
+                          itemCount:
+                              provider.serviceManProfile!.galleryImages!.isEmpty
+                                  ? 4
+                                  : provider
+                                      .serviceManProfile?.galleryImages?.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             final galleryImages =
                                 provider.serviceManProfile?.galleryImages;
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
-                              child: Container(
-                                height: 80,
-                                width: size.width * .28,
-                                color: ColorManager.grayLight,
-                                child: CachedNetworkImage(
-                                  errorWidget: (context, url, error) {
-                                    return Container(
-                                      height: 80,
-                                      width: size.width * .28,
-                                      color: ColorManager.grayLight,
-                                    );
-                                  },
-                                  imageUrl:
-                                      "$endPoint${galleryImages![index].galleryImage ?? ''}",
-                                  fit: BoxFit.cover,
-                                  // cacheManager: customCacheManager,
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => PopupImage(
+                                          image: galleryImages?[index]
+                                              .galleryImage),
+                                      barrierDismissible: true);
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Container(
+                                    height: 80,
+                                    width: size.width * .28,
+                                    color: ColorManager.grayLight,
+                                    child: galleryImages!.isEmpty
+                                        ? Image.asset(
+                                            'assets/no_image.png',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : CachedNetworkImage(
+                                            errorWidget: (context, url, error) {
+                                              return Container(
+                                                height: 80,
+                                                width: size.width * .28,
+                                                color: ColorManager.grayLight,
+                                              );
+                                            },
+                                            imageUrl:
+                                                "$endPoint${galleryImages[index].galleryImage ?? ''}",
+                                            fit: BoxFit.cover,
+                                            // cacheManager: customCacheManager,
+                                          ),
+                                  ),
                                 ),
                               ),
                             );
@@ -789,15 +840,15 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
         : ServiceManProfileEdit.detailsController.text;
     final countryId = countryid ?? userData?.countryId.toString();
 
-    final transport = selectedValue ?? userData?.transport;
+    final transport = selectedValue;
     // print(state);
     // print(about);
     // print(profile);
     // print(countryId);
     // print(transport);
 
-    updateServiceManApiFun(
-        context, state, countryId.toString(), about, profile, transport);
+    updateServiceManApiFun(context, state, countryId.toString(), about, profile,
+        transport, checkBoxValue);
   }
   // updateServiceManApiFun() {
   //   print(selectedCountry);
@@ -827,91 +878,80 @@ class _WorkerDetailedAdminState extends State<WorkerDetailedAdmin> {
       }
     });
   }
-}
 
-class DescriptionEditWidget extends StatefulWidget {
-  final String title;
-  final String hint;
-  final TextEditingController controller;
-  const DescriptionEditWidget({
-    Key? key,
-    required this.title,
-    required this.hint,
-    required this.controller,
-  }) : super(key: key);
+  selectImage() async {
+    List<File>? imageFileList = [];
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if (images == null) {
+      return;
+    }
+    for (XFile image in images) {
+      var imagesTemporary = File(image.path);
+      imageFileList.add(imagesTemporary);
+    }
+    print(images);
+    upload(images);
+    // uploadmultipleimage(images);
+  }
 
-  @override
-  State<DescriptionEditWidget> createState() => _DescriptionEditWidgetState();
-}
+  upload(List<XFile> imageFile) async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final userData = provider.serviceManProfile?.userData;
+    final state = ServiceManProfileEdit.stateController.text.isEmpty
+        ? userData?.state ?? ''
+        : ServiceManProfileEdit.stateController.text;
+    final about = ServiceManProfileEdit.descriptionController.text.isEmpty
+        ? userData?.about ?? ''
+        : ServiceManProfileEdit.descriptionController.text;
+    final profile = ServiceManProfileEdit.detailsController.text.isEmpty
+        ? userData?.profile ?? ''
+        : ServiceManProfileEdit.detailsController.text;
+    final cntryId = countryid ?? userData?.countryId.toString();
 
-class _DescriptionEditWidgetState extends State<DescriptionEditWidget> {
-  bool isEditable = false;
-  @override
-  Widget build(BuildContext context) {
-    // final str = AppLocalizations.of(context)!;
-    // final provider = Provider.of<DataProvider>(context, listen: true);
-    return Container(
-      decoration: BoxDecoration(
-        color: ColorManager.whiteColor,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10.0,
-            color: Colors.grey.shade300,
-            offset: const Offset(5, 8.5),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 5, 10, 20),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                    onTap: () {
-                      setState(() {
-                        isEditable = true;
-                      });
-                    },
-                    child: Image.asset(ImageAssets.penEdit))
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Row(
-                children: [
-                  Text(
-                    widget.title,
-                    style: getRegularStyle(
-                        color: ColorManager.black, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            isEditable
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                    child: TextField(
-                      controller: widget.controller,
-                      minLines: 3,
-                      maxLines: 6,
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Text(
-                      widget.controller.text.isEmpty
-                          ? 'Add  ${widget.title}'
-                          : widget.controller.text,
-                      style: getRegularStyle(
-                          color: ColorManager.engineWorkerColor, fontSize: 16),
-                    ),
-                  ),
-          ],
-        ),
-      ),
+    final transport = selectedValue;
+
+    final length = imageFile.length;
+    var uri = Uri.parse(
+        '$updateServiceManApi?state=$state&country_id=${cntryId.toString()}&profile=$profile&about=$about&transport=$transport&online_status=$checkBoxValue');
+    var request = http.MultipartRequest(
+      "POST",
+      uri,
     );
+
+    print(uri);
+    List<MultipartFile> multiPart = [];
+    for (var i = 0; i < length; i++) {
+      var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
+
+      var length = await imageFile[i].length();
+
+      final apiToken = Hive.box("token").get('api_token');
+
+      request.headers.addAll(
+          {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+      var multipartFile = http.MultipartFile(
+        'gallery_images[]',
+        stream,
+        length,
+        filename: (imageFile[i].path),
+      );
+      multiPart.add(multipartFile);
+    }
+    print(multiPart[0].filename);
+    print(multiPart[1].filename);
+    request.files.addAll(multiPart);
+    // "content-type": "multipart/form-data"
+
+    var response = await request.send();
+    final res = await http.Response.fromStream(response);
+
+    navigateToViewPage();
+  }
+
+  navigateToViewPage() async {
+    await getServiceManProfileFun(context);
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return ServiceManProfileViewPage();
+    }));
   }
 }

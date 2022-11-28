@@ -1,32 +1,141 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
+import 'package:social_media_services/widgets/custom_drawer.dart';
+import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 
-class WorkerDetailed extends StatefulWidget {
+class ServiceManProfileViewPage extends StatefulWidget {
   Serviceman? serviceman;
-  WorkerDetailed({super.key, this.serviceman});
+  ServiceManProfileViewPage({super.key, this.serviceman});
 
   @override
-  State<WorkerDetailed> createState() => _WorkerDetailedState();
+  State<ServiceManProfileViewPage> createState() =>
+      _ServiceManProfileViewPageState();
 }
 
-class _WorkerDetailedState extends State<WorkerDetailed> {
+class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
+  final int _selectedIndex = 2;
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      getServiceManProfileFun(context);
+    });
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DataProvider>(context, listen: true);
-
+    final mob = Responsive.isMobile(context);
     final userData = provider.serviceManProfile?.userData;
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    print(userData?.profile);
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      endDrawer: SizedBox(
+        height: size.height * 0.825,
+        width: size.width * 0.6,
+        child: const CustomDrawer(),
+      ),
+      // * Custom bottom Nav
+      bottomNavigationBar: Stack(
+        children: [
+          Container(
+            height: 45,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                blurRadius: 5.0,
+                color: Colors.grey.shade400,
+                offset: const Offset(6, 1),
+              ),
+            ]),
+          ),
+          SizedBox(
+            height: 44,
+            child: GNav(
+              tabMargin: const EdgeInsets.symmetric(
+                vertical: 0,
+              ),
+              gap: 0,
+              backgroundColor: ColorManager.whiteColor,
+              mainAxisAlignment: MainAxisAlignment.center,
+              activeColor: ColorManager.grayDark,
+              iconSize: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              duration: const Duration(milliseconds: 400),
+              tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
+              color: ColorManager.black,
+              tabs: [
+                GButton(
+                  icon: FontAwesomeIcons.message,
+                  leading: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                  ),
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.message,
+                  leading: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                  ),
+                ),
+              ],
+              haptic: true,
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.homePage, (route) => false);
+                // setState(() {
+                //   _selectedIndex = index;
+                // });
+              },
+            ),
+          ),
+          Positioned(
+              left: lang == 'ar' ? 5 : null,
+              right: lang != 'ar' ? 5 : null,
+              bottom: 0,
+              child: Builder(
+                builder: (context) => InkWell(
+                  onTap: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.menu,
+                      size: 25,
+                      color: ColorManager.black,
+                    ),
+                  ),
+                ),
+              ))
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -34,15 +143,31 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 45,
-                  backgroundColor: ColorManager.background,
-                  child: ProfileImage(
-                    isNavigationActive: false,
-                    iconSize: 0,
-                    profileSize: 60,
-                    iconRadius: 0,
-                  ),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 45,
+                      backgroundColor: ColorManager.background,
+                      child: ProfileImage(
+                        isNavigationActive: false,
+                        iconSize: 0,
+                        profileSize: 60,
+                        iconRadius: 0,
+                      ),
+                    ),
+                    Positioned(
+                      height: 40,
+                      // left: size.width * .0,
+                      child: CircleAvatar(
+                        radius: mob ? 8 : 6,
+                        backgroundColor: userData?.onlineStatus == 'online'
+                            ? ColorManager.primary
+                            : userData?.onlineStatus == 'offline'
+                                ? ColorManager.grayLight
+                                : ColorManager.errorRed,
+                      ),
+                    )
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 5, 0, 4),
@@ -68,7 +193,8 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                 // const SizedBox(
                 //   height: 5,
                 // ),
-                Text('${userData?.state ?? ''} | ${userData?.region ?? ''}',
+                Text(
+                    '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
                     style: getRegularStyle(
                         color: ColorManager.engineWorkerColor, fontSize: 15)),
                 Row(
@@ -109,32 +235,44 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                     itemBuilder: (context, index) {
                       final galleryImages =
                           provider.serviceManProfile?.galleryImages;
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
-                        child: Container(
-                          height: 80,
-                          width: size.width * .3,
-                          color: ColorManager.grayLight,
-                          child: galleryImages!.isEmpty
-                              ? Center(
-                                  child: Text(
-                                  "Add an Image",
-                                  style: getRegularStyle(
-                                      color: ColorManager.black),
-                                ))
-                              : CachedNetworkImage(
-                                  errorWidget: (context, url, error) {
-                                    return Container(
-                                      height: 80,
-                                      width: size.width * .3,
-                                      color: ColorManager.grayLight,
-                                    );
-                                  },
-                                  imageUrl:
-                                      "$endPoint${galleryImages[index].galleryImage ?? ''}",
-                                  fit: BoxFit.cover,
-                                  // cacheManager: customCacheManager,
-                                ),
+                      return InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => PopupImage(
+                                  image: galleryImages?[index].galleryImage),
+                              barrierDismissible: true);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: ColorManager.grayLight,
+                              ),
+                              height: 80,
+                              width: size.width * .3,
+                              child: galleryImages!.isEmpty
+                                  ? Image.asset(
+                                      'assets/no_image.png',
+                                      fit: BoxFit.cover,
+                                    )
+                                  : CachedNetworkImage(
+                                      errorWidget: (context, url, error) {
+                                        return Container(
+                                          height: 80,
+                                          width: size.width * .3,
+                                          color: ColorManager.grayLight,
+                                        );
+                                      },
+                                      imageUrl:
+                                          "$endPoint${galleryImages[index].galleryImage ?? ''}",
+                                      fit: BoxFit.cover,
+                                      // cacheManager: customCacheManager,
+                                    ),
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -227,6 +365,9 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                 ),
                 Row(
                   children: [
+                    // userData?.profile == null
+                    //     ? Container()
+                    //     :
                     Text(
                       userData?.profile ?? '',
                       style: getRegularStyle(
@@ -241,9 +382,7 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                        onPressed: () {
-                          // player.stop();
-                        },
+                        onPressed: navigateToServiceEditManProfile,
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
                         child: Text(
@@ -262,5 +401,11 @@ class _WorkerDetailedState extends State<WorkerDetailed> {
         ),
       ),
     );
+  }
+
+  navigateToServiceEditManProfile() {
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const ServiceManProfileEditPage();
+    }));
   }
 }

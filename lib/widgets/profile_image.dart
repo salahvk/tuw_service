@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/serviceman%20settings%20profile/worker_admin.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:http/http.dart' as http;
 
 // import 'package:path/path.dart';
@@ -157,7 +157,7 @@ class _ProfileImageState extends State<ProfileImage> {
 
   navigateToWorkersPage() {
     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-      return const WorkerDetailedAdmin();
+      return const ServiceManProfileEditPage();
     }));
   }
 }

@@ -6,17 +6,18 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/serviceman%20settings%20profile/worker_admin.dart';
+import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
-updateServiceManApiFun(
-    BuildContext context, state, id, about, profile, transport) async {
+updateServiceManApiFun(BuildContext context, state, id, about, profile,
+    transport, checkBoxValue) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   final url =
-      '$updateServiceManApi?state=$state&country_id=$id&profile=$profile&about=$about&transport=$transport';
+      '$updateServiceManApi?state=$state&country_id=$id&profile=$profile&about=$about&transport=$transport&online_status=$checkBoxValue';
   if (apiToken == null) return;
   try {
     var response = await http.post(Uri.parse(url),
@@ -25,9 +26,10 @@ updateServiceManApiFun(
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
-
+      await getServiceManProfileFun(context);
+      Navigator.pop(context);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-        return const WorkerDetailedAdmin();
+        return ServiceManProfileViewPage();
       }));
 
       // if (jsonResponse['result'] == false) {

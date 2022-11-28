@@ -10,6 +10,7 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/API/get_otp.dart';
 import 'package:social_media_services/animations/animtions.dart';
@@ -243,6 +244,9 @@ class _OTPscreenState extends State<OTPscreen> {
         await viewProfile(context);
         await getUserAddress(context);
         await getHome(context);
+        provider.viewProfileModel?.userdetails?.userType == 'customer'
+            ? null
+            : await getServiceManProfileFun(context);
 
         otpProvider.getOtp!.action!.contains('registration')
             ? navigateToEdit(context)
