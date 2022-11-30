@@ -19,25 +19,23 @@ import 'package:social_media_services/screens/serviceman%20settings%20profile/se
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
-import 'package:social_media_services/widgets/profile_image.dart';
 
-class ServiceManProfileViewPage extends StatefulWidget {
+class ServiceManDetails extends StatefulWidget {
   Serviceman? serviceman;
-  ServiceManProfileViewPage({super.key, this.serviceman});
+  ServiceManDetails({super.key, this.serviceman});
 
   @override
-  State<ServiceManProfileViewPage> createState() =>
-      _ServiceManProfileViewPageState();
+  State<ServiceManDetails> createState() => _ServiceManDetailsState();
 }
 
-class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
+class _ServiceManDetailsState extends State<ServiceManDetails> {
   final int _selectedIndex = 2;
   String lang = '';
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      getServiceManProfileFun(context);
+      getServiceManDetailsFun(context, widget.serviceman?.id.toString());
     });
     lang = Hive.box('LocalLan').get(
       'lang',
@@ -48,7 +46,7 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<DataProvider>(context, listen: true);
     final mob = Responsive.isMobile(context);
-    final userData = provider.serviceManProfile?.userData;
+    final userData = provider.serviceManDetails?.userData;
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     print(userData?.profile);
@@ -146,14 +144,37 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
               children: [
                 Stack(
                   children: [
-                    CircleAvatar(
-                      radius: 45,
-                      backgroundColor: ColorManager.background,
-                      child: ProfileImage(
-                        isNavigationActive: false,
-                        iconSize: 0,
-                        profileSize: 60,
-                        iconRadius: 0,
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(4, 4.5),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor:
+                                ColorManager.whiteColor.withOpacity(0.8),
+                            radius: 45,
+                            backgroundImage:
+                                widget.serviceman?.profilePic == null
+                                    ? null
+                                    : CachedNetworkImageProvider(
+                                        "$endPoint/${widget.serviceman?.profilePic}",
+                                      ),
+                            child: widget.serviceman?.profilePic == null
+                                ? Image.asset(
+                                    'assets/user.png',
+                                  )
+                                : null,
+                          ),
+                        ],
                       ),
                     ),
                     Positioned(
@@ -229,13 +250,13 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                   height: 80,
                   child: ListView.builder(
                     itemCount:
-                        provider.serviceManProfile!.galleryImages!.isEmpty
+                        provider.serviceManDetails!.galleryImages!.isEmpty
                             ? 4
-                            : provider.serviceManProfile?.galleryImages?.length,
+                            : provider.serviceManDetails?.galleryImages?.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       final galleryImages =
-                          provider.serviceManProfile?.galleryImages;
+                          provider.serviceManDetails?.galleryImages;
                       return InkWell(
                         onTap: () {
                           galleryImages!.isEmpty
@@ -386,17 +407,28 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                        onPressed: navigateToServiceEditManProfile,
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
+                            padding: EdgeInsets.fromLTRB(
+                                size.width * .1, 0, size.width * .1, 0)),
                         child: Text(
-                          'Edit Profile',
+                          'Report',
                           style: getMediumtStyle(
                               color: ColorManager.whiteText, fontSize: 14),
                         )),
                     const SizedBox(
                       width: 15,
                     ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.fromLTRB(
+                                size.width * .1, 0, size.width * .1, 0)),
+                        child: Text(
+                          'Block',
+                          style: getMediumtStyle(
+                              color: ColorManager.whiteText, fontSize: 14),
+                        )),
                   ],
                 ),
               ],

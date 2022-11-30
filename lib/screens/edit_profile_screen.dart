@@ -30,7 +30,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  bool isregister;
+  EditProfileScreen({Key? key, this.isregister = true}) : super(key: key);
 
   @override
   State<EditProfileScreen> createState() => _ProfileDetailsPageState();
@@ -74,7 +75,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         r3.add(provider.countriesModel!.countries![i].countryName!);
         i++;
       }
-      // fillFields(provider);
+      widget.isregister ? null : fillFields(provider);
       viewProfile(context);
       setState(() {});
       // getCustomerParent(context);
@@ -87,7 +88,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     final h = MediaQuery.of(context).size.height;
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
-    final provider = Provider.of<DataProvider>(context, listen: true);
+
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -181,23 +182,25 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (ctx) {
-                                    return const HomePage();
-                                  }));
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back_rounded,
-                                  size: 30,
-                                  color: ColorManager.primary,
-                                ),
-                              )
-                            ],
-                          ),
+                          widget.isregister
+                              ? Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pushReplacement(context,
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return const HomePage();
+                                        }));
+                                      },
+                                      child: const Icon(
+                                        Icons.arrow_back_rounded,
+                                        size: 30,
+                                        color: ColorManager.primary,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Container(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -385,57 +388,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: TitleWidget(name: str.e_country),
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          //   child: Container(
-                          //     decoration: BoxDecoration(
-                          //       boxShadow: [
-                          //         BoxShadow(
-                          //           blurRadius: 10.0,
-                          //           color: Colors.grey.shade300,
-                          //           // offset: const Offset(5, 8.5),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     child: TextField(
-                          //       // onTap: () {
-                          //       //   setState(() {
-                          //       //     isPickerSelected = true;
-                          //       //   });
-                          //       // },
-                          //       onChanged: (value) async {
-                          //         setState(() {
-                          //           isPickerSelected = true;
-                          //         });
-                          //         String capitalize(String s) =>
-                          //             s[0].toUpperCase() + s.substring(1);
 
-                          //         if (value.isEmpty) {
-                          //           r1 = [];
-                          //           setState(() {
-                          //             r1 =
-                          //                 (provider.countriesModel!.countries)!;
-                          //           });
-                          //         } else {
-                          //           final lower = capitalize(value);
-
-                          //           onSearchChanged(lower);
-                          //         }
-
-                          //         // print(r);
-                          //       },
-                          //       style: const TextStyle(),
-                          //       controller:
-                          //           EditProfileControllers.countryController,
-                          //       decoration: InputDecoration(
-                          //           hintText: str.e_country_h,
-                          //           hintStyle: getRegularStyle(
-                          //               color: const Color.fromARGB(
-                          //                   255, 173, 173, 173),
-                          //               fontSize: mob ? 15 : 10)),
-                          //     ),
-                          //   ),
-                          // ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Container(
@@ -719,101 +672,6 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                         ],
                       ),
                     ),
-                    // isPickerSelected
-                    //     ? Positioned(
-                    //         top: mob ? size.height * .53 : 410,
-                    //         // top: size.height * .458,
-                    //         right: lang == 'ar' ? size.width * .05 : null,
-                    //         left: lang != 'ar' ? size.width * .05 : null,
-                    //         child: Container(
-                    //           decoration: BoxDecoration(
-                    //             boxShadow: [
-                    //               BoxShadow(
-                    //                 blurRadius: 10.0,
-                    //                 color: Colors.grey.shade300,
-                    //                 offset: const Offset(3, 8.5),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //           child: ClipRRect(
-                    //             borderRadius: BorderRadius.circular(6),
-                    //             child: Container(
-                    //               decoration: const BoxDecoration(
-                    //                 color: ColorManager.primary2,
-                    //               ),
-                    //               height: 110,
-                    //               width: 160,
-                    //               child: Column(
-                    //                 mainAxisAlignment: MainAxisAlignment.start,
-                    //                 children: [
-                    //                   Expanded(
-                    //                     child: ListView.builder(
-                    //                         padding: const EdgeInsets.fromLTRB(
-                    //                             0, 0, 0, 0),
-                    //                         itemCount: r1.length,
-                    //                         itemBuilder: (ctx, index) {
-                    //                           return InkWell(
-                    //                             onTap: () {
-                    //                               setState(() {
-                    //                                 countryid =
-                    //                                     r1[index].countryId;
-                    //                                 r1 = (provider
-                    //                                     .countriesModel!
-                    //                                     .countries)!;
-                    //                                 isPickerSelected = false;
-                    //                               });
-                    //                             },
-                    //                             child: InkWell(
-                    //                               onTap: () {
-                    //                                 setState(() {
-                    //                                   countryid =
-                    //                                       r1[index].countryId;
-                    //                                   EditProfileControllers
-                    //                                       .countryController
-                    //                                       .text = r1[index]
-                    //                                           .countryName ??
-                    //                                       '';
-                    //                                   isPickerSelected = false;
-                    //                                 });
-                    //                               },
-                    //                               child: Container(
-                    //                                 height: 25,
-                    //                                 color:
-                    //                                     ColorManager.primary2,
-                    //                                 child: Padding(
-                    //                                   padding: const EdgeInsets
-                    //                                           .fromLTRB(
-                    //                                       10, 0, 5, 0),
-                    //                                   child: Row(
-                    //                                     children: [
-                    //                                       Text(
-                    //                                           r1[index]
-                    //                                                   .countryName ??
-                    //                                               '',
-                    //                                           style: getSemiBoldtStyle(
-                    //                                               color: ColorManager.background,
-                    //                                               fontSize: r1[index].countryName!.length < 12
-                    //                                                   ? 12
-                    //                                                   : r1[index].countryName!.length < 20
-                    //                                                       ? 10
-                    //                                                       : r1[index].countryName!.length > 25
-                    //                                                           ? 8
-                    //                                                           : 10)),
-                    //                                     ],
-                    //                                   ),
-                    //                                 ),
-                    //                               ),
-                    //                             ),
-                    //                           );
-                    //                         }),
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       )
-                    //     : Container()
                   ],
                 ),
               ),
@@ -894,8 +752,6 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         var jsonResponse = jsonDecode(response.body);
         print(jsonResponse);
 
-        // var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
-        // otpProvider.getOtpVerifiedData(otpVerifiedData);
         await viewProfile(context);
         navigateToNext();
       } else {}
@@ -911,72 +767,11 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     }));
   }
 
-  // onSearchChanged(String query) {
-  //   setState(() {
-  //     r1 = [];
-  //   });
-  //   if (_debounce?.isActive ?? false) _debounce?.cancel();
-  //   _debounce = Timer(const Duration(microseconds: 200), () {
-  //     s(query);
-  //   });
-  // }
-
-  // s(filter) {
-  //   final provider = Provider.of<DataProvider>(context, listen: false);
-  //   provider.countriesModel?.countries?.forEach((element) {
-  //     final m = element.countryName?.contains(filter);
-
-  //     if (m == true) {
-  //       setState(() {
-  //         // r = [];
-  //         r1.add(element);
-  //       });
-  //     }
-
-  //     final phoneCode = element.phonecode?.toString().contains(filter);
-
-  //     if (phoneCode == true) {
-  //       setState(() {
-  //         // r = [];
-  //         r1.add(element);
-  //       });
-  //     }
-  //   });
-  // }
-
-  // viewProfile() async {
-  //   print("view profile");
-  //   final apiToken = Hive.box("token").get('api_token');
-  //   final provider = Provider.of<DataProvider>(context, listen: false);
-
-  //   try {
-  //     var response = await http.get(Uri.parse(viewUserProfileApi), headers: {
-  //       "device-id": provider.deviceId ?? '',
-  //       "api-token": apiToken
-  //     });
-  //     if (response.statusCode == 200) {
-  //       var jsonResponse = jsonDecode(response.body);
-  //       print(jsonResponse);
-
-  //       var viewProfileData = ViewProfileModel.fromJson(jsonResponse);
-  //       provider.viewProfileData(viewProfileData);
-  //       print(provider.viewProfileModel!.userdetails!.profilePic ?? '');
-  //     } else {
-  //       print(response.statusCode);
-  //       print(response.body);
-  //       print('Something went wrong');
-  //     }
-  //   } on Exception catch (e) {
-  //     print(e);
-  //     showSnackBar("Something Went Wrong1", context);
-  //   }
-  // }
-
   s(filter) {
     setState(() {
       r = [];
     });
-    // print(filter);
+
     final provider = Provider.of<DataProvider>(context, listen: false);
     provider.countriesModel?.countries?.forEach((element) {
       final m = element.countryName?.contains(filter);
@@ -986,15 +781,25 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
           return;
         }
         setState(() {
-          // r = [];
           r.add(element);
         });
         countryid = r[0].countryId;
-
-        print(countryid);
-        print(r[0].countryName);
         provider.selectedCountryId = r[0].countryId;
       }
     });
+  }
+
+  fillFields(DataProvider provider) {
+    EditProfileControllers.firstNameController.text =
+        provider.viewProfileModel?.userdetails?.firstname ?? '';
+    EditProfileControllers.lastNameController.text =
+        provider.viewProfileModel?.userdetails?.lastname ?? '';
+    EditProfileControllers.regionController.text =
+        provider.viewProfileModel?.userdetails?.region ?? '';
+    EditProfileControllers.stateController.text =
+        provider.viewProfileModel?.userdetails?.state ?? '';
+    EditProfileControllers.regionController.text =
+        provider.viewProfileModel?.userdetails?.region ?? '';
+    selectedValue = provider.viewProfileModel?.userdetails?.countryName;
   }
 }

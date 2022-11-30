@@ -10,7 +10,7 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/Address%20page/address_page.dart';
+import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
@@ -160,9 +160,11 @@ class _ProfilePageState extends State<ProfilePage> {
               )),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                return const AddressPage();
-              })));
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                return EditProfileScreen(
+                  isregister: false,
+                );
+              }));
             },
             child: FadeSlideCustomAnimation(
               delay: .1,

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -234,6 +235,7 @@ class _OTPscreenState extends State<OTPscreen> {
           headers: {"device-id": provider.deviceId ?? ''});
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
+        log(response.body);
 
         var otpVerifiedData = OtpVerification.fromJson(jsonResponse);
         otpProvider.getOtpVerifiedData(otpVerifiedData);
@@ -268,6 +270,6 @@ navigateToHome(BuildContext context) {
 
 navigateToEdit(BuildContext context) {
   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
-    return const EditProfileScreen();
+    return EditProfileScreen();
   }), (route) => false);
 }

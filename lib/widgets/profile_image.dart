@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -71,9 +70,8 @@ class _ProfileImageState extends State<ProfileImage> {
                         "$profileImageApi/${provider.viewProfileModel?.userdetails?.profilePic}",
                       ),
             child: provider.viewProfileModel?.userdetails?.profilePic == null
-                ? SvgPicture.asset(
-                    'assets/profileAvatar.svg',
-                    color: ColorManager.primary,
+                ? Image.asset(
+                    'assets/user.png',
                   )
                 : null,
           ),

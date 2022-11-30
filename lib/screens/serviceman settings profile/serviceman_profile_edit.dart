@@ -1,4 +1,6 @@
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -23,6 +25,7 @@ import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/description_edit_widget.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
@@ -257,7 +260,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                               },
                                               child: StatusLIstTile(
                                                 checkBoxValue: checkBoxValue,
-                                                title: str.wd_online,
+                                                title: 'online',
                                               )),
                                           InkWell(
                                               onTap: () {
@@ -268,7 +271,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                               },
                                               child: StatusLIstTile(
                                                 checkBoxValue: checkBoxValue,
-                                                title: str.wd_offline,
+                                                title: 'offline',
                                               )),
                                           InkWell(
                                               onTap: () {
@@ -279,7 +282,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                               },
                                               child: StatusLIstTile(
                                                 checkBoxValue: checkBoxValue,
-                                                title: str.wd_busy,
+                                                title: 'busy',
                                               )),
                                         ],
                                       ),
@@ -830,36 +833,27 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final userData = provider.serviceManProfile?.userData;
     final state = ServiceManProfileEdit.stateController.text.isEmpty
-        ? userData?.state
+        ? userData?.state ?? ''
         : ServiceManProfileEdit.stateController.text;
     final about = ServiceManProfileEdit.descriptionController.text.isEmpty
-        ? userData?.about
+        ? userData?.about ?? ''
         : ServiceManProfileEdit.descriptionController.text;
     final profile = ServiceManProfileEdit.detailsController.text.isEmpty
-        ? userData?.profile
+        ? userData?.profile ?? ''
         : ServiceManProfileEdit.detailsController.text;
     final countryId = countryid ?? userData?.countryId.toString();
 
-    final transport = selectedValue;
-    // print(state);
-    // print(about);
-    // print(profile);
-    // print(countryId);
-    // print(transport);
+    final transport = selectedValue ?? '';
 
     updateServiceManApiFun(context, state, countryId.toString(), about, profile,
         transport, checkBoxValue);
   }
-  // updateServiceManApiFun() {
-  //   print(selectedCountry);
-  //   print(ServiceManProfileEdit.stateController.text);
-  // }
 
   s(filter) {
     setState(() {
       r = [];
     });
-    // print(filter);
+
     final provider = Provider.of<DataProvider>(context, listen: false);
     provider.countriesModel?.countries?.forEach((element) {
       final m = element.countryName?.contains(filter);
@@ -880,15 +874,16 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
   }
 
   selectImage() async {
-    List<File>? imageFileList = [];
+    // List<File>? imageFileList = [];
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images == null) {
       return;
     }
-    for (XFile image in images) {
-      var imagesTemporary = File(image.path);
-      imageFileList.add(imagesTemporary);
-    }
+    // for (XFile image in images) {
+    //   var imagesTemporary = File(image.path);
+    //   imageFileList.add(imagesTemporary);
+    // }
+    print('testing');
     print(images);
     upload(images);
     // uploadmultipleimage(images);
@@ -908,7 +903,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
         : ServiceManProfileEdit.detailsController.text;
     final cntryId = countryid ?? userData?.countryId.toString();
 
-    final transport = selectedValue;
+    final transport = selectedValue ?? '';
 
     final length = imageFile.length;
     var uri = Uri.parse(
@@ -919,8 +914,10 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
     );
 
     print(uri);
+    print(selectedValue);
     List<MultipartFile> multiPart = [];
     for (var i = 0; i < length; i++) {
+      print('hello');
       var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
 
       var length = await imageFile[i].length();
@@ -937,20 +934,33 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
       );
       multiPart.add(multipartFile);
     }
+    print('multipart printing');
     print(multiPart[0].filename);
-    print(multiPart[1].filename);
-    request.files.addAll(multiPart);
+
+    length > 1
+        ? request.files.addAll(multiPart)
+        : request.files.add(multiPart[0]);
+
     // "content-type": "multipart/form-data"
 
     var response = await request.send();
     final res = await http.Response.fromStream(response);
+    var jsonResponse = jsonDecode(res.body);
+
+    if (jsonResponse["result"] == false) {
+      showAnimatedSnackBar(
+          context, "Images must be a file of type: jpeg, jpg, png.");
+      setState(() {});
+      return;
+    }
 
     navigateToViewPage();
   }
 
   navigateToViewPage() async {
     await getServiceManProfileFun(context);
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+    Navigator.pop(context);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
       return ServiceManProfileViewPage();
     }));
   }

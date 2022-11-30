@@ -107,6 +107,13 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ServiceManProfile? serviceManDetails;
+
+  void getServiceManDetails(value) {
+    serviceManDetails = value;
+    notifyListeners();
+  }
+
   bool isInternetConnected = false;
   bool isTwoWheelerSelected = false;
   bool isFourWheelerSelected = false;

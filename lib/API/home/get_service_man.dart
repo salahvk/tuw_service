@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/servicer.dart';
+import 'package:social_media_services/screens/serviceman/servicer.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getServiceMan(BuildContext context, id) async {

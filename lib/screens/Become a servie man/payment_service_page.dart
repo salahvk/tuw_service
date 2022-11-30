@@ -54,7 +54,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
 
   int _selectedIndex = 2;
   int taxTotal = 0;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   double grandTotal = 0;
   double taxTotalAmount = 0;
 
@@ -607,8 +607,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         },
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1900, 8),
-        lastDate: DateTime.now());
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100, 8));
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;

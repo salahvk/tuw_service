@@ -60,28 +60,10 @@ class _ServicerListTileState extends State<ServicerListTile> {
                         radius: mob ? 40 : 20,
                         // backgroundColor: ColorManager.grayDark,
                         backgroundImage: widget.serviceman?.profilePic == null
-                            ? const AssetImage(ImageAssets.profileIcon)
+                            ? const AssetImage('assets/user.png')
                                 as ImageProvider
                             : CachedNetworkImageProvider(
                                 '$endPoint${widget.serviceman?.profilePic}'),
-
-                        // CachedNetworkImage(
-                        //     imageUrl: '$endPoint${serviceman?.profilePic}',
-                        //     imageBuilder: (context, imageProvider) => Container(
-                        //           // width: 25,
-                        //           // height: 20,
-                        //           decoration: BoxDecoration(
-                        //             // shape: BoxShape.circle,
-                        //             image: DecorationImage(
-                        //                 image: imageProvider,
-                        //                 fit: BoxFit.cover),
-                        //           ),
-                        //         ),
-                        //     fit: BoxFit.cover,
-                        //     errorWidget: (context, url, error) => Image.asset(
-                        //           ImageAssets.profileIcon,
-                        //           fit: BoxFit.cover,
-                        //         )),
                       ),
                     ),
                   ),
@@ -91,7 +73,11 @@ class _ServicerListTileState extends State<ServicerListTile> {
                   left: size.width * .06,
                   child: CircleAvatar(
                     radius: mob ? 8 : 6,
-                    backgroundColor: ColorManager.primary,
+                    backgroundColor: widget.serviceman?.onlineStatus == 'online'
+                        ? ColorManager.primary
+                        : widget.serviceman?.onlineStatus == 'offline'
+                            ? ColorManager.grayLight
+                            : ColorManager.errorRed,
                   ),
                 )
               ],

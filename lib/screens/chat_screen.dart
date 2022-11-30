@@ -11,7 +11,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
+import 'package:social_media_services/screens/serviceman/serviceman_list_details.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
@@ -19,6 +19,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class ChatScreen extends StatefulWidget {
   Serviceman? serviceman;
@@ -84,7 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: CircleAvatar(
               radius: 16,
               backgroundImage: widget.serviceman?.profilePic == null
-                  ? const AssetImage(ImageAssets.profileIcon) as ImageProvider
+                  ? const AssetImage('assets/user.png') as ImageProvider
                   : CachedNetworkImageProvider(
                       '$endPoint${widget.serviceman?.profilePic}'),
             ),
@@ -92,7 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
           title: InkWell(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                return ServiceManProfileViewPage(
+                return ServiceManDetails(
                   serviceman: widget.serviceman,
                 );
               }));
@@ -121,13 +122,18 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-          actions: const [
-            Icon(Icons.videocam),
-            SizedBox(
+          actions: [
+            const Icon(Icons.videocam),
+            const SizedBox(
               width: 8,
             ),
-            Icon(Icons.call_outlined),
-            SizedBox(
+            InkWell(
+                onTap: () {
+                  FlutterPhoneDirectCaller.callNumber(
+                      widget.serviceman?.phone ?? '');
+                },
+                child: const Icon(Icons.call_outlined)),
+            const SizedBox(
               width: 20,
             )
           ],
