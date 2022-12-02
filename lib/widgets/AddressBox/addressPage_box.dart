@@ -1,14 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:social_media_services/API/address/deleteUserAddress.dart';
-import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 
 import 'package:social_media_services/screens/Address%20page/address_update.dart';
+import 'package:social_media_services/utils/diologue.dart';
 
 class AddressBox extends StatefulWidget {
   UserAddress? userAddress;
@@ -93,15 +91,18 @@ class _AddressBoxState extends State<AddressBox> {
                 InkWell(
                   onTap: () async {
                     final addressId = widget.userAddress!.id.toString();
-                    print(addressId);
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await deleteAddressBox(addressId);
-                    setState(() {
-                      isLoading = false;
-                    });
-
+                    // print(addressId);
+                    // setState(() {
+                    //   isLoading = true;
+                    // });
+                    // await deleteAddressBox(addressId);
+                    // setState(() {
+                    //   isLoading = false;
+                    // });
+                    showDialog(
+                        context: context,
+                        builder: (context) => DialogueBox(addressId: addressId),
+                        barrierDismissible: false);
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (ctx) {
                     //   return UserAddressUpdate(
@@ -145,11 +146,5 @@ class _AddressBoxState extends State<AddressBox> {
         ],
       ),
     );
-  }
-
-  deleteAddressBox(id) async {
-    await deleteUserAddress(context, id);
-    await viewProfile(context);
-    Navigator.pushReplacementNamed(context, Routes.addressPage);
   }
 }

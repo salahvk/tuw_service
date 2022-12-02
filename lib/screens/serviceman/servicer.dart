@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -16,9 +18,10 @@ import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
-import 'package:social_media_services/screens/chat_screen.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/profile_loading.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,7 +29,8 @@ import 'package:social_media_services/widgets/servicer_list_tile.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 
 class ServicerPage extends StatefulWidget {
-  const ServicerPage({super.key});
+  int? id;
+  ServicerPage({super.key, this.id});
 
   @override
   State<ServicerPage> createState() => _ServicerPageState();
@@ -44,6 +48,9 @@ class _ServicerPageState extends State<ServicerPage> {
 
   List<Countries> r2 = [];
   Timer? _debounce;
+  List<String> r3 = [];
+  int? countryid;
+  List<Countries> r = [];
 
   @override
   void initState() {
@@ -52,18 +59,17 @@ class _ServicerPageState extends State<ServicerPage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   final provider = Provider.of<DataProvider>(context, listen: false);
-    //   int? n = provider.countriesModel?.countries?.length;
-    //   int i = 0;
-    //   while (i < n!.toInt()) {
-    //     r2.add(provider.countriesModel!.countries![i].countryName!);
-    //     i++;
-    //   }
-    // });
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = Provider.of<DataProvider>(context, listen: false);
-      r2 = (provider.countriesModel!.countries)!;
+      int? n = provider.countriesModel?.countries?.length;
+      int i = 0;
+      while (i < n!.toInt()) {
+        r3.add(provider.countriesModel!.countries![i].countryName!);
+        i++;
+      }
+
+      setState(() {});
     });
   }
 
@@ -88,18 +94,22 @@ class _ServicerPageState extends State<ServicerPage> {
         });
       },
       child: Scaffold(
+        onEndDrawerChanged: (isOpened) async {
+          setState(() {});
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {});
+        },
+
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: size.height * 0.825,
           width: isSerDrawerOpened ? size.width * 0.54 : size.width * 0.6,
-          child: isSerDrawerOpened ? const SerDrawer() : const CustomDrawer(),
+          child: isSerDrawerOpened
+              ? SerDrawer(
+                  id: widget.id,
+                )
+              : const CustomDrawer(),
         ),
-        //   drawerEnableOpenDragGesture: false,
-        // endDrawer: SizedBox(
-        //   height: size.height * 0.825,
-        //   width: size.width * 0.6,
-        //   child: const CustomDrawer(),
-        // ),
         // * Custom bottom Nav
         bottomNavigationBar: GestureDetector(
           onTap: () {
@@ -137,29 +147,46 @@ class _ServicerPageState extends State<ServicerPage> {
                   tabs: [
                     GButton(
                       icon: FontAwesomeIcons.message,
-                      leading: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                      leading: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (ctx) {
+                            return const HomePage(
+                              selectedIndex: 0,
+                            );
+                          }));
+                        },
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                        ),
                       ),
                     ),
                     GButton(
                       icon: FontAwesomeIcons.message,
-                      leading: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                      leading: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (ctx) {
+                            return const HomePage(
+                              selectedIndex: 1,
+                            );
+                          }));
+                        },
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                        ),
                       ),
                     ),
                   ],
                   haptic: true,
                   selectedIndex: _selectedIndex,
                   onTabChange: (index) {
-                    if (mounted) {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.homePage, (route) => false);
-                    }
-
                     // setState(() {
                     //   _selectedIndex = index;
                     // });
@@ -349,67 +376,216 @@ class _ServicerPageState extends State<ServicerPage> {
                                                   ),
                                                   child: Container(
                                                     width: size.width * .44,
-                                                    height: mob ? 50 : 35,
+                                                    height: 50,
                                                     decoration: BoxDecoration(
                                                         color: ColorManager
                                                             .whiteColor,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(4)),
-                                                    child: TextField(
-                                                      // onTap: () {
-                                                      //   setState(() {
-                                                      //     isPickerSelected = true;
-                                                      //   });
-                                                      // },
-                                                      onChanged: (value) async {
-                                                        setState(() {
-                                                          isPickerSelected =
-                                                              true;
-                                                        });
-                                                        String capitalize(
-                                                                String s) =>
-                                                            s[0].toUpperCase() +
-                                                            s.substring(1);
-
-                                                        if (value.isEmpty) {
-                                                          r2 = [];
-                                                          setState(() {
-                                                            r2 = (provider
-                                                                .countriesModel!
-                                                                .countries)!;
-                                                          });
-                                                        } else {
-                                                          final lower =
-                                                              capitalize(value);
-
-                                                          onSearchChanged(
-                                                              lower);
-                                                        }
-
-                                                        // print(r);
-                                                      },
-                                                      style: const TextStyle(),
-                                                      controller:
-                                                          EditProfileControllers
-                                                              .countryController,
-                                                      decoration: InputDecoration(
-                                                          hintText:
-                                                              str.e_country_h,
-                                                          hintStyle: getRegularStyle(
-                                                              color: const Color
-                                                                      .fromARGB(
-                                                                  255,
-                                                                  173,
-                                                                  173,
-                                                                  173),
-                                                              fontSize: mob
-                                                                  ? 15
-                                                                  : 10)),
+                                                                .circular(8)),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 10, 0, 10),
+                                                      child:
+                                                          DropdownButtonHideUnderline(
+                                                        child: DropdownButton2(
+                                                            isExpanded: true,
+                                                            // focusNode: nfocus,
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .keyboard_arrow_down,
+                                                              size: 35,
+                                                              color:
+                                                                  ColorManager
+                                                                      .black,
+                                                            ),
+                                                            hint: Text(str.ae_country_h,
+                                                                style: getRegularStyle(
+                                                                    color: const Color.fromARGB(
+                                                                        255,
+                                                                        173,
+                                                                        173,
+                                                                        173),
+                                                                    fontSize:
+                                                                        15)),
+                                                            items: r3
+                                                                .map(
+                                                                    (item) =>
+                                                                        DropdownMenuItem<
+                                                                            String>(
+                                                                          value:
+                                                                              item,
+                                                                          child: Text(
+                                                                              item,
+                                                                              style: getRegularStyle(color: ColorManager.black, fontSize: 15)),
+                                                                        ))
+                                                                .toList(),
+                                                            value:
+                                                                selectedValue,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                selectedValue =
+                                                                    value
+                                                                        as String;
+                                                              });
+                                                              s(selectedValue);
+                                                            },
+                                                            buttonHeight: 40,
+                                                            dropdownMaxHeight:
+                                                                size.height *
+                                                                    .6,
+                                                            // buttonWidth: 140,
+                                                            itemHeight: 40,
+                                                            buttonPadding:
+                                                                const EdgeInsets.fromLTRB(
+                                                                    12, 0, 8, 0),
+                                                            // dropdownWidth: size.width,
+                                                            itemPadding:
+                                                                const EdgeInsets.fromLTRB(
+                                                                    12, 0, 12, 0),
+                                                            searchController:
+                                                                AddressEditControllers
+                                                                    .searchController,
+                                                            searchInnerWidget: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                top: 8,
+                                                                bottom: 4,
+                                                                right: 8,
+                                                                left: 8,
+                                                              ),
+                                                              child:
+                                                                  TextFormField(
+                                                                controller:
+                                                                    AddressEditControllers
+                                                                        .searchController,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  isDense: true,
+                                                                  contentPadding:
+                                                                      const EdgeInsets
+                                                                          .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical: 8,
+                                                                  ),
+                                                                  // TODO: localisation
+                                                                  hintText:
+                                                                      'Search a country',
+                                                                  hintStyle:
+                                                                      const TextStyle(
+                                                                          fontSize:
+                                                                              12),
+                                                                  border:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(8),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            searchMatchFn: (item, searchValue) {
+                                                              return (item.value
+                                                                  .toString()
+                                                                  .toLowerCase()
+                                                                  .contains(
+                                                                      searchValue));
+                                                            },
+                                                            //This to clear the search value when you close the menu
+                                                            onMenuStateChange: (isOpen) {
+                                                              if (!isOpen) {
+                                                                AddressEditControllers
+                                                                    .searchController
+                                                                    .clear();
+                                                              }
+                                                            }),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              )
+                                              ),
+
+                                              // Padding(
+                                              //   padding:
+                                              //       const EdgeInsets.fromLTRB(
+                                              //           0, 10, 0, 0),
+                                              //   child: Container(
+                                              //     decoration: BoxDecoration(
+                                              //       boxShadow: [
+                                              //         BoxShadow(
+                                              //           blurRadius: 10.0,
+                                              //           color: Colors
+                                              //               .grey.shade300,
+                                              //           // offset: const Offset(5, 8.5),
+                                              //         ),
+                                              //       ],
+                                              //     ),
+                                              //     child: Container(
+                                              //       width: size.width * .44,
+                                              //       height: mob ? 50 : 35,
+                                              //       decoration: BoxDecoration(
+                                              //           color: ColorManager
+                                              //               .whiteColor,
+                                              //           borderRadius:
+                                              //               BorderRadius
+                                              //                   .circular(4)),
+                                              //       child: TextField(
+                                              //         // onTap: () {
+                                              //         //   setState(() {
+                                              //         //     isPickerSelected = true;
+                                              //         //   });
+                                              //         // },
+                                              //         onChanged: (value) async {
+                                              //           setState(() {
+                                              //             isPickerSelected =
+                                              //                 true;
+                                              //           });
+                                              //           String capitalize(
+                                              //                   String s) =>
+                                              //               s[0].toUpperCase() +
+                                              //               s.substring(1);
+
+                                              //           if (value.isEmpty) {
+                                              //             r2 = [];
+                                              //             setState(() {
+                                              //               r2 = (provider
+                                              //                   .countriesModel!
+                                              //                   .countries)!;
+                                              //             });
+                                              //           } else {
+                                              //             final lower =
+                                              //                 capitalize(value);
+
+                                              //             onSearchChanged(
+                                              //                 lower);
+                                              //           }
+
+                                              //           // print(r);
+                                              //         },
+                                              //         style: const TextStyle(),
+                                              //         controller:
+                                              //             EditProfileControllers
+                                              //                 .countryController,
+                                              //         decoration: InputDecoration(
+                                              //             hintText:
+                                              //                 str.e_country_h,
+                                              //             hintStyle: getRegularStyle(
+                                              //                 color: const Color
+                                              //                         .fromARGB(
+                                              //                     255,
+                                              //                     173,
+                                              //                     173,
+                                              //                     173),
+                                              //                 fontSize: mob
+                                              //                     ? 15
+                                              //                     : 10)),
+                                              //       ),
+                                              //     ),
+                                              //   ),
+                                              // )
                                             ],
                                           ),
                                           Column(
@@ -693,7 +869,19 @@ class _ServicerPageState extends State<ServicerPage> {
                                       SizedBox(
                                         width: size.width,
                                         child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              await searchServiceMan(
+                                                  context,
+                                                  widget.id.toString(),
+                                                  countryid,
+                                                  ServiceControllers
+                                                      .stateController.text,
+                                                  ServiceControllers
+                                                      .regionController.text,
+                                                  '',
+                                                  '');
+                                              setState(() {});
+                                            },
                                             child: Text(
                                               "Search",
                                               style: getSemiBoldtStyle(
@@ -766,10 +954,16 @@ class _ServicerPageState extends State<ServicerPage> {
                                 child: InkWell(
                                     onTap: () {
                                       print(serviceManData?[index].toJson());
+                                      // Navigator.push(context,
+                                      //     MaterialPageRoute(builder: (ctx) {
+                                      //   return ChatScreen(
+                                      //       serviceman: serviceManData![index]);
+                                      // }));
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (ctx) {
-                                        return ChatScreen(
-                                            serviceman: serviceManData![index]);
+                                        return ProfileLoading(
+                                          serviceman: serviceManData![index],
+                                        );
                                       }));
                                     },
                                     child: ServicerListTile(
@@ -779,40 +973,7 @@ class _ServicerPageState extends State<ServicerPage> {
                             }),
                             itemCount: serviceManData?.length ?? 0,
                           ),
-                          // Padding(
-                          //   padding: mob
-                          //       ? const EdgeInsets.fromLTRB(0, 5, 0, 10)
-                          //       : const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                          //   child: mob
-                          //       ? ElevatedButton(
-                          //           onPressed: () {
-                          //             // player.stop();
-                          //           },
-                          //           style: ElevatedButton.styleFrom(
-                          //               padding: const EdgeInsets.fromLTRB(
-                          //                   30, 0, 30, 0)),
-                          //           child: Text(
-                          //             str.s_continue,
-                          //             style: getRegularStyle(
-                          //                 color: ColorManager.whiteText,
-                          //                 fontSize: 16),
-                          //           ))
-                          //       : Container(
-                          //           width: 100,
-                          //           height: 25,
-                          //           decoration: BoxDecoration(
-                          //               color: ColorManager.primary,
-                          //               borderRadius: BorderRadius.circular(3)),
-                          //           child: Center(
-                          //             child: Text(
-                          //               str.s_continue,
-                          //               style: getRegularStyle(
-                          //                   color: ColorManager.whiteText,
-                          //                   fontSize: 12),
-                          //             ),
-                          //           ),
-                          //         ),
-                          // ),
+
                           const SizedBox(
                             height: 5,
                           )
@@ -933,24 +1094,23 @@ class _ServicerPageState extends State<ServicerPage> {
   }
 
   s(filter) {
+    setState(() {
+      r = [];
+    });
+
     final provider = Provider.of<DataProvider>(context, listen: false);
     provider.countriesModel?.countries?.forEach((element) {
       final m = element.countryName?.contains(filter);
 
       if (m == true) {
+        if (selectedValue != element.countryName) {
+          return;
+        }
         setState(() {
-          // r = [];
-          r2.add(element);
+          r.add(element);
         });
-      }
-
-      final phoneCode = element.phonecode?.toString().contains(filter);
-
-      if (phoneCode == true) {
-        setState(() {
-          // r = [];
-          r2.add(element);
-        });
+        countryid = r[0].countryId;
+        provider.selectedCountryId = r[0].countryId;
       }
     });
   }

@@ -26,7 +26,7 @@ class _SearchNearServiceState extends State<SearchNearService> {
       endDrawer: SizedBox(
         height: size.height * 0.825,
         width: size.width * 0.54,
-        child: const SerDrawer(),
+        child: SerDrawer(),
       ),
       body: SafeArea(
           child: Padding(

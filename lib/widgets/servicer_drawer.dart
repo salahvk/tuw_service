@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/widgets/Ser_button.dart';
@@ -11,7 +13,9 @@ import 'package:social_media_services/widgets/ser_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SerDrawer extends StatefulWidget {
-  const SerDrawer({
+  int? id;
+  SerDrawer({
+    this.id,
     Key? key,
   }) : super(key: key);
 
@@ -36,8 +40,6 @@ class _SerDrawerState extends State<SerDrawer> {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
-    final homeData = provider.homeModel?.services;
-
     return DrawerHeader(
         decoration: BoxDecoration(
           color: ColorManager.primary3,
@@ -67,12 +69,14 @@ class _SerDrawerState extends State<SerDrawer> {
               ),
             ),
             SerDrawerList(
+              id: widget.id ?? 0,
               image: ImageAssets.scooter,
               title: 'Two-Wheeler',
               // isResetSelected: isResetSelected,
               key: UniqueKey(),
             ),
             SerDrawerList(
+              id: widget.id ?? 0,
               image: ImageAssets.car,
               title: 'Four-Wheeler',
               // isResetSelected: isResetSelected,
@@ -142,6 +146,15 @@ class _SerDrawerState extends State<SerDrawer> {
                   : const EdgeInsets.fromLTRB(0, 5, 0, 10),
               child: ElevatedButton(
                   onPressed: () async {
+                    await searchServiceMan(
+                        context,
+                        widget.id.toString(),
+                        '',
+                        ServiceControllers.stateController.text,
+                        ServiceControllers.regionController.text,
+                        '',
+                        '');
+
                     setState(() {
                       // isResetSelected = true;
                     });

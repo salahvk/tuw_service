@@ -26,7 +26,7 @@ getServiceMan(BuildContext context, id) async {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
-      navToServiceMan(context);
+      navToServiceMan(context, id);
       if (jsonResponse['result'] == false) {
         await Hive.box("token").clear();
 
@@ -45,8 +45,40 @@ getServiceMan(BuildContext context, id) async {
   }
 }
 
-navToServiceMan(context) {
+searchServiceMan(BuildContext context, id, countryIdd, state, region, name,
+    transport) async {
+  //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+  final provider = Provider.of<DataProvider>(context, listen: false);
+  final userDetails = provider.viewProfileModel?.userdetails;
+  provider.subServicesModel = null;
+  final apiToken = Hive.box("token").get('api_token');
+  if (apiToken == null) return;
+  try {
+    final url =
+        '$servicemanList?service_id=$id&page=1&latitude=${userDetails?.latitude}&longitude=${userDetails?.longitude}&sel_country_id=${countryIdd ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
+    print(url);
+    var response = await http.post(Uri.parse(url),
+        headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      log(response.body);
+
+      final serviceManListData = ServiceManListModel.fromJson(jsonResponse);
+      provider.getServiceManData(serviceManListData);
+    } else {
+      // print(response.statusCode);
+      // print(response.body);
+      // print('Something went wrong');
+    }
+  } on Exception catch (_) {
+    showSnackBar("Something Went Wrong1", context);
+  }
+}
+
+navToServiceMan(context, id) {
   Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-    return const ServicerPage();
+    return ServicerPage(
+      id: id,
+    );
   }));
 }

@@ -38,12 +38,14 @@ getServiceManDetailsFun(BuildContext context, id) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
 
   try {
-    var response = await http.post(
-        Uri.parse('$serviceManProfileApi?user_id=$id'),
+    final url = '$serviceManProfileApi?user_id=$id';
+    print(url);
+    var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
+      print("Service man");
       var servicemanProfileData = ServiceManProfile.fromJson(jsonResponse);
       provider.getServiceManDetails(servicemanProfileData);
     } else {

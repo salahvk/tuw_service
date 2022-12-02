@@ -18,6 +18,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
+import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/API/viewProfile.dart';
@@ -200,7 +201,9 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                     )
                                   ],
                                 )
-                              : Container(),
+                              : Container(
+                                  height: 30,
+                                ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -763,7 +766,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
   navigateToNext() {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-      return const HomePage();
+      return const ProfilePage();
     }));
   }
 
@@ -794,6 +797,8 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         provider.viewProfileModel?.userdetails?.firstname ?? '';
     EditProfileControllers.lastNameController.text =
         provider.viewProfileModel?.userdetails?.lastname ?? '';
+    EditProfileControllers.dateController.text =
+        provider.viewProfileModel?.userdetails?.dob ?? '';
     EditProfileControllers.regionController.text =
         provider.viewProfileModel?.userdetails?.region ?? '';
     EditProfileControllers.stateController.text =
@@ -801,5 +806,6 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     EditProfileControllers.regionController.text =
         provider.viewProfileModel?.userdetails?.region ?? '';
     selectedValue = provider.viewProfileModel?.userdetails?.countryName;
+    countryid = provider.viewProfileModel?.userdetails?.countryId;
   }
 }

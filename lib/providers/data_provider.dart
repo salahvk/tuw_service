@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_services/model/chat_list.dart';
 import 'package:social_media_services/model/coupenCode.dart';
 import 'package:social_media_services/model/get_child_service.dart';
 
@@ -111,6 +112,13 @@ class DataProvider with ChangeNotifier {
 
   void getServiceManDetails(value) {
     serviceManDetails = value;
+    notifyListeners();
+  }
+
+  ChatListModel? chatListDetails;
+
+  void getChatListDetails(value) {
+    chatListDetails = value;
     notifyListeners();
   }
 

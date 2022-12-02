@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
 class SerDrawerList extends StatefulWidget {
   final String image;
   final String title;
+  final int id;
   // bool isResetSelected = false;
   // GestureTapCallback? onTap;
 
-  const SerDrawerList({
-    Key? key,
-    required this.image,
-    required this.title,
-  }) : super(key: key);
+  const SerDrawerList(
+      {Key? key, required this.image, required this.title, this.id = 0})
+      : super(key: key);
 
   @override
   State<SerDrawerList> createState() => _SerDrawerListState();
@@ -43,11 +44,10 @@ class _SerDrawerListState extends State<SerDrawerList> {
     return SizedBox(
       height: 30,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           setState(() {
             isTickSelected = !isTickSelected;
           });
-          print(isTickSelected);
 
           // }
           if (isTickSelected == false) {
@@ -65,6 +65,21 @@ class _SerDrawerListState extends State<SerDrawerList> {
                 ? provider.isTwoWheelerSelected = true
                 : false;
           }
+
+          await searchServiceMan(
+              context,
+              widget.id.toString(),
+              '',
+              ServiceControllers.stateController.text,
+              ServiceControllers.regionController.text,
+              '',
+              provider.isFourWheelerSelected && provider.isTwoWheelerSelected
+                  ? ''
+                  : provider.isFourWheelerSelected
+                      ? 'four wheeler'
+                      : provider.isTwoWheelerSelected
+                          ? 'two wheeler'
+                          : '');
         },
         child: ListTile(
           title: Row(

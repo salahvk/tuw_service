@@ -47,6 +47,7 @@ getSubService(BuildContext context, id) async {
 }
 
 selectServiceType(context, id) {
+  print(id);
   final provider = Provider.of<DataProvider>(context, listen: false);
   // print(provider.viewProfileModel?.userdetails?.latitude);
   if (provider.subServicesModel?.type == 'service') {

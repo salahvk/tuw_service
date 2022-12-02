@@ -54,35 +54,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                         getBoldtStyle(color: ColorManager.black, fontSize: 20),
                   ),
                 ),
-                // * carousel
-                // CarouselSlider.builder(
-                //   itemCount: 10,
-                //   itemBuilder:
-                //       (BuildContext context, int itemIndex, int pageViewIndex) {
-                //     return Container(
-                //       decoration: const BoxDecoration(
-                //         color: ColorManager.whiteColor,
-                //       ),
-                //       // width: 250,
-                //       child: ClipRRect(
-                //         borderRadius: BorderRadius.circular(5),
-                //         child: CachedNetworkImage(
-                //           imageUrl: switzeland,
-                //           fit: BoxFit.cover,
-                //         ),
-                //       ),
-                //     );
-                //   },
-                //   options: CarouselOptions(
-                //     autoPlay: false,
-                //     height: mob ? 110 : 60,
-                //     onPageChanged: (index, reason) {},
-                //     enlargeCenterPage: true,
-                //     viewportFraction: 0.3,
-                //     aspectRatio: 2.0,
-                //     initialPage: 0,
-                //   ),
-                // ),
                 SizedBox(
                   height: mob ? 150 : 110,
                   child: ListView.builder(
@@ -104,7 +75,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                     itemCount: provider.homeModel?.homebanner?.length ?? 0,
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
                   child: GridView.builder(
@@ -125,6 +95,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                               return const LoadingListPage();
                             }));
                             final id = homeData![index].id;
+
                             getSubService(context, id);
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (ctx) {

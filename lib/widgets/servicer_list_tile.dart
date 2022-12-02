@@ -112,49 +112,6 @@ class _ServicerListTileState extends State<ServicerListTile> {
                   const SizedBox(
                     height: 4,
                   ),
-                  // Text(widget.serviceman?.about ?? '',
-                  //     style: getRegularStyle(
-                  //         color: const Color.fromARGB(255, 173, 173, 173),
-                  //         fontSize: mob ? 15 : 10)),
-                  // const SizedBox(
-                  //   height: 4,
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     RatingBar.builder(
-                  //       initialRating: 4,
-                  //       minRating: 1,
-                  //       direction: Axis.horizontal,
-                  //       allowHalfRating: true,
-                  //       itemCount: 4,
-                  //       itemSize: mob ? 20 : 12,
-                  //       ignoreGestures: true,
-                  //       itemPadding:
-                  //           const EdgeInsets.symmetric(horizontal: 2.50),
-                  //       itemBuilder: (context, _) => const Icon(
-                  //         Icons.star,
-                  //         color: Colors.amber,
-                  //       ),
-                  //       onRatingUpdate: (rating) {
-                  //         print(rating);
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
-                  // Row(
-                  //   // mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Image.asset(ImageAssets.tools),
-                  //     const SizedBox(
-                  //       width: 5,
-                  //     ),
-                  //     Text("Engin Worker",
-                  //         style: getRegularStyle(
-                  //             color: const Color.fromARGB(255, 173, 173, 173),
-                  //             fontSize: mob ? 15 : 10))
-                  //   ],
-                  // )
                 ],
               ),
             ),

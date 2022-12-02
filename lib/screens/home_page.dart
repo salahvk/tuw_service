@@ -11,7 +11,8 @@ import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final int selectedIndex;
+  const HomePage({Key? key, this.selectedIndex = 0}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,10 +21,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   String lang = '';
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [
+    const ServiceHomePage(),
+    const MessagePage(
+      isHome: true,
+    )
+  ];
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.selectedIndex;
     lang = Hive.box('LocalLan').get(
       'lang',
     );

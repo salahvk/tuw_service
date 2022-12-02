@@ -59,7 +59,7 @@ class RouteGenerator {
       case Routes.chooseService:
         return MaterialPageRoute(builder: (_) => const ChooseServicePage());
       case Routes.servicerPage:
-        return MaterialPageRoute(builder: (_) => const ServicerPage());
+        return MaterialPageRoute(builder: (_) => ServicerPage());
       // case Routes.chatScreen:
       //   return MaterialPageRoute(builder: (_) => const ChatScreen());
       // case Routes.workerDetails:

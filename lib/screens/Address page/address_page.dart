@@ -37,7 +37,12 @@ class AddressPage extends StatefulWidget {
 
 class _AddressPageState extends State<AddressPage> {
   int _selectedIndex = 2;
-  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [
+    const ServiceHomePage(),
+    const MessagePage(
+      isHome: true,
+    )
+  ];
   String lang = '';
   final ImagePicker _picker = ImagePicker();
 

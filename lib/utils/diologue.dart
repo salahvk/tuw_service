@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
-import 'package:social_media_services/utils/initPlatformState.dart';
+import 'package:social_media_services/API/address/deleteUserAddress.dart';
+import 'package:social_media_services/API/viewProfile.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 
 class DialogueBox extends StatefulWidget {
+  final String addressId;
   const DialogueBox({
     Key? key,
+    required this.addressId,
   }) : super(key: key);
 
   @override
@@ -25,7 +28,7 @@ class _DialogueBoxState extends State<DialogueBox> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "Delete the field!",
+              "Delete address field!",
               style: TextStyle(
                   fontFamily: "Open",
                   fontWeight: FontWeight.bold,
@@ -36,7 +39,7 @@ class _DialogueBoxState extends State<DialogueBox> {
                 height: MediaQuery.of(context).size.height / 6,
                 child: LottieBuilder.asset("assets/logout_lottie.json")),
             const Text(
-              "Are you sure you want to \nLog out",
+              "Are you sure you want to \nDelete",
               textAlign: TextAlign.center,
               style: TextStyle(fontFamily: "Open", fontWeight: FontWeight.bold),
             ),
@@ -60,8 +63,8 @@ class _DialogueBoxState extends State<DialogueBox> {
                         strokeWidth: 2.5,
                       )
                     : TextButton(
-                        onPressed: () {
-                          allowfunction(context);
+                        onPressed: () async {
+                          await deleteAddressBox(widget.addressId);
                         },
                         child: const Text(
                           "Allow",
@@ -79,15 +82,23 @@ class _DialogueBoxState extends State<DialogueBox> {
     );
   }
 
-  allowfunction(BuildContext context) async {
+  // allowfunction(BuildContext context) async {
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   await Hive.box("token").clear();
+  //   callInitFunction(context);
+  // }
+
+  // callInitFunction(context) async {
+  //   await initPlatformState(context);
+  // }
+  deleteAddressBox(id) async {
     setState(() {
       loading = true;
     });
-    await Hive.box("token").clear();
-    callInitFunction(context);
-  }
-
-  callInitFunction(context) async {
-    await initPlatformState(context);
+    await deleteUserAddress(context, id);
+    await viewProfile(context);
+    Navigator.pushReplacementNamed(context, Routes.addressPage);
   }
 }

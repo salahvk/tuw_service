@@ -11,6 +11,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
@@ -28,7 +29,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final int _selectedIndex = 2;
-  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [
+    const ServiceHomePage(),
+    const MessagePage(
+      isHome: true,
+    )
+  ];
   String lang = '';
   @override
   void initState() {
@@ -81,30 +87,52 @@ class _ProfilePageState extends State<ProfilePage> {
               tabs: [
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomePage(
+                          selectedIndex: 0,
+                        );
+                      }));
+                    },
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                    ),
                   ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomePage(
+                          selectedIndex: 1,
+                        );
+                      }));
+                    },
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                    ),
                   ),
                 ),
               ],
               haptic: true,
               selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.homePage, (route) => false);
-                // setState(() {
-                //   _selectedIndex = index;
-                // });
-              },
+              // onTabChange: (index) {
+              //   Navigator.pushNamedAndRemoveUntil(
+              //       context, Routes.homePage, (route) => false);
+              //   // setState(() {
+              //   //   _selectedIndex = index;
+              //   // });
+              // },
             ),
           ),
           Positioned(
