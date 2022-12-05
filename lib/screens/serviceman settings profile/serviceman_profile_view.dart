@@ -10,12 +10,12 @@ import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
@@ -91,30 +91,46 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
               tabs: [
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomePage(
+                          selectedIndex: 0,
+                        );
+                      }));
+                    },
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                    ),
                   ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomePage(
+                          selectedIndex: 1,
+                        );
+                      }));
+                    },
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                    ),
                   ),
                 ),
               ],
               haptic: true,
               selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.homePage, (route) => false);
-                // setState(() {
-                //   _selectedIndex = index;
-                // });
-              },
+              onTabChange: (index) {},
             ),
           ),
           Positioned(

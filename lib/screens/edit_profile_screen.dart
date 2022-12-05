@@ -653,10 +653,15 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                     onPressed: updateProfileValidation,
                                     child: Center(
                                       child: loading
-                                          ? const CircularProgressIndicator(
-                                              color: ColorManager.primary,
-                                              backgroundColor:
-                                                  ColorManager.primary3,
+                                          ? const SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: CircularProgressIndicator(
+                                                backgroundColor:
+                                                    ColorManager.primary,
+                                                color: ColorManager.whiteColor,
+                                                strokeWidth: 5,
+                                              ),
                                             )
                                           : Text(
                                               str.e_save,
@@ -758,8 +763,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         await viewProfile(context);
         navigateToNext();
       } else {}
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (_) {
       showSnackBar("Something Went Wrong1", context);
     }
   }

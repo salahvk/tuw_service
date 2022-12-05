@@ -40,6 +40,7 @@ class PaymentServiceControllers {
 }
 
 class ServiceControllers {
+  static TextEditingController servicerController = TextEditingController();
   static TextEditingController stateController = TextEditingController();
   static TextEditingController regionController = TextEditingController();
   static TextEditingController mapController = TextEditingController();

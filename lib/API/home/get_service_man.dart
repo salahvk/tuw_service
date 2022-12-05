@@ -54,6 +54,7 @@ searchServiceMan(BuildContext context, id, countryIdd, state, region, name,
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
   try {
+    print(name);
     final url =
         '$servicemanList?service_id=$id&page=1&latitude=${userDetails?.latitude}&longitude=${userDetails?.longitude}&sel_country_id=${countryIdd ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
     print(url);

@@ -68,7 +68,7 @@ class _ServicerPageState extends State<ServicerPage> {
         r3.add(provider.countriesModel!.countries![i].countryName!);
         i++;
       }
-
+      provider.servicerSelectedCountry = '';
       setState(() {});
     });
   }
@@ -250,7 +250,8 @@ class _ServicerPageState extends State<ServicerPage> {
                                       child: TextField(
                                         // focusNode: nfocus,
                                         style: const TextStyle(),
-                                        // controller: nameController,
+                                        controller: ServiceControllers
+                                            .servicerController,
                                         decoration: InputDecoration(
                                             suffixIcon: SizedBox(
                                               width: 50,
@@ -267,22 +268,54 @@ class _ServicerPageState extends State<ServicerPage> {
                                                   Padding(
                                                     padding: const EdgeInsets
                                                         .fromLTRB(10, 8, 10, 8),
-                                                    child: Text(
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      String.fromCharCode(Icons
-                                                          .search.codePoint),
-                                                      style: TextStyle(
-                                                        inherit: false,
-                                                        color: ColorManager
-                                                            .primary,
-                                                        fontSize: 25.0,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: Icons
-                                                            .search.fontFamily,
-                                                        package: Icons
-                                                            .search.fontPackage,
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        await searchServiceMan(
+                                                            context,
+                                                            widget.id
+                                                                .toString(),
+                                                            countryid,
+                                                            ServiceControllers
+                                                                .stateController
+                                                                .text,
+                                                            ServiceControllers
+                                                                .regionController
+                                                                .text,
+                                                            ServiceControllers
+                                                                .servicerController
+                                                                .text,
+                                                            provider.isFourWheelerSelected &&
+                                                                    provider
+                                                                        .isTwoWheelerSelected
+                                                                ? ''
+                                                                : provider
+                                                                        .isFourWheelerSelected
+                                                                    ? 'four wheeler'
+                                                                    : provider
+                                                                            .isTwoWheelerSelected
+                                                                        ? 'two wheeler'
+                                                                        : '');
+                                                        setState(() {});
+                                                      },
+                                                      child: Text(
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        String.fromCharCode(
+                                                            Icons.search
+                                                                .codePoint),
+                                                        style: TextStyle(
+                                                          inherit: false,
+                                                          color: ColorManager
+                                                              .primary,
+                                                          fontSize: 25.0,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: Icons
+                                                              .search
+                                                              .fontFamily,
+                                                          package: Icons.search
+                                                              .fontPackage,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -878,8 +911,19 @@ class _ServicerPageState extends State<ServicerPage> {
                                                       .stateController.text,
                                                   ServiceControllers
                                                       .regionController.text,
-                                                  '',
-                                                  '');
+                                                  ServiceControllers
+                                                      .servicerController.text,
+                                                  provider.isFourWheelerSelected &&
+                                                          provider
+                                                              .isTwoWheelerSelected
+                                                      ? ''
+                                                      : provider
+                                                              .isFourWheelerSelected
+                                                          ? 'four wheeler'
+                                                          : provider
+                                                                  .isTwoWheelerSelected
+                                                              ? 'two wheeler'
+                                                              : '');
                                               setState(() {});
                                             },
                                             child: Text(
@@ -1111,6 +1155,7 @@ class _ServicerPageState extends State<ServicerPage> {
         });
         countryid = r[0].countryId;
         provider.selectedCountryId = r[0].countryId;
+        provider.servicerSelectedCountry = r[0].countryId.toString();
       }
     });
   }

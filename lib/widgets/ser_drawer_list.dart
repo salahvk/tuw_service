@@ -69,10 +69,10 @@ class _SerDrawerListState extends State<SerDrawerList> {
           await searchServiceMan(
               context,
               widget.id.toString(),
-              '',
+              provider.servicerSelectedCountry,
               ServiceControllers.stateController.text,
               ServiceControllers.regionController.text,
-              '',
+              ServiceControllers.servicerController.text,
               provider.isFourWheelerSelected && provider.isTwoWheelerSelected
                   ? ''
                   : provider.isFourWheelerSelected

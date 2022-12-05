@@ -11,7 +11,6 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/serviceman/serviceman_list_details.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
@@ -23,7 +22,7 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class ChatScreen extends StatefulWidget {
   Serviceman? serviceman;
-  ChatScreen({super.key, required this.serviceman});
+  ChatScreen({super.key, this.serviceman});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -92,17 +91,17 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           title: InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                return ServiceManDetails(
-                  serviceman: widget.serviceman,
-                );
-              }));
+              // Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+              //   return ServiceManDetails(
+              //     serviceman: widget.serviceman,
+              //   );
+              // }));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.serviceman?.firstname} ${widget.serviceman?.lastname}',
+                  'Name',
                   style:
                       getRegularStyle(color: ColorManager.black, fontSize: 16),
                 ),
@@ -113,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     // const SizedBox(
                     //   width: 5,
                     // ),
-                    Text(widget.serviceman?.about ?? '',
+                    Text('',
                         style: getRegularStyle(
                             color: const Color.fromARGB(255, 173, 173, 173),
                             fontSize: 15))
@@ -123,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           actions: [
-            const Icon(Icons.videocam),
+            // const Icon(Icons.videocam),
             const SizedBox(
               width: 8,
             ),

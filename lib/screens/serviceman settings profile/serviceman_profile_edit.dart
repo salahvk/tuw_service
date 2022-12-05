@@ -58,6 +58,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
 
   bool isCountryEditEnabled = false;
   bool isStatusVisible = false;
+  bool isLoading = false;
 
   List<String> r3 = [];
   final List<String> items = [
@@ -321,7 +322,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: Image.asset(ImageAssets.tools),
                             ),
-                            Text("Engin Worker",
+                            Text(userData?.serviceName ?? '',
                                 style: getRegularStyle(
                                     color: ColorManager.engineWorkerColor,
                                     fontSize: 15)),
@@ -697,7 +698,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Text("Engine Mechanic",
+                            Text(userData.serviceName ?? '',
                                 style: getRegularStyle(
                                     color: ColorManager.engineWorkerColor,
                                     fontSize: 15)),
@@ -808,17 +809,30 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                         children: [
                           ElevatedButton(
                               onPressed: () {
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 onSaveFunction();
                               },
                               style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.fromLTRB(33, 0, 33, 0)),
-                              child: Text(
-                                "SAVE",
-                                style: getMediumtStyle(
-                                    color: ColorManager.whiteText,
-                                    fontSize: 14),
-                              ))
+                              child: isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        backgroundColor: ColorManager.primary,
+                                        color: ColorManager.whiteColor,
+                                        strokeWidth: 5,
+                                      )))
+                                  : Text(
+                                      "SAVE",
+                                      style: getMediumtStyle(
+                                          color: ColorManager.whiteText,
+                                          fontSize: 14),
+                                    ))
                         ],
                       ),
                     ],
@@ -874,19 +888,12 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
   }
 
   selectImage() async {
-    // List<File>? imageFileList = [];
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images == null) {
       return;
     }
-    // for (XFile image in images) {
-    //   var imagesTemporary = File(image.path);
-    //   imageFileList.add(imagesTemporary);
-    // }
-    print('testing');
-    print(images);
+
     upload(images);
-    // uploadmultipleimage(images);
   }
 
   upload(List<XFile> imageFile) async {
@@ -914,14 +921,11 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
     );
 
     print(uri);
-    print(selectedValue);
+
     List<MultipartFile> multiPart = [];
     for (var i = 0; i < length; i++) {
-      print('hello');
       var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
-
       var length = await imageFile[i].length();
-
       final apiToken = Hive.box("token").get('api_token');
 
       request.headers.addAll(
@@ -934,8 +938,6 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
       );
       multiPart.add(multipartFile);
     }
-    print('multipart printing');
-    print(multiPart[0].filename);
 
     length > 1
         ? request.files.addAll(multiPart)

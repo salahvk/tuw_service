@@ -36,8 +36,8 @@ class _DialogueBoxState extends State<DialogueBox> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 65),
             SizedBox(
-                height: MediaQuery.of(context).size.height / 6,
-                child: LottieBuilder.asset("assets/logout_lottie.json")),
+                height: MediaQuery.of(context).size.height / 5,
+                child: LottieBuilder.asset("assets/delete_bin2.json")),
             const Text(
               "Are you sure you want to \nDelete",
               textAlign: TextAlign.center,

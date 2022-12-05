@@ -126,6 +126,8 @@ class DataProvider with ChangeNotifier {
   bool isTwoWheelerSelected = false;
   bool isFourWheelerSelected = false;
 
+  String? servicerSelectedCountry;
+
   String gender = 'male';
   int? serviceId;
   int? selectedCountryId;

@@ -367,7 +367,7 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                       const SizedBox(
                         width: 5,
                       ),
-                      Text("Engine Mechanic",
+                      Text(userData?.serviceName ?? '',
                           style: getRegularStyle(
                               color: ColorManager.engineWorkerColor,
                               fontSize: 15)),
