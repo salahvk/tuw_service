@@ -97,10 +97,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                             final id = homeData![index].id;
 
                             getSubService(context, id);
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (ctx) {
-                            //   return const ServicerPage();
-                            // }));
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -118,24 +114,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                // SizedBox(
-                                //     width: mob ? 70.0 : 50,
-                                //     height: mob ? 70.0 : 50,
-                                //     child: ScalableImageWidget.fromSISource(
-                                //         onLoading: (p0) {
-                                //           return Container(
-                                //             child:
-                                //                 const CircularProgressIndicator(
-                                //               strokeWidth: 2,
-                                //             ),
-                                //           );
-                                //         },
-                                //         cache: ScalableImageCache(
-                                //             size: homeData?.length ?? 0),
-                                //         si: ScalableImageSource.fromSvgHttpUrl(
-                                //             bigFloats: true,
-                                //             Uri.parse(
-                                //                 '$endPoint${homeData?[index].image}')))),
                                 SizedBox(
                                     width: mob ? 70.0 : 50,
                                     height: mob ? 70.0 : 50,
@@ -143,7 +121,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                       '$endPoint${homeData?[index].image}',
                                       color: ColorManager.primary2,
                                     )),
-
                                 Text(homeData![index].service ?? '',
                                     textAlign: TextAlign.center,
                                     style: getRegularStyle(
@@ -159,10 +136,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                             homeData[index].service!.length > 13
                                                 ? 10
                                                 : 12)),
-                                // Text("100+ Profiles",
-                                //     style: getRegularStyle(
-                                //         color: const Color(0xffbababa),
-                                //         fontSize: mob ? 14 : 10)),
                               ],
                             ),
                           ),

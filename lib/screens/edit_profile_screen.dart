@@ -78,6 +78,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       }
       widget.isregister ? null : fillFields(provider);
       viewProfile(context);
+
       setState(() {});
       // getCustomerParent(context);
     });
@@ -89,6 +90,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     final h = MediaQuery.of(context).size.height;
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
+    final provider = Provider.of<DataProvider>(context, listen: false);
 
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -761,6 +763,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         print(jsonResponse);
 
         await viewProfile(context);
+        setState(() {});
         navigateToNext();
       } else {}
     } on Exception catch (_) {
@@ -769,9 +772,13 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   }
 
   navigateToNext() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-      return const ProfilePage();
-    }));
+    widget.isregister
+        ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+            return const HomePage();
+          }))
+        : Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+            return const ProfilePage();
+          }));
   }
 
   s(filter) {
@@ -797,6 +804,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   }
 
   fillFields(DataProvider provider) {
+    final userDetails = provider.viewProfileModel?.userdetails;
     EditProfileControllers.firstNameController.text =
         provider.viewProfileModel?.userdetails?.firstname ?? '';
     EditProfileControllers.lastNameController.text =
@@ -811,5 +819,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         provider.viewProfileModel?.userdetails?.region ?? '';
     selectedValue = provider.viewProfileModel?.userdetails?.countryName;
     countryid = provider.viewProfileModel?.userdetails?.countryId;
+    value = userDetails?.gender == 'female' ? false : true;
+    print(provider.viewProfileModel?.userdetails?.gender);
   }
 }

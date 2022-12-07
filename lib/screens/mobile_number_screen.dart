@@ -225,7 +225,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   // const TroubleSign(),
                   // const Spacer(),
                   SizedBox(
-                    height: size.height < 600 ? h * .13 : h * .26,
+                    height: size.height < 600 ? h * .13 : h * .23,
                   ),
                   const TermsAndCondition()
                 ],

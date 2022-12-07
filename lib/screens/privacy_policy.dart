@@ -3,12 +3,14 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/lorem.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -30,7 +32,7 @@ class PrivacyPolicy extends StatelessWidget {
                       width: 8,
                     ),
                     Text(
-                      "Privacy Policy",
+                      str.pr_privacy,
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: 17),
                     )

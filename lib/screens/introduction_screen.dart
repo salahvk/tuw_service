@@ -38,143 +38,82 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text(str.l_heading,
-                        style: GoogleFonts.robotoSlab(
-                            textStyle: const TextStyle(
-                                color: Color(0xff16a64c),
-                                fontSize: 25,
-                                shadows: [
-                              Shadow(
-                                blurRadius: 18.0,
-                                color: Color.fromARGB(255, 218, 214, 214),
-                                offset: Offset(0, 6.5),
-                              ),
-                            ]))
-                        // getRegularStyle(color: Color(0xff16a64c), fontSize: 25),
-                        ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(0, 20, 0, 15),
-                  //   child: Text(
-                  //     str.l_choose_language,
-                  //     style: getRegularStyle(
-                  //         color: ColorManager.grayLight, fontSize: 16),
-                  //   ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
-                    child: Text(str.l_description,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.robotoSlab(
-                            textStyle: TextStyle(
-                                color: ColorManager.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                shadows: [
-                              Shadow(
-                                blurRadius: 15.0,
-                                color: Colors.grey.shade400,
-                                offset: const Offset(0, 6.5),
-                              ),
-                            ]))),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Text(str.l_description2,
-                        textAlign: TextAlign.center,
-                        style: getRegularStyle(
-                            color: ColorManager.grayLight, fontSize: 16)),
-                  ),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     // color: Colors.transparent,
-                  //     boxShadow: [
-                  //       BoxShadow(
-                  //         blurRadius: 5.0,
-                  //         color: Colors.grey.shade400,
-                  //         offset: const Offset(6, 4),
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   child: ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(elevation: 0),
-                  //     onPressed: () {
-                  //       selectLanguage();
-                  //     },
-                  //     child: Text(str.l_get_started,
-                  //         style: getRegularStyle(
-                  //             color: ColorManager.whiteColor, fontSize: 18)),
-                  //   ),
-                  // )
-
-                  // ),
-                  SizedBox(
-                      // decoration: BoxDecoration(
-                      //   boxShadow: [
-                      //     BoxShadow(
-                      //       blurRadius: 6.0,
-                      //       color: Colors.grey.shade300,
-                      //       offset: const Offset(6, 6.5),
-                      //     ),
-                      //   ],
-                      // ),
-                      height: 32,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (ctx, index) {
-                          final lan = provider.languageModel?.languages?[index];
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, Routes.phoneNumber);
-                              setState(() {
-                                selected = lan?.language ?? '';
-                              });
-                              Hive.box("LocalLan")
-                                  .put('lang', lan?.shortcode ?? '');
-                              String? id = provider
-                                  .languageModel?.languages?[index].id
-                                  .toString();
-                              Hive.box("LocalLan").put('lang_id', id ?? '');
-                            },
-                            child: LanguageButton(
-                              language: lan?.language ?? '',
-                              color: selected == lan?.language
-                                  ? ColorManager.selectedGreen
-                                  : ColorManager.primary,
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Text(str.l_heading,
+                      style: GoogleFonts.robotoSlab(
+                          textStyle: const TextStyle(
+                              color: Color(0xff16a64c),
+                              fontSize: 25,
+                              shadows: [
+                            Shadow(
+                              blurRadius: 18.0,
+                              color: Color.fromARGB(255, 218, 214, 214),
+                              offset: Offset(0, 6.5),
                             ),
-                          );
-                        },
-                        itemCount: 3,
-                        scrollDirection: Axis.horizontal,
-                      )),
-                ],
-              ),
+                          ]))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
+                  child: Text(str.l_description,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.robotoSlab(
+                          textStyle: TextStyle(
+                              color: ColorManager.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              shadows: [
+                            Shadow(
+                              blurRadius: 15.0,
+                              color: Colors.grey.shade400,
+                              offset: const Offset(0, 6.5),
+                            ),
+                          ]))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  child: Text(str.l_description2,
+                      textAlign: TextAlign.center,
+                      style: getRegularStyle(
+                          color: ColorManager.grayLight, fontSize: 16)),
+                ),
+                SizedBox(
+                    height: 32,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (ctx, index) {
+                        final lan = provider.languageModel?.languages?[index];
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, Routes.phoneNumber);
+                            setState(() {
+                              selected = lan?.language ?? '';
+                            });
+                            Hive.box("LocalLan")
+                                .put('lang', lan?.shortcode ?? '');
+                            String? id = provider
+                                .languageModel?.languages?[index].id
+                                .toString();
+                            Hive.box("LocalLan").put('lang_id', id ?? '');
+                          },
+                          child: LanguageButton(
+                            language: lan?.language ?? '',
+                            color: selected == lan?.language
+                                ? ColorManager.selectedGreen
+                                : ColorManager.primary,
+                          ),
+                        );
+                      },
+                      itemCount: 3,
+                      scrollDirection: Axis.horizontal,
+                    )),
+              ],
             )
           ],
         ),
       ),
     );
-  }
-
-  selectLanguage() {
-    // selected.isNotEmpty
-    //     ?
-    // Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-    //   return const PhoneNumberScreen();
-    // }));
-    // :
-    //  AnimatedSnackBar.material('Please Select a Language to Continue',
-    //         type: AnimatedSnackBarType.error,
-    //         borderRadius: BorderRadius.circular(6),
-    //         // brightness: Brightness.dark,
-    //         duration: const Duration(seconds: 1))
-    //     .show(
-    //     context,
-    //   );
   }
 }

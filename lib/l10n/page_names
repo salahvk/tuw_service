@@ -1,6 +1,6 @@
 l =  landingPage/IntroductionPage
 m =  Mobile number screen
-t =  terms and conditions
+t =  terms and conditions 
 o =  otp screen
 e =  edit profile page
 d =  drawer
@@ -20,3 +20,6 @@ a  = Address page
 ae = Address page edit
 se = services page
 sd = servicer drawer
+mh = message History page
+sv = service man profile view
+se = service man profile edit

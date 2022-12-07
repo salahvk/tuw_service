@@ -28,7 +28,7 @@ class PaymentSuccessPage extends StatefulWidget {
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   final player = AudioPlayer();
   bool isProgress = true;
   String lang = '';
@@ -260,7 +260,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                         ?.totalTaxAmount ??
                                     ''),
                             PaymentListTile(
-                              text1: 'Coupen Discount',
+                              text1: 'Coupon Discount',
                               text2: provider.paymentSuccess?.orderDetails
                                       ?.couponDiscount ??
                                   '',
@@ -293,7 +293,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                   padding:
                                       const EdgeInsets.fromLTRB(13, 0, 13, 0)),
                               child: Text(
-                                "BACK TO HOME",
+                                str.su_home,
                                 style: getMediumtStyle(
                                     color: ColorManager.whiteText,
                                     fontSize: 14),
@@ -312,7 +312,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                       backgroundColor: ColorManager.primary3,
                                     )
                                   : Text(
-                                      "SAVE PDF",
+                                      str.su_save_pdf,
                                       style: getMediumtStyle(
                                           color: ColorManager.whiteText,
                                           fontSize: 14),

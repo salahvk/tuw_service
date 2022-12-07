@@ -10,6 +10,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WishList extends StatefulWidget {
   const WishList({super.key});
@@ -20,7 +21,7 @@ class WishList extends StatefulWidget {
 
 class _WishListState extends State<WishList> {
   int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _WishListState extends State<WishList> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -119,7 +121,7 @@ class _WishListState extends State<WishList> {
       ),
       appBar: AppBar(
         title: Text(
-          "WishList",
+          str.w_wishList,
           style: getMediumtStyle(color: ColorManager.black, fontSize: 22),
         ),
         centerTitle: true,

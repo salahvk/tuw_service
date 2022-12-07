@@ -122,16 +122,16 @@ class _ServicerListTileState extends State<ServicerListTile> {
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: SizedBox(
                       width: size.width * 0.1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                isFavorite = !isFavorite;
-                              });
-                            },
-                            child: Icon(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isFavorite = !isFavorite;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
                               Icons.favorite,
                               shadows: const [
                                 Shadow(
@@ -145,18 +145,18 @@ class _ServicerListTileState extends State<ServicerListTile> {
                                   ? ColorManager.primary2
                                   : Colors.black12,
                             ),
-                          ),
-                          Column(
-                            children: [
-                              Image.asset(ImageAssets.car),
-                              Text('${s![0]} km',
-                                  style: getMediumtStyle(
-                                      color: const Color.fromARGB(
-                                          255, 173, 173, 173),
-                                      fontSize: 12))
-                            ],
-                          )
-                        ],
+                            Column(
+                              children: [
+                                Image.asset(ImageAssets.car),
+                                Text(s![0],
+                                    style: getMediumtStyle(
+                                        color: const Color.fromARGB(
+                                            255, 173, 173, 173),
+                                        fontSize: 12))
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   )

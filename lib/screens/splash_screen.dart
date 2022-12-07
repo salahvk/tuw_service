@@ -20,14 +20,9 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    // Hive.box("token").clear();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final provider = Provider.of<DataProvider>(context, listen: false);
-      // provider.isInternetConnected
-      //     ?
       initPlatformState(context);
-      // : Navigator.pushNamed(context, Routes.noConnectionPage);
     });
   }
 
@@ -38,11 +33,11 @@ class _SplashState extends State<Splash> {
       switch (status) {
         case InternetConnectionStatus.connected:
           provider.isInternetConnected = true;
-          // print(provider.isInternetConnected);
+
           break;
         case InternetConnectionStatus.disconnected:
           provider.isInternetConnected = false;
-          // print(provider.isInternetConnected);
+
           break;
       }
     });

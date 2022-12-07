@@ -3,12 +3,14 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/lorem.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TermsAndConditionPage extends StatelessWidget {
   const TermsAndConditionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -29,7 +31,7 @@ class TermsAndConditionPage extends StatelessWidget {
                     width: 8,
                   ),
                   Text(
-                    "Terms & Conditions",
+                    str.t_2,
                     style: getRegularStyle(
                         color: ColorManager.black, fontSize: 17),
                   )

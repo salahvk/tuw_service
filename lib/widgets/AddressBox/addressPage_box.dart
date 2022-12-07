@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/user_address_show.dart';
@@ -18,6 +19,15 @@ class AddressBox extends StatefulWidget {
 
 class _AddressBoxState extends State<AddressBox> {
   bool isLoading = false;
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -49,7 +59,8 @@ class _AddressBoxState extends State<AddressBox> {
             ),
           ),
           Positioned(
-            right: 5,
+            right: lang == 'ar' ? null : 5,
+            left: lang == 'ar' ? 5 : null,
             top: 5,
             child: Row(
               children: [

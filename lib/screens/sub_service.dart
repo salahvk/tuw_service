@@ -7,14 +7,15 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/home/get_subService.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/loading_page.dart';
+import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class SubServicesPage extends StatefulWidget {
   const SubServicesPage({Key? key}) : super(key: key);
@@ -31,10 +32,17 @@ class _SubServicesPageState extends State<SubServicesPage> {
   Widget build(BuildContext context) {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
+    final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
     final provider = Provider.of<DataProvider>(context, listen: false);
     final homeData = provider.subServicesModel?.subservices;
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      endDrawer: SizedBox(
+        height: h * 0.825,
+        width: w * 0.6,
+        child: const CustomDrawer(),
+      ),
       bottomNavigationBar: Stack(
         children: [
           Container(
@@ -65,26 +73,48 @@ class _SubServicesPageState extends State<SubServicesPage> {
               tabs: [
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: SvgPicture.asset(ImageAssets.homeIconSvg)),
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomePage(
+                          selectedIndex: 0,
+                        );
+                      }));
+                    },
+                    child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: SvgPicture.asset(ImageAssets.homeIconSvg)),
+                  ),
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: SvgPicture.asset(ImageAssets.chatIconSvg)),
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomePage(
+                          selectedIndex: 1,
+                        );
+                      }));
+                    },
+                    child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: SvgPicture.asset(ImageAssets.chatIconSvg)),
+                  ),
                 ),
               ],
               selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                if (mounted) {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, Routes.homePage, (route) => false);
-                }
-              },
+              // onTabChange: (index) {
+              //   if (mounted) {
+              //     Navigator.pushNamedAndRemoveUntil(
+              //         context, Routes.homePage, (route) => false);
+              //   }
+              // },
             ),
           ),
           Positioned(

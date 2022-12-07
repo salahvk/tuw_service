@@ -337,56 +337,56 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                       const SizedBox(
                         height: 8,
                       ),
-                      Container(
-                        height: 35,
-                        width: 170,
-                        decoration: BoxDecoration(
-                          color: ColorManager.whiteColor,
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 10.0,
-                              color: Colors.grey.shade300,
-                              offset: const Offset(5, 8.5),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 140,
-                              child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text(
-                                    '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
-                                    style: getRegularStyle(
-                                        color: ColorManager.engineWorkerColor,
-                                        fontSize:
-                                            userData!.countryName!.length > 10
-                                                ? 10
-                                                : 12),
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 30,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                                child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isCountryEditEnabled =
-                                            !isCountryEditEnabled;
-                                      });
-                                    },
-                                    child: isCountryEditEnabled
-                                        ? const Icon(
-                                            Icons.arrow_drop_up_outlined)
-                                        : Image.asset(ImageAssets.penEdit)),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isCountryEditEnabled = !isCountryEditEnabled;
+                          });
+                        },
+                        child: Container(
+                          height: 35,
+                          width: 170,
+                          decoration: BoxDecoration(
+                            color: ColorManager.whiteColor,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 10.0,
+                                color: Colors.grey.shade300,
+                                offset: const Offset(5, 8.5),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 140,
+                                child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
+                                      style: getRegularStyle(
+                                          color: ColorManager.engineWorkerColor,
+                                          fontSize:
+                                              userData!.countryName!.length > 10
+                                                  ? 10
+                                                  : 12),
+                                    )),
+                              ),
+                              SizedBox(
+                                width: 30,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                  child: isCountryEditEnabled
+                                      ? const Icon(Icons.arrow_drop_up_outlined)
+                                      : Image.asset(ImageAssets.penEdit),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
 // * Country edit enabled

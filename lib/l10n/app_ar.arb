@@ -32,8 +32,8 @@
     "e_country_h":"إختر البلد",
     "e_region":"المنطقة",
     "e_region_h":"إختر المنطقة",
-    "e_state":"الولاية",
-    "e_state_h":"إختر الولاية",
+    "e_state":"المدينة",
+    "e_state_h":"إختر المدينة",
     "e_about":"عني",
     "e_about_h":"أكتب نبذه عنك",
     "e_save":"حفظ",
@@ -59,8 +59,8 @@
     "p_country_h":"إختر البلد",
     "p_region":"المنطقة",
     "p_region_h":"إختر المنطقة",
-    "p_state":"الولاية",
-    "p_state_h":"إختر الولاية",
+    "p_state":"المدينة",
+    "p_state_h":"إختر المدينة",
     "p_address":"العنوان",
     "p_address_h":"أدخل العنوان",
     "p_continue":"متابعة",
@@ -78,7 +78,7 @@
     "s_country":"البلد",
     "s_region":"المنطقة",
     "s_map":"الخارطه",
-    "s_state":"الولاية",
+    "s_state":"المدينة",
     "s_continue":"متابعة",
 
     "cp_photo1":"صور او فيديو",
@@ -110,10 +110,10 @@
     "ps_pay":"إدفع الأن",
 
     "pp_my_profile":"ملفي الشخصي",
-    "pp_message":"Message",
-    "pp_favourites":"Favourites",
-    "pp_address":"Address Book",
-    "pp_settings":"Settings",
+    "pp_message":"الرسائل",
+    "pp_favourites":"المفضلة",
+    "pp_address":"دفتر العناوين",
+    "pp_settings":"الإعدادات",
 
     "w_wishList":"المفضلة",
 
@@ -121,7 +121,7 @@
 
     "su_success":"تم تقديم الطلب ",
     "su_title":"تتم معالجة الطلب حالياً،سوف تتم الموافقة خلال ال٢٤ ساعة القادمة",
-    "su_title_1":"Detail of transaction are included",
+    "su_title_1":"تم إرفاق تفاصيل المعاملة",
     "su_date":"التاريخ",
     "su_time":"الوقت",
     "su_service_fee":"رسوم الخدمة",
@@ -131,6 +131,12 @@
     "su_exp":"تاريخ الإنتهاء",
     "su_save_pdf":"حفظ PDF",
     "su_home":"العودة للقائمة الرئيسية",
+    "su_grand_total":"Grand Total (With discount)",
+    "su_coupon_discount":"Coupon Discount",
+    "su_tax_amount":"Tax Amount",
+    "su_sub_date":"Subscription Date",
+    "su_order_id":"Order Id",
+    "su_package_id":"Package Id",
 
     "a_home_locator":"المواقع",
     "a_add":"إضافة",
@@ -147,14 +153,15 @@
     "ae_country_h":"إختر البلد",
     "ae_region":"المنطقة",
     "ae_region_h":"إختر المنطقة",
-    "ae_state":"الولاية",
-    "ae_state_h":"إختر الولاية",
+    "ae_state":"المدينة",
+    "ae_state_h":"إختر المدينة",
     "ae_home_flat":"رقم المنزل‫/‬الشقة",
     "ae_no":"أدخل",
     "ae_save":"حفظ",
     "ae_cancel":"إلغاء",
 
     "se_services":"الخدمات",
+    "se_sub_services":"Sub Services",
 
     "wd_desc":"الوصف",
     "wd_ser":"نوع الخدمة",
@@ -181,5 +188,23 @@
     "sd_status":"حالة الخدمة",  
     "sd_available":"النقل المتوفرة:",
     "sd_type":"نوع الخدمة:",
-    "sd_reset":"إعادة ضبط"
+    "sd_reset":"إعادة ضبط",
+
+    "mh_message":"Message",
+    "mh_recents":"Recents",
+
+    "ps_snack_card":"Please Enter A Card Holder Name",
+    "ps_snack_card_no":"Please Enter A Card Number",
+    "ps_snack_expiry":"Please Enter Card Expiry Date",
+    "ps_snack_cvv":"Please Enter Your CVV Number",
+    "ps_snack_package":"Please Choose a package to continue",
+    "ps_snack_coupen":"Please Enter a Coupen code to redeem",
+    "e_snack_name":"The name field is required",
+    "e_snack_dob":"DOB field can not be empty",
+    "e_snack_country_field":"Country field can not be empty",
+
+    "sv_edit_profile":"Edit Profile",
+    "sv_no_images":"No images to display",
+
+    "se_transport_ty":"Select Transport Type",
 }

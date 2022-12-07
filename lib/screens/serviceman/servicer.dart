@@ -252,6 +252,14 @@ class _ServicerPageState extends State<ServicerPage> {
                                         style: const TextStyle(),
                                         controller: ServiceControllers
                                             .servicerController,
+                                        onChanged: (value) async {
+                                          value.isEmpty
+                                              ? await searchServicer()
+                                              : null;
+                                          await Future.delayed(
+                                              const Duration(seconds: 2));
+                                          setState(() {});
+                                        },
                                         decoration: InputDecoration(
                                             suffixIcon: SizedBox(
                                               width: 50,
@@ -270,31 +278,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                                         .fromLTRB(10, 8, 10, 8),
                                                     child: InkWell(
                                                       onTap: () async {
-                                                        await searchServiceMan(
-                                                            context,
-                                                            widget.id
-                                                                .toString(),
-                                                            countryid,
-                                                            ServiceControllers
-                                                                .stateController
-                                                                .text,
-                                                            ServiceControllers
-                                                                .regionController
-                                                                .text,
-                                                            ServiceControllers
-                                                                .servicerController
-                                                                .text,
-                                                            provider.isFourWheelerSelected &&
-                                                                    provider
-                                                                        .isTwoWheelerSelected
-                                                                ? ''
-                                                                : provider
-                                                                        .isFourWheelerSelected
-                                                                    ? 'four wheeler'
-                                                                    : provider
-                                                                            .isTwoWheelerSelected
-                                                                        ? 'two wheeler'
-                                                                        : '');
+                                                        await searchServicer();
                                                         setState(() {});
                                                       },
                                                       child: Text(
@@ -504,7 +488,6 @@ class _ServicerPageState extends State<ServicerPage> {
                                                                         10,
                                                                     vertical: 8,
                                                                   ),
-                                                                  // TODO: localisation
                                                                   hintText:
                                                                       'Search a country',
                                                                   hintStyle:
@@ -1158,5 +1141,23 @@ class _ServicerPageState extends State<ServicerPage> {
         provider.servicerSelectedCountry = r[0].countryId.toString();
       }
     });
+  }
+
+  searchServicer() {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    searchServiceMan(
+        context,
+        widget.id.toString(),
+        countryid,
+        ServiceControllers.stateController.text,
+        ServiceControllers.regionController.text,
+        ServiceControllers.servicerController.text,
+        provider.isFourWheelerSelected && provider.isTwoWheelerSelected
+            ? ''
+            : provider.isFourWheelerSelected
+                ? 'four wheeler'
+                : provider.isTwoWheelerSelected
+                    ? 'two wheeler'
+                    : '');
   }
 }

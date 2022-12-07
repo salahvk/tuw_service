@@ -259,7 +259,7 @@ class _OTPscreenState extends State<OTPscreen> {
         print('Something went wrong');
       }
     } on Exception catch (_) {
-      showSnackBar("Something Went Wrong", context);
+      showSnackBar("Connection Timed Out", context);
     }
   }
 }

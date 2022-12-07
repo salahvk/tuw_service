@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -19,6 +20,15 @@ class ChatListTile extends StatefulWidget {
 
 class _ChatListTileState extends State<ChatListTile> {
   bool isFavorite = false;
+  String lang = '';
+  @override
+  void initState() {
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -121,14 +131,16 @@ class _ChatListTileState extends State<ChatListTile> {
           ),
           Positioned(
             top: 3,
-            right: 10,
+            right: lang == 'ar' ? null : 10,
+            left: lang == 'ar' ? 10 : null,
             child: Text('3 min ago',
                 style: getRegularStyle(
                     color: const Color.fromARGB(255, 173, 173, 173),
                     fontSize: mob ? 10 : 7)),
           ),
           Positioned(
-              right: 10,
+              right: lang == 'ar' ? null : 10,
+              left: lang == 'ar' ? 10 : null,
               bottom: 10,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,

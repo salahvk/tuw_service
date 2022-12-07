@@ -150,7 +150,8 @@ class _ProfileImageState extends State<ProfileImage> {
     request.files.add(multipartFile);
     var response = await request.send();
     print(response.statusCode);
-    viewProfile(context);
+    await viewProfile(context);
+    setState(() {});
   }
 
   navigateToWorkersPage() {

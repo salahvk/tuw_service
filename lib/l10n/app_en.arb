@@ -68,6 +68,7 @@
     "c_service_group":"Service Group",
     "c_service_group_h":"Enter Group",
     "c_service_list":"Service List",
+     "c_service_list_h":"Service List",
     "c_vehicle":"Vehicle Registration Card/ CR Copy",
     "c_browse":"Browse",
     "c_pay":"CONTINUE TO PAY",  
@@ -79,6 +80,8 @@
     "s_map":"Map",
     "s_state":"State",
     "s_continue":"Continue",
+    "s_advanced_search":"Advanced Search",
+    "s_search_country":"Search a country",
 
     "cp_photo1":"Photo & Video",
     "cp_photo2":"Library",
@@ -122,6 +125,7 @@
     "su_title":"Your payment was successfully processed",
     "su_title_1":"Detail of transaction are included",
     "su_date":"Date",
+    "su_time":"Time",
     "su_service_fee":"Service Fee",
     "su_discount":"Discount",
     "su_vat":"VAT",
@@ -129,6 +133,12 @@
     "su_exp":"Exp Date",
     "su_save_pdf":"SAVE PDF",
     "su_home":"BACK TO HOME",
+    "su_grand_total":"Grand Total (With discount)",
+    "su_coupon_discount":"Coupon Discount",
+    "su_tax_amount":"Tax Amount",
+    "su_sub_date":"Subscription Date",
+    "su_order_id":"Order Id",
+    "su_package_id":"Package Id",
 
     "a_home_locator":"Home Locator",
     "a_add":"Add",
@@ -153,6 +163,7 @@
     "ae_cancel":"CANCEL",
 
     "se_services":"Services",
+    "se_sub_services":"Sub Services",
 
     "wd_desc":"Description",
     "wd_ser":"Service Type",
@@ -181,10 +192,23 @@
     "sd_type":"Service Type:",
     "sd_reset":"Reset",
 
+    "mh_message":"Message",
+    "mh_recents":"Recents",
+
     "ps_snack_card":"Please Enter A Card Holder Name",
     "ps_snack_card_no":"Please Enter A Card Number",
     "ps_snack_expiry":"Please Enter Card Expiry Date",
     "ps_snack_cvv":"Please Enter Your CVV Number",
     "ps_snack_package":"Please Choose a package to continue",
-    "ps_snack_coupen":"Please Enter a Coupen code to redeem"
+    "ps_snack_coupen":"Please Enter a Coupen code to redeem",
+    "e_snack_name":"The name field is required",
+    "e_snack_dob":"DOB field can not be empty",
+    "e_snack_country_field":"Country field can not be empty",
+
+    "sv_edit_profile":"Edit Profile",
+    "sv_no_images":"No images to display",
+
+    "se_transport_ty":"Select Transport Type",
+
+
 }

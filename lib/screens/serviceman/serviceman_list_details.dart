@@ -337,10 +337,13 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                 ),
                 Row(
                   children: [
-                    Text(
-                      userData?.about ?? '',
-                      style: getRegularStyle(
-                          color: ColorManager.engineWorkerColor, fontSize: 16),
+                    Expanded(
+                      child: Text(
+                        userData?.about ?? '',
+                        style: getRegularStyle(
+                            color: ColorManager.engineWorkerColor,
+                            fontSize: 16),
+                      ),
                     ),
                   ],
                 ),
@@ -413,10 +416,13 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                     // userData?.profile == null
                     //     ? Container()
                     //     :
-                    Text(
-                      userData?.profile ?? '',
-                      style: getRegularStyle(
-                          color: ColorManager.engineWorkerColor, fontSize: 16),
+                    Expanded(
+                      child: Text(
+                        userData?.profile ?? '',
+                        style: getRegularStyle(
+                            color: ColorManager.engineWorkerColor,
+                            fontSize: 16),
+                      ),
                     ),
                   ],
                 ),
