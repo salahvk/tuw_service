@@ -420,6 +420,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   }
 
   onContinue() async {
+    searchCountryName(countryCode ?? '');
     FocusManager.instance.primaryFocus?.unfocus();
     final OtpProvider = Provider.of<OTPProvider>(context, listen: false);
     final str = AppLocalizations.of(context)!;
@@ -497,6 +498,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
   s(filter) {
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     provider.countriesModel?.countries?.forEach((element) {
       final m = element.countryName?.contains(filter);
 
@@ -514,6 +516,17 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           // r = [];
           r.add(element);
         });
+      }
+    });
+  }
+
+  searchCountryName(code) {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+    provider.countriesModel?.countries?.forEach((element) {
+      if (code == element.phonecode?.toString()) {
+        print(element.countryName);
+        otpProvider.userCountryName = element.countryName;
       }
     });
   }

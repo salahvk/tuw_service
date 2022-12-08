@@ -30,4 +30,6 @@ class OTPProvider with ChangeNotifier {
     otpVerification = value;
     notifyListeners();
   }
+
+  String? userCountryName;
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -31,6 +32,8 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
 
     var jsonResponse = jsonDecode(response.body);
     final result = jsonResponse["result"];
+    final action = jsonResponse["action"];
+    log(action);
 
     if (result == false) {
       final errorMessage = jsonResponse["message"]["phone"][0];

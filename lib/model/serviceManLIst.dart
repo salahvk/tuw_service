@@ -39,6 +39,7 @@ class Serviceman {
   String? countryname;
   String? onlineStatus;
   var distance;
+  int? featured;
 
   Serviceman(
       {this.id,
@@ -51,7 +52,8 @@ class Serviceman {
       this.profilePic,
       this.distance,
       this.countryname,
-      this.onlineStatus});
+      this.onlineStatus,
+      this.featured});
 
   Serviceman.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +67,7 @@ class Serviceman {
     distance = json['distance'];
     countryname = json['country_name'];
     onlineStatus = json['online_status'];
+    featured = json['featured'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +83,7 @@ class Serviceman {
     data['distance'] = distance;
     data['country_name'] = countryname;
     data['online_status'] = onlineStatus;
+    data['featured'] = featured;
     return data;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/model/chat_list.dart';
 import 'package:social_media_services/model/coupenCode.dart';
+import 'package:social_media_services/model/favorite_serviceMan.dart';
 import 'package:social_media_services/model/get_child_service.dart';
 
 import 'package:social_media_services/model/get_countries.dart';
@@ -98,6 +99,13 @@ class DataProvider with ChangeNotifier {
 
   void getServiceManData(value) {
     serviceManListModel = value;
+    notifyListeners();
+  }
+
+  FavoriteServiceManModel? serviceManListFavoriteModel;
+
+  void getServiceManFavoriteData(value) {
+    serviceManListFavoriteModel = value;
     notifyListeners();
   }
 

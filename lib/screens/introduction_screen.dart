@@ -42,7 +42,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(str.l_heading,
+                  child: Text('Tuw Services',
+                      // str.l_heading
                       style: GoogleFonts.robotoSlab(
                           textStyle: const TextStyle(
                               color: Color(0xff16a64c),

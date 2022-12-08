@@ -99,6 +99,7 @@ class _DialogueBoxState extends State<DialogueBox> {
     });
     await deleteUserAddress(context, id);
     await viewProfile(context);
+    Navigator.pop(context);
     Navigator.pushReplacementNamed(context, Routes.addressPage);
   }
 }

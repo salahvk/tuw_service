@@ -15,7 +15,8 @@ import 'package:social_media_services/screens/serviceman/serviceman_list_details
 
 class ProfileLoading extends StatefulWidget {
   Serviceman? serviceman;
-  ProfileLoading({super.key, this.serviceman});
+  String? serviceId;
+  ProfileLoading({super.key, this.serviceman, this.serviceId});
 
   @override
   State<ProfileLoading> createState() => _ServiceManDetailsState();
@@ -28,7 +29,8 @@ class _ServiceManDetailsState extends State<ProfileLoading> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await getServiceManDetailsFun(context, widget.serviceman?.id.toString());
+      await getServiceManDetailsFun(
+          context, widget.serviceId ?? widget.serviceman?.id.toString());
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
         return ServiceManDetails(
           serviceman: widget.serviceman,

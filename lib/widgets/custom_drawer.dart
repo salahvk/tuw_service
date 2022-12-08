@@ -65,12 +65,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 }));
               },
             ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
-                ? CustomDrawerList(
-                    title: str.d_become,
-                    onTap: becomeService,
-                  )
-                : Container(),
+            CustomDrawerList(
+              title:
+                  provider.viewProfileModel?.userdetails?.userType == 'customer'
+                      ? str.d_become
+                      : 'Add Service',
+              onTap: becomeService,
+            ),
             CustomDrawerList(
               title: str.d_privacy,
               onTap: () {

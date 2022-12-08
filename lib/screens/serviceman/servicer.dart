@@ -279,6 +279,9 @@ class _ServicerPageState extends State<ServicerPage> {
                                                     child: InkWell(
                                                       onTap: () async {
                                                         await searchServicer();
+                                                        await Future.delayed(
+                                                            const Duration(
+                                                                seconds: 1));
                                                         setState(() {});
                                                       },
                                                       child: Text(
@@ -523,85 +526,6 @@ class _ServicerPageState extends State<ServicerPage> {
                                                   ),
                                                 ),
                                               ),
-
-                                              // Padding(
-                                              //   padding:
-                                              //       const EdgeInsets.fromLTRB(
-                                              //           0, 10, 0, 0),
-                                              //   child: Container(
-                                              //     decoration: BoxDecoration(
-                                              //       boxShadow: [
-                                              //         BoxShadow(
-                                              //           blurRadius: 10.0,
-                                              //           color: Colors
-                                              //               .grey.shade300,
-                                              //           // offset: const Offset(5, 8.5),
-                                              //         ),
-                                              //       ],
-                                              //     ),
-                                              //     child: Container(
-                                              //       width: size.width * .44,
-                                              //       height: mob ? 50 : 35,
-                                              //       decoration: BoxDecoration(
-                                              //           color: ColorManager
-                                              //               .whiteColor,
-                                              //           borderRadius:
-                                              //               BorderRadius
-                                              //                   .circular(4)),
-                                              //       child: TextField(
-                                              //         // onTap: () {
-                                              //         //   setState(() {
-                                              //         //     isPickerSelected = true;
-                                              //         //   });
-                                              //         // },
-                                              //         onChanged: (value) async {
-                                              //           setState(() {
-                                              //             isPickerSelected =
-                                              //                 true;
-                                              //           });
-                                              //           String capitalize(
-                                              //                   String s) =>
-                                              //               s[0].toUpperCase() +
-                                              //               s.substring(1);
-
-                                              //           if (value.isEmpty) {
-                                              //             r2 = [];
-                                              //             setState(() {
-                                              //               r2 = (provider
-                                              //                   .countriesModel!
-                                              //                   .countries)!;
-                                              //             });
-                                              //           } else {
-                                              //             final lower =
-                                              //                 capitalize(value);
-
-                                              //             onSearchChanged(
-                                              //                 lower);
-                                              //           }
-
-                                              //           // print(r);
-                                              //         },
-                                              //         style: const TextStyle(),
-                                              //         controller:
-                                              //             EditProfileControllers
-                                              //                 .countryController,
-                                              //         decoration: InputDecoration(
-                                              //             hintText:
-                                              //                 str.e_country_h,
-                                              //             hintStyle: getRegularStyle(
-                                              //                 color: const Color
-                                              //                         .fromARGB(
-                                              //                     255,
-                                              //                     173,
-                                              //                     173,
-                                              //                     173),
-                                              //                 fontSize: mob
-                                              //                     ? 15
-                                              //                     : 10)),
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // )
                                             ],
                                           ),
                                           Column(
@@ -756,76 +680,6 @@ class _ServicerPageState extends State<ServicerPage> {
                                               ),
                                             ],
                                           ),
-                                          // Column(
-                                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                                          //   children: [
-                                          //     MandatoryHeader(heading: str.s_state),
-                                          //     Padding(
-                                          //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                          //       child: Container(
-                                          //         decoration: BoxDecoration(
-                                          //           boxShadow: [
-                                          //             BoxShadow(
-                                          //               blurRadius: 10.0,
-                                          //               color: Colors.grey.shade300,
-                                          //               // offset: const Offset(5, 8.5),
-                                          //             ),
-                                          //           ],
-                                          //         ),
-                                          //         child: Container(
-                                          //           width: size.width * .44,
-                                          //           height: mob ? 50 : 35,
-                                          //           decoration: BoxDecoration(
-                                          //               color: ColorManager.whiteColor,
-                                          //               borderRadius: BorderRadius.circular(4)),
-                                          //           child: DropdownButtonHideUnderline(
-                                          //             child: DropdownButton2(
-                                          //               icon: const Icon(
-                                          //                 Icons.keyboard_arrow_down,
-                                          //                 size: 35,
-                                          //                 color: ColorManager.black,
-                                          //               ),
-                                          //               hint: Text(str.s_state,
-                                          //                   style: getRegularStyle(
-                                          //                       color: const Color.fromARGB(
-                                          //                           255, 173, 173, 173),
-                                          //                       fontSize:
-                                          //                           Responsive.isMobile(context)
-                                          //                               ? 15
-                                          //                               : 10)),
-                                          //               items: items
-                                          //                   .map((item) =>
-                                          //                       DropdownMenuItem<String>(
-                                          //                         value: item,
-                                          //                         child: Text(item,
-                                          //                             style: getRegularStyle(
-                                          //                                 color: ColorManager
-                                          //                                     .black,
-                                          //                                 fontSize: 15)),
-                                          //                       ))
-                                          //                   .toList(),
-                                          //               value: selectedValue,
-                                          //               onChanged: (value) {
-                                          //                 setState(() {
-                                          //                   selectedValue = value as String;
-                                          //                 });
-                                          //               },
-                                          //               buttonHeight: 40,
-                                          //               // buttonWidth: 140,
-                                          //               itemHeight: 40,
-                                          //               buttonPadding:
-                                          //                   const EdgeInsets.fromLTRB(
-                                          //                       12, 0, 8, 0),
-                                          //               // dropdownWidth: size.width,
-                                          //               itemPadding: const EdgeInsets.fromLTRB(
-                                          //                   12, 0, 12, 0),
-                                          //             ),
-                                          //           ),
-                                          //         ),
-                                          //       ),
-                                          //     ),
-                                          //   ],
-                                          // ),
                                           Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -980,12 +834,6 @@ class _ServicerPageState extends State<ServicerPage> {
                                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: InkWell(
                                     onTap: () {
-                                      print(serviceManData?[index].toJson());
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (ctx) {
-                                      //   return ChatScreen(
-                                      //       serviceman: serviceManData![index]);
-                                      // }));
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (ctx) {
                                         return ProfileLoading(

@@ -1,21 +1,17 @@
-class ServiceManProfile {
+class FavoriteServiceManModel {
   bool? result;
   String? message;
-  UserData? userData;
-  List<GalleryImages>? galleryImages;
+  List<Favorites>? favorites;
 
-  ServiceManProfile(
-      {this.result, this.message, this.userData, this.galleryImages});
+  FavoriteServiceManModel({this.result, this.message, this.favorites});
 
-  ServiceManProfile.fromJson(Map<String, dynamic> json) {
+  FavoriteServiceManModel.fromJson(Map<String, dynamic> json) {
     result = json['result'];
     message = json['message'];
-    userData =
-        json['user_data'] != null ? UserData.fromJson(json['user_data']) : null;
-    if (json['gallery_images'] != null) {
-      galleryImages = <GalleryImages>[];
-      json['gallery_images'].forEach((v) {
-        galleryImages!.add(GalleryImages.fromJson(v));
+    if (json['favorites'] != null) {
+      favorites = <Favorites>[];
+      json['favorites'].forEach((v) {
+        favorites!.add(Favorites.fromJson(v));
       });
     }
   }
@@ -24,23 +20,21 @@ class ServiceManProfile {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['result'] = result;
     data['message'] = message;
-    if (userData != null) {
-      data['user_data'] = userData!.toJson();
-    }
-    if (galleryImages != null) {
-      data['gallery_images'] = galleryImages!.map((v) => v.toJson()).toList();
+    if (favorites != null) {
+      data['favorites'] = favorites!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class UserData {
+class Favorites {
   int? id;
   String? firstname;
   String? dob;
   String? gender;
   String? email;
   String? emailVerifiedAt;
+  String? password;
   String? phone;
   int? countryId;
   String? state;
@@ -54,6 +48,7 @@ class UserData {
   String? about;
   String? status;
   int? languageId;
+  String? rememberToken;
   String? createdAt;
   String? updatedAt;
   String? userType;
@@ -69,17 +64,15 @@ class UserData {
   String? transport;
   String? profile;
   String? onlineStatus;
-  String? countryName;
-  String? serviceName;
-  String? profileImage;
 
-  UserData(
+  Favorites(
       {this.id,
       this.firstname,
       this.dob,
       this.gender,
       this.email,
       this.emailVerifiedAt,
+      this.password,
       this.phone,
       this.countryId,
       this.state,
@@ -93,6 +86,7 @@ class UserData {
       this.about,
       this.status,
       this.languageId,
+      this.rememberToken,
       this.createdAt,
       this.updatedAt,
       this.userType,
@@ -107,18 +101,16 @@ class UserData {
       this.longitude,
       this.transport,
       this.profile,
-      this.onlineStatus,
-      this.countryName,
-      this.serviceName,
-      this.profileImage});
+      this.onlineStatus});
 
-  UserData.fromJson(Map<String, dynamic> json) {
+  Favorites.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstname = json['firstname'];
     dob = json['dob'];
     gender = json['gender'];
     email = json['email'];
     emailVerifiedAt = json['email_verified_at'];
+    password = json['password'];
     phone = json['phone'];
     countryId = json['country_id'];
     state = json['state'];
@@ -132,6 +124,7 @@ class UserData {
     about = json['about'];
     status = json['status'];
     languageId = json['language_id'];
+    rememberToken = json['remember_token'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     userType = json['user_type'];
@@ -147,9 +140,6 @@ class UserData {
     transport = json['transport'];
     profile = json['profile'];
     onlineStatus = json['online_status'];
-    countryName = json['country_name'];
-    serviceName = json['service_name'];
-    profileImage = json['profile_image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -160,6 +150,7 @@ class UserData {
     data['gender'] = gender;
     data['email'] = email;
     data['email_verified_at'] = emailVerifiedAt;
+    data['password'] = password;
     data['phone'] = phone;
     data['country_id'] = countryId;
     data['state'] = state;
@@ -173,6 +164,7 @@ class UserData {
     data['about'] = about;
     data['status'] = status;
     data['language_id'] = languageId;
+    data['remember_token'] = rememberToken;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['user_type'] = userType;
@@ -188,46 +180,6 @@ class UserData {
     data['transport'] = transport;
     data['profile'] = profile;
     data['online_status'] = onlineStatus;
-    data['country_name'] = countryName;
-    data['service_name'] = serviceName;
-    data['profile_image'] = profileImage;
-    return data;
-  }
-}
-
-class GalleryImages {
-  int? id;
-  int? userId;
-  String? image;
-  String? createdAt;
-  String? updatedAt;
-  String? galleryImage;
-
-  GalleryImages(
-      {this.id,
-      this.userId,
-      this.image,
-      this.createdAt,
-      this.updatedAt,
-      this.galleryImage});
-
-  GalleryImages.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    image = json['image'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    galleryImage = json['gallery_image'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
-    data['image'] = image;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['gallery_image'] = galleryImage;
     return data;
   }
 }

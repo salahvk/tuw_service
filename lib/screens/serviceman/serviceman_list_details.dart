@@ -47,7 +47,7 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
     final userData = provider.serviceManDetails?.userData;
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
-    print(userData?.profile);
+    print(userData?.profilePic);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -182,13 +182,12 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                             backgroundColor:
                                 ColorManager.whiteColor.withOpacity(0.8),
                             radius: 45,
-                            backgroundImage:
-                                widget.serviceman?.profilePic == null
-                                    ? null
-                                    : CachedNetworkImageProvider(
-                                        "$endPoint/${widget.serviceman?.profilePic}",
-                                      ),
-                            child: widget.serviceman?.profilePic == null
+                            backgroundImage: userData?.profileImage == null
+                                ? null
+                                : CachedNetworkImageProvider(
+                                    "$endPoint/${userData?.profileImage}",
+                                  ),
+                            child: userData?.profileImage == null
                                 ? Image.asset(
                                     'assets/user.png',
                                   )

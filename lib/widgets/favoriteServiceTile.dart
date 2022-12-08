@@ -2,34 +2,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_favorites.dart';
-import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/model/serviceManLIst.dart';
+import 'package:social_media_services/model/favorite_serviceMan.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 
-class ServicerListTile extends StatefulWidget {
-  Serviceman? serviceman;
-  ServicerListTile({super.key, required this.serviceman});
+class FavoriteServiceListTile extends StatefulWidget {
+  Favorites? serviceman;
+  FavoriteServiceListTile({super.key, required this.serviceman});
 
   @override
-  State<ServicerListTile> createState() => _ServicerListTileState();
+  State<FavoriteServiceListTile> createState() =>
+      _FavoriteServiceListTileState();
 }
 
-class _ServicerListTileState extends State<ServicerListTile> {
-  bool isFavorite = false;
-  @override
-  void initState() {
-    super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   final provider = Provider.of<DataProvider>(context, listen: false);
-    // });
-    isFavorite = widget.serviceman?.featured == 1 ? true : false;
-  }
-
+class _FavoriteServiceListTileState extends State<FavoriteServiceListTile> {
+  bool isFavorite = true;
   @override
   Widget build(BuildContext context) {
-    final s = widget.serviceman?.distance.toString().split('.');
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
     return Container(
@@ -73,7 +63,7 @@ class _ServicerListTileState extends State<ServicerListTile> {
                             ? const AssetImage('assets/user.png')
                                 as ImageProvider
                             : CachedNetworkImageProvider(
-                                '$endPoint${widget.serviceman?.profilePic}'),
+                                '$profileImageApi/${widget.serviceman?.profilePic}'),
                       ),
                     ),
                   ),
@@ -102,13 +92,13 @@ class _ServicerListTileState extends State<ServicerListTile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${widget.serviceman?.firstname ?? ''} ${widget.serviceman?.lastname ?? ''}',
+                      '${widget.serviceman?.firstname} ${widget.serviceman?.lastname ?? ''}',
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: mob ? 16 : 10)),
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(widget.serviceman?.countryname ?? '',
+                  Text(widget.serviceman?.homeLocation ?? '',
                       style: getRegularStyle(
                           color: const Color.fromARGB(255, 173, 173, 173),
                           fontSize: mob ? 12 : 8)),
@@ -126,55 +116,42 @@ class _ServicerListTileState extends State<ServicerListTile> {
               ),
             ),
             const Spacer(),
-            widget.serviceman?.distance == null
-                ? Container()
-                : Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: SizedBox(
-                      width: size.width * 0.1,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            isFavorite = !isFavorite;
-                          });
-                          isFavorite
-                              ? addFavoritesListFun(
-                                  context, widget.serviceman?.id)
-                              : removeFavoritesListFun(
-                                  context, widget.serviceman?.id);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              Icons.favorite,
-                              shadows: const [
-                                Shadow(
-                                  blurRadius: 5.0,
-                                  color: Colors.black12,
-                                  offset: Offset(0, 3.5),
-                                ),
-                              ],
-                              size: mob ? 23 : 15,
-                              color: isFavorite
-                                  ? ColorManager.primary2
-                                  : Colors.black12,
-                            ),
-                            Column(
-                              children: [
-                                Image.asset(ImageAssets.car),
-                                Text(s![0],
-                                    style: getMediumtStyle(
-                                        color: const Color.fromARGB(
-                                            255, 173, 173, 173),
-                                        fontSize: 12))
-                              ],
-                            )
-                          ],
-                        ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: SizedBox(
+                width: size.width * 0.1,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                    isFavorite ? print("True") : print("False");
+                    isFavorite
+                        ? addFavoritesListFun(context, widget.serviceman?.id)
+                        : removeFavoritesListFun(
+                            context, widget.serviceman?.id);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.favorite,
+                        shadows: const [
+                          Shadow(
+                            blurRadius: 5.0,
+                            color: Colors.black12,
+                            offset: Offset(0, 3.5),
+                          ),
+                        ],
+                        size: mob ? 23 : 15,
+                        color:
+                            isFavorite ? ColorManager.primary2 : Colors.black12,
                       ),
-                    ),
-                  )
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

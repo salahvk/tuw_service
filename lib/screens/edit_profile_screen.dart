@@ -15,6 +15,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
@@ -70,6 +71,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // print(timeStamp);
       final provider = Provider.of<DataProvider>(context, listen: false);
+      final otpProvider = Provider.of<OTPProvider>(context, listen: false);
       int? n = provider.countriesModel?.countries?.length;
       int i = 0;
       while (i < n!.toInt()) {
@@ -78,6 +80,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       }
       widget.isregister ? null : fillFields(provider);
       viewProfile(context);
+      selectedValue = otpProvider.userCountryName;
 
       setState(() {});
       // getCustomerParent(context);
@@ -445,6 +448,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                           setState(() {
                                             selectedValue = value as String;
                                           });
+                                          print(selectedValue);
                                           s(selectedValue);
                                         },
                                         buttonHeight: 40,
@@ -730,9 +734,11 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     // }
     else if (dob.isEmpty) {
       showAnimatedSnackBar(context, "DOB field can not be empty");
-    } else if (countryid == null) {
-      showAnimatedSnackBar(context, "Country field can not be empty");
-    } else {
+    }
+    // else if (countryid == null) {
+    //   showAnimatedSnackBar(context, "Country field can not be empty");
+    // }
+    else {
       setState(() {
         loading = true;
       });
@@ -746,14 +752,17 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   updateProfile(firstname, lastname, dob) async {
     final apiToken = Hive.box("token").get('api_token');
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     final about = EditProfileControllers.aboutController.text;
     final region = EditProfileControllers.regionController.text;
     final state = EditProfileControllers.stateController.text;
+    final countryId =
+        countryid ?? otpProvider.otpVerification?.customerdetails?.countryId;
 
     try {
       var response = await http.post(
           Uri.parse(
-              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$state&country_id=${countryid.toString()}&state=$region&lastname=$lastname"),
+              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$state&country_id=${countryId.toString()}&state=$region&lastname=$lastname"),
           headers: {
             "device-id": provider.deviceId ?? '',
             "api-token": apiToken

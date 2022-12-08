@@ -44,7 +44,7 @@ class IntroductionLogo extends StatelessWidget {
                     backgroundColor: ColorManager.primary..withOpacity(0.25),
                     radius: 44.5,
                     child: Center(
-                      child: SvgPicture.asset(ImageAssets.paperPlaneSvg),
+                      child: SvgPicture.asset(ImageAssets.logo, height: 55),
                     ),
                   ),
                 ),

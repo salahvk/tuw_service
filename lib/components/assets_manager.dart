@@ -1,6 +1,6 @@
 class ImageAssets {
   static const String paperPlane = 'assets/paper-plane.png';
-  static const String paperPlaneSvg = 'assets/paper-plane.svg';
+  static const String logo = 'assets/logo-white.svg';
   static const String profileIcon = 'assets/profile_icon.png';
   static const String paymentSuccess = 'assets/payment_success.json';
   static const String paymentFailure = 'assets/payment_failure.json';
