@@ -48,30 +48,29 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => DataProvider()),
-        ChangeNotifierProvider(create: (_) => OTPProvider()),
-      ],
-      child: MaterialApp(
-        supportedLocales: const [
-          Locale('en', ''), // English
-          Locale('hi', ''), // Hindi
-          Locale('ar', ''), // arabic
+        providers: [
+          ChangeNotifierProvider(create: (_) => DataProvider()),
+          ChangeNotifierProvider(create: (_) => OTPProvider()),
         ],
-        locale: locale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        title: 'Social Media Services',
-        debugShowCheckedModeBanner: false,
-        theme: getApplicationTheme(context).copyWith(useMaterial3: true),
-        initialRoute: Routes.splashScreen,
-        onGenerateRoute: RouteGenerator.getRoute,
-        // home: const ProfileLoading()
-      ),
-    );
+        child: MaterialApp(
+          supportedLocales: const [
+            Locale('en', ''), // English
+            Locale('hi', ''), // Hindi
+            Locale('ar', ''), // arabic
+          ],
+          locale: locale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          title: 'Social Media Services',
+          debugShowCheckedModeBanner: false,
+          theme: getApplicationTheme(context).copyWith(useMaterial3: true),
+          initialRoute: Routes.splashScreen,
+          onGenerateRoute: RouteGenerator.getRoute,
+          // home: const MyServicesPage()),
+        ));
   }
 }

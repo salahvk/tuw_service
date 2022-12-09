@@ -178,20 +178,32 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                       ),
                       child: Stack(
                         children: [
-                          CircleAvatar(
-                            backgroundColor:
-                                ColorManager.whiteColor.withOpacity(0.8),
-                            radius: 45,
-                            backgroundImage: userData?.profileImage == null
-                                ? null
-                                : CachedNetworkImageProvider(
-                                    "$endPoint/${userData?.profileImage}",
-                                  ),
-                            child: userData?.profileImage == null
-                                ? Image.asset(
-                                    'assets/user.png',
-                                  )
-                                : null,
+                          InkWell(
+                            onTap: () {
+                              userData!.profileImage!.isEmpty
+                                  ? showAnimatedSnackBar(
+                                      context, "No images to display")
+                                  : showDialog(
+                                      context: context,
+                                      builder: (context) => PopupImage(
+                                          image: '/${userData.profileImage}'),
+                                      barrierDismissible: true);
+                            },
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  ColorManager.whiteColor.withOpacity(0.8),
+                              radius: 45,
+                              backgroundImage: userData?.profileImage == null
+                                  ? null
+                                  : CachedNetworkImageProvider(
+                                      "$endPoint/${userData?.profileImage}",
+                                    ),
+                              child: userData?.profileImage == null
+                                  ? Image.asset(
+                                      'assets/user.png',
+                                    )
+                                  : null,
+                            ),
                           ),
                         ],
                       ),

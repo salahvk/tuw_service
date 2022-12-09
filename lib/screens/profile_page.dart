@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/Remaining%20pages/my_services.dart';
+import 'package:social_media_services/Remaining%20pages/my_subscription.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -251,7 +253,36 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon: Icons.settings_outlined,
                     ),
                   ),
-                )
+                ),
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                return const MyServicesPage();
+              }));
+            },
+            child: FadeSlideCustomAnimation(
+              delay: .5,
+              child: ProfileTitleWidget(
+                name: 'My Services',
+                icon: Icons.pin_drop_outlined,
+                svg: 'assets/Myservice.svg',
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                return const MySubscriptionPage();
+              }));
+            },
+            child: FadeSlideCustomAnimation(
+              delay: .5,
+              child: ProfileTitleWidget(
+                name: 'My Subscription',
+                icon: FontAwesomeIcons.bell,
+              ),
+            ),
+          ),
         ],
       )),
     );

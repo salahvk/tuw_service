@@ -1,3 +1,4 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -5,11 +6,10 @@ import 'package:social_media_services/components/styles_manager.dart';
 class ProfileTitleWidget extends StatelessWidget {
   final String name;
   final IconData icon;
-  const ProfileTitleWidget({
-    Key? key,
-    required this.name,
-    required this.icon,
-  }) : super(key: key);
+  String? svg;
+  ProfileTitleWidget(
+      {Key? key, required this.name, required this.icon, this.svg})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +22,17 @@ class ProfileTitleWidget extends StatelessWidget {
           ),
           SizedBox(
             width: 25,
-            child: Icon(
-              icon,
-              color: ColorManager.primary,
-              size: 22,
-            ),
+            child: svg != null
+                ? SvgPicture.asset(
+                    svg ?? '',
+                    color: ColorManager.primary,
+                    height: 22,
+                  )
+                : Icon(
+                    icon,
+                    color: ColorManager.primary,
+                    size: 22,
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
