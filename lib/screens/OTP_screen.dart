@@ -6,6 +6,7 @@ import 'dart:developer';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,6 @@ import 'package:social_media_services/utils/pinTheme.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/API/viewProfile.dart';
-import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -57,6 +57,7 @@ class _OTPscreenState extends State<OTPscreen> {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
     final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
@@ -76,9 +77,13 @@ class _OTPscreenState extends State<OTPscreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const IntroductionLogo(),
+                      SizedBox(
+                          width: w * .6,
+                          height: h * .2,
+                          child: SvgPicture.asset(
+                              'assets/logo/app_logo_green.svg')),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, h * .04, 0, 0),
+                        padding: EdgeInsets.fromLTRB(0, h * .01, 0, 0),
                         child: Text(str.o_verification,
                             style: getBoldtStyle(
                                 color: ColorManager.black, fontSize: 20)),

@@ -138,6 +138,9 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
         child: SafeArea(
           child: Column(
             children: [
+              const SizedBox(
+                height: 10,
+              ),
               Stack(
                 children: [
                   Row(

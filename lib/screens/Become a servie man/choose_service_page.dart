@@ -42,7 +42,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
 
   String? fileName;
   int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
   List<Services> sGroup = [];
   List<Childservices> childGroup = [];
@@ -600,6 +600,8 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
       );
     } else if (selectedValue == null) {
       showAnimatedSnackBar(context, 'Please Choose a Service Group');
+    } else if (fileName == null) {
+      showAnimatedSnackBar(context, 'Please Upload a File');
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (ctx) {
         return const PaymentServicePage();

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:social_media_services/API/get_chat_list.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/screens/messagePage.dart';
@@ -83,14 +84,19 @@ class _HomePageState extends State<HomePage> {
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: SvgPicture.asset(ImageAssets.chatIconSvg)),
+                  leading: InkWell(
+                    child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: SvgPicture.asset(ImageAssets.chatIconSvg)),
+                  ),
                 ),
               ],
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
+                getChatList(
+                  context,
+                );
                 setState(() {
                   _selectedIndex = index;
                 });

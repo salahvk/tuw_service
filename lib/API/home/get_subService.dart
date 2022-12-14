@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -46,7 +47,7 @@ getSubService(BuildContext context, id) async {
   }
 }
 
-selectServiceType(context, id) {
+selectServiceType(context, id) async {
   print(id);
   final provider = Provider.of<DataProvider>(context, listen: false);
   // print(provider.viewProfileModel?.userdetails?.latitude);
@@ -55,7 +56,27 @@ selectServiceType(context, id) {
       return const SubServicesPage();
     }));
   } else if (provider.viewProfileModel?.userdetails?.latitude == null) {
-    requestLocationPermission(context);
+    requestLocationPermission(
+      context,
+    );
+    Navigator.pop(context);
+
+    AnimatedSnackBar.material("Getting Current Location...",
+            type: AnimatedSnackBarType.info,
+            borderRadius: BorderRadius.circular(6),
+            duration: const Duration(seconds: 1))
+        .show(
+      context,
+    );
+    await Future.delayed(const Duration(seconds: 2));
+
+    AnimatedSnackBar.material("Done",
+            type: AnimatedSnackBarType.success,
+            borderRadius: BorderRadius.circular(6),
+            duration: const Duration(seconds: 3))
+        .show(
+      context,
+    );
   } else {
     getServiceMan(context, id);
   }

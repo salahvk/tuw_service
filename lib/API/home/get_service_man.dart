@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/screens/serviceman/servicer.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
@@ -26,6 +27,7 @@ getServiceMan(BuildContext context, id) async {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
+      print("Navigation active");
       navToServiceMan(context, id);
       if (jsonResponse['result'] == false) {
         await Hive.box("token").clear();
@@ -47,16 +49,16 @@ getServiceMan(BuildContext context, id) async {
 
 searchServiceMan(BuildContext context, id, countryIdd, state, region, name,
     transport) async {
-  //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+  final servicerProvider =
+      Provider.of<ServicerProvider>(context, listen: false);
   final provider = Provider.of<DataProvider>(context, listen: false);
   final userDetails = provider.viewProfileModel?.userdetails;
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
   try {
-    print(name);
     final url =
-        '$servicemanList?service_id=$id&page=1&latitude=${userDetails?.latitude}&longitude=${userDetails?.longitude}&sel_country_id=${countryIdd ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
+        '$servicemanList?service_id=$id&page=1&latitude=${servicerProvider.servicerLatitude ?? userDetails?.latitude}&longitude=${servicerProvider.servicerLatitude ?? userDetails?.longitude}&sel_country_id=${countryIdd ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
     print(url);
     var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});

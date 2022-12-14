@@ -4,13 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/get_chat_list.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
-import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/chat_list_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
@@ -31,10 +31,16 @@ class _MessagePageState extends State<MessagePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      getChatList(
+        context,
+      );
+    });
   }
 
   int _selectedIndex = 1;
-  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
+  // final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

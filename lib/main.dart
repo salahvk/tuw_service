@@ -9,6 +9,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:social_media_services/providers/servicer_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
         providers: [
           ChangeNotifierProvider(create: (_) => DataProvider()),
           ChangeNotifierProvider(create: (_) => OTPProvider()),
+          ChangeNotifierProvider(create: (_) => ServicerProvider()),
         ],
         child: MaterialApp(
           supportedLocales: const [
@@ -70,7 +72,7 @@ class _MyAppState extends State<MyApp> {
           theme: getApplicationTheme(context).copyWith(useMaterial3: true),
           initialRoute: Routes.splashScreen,
           onGenerateRoute: RouteGenerator.getRoute,
-          // home: const MyServicesPage()),
+          // home: const ChatLoadingScreen(),
         ));
   }
 }

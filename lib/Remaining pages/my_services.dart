@@ -140,6 +140,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
             padding: const EdgeInsets.fromLTRB(18, 0, 0, 0),
             child: Column(
               children: [
+                const SizedBox(
+                  height: 10,
+                ),
                 Stack(
                   children: [
                     Row(

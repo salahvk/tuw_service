@@ -7,7 +7,9 @@ import 'package:social_media_services/API/updateLocation.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 
-requestLocationPermission(BuildContext context) async {
+requestLocationPermission(
+  BuildContext context,
+) async {
   LocationPermission permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
@@ -23,7 +25,11 @@ requestLocationPermission(BuildContext context) async {
     print("GPS Location permission granted.");
     final latLon = await getCurrentLocation();
     final location = await getPlaceAddress(latLon);
-    await updateLocationFunction(context, latLon, location);
+    await updateLocationFunction(
+      context,
+      latLon,
+      location,
+    );
     await viewProfile(context);
   }
   // searchController.text.isEmpty ? getCurrentLocation() : null;

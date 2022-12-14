@@ -16,8 +16,9 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
+import 'package:social_media_services/screens/Google%20Map/searchServicerLocation.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -30,7 +31,8 @@ import 'package:social_media_services/widgets/title_widget.dart';
 
 class ServicerPage extends StatefulWidget {
   int? id;
-  ServicerPage({super.key, this.id});
+  bool? isAdvancedSearchEnabled;
+  ServicerPage({super.key, this.id, this.isAdvancedSearchEnabled = false});
 
   @override
   State<ServicerPage> createState() => _ServicerPageState();
@@ -54,20 +56,27 @@ class _ServicerPageState extends State<ServicerPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    isAdvancedSearchEnabled = widget.isAdvancedSearchEnabled ?? false;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = Provider.of<DataProvider>(context, listen: false);
+      final servicerProvider =
+          Provider.of<ServicerProvider>(context, listen: false);
       int? n = provider.countriesModel?.countries?.length;
       int i = 0;
       while (i < n!.toInt()) {
         r3.add(provider.countriesModel!.countries![i].countryName!);
         i++;
       }
+      ServiceControllers.mapController.text = servicerProvider
+                  .servicerLatitude !=
+              null
+          ? "${servicerProvider.servicerLatitude} ${servicerProvider.servicerLongitude}"
+          : 'Map';
       provider.servicerSelectedCountry = '';
       setState(() {});
     });
@@ -81,12 +90,6 @@ class _ServicerPageState extends State<ServicerPage> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final serviceManData = provider.serviceManListModel?.serviceman;
 
-    final List<String> items = [
-      'Item1',
-      'Item2',
-      'Item3',
-      'Item4',
-    ];
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -102,7 +105,7 @@ class _ServicerPageState extends State<ServicerPage> {
 
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
-          height: size.height * 0.825,
+          height: isSerDrawerOpened ? size.height * 0.425 : size.height * 0.825,
           width: isSerDrawerOpened ? size.width * 0.54 : size.width * 0.6,
           child: isSerDrawerOpened
               ? SerDrawer(
@@ -557,7 +560,6 @@ class _ServicerPageState extends State<ServicerPage> {
                                                     ],
                                                   ),
                                                   child: TextField(
-                                                    // style: const TextStyle(),
                                                     controller:
                                                         ServiceControllers
                                                             .regionController,
@@ -616,7 +618,8 @@ class _ServicerPageState extends State<ServicerPage> {
                                                     ],
                                                   ),
                                                   child: TextField(
-                                                    // style: const TextStyle(),
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
                                                     controller:
                                                         ServiceControllers
                                                             .mapController,
@@ -632,7 +635,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                                                   MaterialPageRoute(
                                                                       builder:
                                                                           (ctx) {
-                                                                return const GoogleMapScreen();
+                                                                return const SearchServicerLocation();
                                                               }));
                                                             },
                                                             child: Container(

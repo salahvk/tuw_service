@@ -4,6 +4,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
@@ -16,7 +17,6 @@ import 'package:social_media_services/main.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
-import 'package:social_media_services/widgets/introduction_logo.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,7 +41,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   void initState() {
     super.initState();
     PhoneNumberControllers.phoneNumCon.text = '';
-    countryCode = "91";
+    countryCode = "968";
     lang = Hive.box('LocalLan').get(
       'lang',
     );
@@ -87,9 +87,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       height: size.height * 0.36,
                       child: Center(
                         child: Padding(
-                          padding:
-                              EdgeInsets.fromLTRB(0, 0, 0, size.height * .04),
-                          child: const IntroductionLogo(),
+                          padding: EdgeInsets.fromLTRB(
+                              0, size.height * .13, 0, size.height * .04),
+                          child: SizedBox(
+                              width: size.width * .6,
+                              height: size.height * .2,
+                              child: SvgPicture.asset(
+                                  'assets/logo/app_logo_green.svg')),
                         ),
                       ),
                     ),
