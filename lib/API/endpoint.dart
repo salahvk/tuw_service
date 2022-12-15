@@ -40,3 +40,5 @@ const String serviceManProfileApi = '$api/serviceman-profile';
 const String favoritesListApi = '$api/favorite/list';
 const String addFavoritesListApi = '$api/favorite/add';
 const String removeFavoritesListApi = '$api/favorite/remove';
+
+const String viewChatMessagesApi = '$api/chat-messages?receiver_id=';

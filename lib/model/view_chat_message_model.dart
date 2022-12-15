@@ -1,10 +1,10 @@
-class ChatListModel {
+class ViewChatMessageModel {
   bool? result;
   ChatMessage? chatMessage;
 
-  ChatListModel({this.result, this.chatMessage});
+  ViewChatMessageModel({this.result, this.chatMessage});
 
-  ChatListModel.fromJson(Map<String, dynamic> json) {
+  ViewChatMessageModel.fromJson(Map<String, dynamic> json) {
     result = json['result'];
     chatMessage = json['chat_message'] != null
         ? ChatMessage.fromJson(json['chat_message'])
@@ -102,10 +102,9 @@ class ChatMessage {
 
 class Data {
   int? id;
-  var senderId;
-  var receiverId;
-  var servicemanId;
-  String? message;
+  int? senderId;
+  int? receiverId;
+  var message;
   String? uploads;
   String? type;
   String? status;
@@ -114,15 +113,13 @@ class Data {
   int? sendUserId;
   String? firstname;
   String? onlineStatus;
-  String? serviceName;
-  String? profilePic;
-  int? unreadCount;
+  String? chatMedia;
+  String? profileImage;
 
   Data(
       {this.id,
       this.senderId,
       this.receiverId,
-      this.servicemanId,
       this.message,
       this.uploads,
       this.type,
@@ -132,15 +129,13 @@ class Data {
       this.sendUserId,
       this.firstname,
       this.onlineStatus,
-      this.serviceName,
-      this.profilePic,
-      this.unreadCount});
+      this.chatMedia,
+      this.profileImage});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     senderId = json['sender_id'];
     receiverId = json['receiver_id'];
-    servicemanId = json['serviceman_id'];
     message = json['message'];
     uploads = json['uploads'];
     type = json['type'];
@@ -150,9 +145,8 @@ class Data {
     sendUserId = json['send_user_id'];
     firstname = json['firstname'];
     onlineStatus = json['online_status'];
-    serviceName = json['service_name'];
-    profilePic = json['profile_pic'];
-    unreadCount = json['unread_count'];
+    chatMedia = json['chat_media'];
+    profileImage = json['profile_image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -160,7 +154,6 @@ class Data {
     data['id'] = id;
     data['sender_id'] = senderId;
     data['receiver_id'] = receiverId;
-    data['serviceman_id'] = servicemanId;
     data['message'] = message;
     data['uploads'] = uploads;
     data['type'] = type;
@@ -170,9 +163,8 @@ class Data {
     data['send_user_id'] = sendUserId;
     data['firstname'] = firstname;
     data['online_status'] = onlineStatus;
-    data['service_name'] = serviceName;
-    data['profile_pic'] = profilePic;
-    data['unread_count'] = unreadCount;
+    data['chat_media'] = chatMedia;
+    data['profile_image'] = profileImage;
     return data;
   }
 }

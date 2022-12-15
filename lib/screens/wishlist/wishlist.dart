@@ -15,7 +15,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
-import 'package:social_media_services/utils/profile_loading.dart';
+import 'package:social_media_services/loading%20screens/profile_loading.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/favoriteServiceTile.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';

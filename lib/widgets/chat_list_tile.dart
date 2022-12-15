@@ -74,12 +74,12 @@ class _ChatListTileState extends State<ChatListTile> {
                           backgroundColor: mob ? ColorManager.whiteColor : null,
                           child: CircleAvatar(
                             radius: mob ? 40 : 20,
-                            backgroundImage: widget.profileData?.profileImage ==
+                            backgroundImage: widget.profileData?.profilePic ==
                                     null
                                 ? const AssetImage('assets/user.png')
                                     as ImageProvider
                                 : CachedNetworkImageProvider(
-                                    '$endPoint${widget.profileData?.profileImage}'),
+                                    '$endPoint${widget.profileData?.profilePic}'),
                           ),
                         ),
                       ),
@@ -116,7 +116,7 @@ class _ChatListTileState extends State<ChatListTile> {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(widget.profileData?.messsage ?? '',
+                      Text(widget.profileData?.message ?? '',
                           style: getRegularStyle(
                               color: const Color.fromARGB(255, 139, 138, 138),
                               fontSize: mob ? 11 : 7)),
@@ -138,29 +138,31 @@ class _ChatListTileState extends State<ChatListTile> {
                     color: const Color.fromARGB(255, 173, 173, 173),
                     fontSize: mob ? 10 : 7)),
           ),
-          Positioned(
-              right: lang == 'ar' ? null : 10,
-              left: lang == 'ar' ? 10 : null,
-              bottom: 10,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        color: ColorManager.primary2,
-                        borderRadius: BorderRadius.circular(2)),
-                    child: Center(
-                      child: Text(
-                        '5',
-                        style: getSemiBoldtStyle(
-                            color: ColorManager.whiteColor, fontSize: 10),
-                      ),
-                    ),
-                  )
-                ],
-              ))
+          widget.profileData?.unreadCount == 0
+              ? Container()
+              : Positioned(
+                  right: lang == 'ar' ? null : 10,
+                  left: lang == 'ar' ? 10 : null,
+                  bottom: 10,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
+                            color: ColorManager.primary2,
+                            borderRadius: BorderRadius.circular(2)),
+                        child: Center(
+                          child: Text(
+                            widget.profileData?.unreadCount.toString() ?? '',
+                            style: getSemiBoldtStyle(
+                                color: ColorManager.whiteColor, fontSize: 10),
+                          ),
+                        ),
+                      )
+                    ],
+                  ))
         ],
       ),
     );

@@ -8,25 +8,29 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/model/chat_list.dart';
+import 'package:social_media_services/model/view_chat_message_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
-getChatList(BuildContext context) async {
+viewChatMessages(BuildContext context, id) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
   try {
-    var response = await http.post(
-        Uri.parse('$api/chat-list?page=1&language_id=1'),
+    var response = await http.post(Uri.parse('$viewChatMessagesApi$id'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
+      // if (jsonResponse['result'] == false) {
+      //   await Hive.box("token").clear();
 
-      final chatDetails = ChatListModel.fromJson(jsonResponse);
-      provider.getChatListDetails(chatDetails);
+      //   return;
+      // }
+
+      final viewChatMessageData = ViewChatMessageModel.fromJson(jsonResponse);
+      provider.viewChatMessageModelData(viewChatMessageData);
     } else {
       // print(response.statusCode);
       // print(response.body);

@@ -4,4 +4,5 @@ class ServicerProvider with ChangeNotifier {
   String? servicerLatitude;
   String? servicerLongitude;
   int? serviceId;
+  int? servicerId;
 }

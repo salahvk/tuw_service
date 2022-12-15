@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,11 +10,10 @@ import 'package:social_media_services/API/get_chat_list.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/loading%20screens/chat_loading_screen.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/responsive/responsive.dart';
-import 'package:social_media_services/screens/chat_screen.dart';
+import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/widgets/chat_list_tile.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class MessagePage extends StatefulWidget {
@@ -32,21 +33,34 @@ class _MessagePageState extends State<MessagePage> {
       'lang',
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final provider = Provider.of<DataProvider>(context, listen: false);
-      getChatList(
-        context,
-      );
+      Timer.periodic(const Duration(seconds: 30), (timer) {
+        final provider = Provider.of<DataProvider>(context, listen: false);
+        getChatList(
+          context,
+        );
+      });
     });
   }
+
+  //  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     Timer.periodic(const Duration(seconds: 5), (timer) {
+  //       if (mounted) {
+  //         print("recurring Api call");
+  //         final servicerProvider =
+  //             Provider.of<ServicerProvider>(context, listen: false);
+  //         viewChatMessages(context, servicerProvider.servicerId);
+  //       }
+  //     });
+  //   });
 
   int _selectedIndex = 1;
   // final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final mob = Responsive.isMobile(context);
-    final str = AppLocalizations.of(context)!;
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: true);
 
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -225,26 +239,13 @@ class _MessagePageState extends State<MessagePage> {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                     child: InkWell(
-                        onTap: () {
-                          print(provider.chatListDetails?.chatMessage
-                              ?.data?[index].firstname);
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (ctx) {
-                          //   return ChatScreen(
-                          //       serviceman: serviceManData![index]);
-                          // }));
-                        },
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (ctx) {
-                              return ChatScreen();
-                            }));
-                          },
-                          child: ChatListTile(
-                            profileData: profileDetails,
-                          ),
-                        )),
+                      onTap: () {
+                        navToChatLoadingScreen(index);
+                      },
+                      child: ChatListTile(
+                        profileData: profileDetails,
+                      ),
+                    ),
                   );
                 }),
                 itemCount: provider.chatListDetails?.chatMessage?.data?.length,
@@ -254,5 +255,19 @@ class _MessagePageState extends State<MessagePage> {
         ),
       ),
     );
+  }
+
+  navToChatLoadingScreen(index) {
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final serviceManId =
+        provider.chatListDetails?.chatMessage?.data?[index].servicemanId;
+    servicerProvider.servicerId = serviceManId;
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return ChatLoadingScreen(
+        serviceManId: serviceManId.toString(),
+      );
+    }));
   }
 }

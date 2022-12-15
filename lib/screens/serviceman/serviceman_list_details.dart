@@ -11,8 +11,10 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/loading%20screens/chat_loading_screen.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
@@ -253,6 +255,34 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    InkWell(
+                      onTap: navToChatLoadingScreen,
+                      child: Container(
+                        width: 40,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 9.5,
+                              color: Colors.grey.shade400,
+                              offset: const Offset(6, 6),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(5),
+                          color: ColorManager.primary,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: SvgPicture.asset(
+                            ImageAssets.chatIconSvg,
+                            color: ColorManager.whiteColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     Container(
                       width: 40,
                       height: 30,
@@ -479,6 +509,21 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
   navigateToServiceEditManProfile() {
     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
       return const ServiceManProfileEditPage();
+    }));
+  }
+
+  navToChatLoadingScreen() {
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final serviceManId = provider.serviceManDetails?.userData?.id;
+
+    servicerProvider.servicerId = serviceManId;
+    print(serviceManId);
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return ChatLoadingScreen(
+        serviceManId: serviceManId.toString(),
+      );
     }));
   }
 }

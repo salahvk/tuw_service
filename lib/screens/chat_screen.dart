@@ -1,16 +1,24 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/view_chat_messages.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
+import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
@@ -19,6 +27,10 @@ import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:audio_session/audio_session.dart';
 
 class ChatScreen extends StatefulWidget {
   Serviceman? serviceman;
@@ -40,11 +52,14 @@ class _ChatScreenState extends State<ChatScreen> {
   String lang = '';
   VideoPlayerController? _controller;
   VideoPlayerController? _toBeDisposed;
+  TextEditingController msgController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   );
+
+  final _player = AudioPlayer();
 
   @override
   void initState() {
@@ -52,6 +67,17 @@ class _ChatScreenState extends State<ChatScreen> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Timer.periodic(const Duration(seconds: 30), (timer) {
+        if (mounted) {
+          print("recurring Api call");
+          final servicerProvider =
+              Provider.of<ServicerProvider>(context, listen: false);
+          viewChatMessages(context, servicerProvider.servicerId);
+        }
+      });
+    });
+    _init();
   }
 
   @override
@@ -65,6 +91,11 @@ class _ChatScreenState extends State<ChatScreen> {
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
+
+    final provider = Provider.of<DataProvider>(context, listen: true);
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: true);
+    final chatData = provider.viewChatMessageModel?.chatMessage;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -78,10 +109,12 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: CircleAvatar(
               radius: 16,
-              backgroundImage: widget.serviceman?.profilePic == null
+              backgroundImage: provider
+                          .serviceManDetails?.userData?.profileImage ==
+                      null
                   ? const AssetImage('assets/user.png') as ImageProvider
                   : CachedNetworkImageProvider(
-                      '$endPoint${widget.serviceman?.profilePic}'),
+                      '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
             ),
           ),
           title: InkWell(
@@ -96,17 +129,12 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name',
+                  " ${provider.serviceManDetails?.userData?.firstname ?? ''} ${provider.serviceManDetails?.userData?.lastname ?? ''}",
                   style:
                       getRegularStyle(color: ColorManager.black, fontSize: 16),
                 ),
                 Row(
-                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Image.asset(ImageAssets.tools),
-                    // const SizedBox(
-                    //   width: 5,
-                    // ),
                     Text('',
                         style: getRegularStyle(
                             color: const Color.fromARGB(255, 173, 173, 173),
@@ -124,7 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
             InkWell(
                 onTap: () {
                   FlutterPhoneDirectCaller.callNumber(
-                      widget.serviceman?.phone ?? '');
+                      provider.serviceManDetails?.userData?.phone ?? '');
                 },
                 child: const Icon(Icons.call_outlined)),
             const SizedBox(
@@ -136,32 +164,51 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-              child: Column(
-                children: [
-                  CustomChatBubble(
-                      isSendByme: true,
+                padding: const EdgeInsets.fromLTRB(15, 15, 15, 60),
+                child: ListView.builder(
+                  reverse: true,
+                  itemCount: chatData?.data!.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return CustomChatBubble(
+                      isSendByme: chatData?.data![index].senderId ==
+                              provider.viewProfileModel?.userdetails?.id
+                          ? true
+                          : false,
                       seen: true,
-                      text: 'How can help you',
-                      image: "",
-                      time: "2:05 PM"),
-                  CustomChatBubble(
-                    isSendByme: false,
-                    seen: false,
-                    time: "3:00 PM",
-                    image: switzeland,
-                    text: 'Hi friend',
-                  ),
-                  CustomChatBubble(
-                    isSendByme: true,
-                    seen: false,
-                    time: "5:00 PM",
-                    image: '',
-                    text: 'Where are you now',
-                  ),
-                ],
-              ),
-            ),
+                      text: chatData!.data![index].message,
+                      image: chatData.data![index].type == 'image'
+                          ? "$endPoint${chatData.data![index].chatMedia}"
+                          : "",
+                      time: "2:05 PM",
+                      audio: chatData.data![index].type == 'audio' ? 's' : '',
+                    );
+                  },
+                )
+                //  Column(
+                //   children: [
+                //     CustomChatBubble(
+                //         isSendByme: true,
+                //         seen: true,
+                //         text: 'How can help you',
+                //         image: "",
+                //         time: "2:05 PM"),
+                //     CustomChatBubble(
+                //       isSendByme: false,
+                //       seen: false,
+                //       time: "3:00 PM",
+                //       image: switzeland,
+                //       text: 'Hi friend',
+                //     ),
+                //     CustomChatBubble(
+                //       isSendByme: true,
+                //       seen: false,
+                //       time: "5:00 PM",
+                //       image: '',
+                //       text: 'Where are you now',
+                //     ),
+                //   ],
+                // ),
+                ),
 
             ismenuVisible
                 ? Positioned(
@@ -181,7 +228,17 @@ class _ChatScreenState extends State<ChatScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
-                              onTap: pickGallery,
+                              onTap: () async {
+                                setState(() {
+                                  ismenuVisible = false;
+                                });
+                                await selectImage();
+                                await viewChatMessages(
+                                    context, servicerProvider.servicerId);
+                                await Future.delayed(
+                                    const Duration(seconds: 2));
+                                setState(() {});
+                              },
                               child: ChatAddTile(
                                   svg: false,
                                   title: lang == 'ar'
@@ -303,7 +360,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         width: mob ? size.width * 0.69 : size.width * 0.65,
                         height: 40,
                         child: TextField(
-                          // controller: chatMsg,
+                          controller: msgController,
                           onChanged: (v) {
                             if (v.isNotEmpty) {
                               setState(() {
@@ -331,8 +388,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     InkWell(
                       onTap: () async {
-                        _onImageButtonPressed(ImageSource.camera,
-                            context: context);
+                        _onImageButtonPressed(ImageSource.camera, context);
                       },
                       child: const Icon(
                         Icons.camera_alt,
@@ -366,10 +422,24 @@ class _ChatScreenState extends State<ChatScreen> {
                               color: ColorManager.primary,
                             ),
                           )
-                        : const Icon(
-                            Icons.send,
-                            size: 30,
-                            color: ColorManager.primary,
+                        : InkWell(
+                            onTap: () async {
+                              await sendMessages();
+                              await viewChatMessages(
+                                  context, servicerProvider.servicerId);
+                              setState(() {});
+                              // print(servicerProvider.servicerId);
+                              // await Future.delayed(
+                              //     const Duration(milliseconds: 100));
+                              // setState(() {});
+                              // await Future.delayed(const Duration(seconds: 1));
+                              // setState(() {});
+                            },
+                            child: const Icon(
+                              Icons.send,
+                              size: 30,
+                              color: ColorManager.primary,
+                            ),
                           ),
                     const SizedBox(
                       width: 35,
@@ -509,8 +579,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Future<void> _onImageButtonPressed(ImageSource source,
-      {BuildContext? context}) async {
+  Future<void> _onImageButtonPressed(
+      ImageSource source, BuildContext context) async {
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
     if (_controller != null) {
       await _controller!.setVolume(0.0);
     }
@@ -548,9 +620,12 @@ class _ChatScreenState extends State<ChatScreen> {
         // maxHeight: maxHeight,
         // imageQuality: quality,
       );
-      setState(() {
-        // _setImageFileListFromFile(pickedFile);
-      });
+      print(pickedFile);
+      final list = [pickedFile!];
+      await uploadImages(list);
+      await viewChatMessages(context, servicerProvider.servicerId);
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() {});
     } catch (e) {
       setState(() {
         // _pickImageError = e;
@@ -560,23 +635,23 @@ class _ChatScreenState extends State<ChatScreen> {
     // }
   }
 
-  pickGallery() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowMultiple: true,
-      allowedExtensions: ['jpg', 'mp4', 'png'],
-    );
+  // pickGallery() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowMultiple: true,
+  //     allowedExtensions: ['jpg', 'mp4', 'png'],
+  //   );
 
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      setState(() {
-        // fileName = file.name;
-      });
-    } else {}
-    setState(() {
-      ismenuVisible = false;
-    });
-  }
+  //   if (result != null) {
+  //     PlatformFile file = result.files.first;
+  //     setState(() {
+  //       // fileName = file.name;
+  //     });
+  //   } else {}
+  //   setState(() {
+  //     ismenuVisible = false;
+  //   });
+  // }
 
   pickDoc() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -594,5 +669,128 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       ismenuVisible = false;
     });
+  }
+
+  sendMessages() async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final receiverId = provider.serviceManDetails?.userData?.id.toString();
+    provider.subServicesModel = null;
+    final apiToken = Hive.box("token").get('api_token');
+    final url =
+        '$api/chat-store?receiver_id=$receiverId&type=text&message=${msgController.text}&page=1';
+
+    msgController.text = '';
+    setState(() {
+      ismicVisible = true;
+    });
+    print(url);
+    if (apiToken == null) return;
+    try {
+      var response = await http.post(Uri.parse(url), headers: {
+        "device-id": provider.deviceId ?? '',
+        "api-token": apiToken
+      });
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+
+        // msgController.text = '';
+
+        // log(response.body);
+        // if (jsonResponse['result'] == false) {
+        //   await Hive.box("token").clear();
+
+        //   return;
+        // }
+
+        // final subServicesData = SubServicesModel.fromJson(jsonResponse);
+        // provider.subServicesModelData(subServicesData);
+        // selectServiceType(context, id);
+      } else {
+        // print(response.statusCode);
+        // print(response.body);
+        // print('Something went wrong');
+      }
+    } on Exception catch (_) {
+      showSnackBar("Something Went Wrong1", context);
+    }
+  }
+
+// * Select Image Function
+
+  selectImage() async {
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if (images == null) {
+      return;
+    }
+
+    uploadImages(images);
+  }
+
+  uploadImages(List<XFile> imageFile) async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final userData = provider.serviceManProfile?.userData;
+    final receiverId = provider.serviceManDetails?.userData?.id.toString();
+
+    final length = imageFile.length;
+    var uri =
+        Uri.parse('$api/chat-store?receiver_id=$receiverId&type=image&page=1');
+    var request = http.MultipartRequest(
+      "POST",
+      uri,
+    );
+
+    print(uri);
+
+    List<MultipartFile> multiPart = [];
+    for (var i = 0; i < length; i++) {
+      var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
+      var length = await imageFile[i].length();
+      final apiToken = Hive.box("token").get('api_token');
+
+      request.headers.addAll(
+          {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+      var multipartFile = http.MultipartFile(
+        'file',
+        stream,
+        length,
+        filename: (imageFile[i].path),
+      );
+      multiPart.add(multipartFile);
+    }
+
+    length > 1
+        ? request.files.addAll(multiPart)
+        : request.files.add(multiPart[0]);
+
+    // "content-type": "multipart/form-data"
+
+    var response = await request.send();
+    final res = await http.Response.fromStream(response);
+    var jsonResponse = jsonDecode(res.body);
+
+    if (jsonResponse["result"] == false) {
+      showAnimatedSnackBar(
+          context, "Images must be a file of type: jpeg, jpg, png.");
+      setState(() {});
+      return;
+    }
+  }
+
+  Future<void> _init() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
+
+    _player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace stackTrace) {
+      print('A stream error occurred: $e');
+    });
+    // Try to load audio from a source and catch any errors.
+    try {
+      // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
+      await _player.setAudioSource(AudioSource.uri(Uri.parse(
+          "http://projects.techoriz.in/serviceapp/public/assets/uploads/chatmedia/audio1671101877.ogg")));
+    } catch (e) {
+      print("Error loading audio source: $e");
+    }
   }
 }

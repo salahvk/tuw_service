@@ -11,7 +11,7 @@ import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/utils/get_location.dart';
-import 'package:social_media_services/utils/loading_page.dart';
+import 'package:social_media_services/loading%20screens/loading_page.dart';
 
 class ServiceHomePage extends StatefulWidget {
   const ServiceHomePage({Key? key}) : super(key: key);

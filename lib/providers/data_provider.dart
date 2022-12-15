@@ -14,6 +14,7 @@ import 'package:social_media_services/model/serviceman_profile_model.dart';
 import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
+import 'package:social_media_services/model/view_chat_message_model.dart';
 
 class DataProvider with ChangeNotifier {
   LanguageModel? languageModel;
@@ -71,6 +72,13 @@ class DataProvider with ChangeNotifier {
 
   void subServicesModelData(value) {
     subServicesModel = value;
+    notifyListeners();
+  }
+
+  ViewChatMessageModel? viewChatMessageModel;
+
+  void viewChatMessageModelData(value) {
+    viewChatMessageModel = value;
     notifyListeners();
   }
 

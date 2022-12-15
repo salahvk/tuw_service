@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
+import 'package:social_media_services/API/view_chat_messages.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
 
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/widgets/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -17,9 +20,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 class ChatLoadingScreen extends StatefulWidget {
-  const ChatLoadingScreen({
-    super.key,
-  });
+  String? serviceManId;
+  ChatLoadingScreen({super.key, this.serviceManId});
 
   @override
   State<ChatLoadingScreen> createState() => _ChatScreenState();
@@ -49,12 +51,13 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await _stopWatchTimer.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await getServiceManDetailsFun(context, widget.serviceManId);
+      await viewChatMessages(context, widget.serviceManId);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+        return ChatScreen();
+      }));
+    });
   }
 
   @override
@@ -134,11 +137,13 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
                     baseColor: ColorManager.whiteColor,
                     highlightColor: Colors.green,
                     child: CustomChatBubble(
-                        isSendByme: true,
-                        seen: true,
-                        text: 'How can help you',
-                        image: "",
-                        time: "2:05 PM"),
+                      isSendByme: true,
+                      seen: true,
+                      text: 'How can help you',
+                      image: "",
+                      time: "2:05 PM",
+                      audio: '',
+                    ),
                   ),
                   Shimmer.fromColors(
                     baseColor: ColorManager.whiteColor,
@@ -149,6 +154,7 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
                       time: "3:00 PM",
                       image: switzeland,
                       text: 'Hi friend',
+                      audio: '',
                     ),
                   ),
                   Shimmer.fromColors(
@@ -160,6 +166,7 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
                       time: "5:00 PM",
                       image: '',
                       text: 'Where are you now',
+                      audio: '',
                     ),
                   ),
                 ],
