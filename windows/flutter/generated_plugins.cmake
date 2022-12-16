@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   geolocator_windows
   permission_handler_windows
   platform_device_id_windows
+  record_windows
   smart_auth
 )
 

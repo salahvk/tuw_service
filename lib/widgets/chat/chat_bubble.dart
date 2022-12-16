@@ -1,12 +1,15 @@
-import 'dart:math';
+import 'dart:async';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:social_media_services/widgets/show_slider.dart';
+import 'package:social_media_services/widgets/chat/common.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:audio_session/audio_session.dart';
 
 class CustomChatBubble extends StatefulWidget {
   final bool isSendByme;
@@ -34,7 +37,40 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   @override
   void initState() {
     super.initState();
+    log("Chat init Function called");
+    _init();
+    Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted) {
+        _init();
+      }
+    });
   }
+
+  Future<void> _init() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
+
+    _player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace stackTrace) {
+      print('A stream error occurred: $e');
+    });
+    // Try to load audio from a source and catch any errors.
+    try {
+      // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
+      await _player.setAudioSource(
+          AudioSource.uri(Uri.parse("$endPoint${widget.audio}")));
+    } catch (e) {
+      print("Error loading audio source: $e");
+    }
+  }
+
+  Stream<PositionData> get _positionDataStream =>
+      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+          _player.positionStream,
+          _player.bufferedPositionStream,
+          _player.durationStream,
+          (position, bufferedPosition, duration) => PositionData(
+              position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +114,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                         )
                       : widget.audio.isNotEmpty
                           ? SizedBox(
-                              width: size.width * .7,
+                              // width: size.width,
                               height: 50,
                               // color: ColorManager.primary,
                               child: Row(
@@ -134,14 +170,6 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
       ),
     );
   }
-
-  Stream<PositionData> get _positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-          _player.positionStream,
-          _player.bufferedPositionStream,
-          _player.durationStream,
-          (position, bufferedPosition, duration) => PositionData(
-              position, bufferedPosition, duration ?? Duration.zero));
 }
 
 class ControlButtons extends StatelessWidget {
@@ -186,8 +214,12 @@ class ControlButtons extends StatelessWidget {
               return Container(
                 margin: const EdgeInsets.all(8.0),
                 width: 44.0,
-                height: 64.0,
-                child: const CircularProgressIndicator(),
+                height: 44.0,
+                child: const Icon(
+                  Icons.play_arrow,
+                  size: 44,
+                  color: ColorManager.grayLight,
+                ),
               );
             } else if (playing != true) {
               return IconButton(
@@ -233,141 +265,4 @@ class ControlButtons extends StatelessWidget {
       ],
     );
   }
-}
-
-class PositionData {
-  final Duration position;
-  final Duration bufferedPosition;
-  final Duration duration;
-
-  PositionData(this.position, this.bufferedPosition, this.duration);
-}
-
-class SeekBar extends StatefulWidget {
-  final Duration duration;
-  final Duration position;
-  final Duration bufferedPosition;
-  final ValueChanged<Duration>? onChanged;
-  final ValueChanged<Duration>? onChangeEnd;
-
-  const SeekBar({
-    Key? key,
-    required this.duration,
-    required this.position,
-    required this.bufferedPosition,
-    this.onChanged,
-    this.onChangeEnd,
-  }) : super(key: key);
-
-  @override
-  SeekBarState createState() => SeekBarState();
-}
-
-class SeekBarState extends State<SeekBar> {
-  double? _dragValue;
-  late SliderThemeData _sliderThemeData;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _sliderThemeData = SliderTheme.of(context).copyWith(
-      trackHeight: 2.0,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
-          ),
-          child: ExcludeSemantics(
-            child: Slider(
-              min: 0.0,
-              max: widget.duration.inMilliseconds.toDouble(),
-              value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
-                  widget.duration.inMilliseconds.toDouble()),
-              onChanged: (value) {
-                setState(() {
-                  _dragValue = value;
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(Duration(milliseconds: value.round()));
-                }
-              },
-              onChangeEnd: (value) {
-                if (widget.onChangeEnd != null) {
-                  widget.onChangeEnd!(Duration(milliseconds: value.round()));
-                }
-                _dragValue = null;
-              },
-            ),
-          ),
-        ),
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            inactiveTrackColor: Colors.transparent,
-          ),
-          child: Slider(
-            min: 0.0,
-            max: widget.duration.inMilliseconds.toDouble(),
-            value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble()),
-            onChanged: (value) {
-              setState(() {
-                _dragValue = value;
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged!(Duration(milliseconds: value.round()));
-              }
-            },
-            onChangeEnd: (value) {
-              if (widget.onChangeEnd != null) {
-                widget.onChangeEnd!(Duration(milliseconds: value.round()));
-              }
-              _dragValue = null;
-            },
-          ),
-        ),
-        Positioned(
-          right: 16.0,
-          bottom: 0.0,
-          child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
-                  '$_remaining',
-              style: Theme.of(context).textTheme.caption),
-        ),
-      ],
-    );
-  }
-
-  Duration get _remaining => widget.duration - widget.position;
-}
-
-class HiddenThumbComponentShape extends SliderComponentShape {
-  @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
-
-  @override
-  void paint(
-    PaintingContext context,
-    Offset center, {
-    required Animation<double> activationAnimation,
-    required Animation<double> enableAnimation,
-    required bool isDiscrete,
-    required TextPainter labelPainter,
-    required RenderBox parentBox,
-    required SliderThemeData sliderTheme,
-    required TextDirection textDirection,
-    required double value,
-    required double textScaleFactor,
-    required Size sizeWithOverflow,
-  }) {}
 }

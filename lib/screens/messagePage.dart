@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_chat_list.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -13,7 +15,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/loading%20screens/chat_loading_screen.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
-import 'package:social_media_services/widgets/chat_list_tile.dart';
+import 'package:social_media_services/widgets/chat/chat_list_tile.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class MessagePage extends StatefulWidget {
@@ -181,9 +183,12 @@ class _MessagePageState extends State<MessagePage> {
               SizedBox(
                 height: 100,
                 child: ListView.builder(
-                    itemCount: 20,
+                    itemCount:
+                        provider.chatListDetails?.chatMessage?.data?.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
+                      final profileDetails =
+                          provider.chatListDetails?.chatMessage?.data?[index];
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Column(
@@ -204,12 +209,23 @@ class _MessagePageState extends State<MessagePage> {
                                   ),
                                   child: Stack(
                                     children: [
-                                      CircleAvatar(
-                                        backgroundColor: ColorManager.whiteColor
-                                            .withOpacity(0.8),
-                                        radius: 25,
-                                        child: Image.asset(
-                                          'assets/user.png',
+                                      InkWell(
+                                        onTap: () {
+                                          navToChatLoadingScreen(index);
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: ColorManager
+                                              .whiteColor
+                                              .withOpacity(0.8),
+                                          radius: 25,
+                                          backgroundImage: profileDetails
+                                                      ?.profilePic ==
+                                                  null
+                                              ? const AssetImage(
+                                                      'assets/user.png')
+                                                  as ImageProvider
+                                              : CachedNetworkImageProvider(
+                                                  '$endPoint${profileDetails?.profilePic}'),
                                         ),
                                       ),
                                     ],
@@ -224,7 +240,7 @@ class _MessagePageState extends State<MessagePage> {
                                 )
                               ],
                             ),
-                            const Text('Darren'),
+                            Text(profileDetails?.firstname ?? ''),
                           ],
                         ),
                       );

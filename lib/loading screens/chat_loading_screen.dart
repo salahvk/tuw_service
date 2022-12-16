@@ -12,8 +12,8 @@ import 'package:social_media_services/custom/links.dart';
 
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
-import 'package:social_media_services/widgets/chat_add_tile.dart';
-import 'package:social_media_services/widgets/chat_bubble.dart';
+import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
+import 'package:social_media_services/widgets/chat/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

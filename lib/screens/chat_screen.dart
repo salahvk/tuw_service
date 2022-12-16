@@ -1,12 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/API/endpoint.dart';
@@ -20,8 +25,8 @@ import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
-import 'package:social_media_services/widgets/chat_add_tile.dart';
-import 'package:social_media_services/widgets/chat_bubble.dart';
+import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
+import 'package:social_media_services/widgets/chat/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,7 +35,9 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:audio_session/audio_session.dart';
+
+// Import package
+import 'package:record/record.dart';
 
 class ChatScreen extends StatefulWidget {
   Serviceman? serviceman;
@@ -61,6 +68,35 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final _player = AudioPlayer();
 
+  final recorder = Record();
+
+  Future record() async {
+    final dir2 = await getExternalStorageDirectory();
+    // final file = File('${dir2!.path}/$name');
+    await initRecorder();
+    await recorder.start(
+      path: '${dir2?.path}/myFile.aac', // required
+      encoder: AudioEncoder.aacLc, // by default
+      // bitRate: 128000, // by default
+      // sampleRate: 44100, // by default
+    );
+  }
+
+  Future stop() async {
+    final path = await recorder.stop();
+    log("filepath");
+    print(path);
+    final file = File(path!);
+    print(file);
+    List<File> s = [file];
+
+    await uploadAudio(s);
+    // final dir2 = await getExternalStorageDirectory();
+    // final file = File('${dir2!.path}/audio');
+    // file.readAsBytes (path!);
+    // final audioFile = File(, fileName)
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,14 +111,31 @@ class _ChatScreenState extends State<ChatScreen> {
               Provider.of<ServicerProvider>(context, listen: false);
           viewChatMessages(context, servicerProvider.servicerId);
         }
+        setState(() {});
       });
     });
-    _init();
+    initRecorder();
+  }
+
+  Future initRecorder() async {
+    final status = await Permission.microphone.request();
+    print(status);
+    try {
+      if (status != PermissionStatus.granted) {
+        print("granted");
+      } else {
+        await Permission.microphone.request();
+        print("Not granted");
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   void dispose() async {
     super.dispose();
+    recorder.stop();
     await _stopWatchTimer.dispose();
   }
 
@@ -180,7 +233,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           ? "$endPoint${chatData.data![index].chatMedia}"
                           : "",
                       time: "2:05 PM",
-                      audio: chatData.data![index].type == 'audio' ? 's' : '',
+                      audio: chatData.data![index].type == 'audio'
+                          ? '${chatData.data?[index].chatMedia}'
+                          : '',
                     );
                   },
                 )
@@ -401,11 +456,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     ismicVisible
                         ? InkWell(
-                            onLongPress: () {
+                            onLongPress: () async {
                               _stopWatchTimer.onStartTimer();
                               setState(() {
                                 isRecordingOn = true;
                               });
+                              await record();
+
                               // Vibration.hasVibrator() != null
                               // isVibrantFeatureAvailable
                               // ?
@@ -468,10 +525,19 @@ class _ChatScreenState extends State<ChatScreen> {
                             const SizedBox(
                               width: 15,
                             ),
-                            const Icon(
-                              Icons.delete,
-                              color: ColorManager.black,
-                              size: 30,
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  isRecordingOn = false;
+                                });
+                                _stopWatchTimer.onResetTimer();
+                                await recorder.stop();
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                color: ColorManager.black,
+                                size: 30,
+                              ),
                             ),
                             const SizedBox(
                               width: 20,
@@ -553,11 +619,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             // const Spacer(),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 setState(() {
                                   isRecordingOn = false;
                                 });
                                 _stopWatchTimer.onResetTimer();
+                                await stop();
                               },
                               child: const Icon(
                                 Icons.send,
@@ -657,11 +724,14 @@ class _ChatScreenState extends State<ChatScreen> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowMultiple: true,
-      allowedExtensions: ['pdf', 'txt'],
+      allowedExtensions: ['pdf', 'txt', 'wav'],
     );
 
     if (result != null) {
       PlatformFile file = result.files.first;
+      print(file.path);
+      print(file.name);
+
       setState(() {
         // fileName = file.name;
       });
@@ -776,21 +846,58 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Future<void> _init() async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
+  uploadAudio(List<File> imageFile) async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
+    final userData = provider.serviceManProfile?.userData;
+    final receiverId = provider.serviceManDetails?.userData?.id.toString();
 
-    _player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
-    });
-    // Try to load audio from a source and catch any errors.
-    try {
-      // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(
-          "http://projects.techoriz.in/serviceapp/public/assets/uploads/chatmedia/audio1671101877.ogg")));
-    } catch (e) {
-      print("Error loading audio source: $e");
+    final length = imageFile.length;
+    var uri =
+        Uri.parse('$api/chat-store?receiver_id=$receiverId&type=audio&page=1');
+    var request = http.MultipartRequest(
+      "POST",
+      uri,
+    );
+
+    print(uri);
+
+    List<MultipartFile> multiPart = [];
+    for (var i = 0; i < length; i++) {
+      var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
+      var length = await imageFile[i].length();
+      final apiToken = Hive.box("token").get('api_token');
+
+      request.headers.addAll(
+          {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+      var multipartFile = http.MultipartFile(
+        'file',
+        stream,
+        length,
+        filename: (imageFile[i].path),
+      );
+      multiPart.add(multipartFile);
+    }
+
+    length > 1
+        ? request.files.addAll(multiPart)
+        : request.files.add(multiPart[0]);
+
+    // "content-type": "multipart/form-data"
+
+    var response = await request.send();
+    final res = await http.Response.fromStream(response);
+    var jsonResponse = jsonDecode(res.body);
+    print(jsonResponse);
+    await viewChatMessages(context, servicerProvider.servicerId);
+    setState(() {});
+
+    if (jsonResponse["result"] == false) {
+      showAnimatedSnackBar(context,
+          "The file must be a file of type: application/octet-stream, audio/mpeg, mpga, mp3, wav, ogg.");
+      setState(() {});
+      return;
     }
   }
 }

@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   platform_device_id_linux
+  record_linux
   smart_auth
 )
 
