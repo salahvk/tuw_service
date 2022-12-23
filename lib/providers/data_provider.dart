@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_services/model/active_services.dart';
+import 'package:social_media_services/model/active_subscription.dart';
 import 'package:social_media_services/model/chat_list.dart';
 import 'package:social_media_services/model/coupenCode.dart';
 import 'package:social_media_services/model/favorite_serviceMan.dart';
@@ -7,6 +9,9 @@ import 'package:social_media_services/model/get_child_service.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/model/get_language.dart';
+import 'package:social_media_services/model/other%20User/other_user_address_model.dart';
+import 'package:social_media_services/model/other%20User/other_user_profile_model.dart';
+import 'package:social_media_services/model/other%20User/show_user_address.dart';
 import 'package:social_media_services/model/payment_success.dart';
 import 'package:social_media_services/model/place_order.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
@@ -75,6 +80,34 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  OtherUserProfile? otherUserProfile;
+
+  void getOtherUserProfileData(value) {
+    otherUserProfile = value;
+    notifyListeners();
+  }
+
+  ActiveSubscription? activeSubscription;
+
+  void getActiveSubscriptionData(value) {
+    activeSubscription = value;
+    notifyListeners();
+  }
+
+  ActiveServices? activeServices;
+
+  void getActiveServicesData(value) {
+    activeServices = value;
+    notifyListeners();
+  }
+
+  OtherUserAddress? otherUserAddress;
+
+  void getOtherUserAddressData(value) {
+    otherUserAddress = value;
+    notifyListeners();
+  }
+
   ViewChatMessageModel? viewChatMessageModel;
 
   void viewChatMessageModelData(value) {
@@ -100,6 +133,13 @@ class DataProvider with ChangeNotifier {
 
   void getUserAddressData(value) {
     userAddressShow = value;
+    notifyListeners();
+  }
+
+  ShowUserAddress? pUserAddressShow;
+
+  void getUserAddressShowData(value) {
+    pUserAddressShow = value;
     notifyListeners();
   }
 

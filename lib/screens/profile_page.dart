@@ -254,35 +254,39 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                return const MyServicesPage();
-              }));
-            },
-            child: FadeSlideCustomAnimation(
-              delay: .5,
-              child: ProfileTitleWidget(
-                name: 'My Services',
-                icon: Icons.pin_drop_outlined,
-                svg: 'assets/Myservice.svg',
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                return const MySubscriptionPage();
-              }));
-            },
-            child: FadeSlideCustomAnimation(
-              delay: .5,
-              child: ProfileTitleWidget(
-                name: 'My Subscription',
-                icon: FontAwesomeIcons.bell,
-              ),
-            ),
-          ),
+          provider.viewProfileModel?.userdetails?.userType == 'customer'
+              ? Container()
+              : InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return const MyServicesPage();
+                    }));
+                  },
+                  child: FadeSlideCustomAnimation(
+                    delay: .5,
+                    child: ProfileTitleWidget(
+                      name: 'My Services',
+                      icon: Icons.pin_drop_outlined,
+                      svg: 'assets/Myservice.svg',
+                    ),
+                  ),
+                ),
+          provider.viewProfileModel?.userdetails?.userType == 'customer'
+              ? Container()
+              : InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return const MySubscriptionPage();
+                    }));
+                  },
+                  child: FadeSlideCustomAnimation(
+                    delay: .5,
+                    child: ProfileTitleWidget(
+                      name: 'My Subscription',
+                      icon: FontAwesomeIcons.bell,
+                    ),
+                  ),
+                ),
         ],
       )),
     );

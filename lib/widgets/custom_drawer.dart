@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/get_active_services.dart';
+import 'package:social_media_services/API/get_active_subscription.dart';
 import 'package:social_media_services/API/logout.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
@@ -55,6 +57,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, Routes.myProfile);
+                  getActiveServices(context);
+                  getActiveSubscriptionData(context);
                 }),
             CustomDrawerList(
               title: str.d_address,

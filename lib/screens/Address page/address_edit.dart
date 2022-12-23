@@ -813,8 +813,9 @@ class _UserAddressEditState extends State<UserAddressEdit> {
         // print(response.body);
         // print('Something went wrong');
       }
-    } on Exception catch (_) {
-      showSnackBar("Something Went Wrong1", context);
+    } on Exception catch (e) {
+      log("Something Went Wrong1");
+      print(e);
     }
   }
 

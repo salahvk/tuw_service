@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,6 +39,39 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+    final p = MediaQuery.of(context).devicePixelRatio;
+    print(p);
+    print(h);
+    print(w);
+    var pixelRatio = window.devicePixelRatio;
+
+    //Size in physical pixels
+    var physicalScreenSize = window.physicalSize;
+    var physicalWidth = physicalScreenSize.width;
+    var physicalHeight = physicalScreenSize.height;
+    print("Hi");
+    print(physicalHeight);
+    print(physicalWidth);
+
+//Size in logical pixels
+    var logicalScreenSize = window.physicalSize / pixelRatio;
+    var logicalWidth = logicalScreenSize.width;
+    print(logicalWidth);
+    var logicalHeight = logicalScreenSize.height;
+
+//Padding in physical pixels
+    var padding = window.padding;
+
+//Safe area paddings in logical pixels
+    var paddingLeft = window.padding.left / window.devicePixelRatio;
+    var paddingRight = window.padding.right / window.devicePixelRatio;
+    var paddingTop = window.padding.top / window.devicePixelRatio;
+    var paddingBottom = window.padding.bottom / window.devicePixelRatio;
+
+//Safe area in logical pixels
+    var safeWidth = logicalWidth - paddingLeft - paddingRight;
+    var safeHeight = logicalHeight - paddingTop - paddingBottom;
     final provider = Provider.of<DataProvider>(context, listen: false);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
@@ -129,13 +164,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                     style: getRegularStyle(
                                         color: ColorManager.serviceHomeGrey,
                                         fontSize:
-                                            // homeData[index].service!.length > 13
-                                            //     ? mob
-                                            //         ? 12
-                                            //         : 10
-                                            //     : mob
-                                            //         ? 16
-                                            //         : 12)),
                                             homeData[index].service!.length > 13
                                                 ? 10
                                                 : 12)),

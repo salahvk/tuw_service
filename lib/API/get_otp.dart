@@ -13,7 +13,6 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:social_media_services/utils/animatedSnackBar.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 getOtp(BuildContext context, countryCode, phoneNo, resend) async {
   final String id = Hive.box("LocalLan").get('lang_id');
@@ -26,7 +25,8 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
         headers: {"device-id": provider.deviceId ?? ''});
 
     if (response.statusCode != 200) {
-      showSnackBar("Something Went Wrong", context);
+      log("Something Went Wrong9");
+
       return;
     }
 
@@ -50,7 +50,7 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
     }
     navigateToOtp(context);
   } on Exception catch (e) {
-    showSnackBar("Something Went Wrong", context);
+    log("Something Went Wrong10");
     print(e);
   }
 }

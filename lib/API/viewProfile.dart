@@ -8,7 +8,7 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 
 viewProfile(BuildContext context) async {
   final apiToken = Hive.box("token").get('api_token');
@@ -24,9 +24,14 @@ viewProfile(BuildContext context) async {
       provider.viewProfileData(viewProfileData);
     } else {
       // ignore: use_build_context_synchronously
-      showSnackBar("Something Went Wrong1", context);
+      log("Something Went Wrong19");
+      showAnimatedSnackBar(
+        context,
+        "Api Error Occured",
+      );
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong20");
+    print(e);
   }
 }

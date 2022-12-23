@@ -3,10 +3,15 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:social_media_services/loading%20screens/address_card_loading.dart';
+import 'package:social_media_services/model/view_chat_message_model.dart';
+import 'package:social_media_services/screens/Google%20Map/share_location.dart';
 import 'package:social_media_services/widgets/chat/common.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:audio_session/audio_session.dart';
@@ -18,15 +23,23 @@ class CustomChatBubble extends StatefulWidget {
   String audio;
   final String time;
   String image;
-  CustomChatBubble({
-    Key? key,
-    this.text,
-    required this.audio,
-    required this.image,
-    required this.isSendByme,
-    required this.time,
-    required this.seen,
-  }) : super(key: key);
+  String location;
+  String addressCard;
+  String senderId;
+  Data? chatMessage;
+  CustomChatBubble(
+      {Key? key,
+      this.text,
+      required this.audio,
+      required this.image,
+      required this.isSendByme,
+      required this.time,
+      required this.seen,
+      required this.addressCard,
+      required this.senderId,
+      required this.location,
+      this.chatMessage})
+      : super(key: key);
 
   @override
   State<CustomChatBubble> createState() => _CustomChatBubbleState();
@@ -34,16 +47,40 @@ class CustomChatBubble extends StatefulWidget {
 
 class _CustomChatBubbleState extends State<CustomChatBubble> {
   final _player = AudioPlayer();
+  List latLong = [];
+  LatLng? currentLocator;
+  GoogleMapController? mapController;
   @override
   void initState() {
     super.initState();
-    log("Chat init Function called");
     _init();
+    log("Chat Bubble initiated");
+    log("hi");
     Timer.periodic(const Duration(seconds: 30), (timer) {
       if (mounted) {
         _init();
       }
     });
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (mounted) {
+        if (widget.location.isNotEmpty) {
+          latLong = widget.location.split(",");
+          currentLocator =
+              LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: currentLocator!, zoom: 12)));
+        }
+      }
+    });
+    log(widget.location);
+    if (widget.location.isNotEmpty) {
+      latLong = widget.location.split(",");
+      currentLocator =
+          LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    }
+    // print(widget.location);
+
+    // print(latLong);
   }
 
   Future<void> _init() async {
@@ -75,6 +112,13 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    var dateTime = DateFormat("HH:mm").parse(widget.time, true);
+    var hour = dateTime.toLocal().hour;
+    var minute = dateTime.toLocal().minute;
+
+    // print(hour);
+    // print(DateTime.now());
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: Row(
@@ -101,14 +145,20 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   widget.image.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
-                          child: SizedBox(
-                            width: size.width * .35,
-                            height: 100,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.image,
-                              fit: BoxFit.cover,
+                      ? InkWell(
+                          onTap: () {
+                            // PopupImage(image: widget.image);
+                            // print("object");
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
+                            child: SizedBox(
+                              width: size.width * .6,
+                              height: 240,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.image,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         )
@@ -139,24 +189,95 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                 ],
                               ),
                             )
-                          : Text(
-                              widget.text ?? '',
-                              style: getRegularStyle(
-                                  color: ColorManager.black, fontSize: 14),
-                            ),
+                          : widget.location.isNotEmpty
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: SizedBox(
+                                    height: 140,
+                                    width: size.width * .6,
+                                    child: GoogleMap(
+                                      liteModeEnabled: true,
+                                      onTap: (argyment) {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return ShareLocation(
+                                            currentLocator: currentLocator,
+                                          );
+                                        }));
+                                      },
+                                      // myLocationEnabled: true,
+                                      zoomControlsEnabled: false,
+                                      // zoomGesturesEnabled: false,
+                                      onMapCreated: (controller) {
+                                        setState(() {
+                                          mapController = controller;
+                                        });
+                                      },
+                                      initialCameraPosition: CameraPosition(
+                                        target: currentLocator ??
+                                            const LatLng(0, 0),
+                                        zoom: 12.0,
+                                      ),
+                                      markers: <Marker>{
+                                        Marker(
+                                          markerId: const MarkerId(''),
+                                          position: currentLocator ??
+                                              const LatLng(0, 0),
+                                          // infoWindow: const InfoWindow(
+                                          //   title: 'Home locator',
+                                          //   snippet: '*',
+                                          // ),
+                                        ),
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : widget.addressCard.isNotEmpty
+                                  ? InkWell(
+                                      onTap: () {
+                                        final addressId = widget
+                                            .chatMessage?.addressId
+                                            .toString();
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return UserAddressCardLoading(
+                                            id: widget.senderId,
+                                            addressId: addressId,
+                                          );
+                                        }));
+                                        print(addressId);
+                                      },
+                                      child: Text(
+                                        widget.text ?? '',
+                                        style: getRegularStyle(
+                                            color: widget.isSendByme
+                                                ? ColorManager.primary3
+                                                : ColorManager.whiteColor,
+                                            fontSize: 14),
+                                      ),
+                                    )
+                                  : Text(
+                                      widget.text ?? '',
+                                      style: getRegularStyle(
+                                          color: ColorManager.black,
+                                          fontSize: 14),
+                                    ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                     child: Row(
                       // mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          widget.time,
+                          "$hour:$minute",
                           style: getRegularStyle(
                               color: ColorManager.grayLight, fontSize: 9),
                         ),
+                        const SizedBox(
+                          width: 2,
+                        ),
                         Icon(
-                          widget.seen ? Icons.done_all : Icons.done,
-                          color: ColorManager.black,
+                          Icons.done_all,
+                          color: widget.seen ? Colors.blue : ColorManager.black,
                           size: 12,
                         )
                       ],

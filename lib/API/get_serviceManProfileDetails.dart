@@ -8,7 +8,7 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/serviceman_profile_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 
 getServiceManProfileFun(BuildContext context) async {
   final apiToken = Hive.box("token").get('api_token');
@@ -25,11 +25,15 @@ getServiceManProfileFun(BuildContext context) async {
       var servicemanProfileData = ServiceManProfile.fromJson(jsonResponse);
       provider.getServiceManProfileData(servicemanProfileData);
     } else {
-      // ignore: use_build_context_synchronously
-      showSnackBar("Something Went Wrong1", context);
+      log("Something Went Wrong11");
+      showAnimatedSnackBar(
+        context,
+        "Api Error Occured",
+      );
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong12");
+    print(e);
   }
 }
 
@@ -50,9 +54,14 @@ getServiceManDetailsFun(BuildContext context, id) async {
       provider.getServiceManDetails(servicemanProfileData);
     } else {
       // ignore: use_build_context_synchronously
-      showSnackBar("Something Went Wrong1", context);
+      log("Something Went Wrong13");
+      showAnimatedSnackBar(
+        context,
+        "Api Error Occured",
+      );
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong13");
+    print(e);
   }
 }

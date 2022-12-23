@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/widgets/Ser_button.dart';
@@ -146,15 +144,15 @@ class _SerDrawerState extends State<SerDrawer> {
                   : const EdgeInsets.fromLTRB(0, 5, 0, 10),
               child: ElevatedButton(
                   onPressed: () async {
-                    await searchServiceMan(
-                        context,
-                        widget.id.toString(),
-                        '',
-                        ServiceControllers.stateController.text,
-                        ServiceControllers.regionController.text,
-                        '',
-                        '');
-
+                    // await searchServiceMan(
+                    //     context,
+                    //     widget.id.toString(),
+                    //     '',
+                    //     ServiceControllers.stateController.text,
+                    //     ServiceControllers.regionController.text,
+                    //     '',
+                    //     '');
+                    Navigator.pop(context);
                     setState(() {
                       // isResetSelected = true;
                     });
@@ -165,7 +163,7 @@ class _SerDrawerState extends State<SerDrawer> {
                       backgroundColor: ColorManager.whiteColor,
                       padding: const EdgeInsets.fromLTRB(40, 0, 40, 0)),
                   child: Text(
-                    str.sd_reset,
+                    "Search",
                     style: getSemiBoldtStyle(
                         color: ColorManager.primary, fontSize: 16),
                   )),

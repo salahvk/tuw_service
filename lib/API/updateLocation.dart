@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/serviceman/servicer.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 updateLocationFunction(
   BuildContext context,
@@ -40,8 +39,9 @@ updateLocationFunction(
       // print(response.body);
       // print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong17");
+    print(e);
   }
 }
 

@@ -3,9 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media_services/API/becomeServiceMan/customerParent.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_more_services_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
@@ -26,11 +32,17 @@ class _MyServicesPageState extends State<MyServicesPage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await getCustomerParent(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final homeData = provider.homeModel?.services;
+    final mob = Responsive.isMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -193,66 +205,82 @@ class _MyServicesPageState extends State<MyServicesPage> {
                     scrollDirection: Axis.horizontal,
                     // shrinkWrap: true,
                     // physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 8,
+                    itemCount: homeData?.length ?? 0,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 18, 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10.0,
-                                color: Colors.grey.shade300,
-                                offset: const Offset(5, 8.5),
-                              ),
-                            ],
-                          ),
-                          height: size.height * .24,
-                          child: Stack(
-                            alignment: AlignmentDirectional.bottomCenter,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(25, 30, 25, 20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      // mainAxisAlignment:
-                                      //     MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                            // width: size.width * .2,
-                                            child: SvgPicture.asset(
-                                          'assets/Asset 38.svg',
-                                          color: ColorManager.primary,
-                                        )),
-                                      ],
-                                    ),
-                                  ],
+                      return InkWell(
+                        onTap: () {
+                          print(homeData?[index].service);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (ctx) {
+                            return ChooseMoreServicePage(
+                              services: homeData?[index],
+                            );
+                          }));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 18, 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorManager.whiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.grey.shade300,
+                                  offset: const Offset(5, 8.5),
                                 ),
-                              ),
-                              Positioned(
-                                  child: SizedBox(
-                                      // width: size.width * .2,
-                                      child: SvgPicture.asset(
-                                'assets/Asset40.svg',
-                                color: const Color(0xffe9f4e4),
-                              ))),
-                              Positioned(
-                                bottom: 30,
-                                child: Text(
-                                  "Auto Car Oil\nService",
-                                  style: getMediumtStyle(
-                                      color: ColorManager.black, fontSize: 15),
+                              ],
+                            ),
+                            height: size.height * .24,
+                            child: Stack(
+                              alignment: AlignmentDirectional.bottomCenter,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 30, 25, 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                              width: mob ? 70.0 : 50,
+                                              height: mob ? 70.0 : 50,
+                                              child: SvgPicture.network(
+                                                '$endPoint${homeData?[index].image}',
+                                                color: ColorManager.primary2,
+                                              )),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Positioned(
+                                    child: SizedBox(
+                                        // width: size.width * .2,
+                                        child: SvgPicture.asset(
+                                  'assets/Asset40.svg',
+                                  color: const Color(0xffe9f4e4),
+                                ))),
+                                Positioned(
+                                  bottom: 30,
+                                  child: Text(homeData![index].service ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: getMediumtStyle(
+                                          color: ColorManager.black,
+                                          fontSize:
+                                              homeData[index].service!.length >
+                                                      13
+                                                  ? 13
+                                                  : 15)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -277,7 +305,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 8,
+                  itemCount: provider.activeServices?.services?.length ?? 0,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 18, 10),
@@ -322,7 +350,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Service 01",
+                                    provider.activeServices?.services?[index]
+                                            .serviceName ??
+                                        '',
                                     style: getMediumtStyle(
                                         color: ColorManager.primary,
                                         fontSize: 16),
@@ -335,14 +365,14 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                   //       fontSize: 12),
                                   // ),
                                   Text(
-                                    "Purachase Date : 01/02/2023",
+                                    "Subscription Date : ${provider.activeServices?.services?[index].subscriptionDate}",
                                     style: getMediumtStyle(
                                         color: ColorManager.paymentPageColor1,
                                         fontSize: 12),
                                   ),
                                   const SizedBox(height: 5),
                                   Text(
-                                    "Exp Date: 01/02/2023",
+                                    "Exp Date: ${provider.activeServices?.services?[index].expiryDate}",
                                     style: getMediumtStyle(
                                         color: ColorManager.paymentPageColor1,
                                         fontSize: 12),

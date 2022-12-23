@@ -728,6 +728,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
 
     ProfileServiceControllers.lastNameController.text =
         fieldData?.lastname ?? '';
+    ProfileServiceControllers.civilCardController.text =
+        fieldData?.civilCardNo ?? '';
 
     ProfileServiceControllers.dateController.text = fieldData?.dob ?? '';
     selectedValue = fieldData?.countryName ?? '';

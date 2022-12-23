@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
-import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,31 +62,34 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     width: size.width * .6,
                     height: size.height * .3,
                     child: SvgPicture.asset('assets/logo/app_logo_green.svg')),
-                Padding(
-                  // padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
+                // Padding(
+                //   // padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
 
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                  child: Text(str.l_description,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.robotoSlab(
-                          textStyle: TextStyle(
-                              color: ColorManager.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              shadows: [
-                            Shadow(
-                              blurRadius: 15.0,
-                              color: Colors.grey.shade400,
-                              offset: const Offset(0, 6.5),
-                            ),
-                          ]))),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                  child: Text(str.l_description2,
-                      textAlign: TextAlign.center,
-                      style: getRegularStyle(
-                          color: ColorManager.grayLight, fontSize: 16)),
+                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                //   child: Text(str.l_description,
+                //       textAlign: TextAlign.center,
+                //       style: GoogleFonts.robotoSlab(
+                //           textStyle: TextStyle(
+                //               color: ColorManager.black,
+                //               fontWeight: FontWeight.bold,
+                //               fontSize: 20,
+                //               shadows: [
+                //             Shadow(
+                //               blurRadius: 15.0,
+                //               color: Colors.grey.shade400,
+                //               offset: const Offset(0, 6.5),
+                //             ),
+                //           ]))),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                //   child: Text(str.l_description2,
+                //       textAlign: TextAlign.center,
+                //       style: getRegularStyle(
+                //           color: ColorManager.grayLight, fontSize: 16)),
+                // ),
+                SizedBox(
+                  height: size.height * .05,
                 ),
                 SizedBox(
                     height: 32,

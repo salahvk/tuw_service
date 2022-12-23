@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/favorite_serviceMan.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 getFavoritesListFun(BuildContext context) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
@@ -33,8 +32,9 @@ getFavoritesListFun(BuildContext context) async {
       final serviceManListData = FavoriteServiceManModel.fromJson(jsonResponse);
       provider.getServiceManFavoriteData(serviceManListData);
     } else {}
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong4");
+    print(e);
   }
 }
 
@@ -50,8 +50,9 @@ addFavoritesListFun(BuildContext context, id) async {
     if (response.statusCode == 200) {
       log(response.body);
     } else {}
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong5");
+    print(e);
   }
 }
 
@@ -67,7 +68,8 @@ removeFavoritesListFun(BuildContext context, id) async {
     if (response.statusCode == 200) {
       log(response.body);
     } else {}
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong6");
+    print(e);
   }
 }

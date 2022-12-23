@@ -1,14 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
+import 'package:social_media_services/API/other%20User/other_user_address_list.dart';
+import 'package:social_media_services/API/update_read_status.dart';
 import 'package:social_media_services/API/view_chat_messages.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/custom/links.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
@@ -32,8 +38,6 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
   bool ismenuVisible = false;
   bool isMapmenuVisible = false;
   bool isDropped = false;
-
-  // bool isAnimationVisible = false;
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
   String lang = '';
@@ -52,8 +56,15 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
       'lang',
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final provider = Provider.of<DataProvider>(context, listen: false);
       await getServiceManDetailsFun(context, widget.serviceManId);
       await viewChatMessages(context, widget.serviceManId);
+      await getOtherUserAddress(context, widget.serviceManId ?? '');
+      // if (provider.otherUserAddress!.userAddress!.isEmpty) {
+      //   Navigator.pop(context);
+      //   return;
+      // }
+      updateReadStatus(context, widget.serviceManId);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
         return ChatScreen();
       }));
@@ -137,36 +148,45 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
                     baseColor: ColorManager.whiteColor,
                     highlightColor: Colors.green,
                     child: CustomChatBubble(
+                      senderId: '',
+                      addressCard: '',
                       isSendByme: true,
                       seen: true,
                       text: 'How can help you',
                       image: "",
                       time: "2:05 PM",
                       audio: '',
+                      location: '',
                     ),
                   ),
                   Shimmer.fromColors(
                     baseColor: ColorManager.whiteColor,
                     highlightColor: Colors.green,
                     child: CustomChatBubble(
+                      senderId: '',
+                      addressCard: '',
                       isSendByme: false,
                       seen: false,
                       time: "3:00 PM",
                       image: switzeland,
                       text: 'Hi friend',
                       audio: '',
+                      location: '',
                     ),
                   ),
                   Shimmer.fromColors(
                     baseColor: ColorManager.whiteColor,
                     highlightColor: Colors.green,
                     child: CustomChatBubble(
+                      senderId: '',
+                      addressCard: '',
                       isSendByme: true,
                       seen: false,
                       time: "5:00 PM",
                       image: '',
                       text: 'Where are you now',
                       audio: '',
+                      location: '',
                     ),
                   ),
                 ],

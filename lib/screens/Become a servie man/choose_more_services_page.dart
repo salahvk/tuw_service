@@ -26,14 +26,15 @@ import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ChooseServicePage extends StatefulWidget {
-  const ChooseServicePage({Key? key}) : super(key: key);
+class ChooseMoreServicePage extends StatefulWidget {
+  Services? services;
+  ChooseMoreServicePage({Key? key, this.services}) : super(key: key);
 
   @override
-  State<ChooseServicePage> createState() => _ChooseServicePageState();
+  State<ChooseMoreServicePage> createState() => _ChooseMoreServicePageState();
 }
 
-class _ChooseServicePageState extends State<ChooseServicePage> {
+class _ChooseMoreServicePageState extends State<ChooseMoreServicePage> {
   Childservices? childSelectedValue;
   Services? selectedValue;
   Childservices? selectedChildServices;
@@ -53,18 +54,25 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    selectedValue = widget.services;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final provider = Provider.of<DataProvider>(context, listen: false);
+
       int? n = provider.customerParentSer?.services?.length;
       int i = 0;
+
       while (i < n!.toInt()) {
         sGroup.add(provider.customerParentSer!.services![i]);
         i++;
       }
-      provider.customerChildSer!.documents!.clear();
+      // provider.customerChildSer!.documents!.clear();
       // print(sGroup[0]);
-
+      provider.serviceId = selectedValue?.id;
+      print(provider.serviceId);
+      await getChildData();
+      setState(() {
+        isChild = provider.customerChildSer!.childservices!.isNotEmpty;
+      });
       setState(() {});
       // getCustomerChild(context);
     });

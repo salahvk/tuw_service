@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 
 getCountriesData(BuildContext context) async {
   try {
@@ -15,7 +16,11 @@ getCountriesData(BuildContext context) async {
         headers: {"device-id": provider.deviceId ?? ''});
     // print(response.body);
     if (response.statusCode != 200) {
-      showSnackBar("Something Went Wrong", context);
+      log("Something Went Wrong3");
+      showAnimatedSnackBar(
+        context,
+        "Api Error Occured",
+      );
       return;
     }
 
@@ -23,7 +28,8 @@ getCountriesData(BuildContext context) async {
     print(jsonResponse);
     var countriesModel = CountriesModel.fromJson(jsonResponse);
     provider.countriesModelData(countriesModel);
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong2");
+    print(e);
   }
 }

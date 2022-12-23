@@ -28,6 +28,7 @@ const String paymentSuccess = '$api/update/payment-status';
 
 const String userAddressCreate = '$api/address/create';
 const String getUserAddressApi = '$api/address/list';
+const String getUserAddressShow = '$api/address/show';
 const String updateUserAddressApi = '$api/address/update';
 const String deleteUserAddressApi = '$api/address/delete?address_id=';
 
@@ -42,3 +43,5 @@ const String addFavoritesListApi = '$api/favorite/add';
 const String removeFavoritesListApi = '$api/favorite/remove';
 
 const String viewChatMessagesApi = '$api/chat-messages?receiver_id=';
+
+const String updateReadStatusApi = "$api/update/read-status";

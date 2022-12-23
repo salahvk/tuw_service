@@ -115,10 +115,10 @@ class _ServicerListTileState extends State<ServicerListTile> {
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(widget.serviceman?.phone ?? '',
-                      style: getRegularStyle(
-                          color: const Color.fromARGB(255, 173, 173, 173),
-                          fontSize: mob ? 15 : 10)),
+                  // Text(widget.serviceman?.phone ?? '',
+                  //     style: getRegularStyle(
+                  //         color: const Color.fromARGB(255, 173, 173, 173),
+                  //         fontSize: mob ? 15 : 10)),
                   const SizedBox(
                     height: 4,
                   ),

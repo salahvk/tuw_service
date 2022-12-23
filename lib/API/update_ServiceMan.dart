@@ -9,7 +9,6 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 updateServiceManApiFun(BuildContext context, state, id, about, profile,
     transport, checkBoxValue) async {
@@ -40,7 +39,8 @@ updateServiceManApiFun(BuildContext context, state, id, about, profile,
     } else {
       print('35r35');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong16");
+    print(e);
   }
 }

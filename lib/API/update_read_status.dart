@@ -8,40 +8,28 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/model/chat_list.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/animatedSnackBar.dart';
 
-getChatList(BuildContext context) async {
+updateReadStatus(BuildContext context, id) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
-  provider.subServicesModel = null;
+
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
+  final url = '$updateReadStatusApi?sender_id=$id';
   try {
-    var response = await http.post(
-        Uri.parse('$api/chat-list?page=1&language_id=1'),
+    var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
 
-      final chatDetails = ChatListModel.fromJson(jsonResponse);
-      provider.getChatListDetails(chatDetails);
+      // final subServicesData = SubServicesModel.fromJson(jsonResponse);
+      // provider.subServicesModelData(subServicesData);
+      // selectServiceType(context, id);
     } else {
       // print(response.statusCode);
       // print(response.body);
-      log("Something Went Wrong");
-      showAnimatedSnackBar(
-        context,
-        "Api Error Occured",
-      );
+      // print('Something went wrong');
     }
-  } on Exception catch (e) {
-    log("Something Went Wrong1");
-    showAnimatedSnackBar(
-      context,
-      "Api Error Occured",
-    );
-    print(e);
-  }
+  } on Exception catch (_) {}
 }

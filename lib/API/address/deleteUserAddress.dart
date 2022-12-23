@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:social_media_services/utils/snack_bar.dart';
 
 deleteUserAddress(BuildContext context, String id) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
@@ -24,9 +23,10 @@ deleteUserAddress(BuildContext context, String id) async {
     } else {
       print(response.statusCode);
       print(response.body);
-      print('Something went wrong');
+      log('Something went wrong22');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong21");
+    print(e);
   }
 }

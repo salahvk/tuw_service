@@ -255,31 +255,31 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    InkWell(
-                      onTap: navToChatLoadingScreen,
-                      child: Container(
-                        width: 40,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 9.5,
-                              color: Colors.grey.shade400,
-                              offset: const Offset(6, 6),
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(5),
-                          color: ColorManager.primary,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: SvgPicture.asset(
-                            ImageAssets.chatIconSvg,
-                            color: ColorManager.whiteColor,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: navToChatLoadingScreen,
+                    //   child: Container(
+                    //     width: 40,
+                    //     height: 30,
+                    //     decoration: BoxDecoration(
+                    //       boxShadow: [
+                    //         BoxShadow(
+                    //           blurRadius: 9.5,
+                    //           color: Colors.grey.shade400,
+                    //           offset: const Offset(6, 6),
+                    //         ),
+                    //       ],
+                    //       borderRadius: BorderRadius.circular(5),
+                    //       color: ColorManager.primary,
+                    //     ),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(5.0),
+                    //       child: SvgPicture.asset(
+                    //         ImageAssets.chatIconSvg,
+                    //         color: ColorManager.whiteColor,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -487,15 +487,16 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                       width: 15,
                     ),
                     ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.fromLTRB(
-                                size.width * .1, 0, size.width * .1, 0)),
-                        child: Text(
-                          'Block',
-                          style: getMediumtStyle(
-                              color: ColorManager.whiteText, fontSize: 14),
-                        )),
+                      onPressed: navToChatLoadingScreen,
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.fromLTRB(
+                              size.width * .1, 0, size.width * .1, 0)),
+                      child: SvgPicture.asset(
+                        height: 20,
+                        ImageAssets.chatIconSvg,
+                        color: ColorManager.whiteColor,
+                      ),
+                    ),
                   ],
                 ),
               ],

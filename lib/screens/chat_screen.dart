@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -23,7 +25,9 @@ import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/screens/Google%20Map/share_location_from_app.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat/chat_bubble.dart';
@@ -52,10 +56,15 @@ class _ChatScreenState extends State<ChatScreen> {
   bool ismenuVisible = false;
   bool isMapmenuVisible = false;
   bool isDropped = false;
+  bool isLocationFetching = false;
+  bool isAddressCardSelected = false;
 
   // bool isAnimationVisible = false;
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
+
+  late Timer timer;
+
   String lang = '';
   VideoPlayerController? _controller;
   VideoPlayerController? _toBeDisposed;
@@ -84,17 +93,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future stop() async {
     final path = await recorder.stop();
-    log("filepath");
-    print(path);
     final file = File(path!);
-    print(file);
     List<File> s = [file];
-
     await uploadAudio(s);
-    // final dir2 = await getExternalStorageDirectory();
-    // final file = File('${dir2!.path}/audio');
-    // file.readAsBytes (path!);
-    // final audioFile = File(, fileName)
   }
 
   @override
@@ -104,24 +105,23 @@ class _ChatScreenState extends State<ChatScreen> {
       'lang',
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Timer.periodic(const Duration(seconds: 30), (timer) {
+      timer = Timer.periodic(const Duration(seconds: 30), (timer) {
         if (mounted) {
-          print("recurring Api call");
           final servicerProvider =
               Provider.of<ServicerProvider>(context, listen: false);
           viewChatMessages(context, servicerProvider.servicerId);
         }
-        setState(() {});
       });
     });
-    initRecorder();
   }
 
   Future initRecorder() async {
     final status = await Permission.microphone.request();
-    print(status);
     try {
       if (status != PermissionStatus.granted) {
+        setState(() {
+          isRecordingOn = true;
+        });
         print("granted");
       } else {
         await Permission.microphone.request();
@@ -136,6 +136,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() async {
     super.dispose();
     recorder.stop();
+    timer.cancel();
     await _stopWatchTimer.dispose();
   }
 
@@ -144,16 +145,20 @@ class _ChatScreenState extends State<ChatScreen> {
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
+    final w = size.width;
 
     final provider = Provider.of<DataProvider>(context, listen: true);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: true);
     final chatData = provider.viewChatMessageModel?.chatMessage;
+    final oUserAddress = provider.pUserAddressShow?.userAddress;
+    final userAddress = provider.userAddressShow?.userAddress;
     return GestureDetector(
       onTap: () {
         setState(() {
           ismenuVisible = false;
           isMapmenuVisible = false;
+          isAddressCardSelected = false;
         });
       },
       child: Scaffold(
@@ -217,7 +222,7 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Stack(
           children: [
             Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 15, 60),
+                padding: const EdgeInsets.fromLTRB(5, 15, 15, 60),
                 child: ListView.builder(
                   reverse: true,
                   itemCount: chatData?.data!.length ?? 0,
@@ -227,43 +232,30 @@ class _ChatScreenState extends State<ChatScreen> {
                               provider.viewProfileModel?.userdetails?.id
                           ? true
                           : false,
-                      seen: true,
-                      text: chatData!.data![index].message,
+                      seen: chatData!.data![index].status == 'read'
+                          ? true
+                          : false,
+                      text: chatData.data![index].message,
                       image: chatData.data![index].type == 'image'
                           ? "$endPoint${chatData.data![index].chatMedia}"
                           : "",
-                      time: "2:05 PM",
+                      time:
+                          chatData.data![index].createdAt?.substring(11, 16) ??
+                              '',
                       audio: chatData.data![index].type == 'audio'
                           ? '${chatData.data?[index].chatMedia}'
                           : '',
+                      location: chatData.data![index].type == 'location'
+                          ? '${chatData.data?[index].message}'
+                          : '',
+                      addressCard: chatData.data![index].type == 'address_card'
+                          ? '${chatData.data?[index].message}'
+                          : '',
+                      senderId: chatData.data![index].senderId.toString(),
+                      chatMessage: chatData.data?[index],
                     );
                   },
-                )
-                //  Column(
-                //   children: [
-                //     CustomChatBubble(
-                //         isSendByme: true,
-                //         seen: true,
-                //         text: 'How can help you',
-                //         image: "",
-                //         time: "2:05 PM"),
-                //     CustomChatBubble(
-                //       isSendByme: false,
-                //       seen: false,
-                //       time: "3:00 PM",
-                //       image: switzeland,
-                //       text: 'Hi friend',
-                //     ),
-                //     CustomChatBubble(
-                //       isSendByme: true,
-                //       seen: false,
-                //       time: "5:00 PM",
-                //       image: '',
-                //       text: 'Where are you now',
-                //     ),
-                //   ],
-                // ),
-                ),
+                )),
 
             ismenuVisible
                 ? Positioned(
@@ -334,13 +326,19 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ))
                 : Container(),
-
             // * Location Menu
+
             isMapmenuVisible
                 ? Positioned(
                     bottom: 60,
-                    left: lang == 'ar' ? 2 : null,
-                    right: lang != 'ar' ? 2 : null,
+                    left: lang == 'ar' && isAddressCardSelected != true ||
+                            lang != 'ar ' && isAddressCardSelected == true
+                        ? 2
+                        : null,
+                    right: lang != 'ar' && isAddressCardSelected != true ||
+                            lang == 'ar ' && isAddressCardSelected == true
+                        ? 2
+                        : null,
                     child: Container(
                       decoration: BoxDecoration(
                           color: ColorManager.primary,
@@ -353,18 +351,63 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ChatAddTile(
-                                svg: true,
-                                title: lang == 'ar'
-                                    ? str.cp_s_loc_1
-                                    : "${str.cp_s_loc_1}\n${str.cp_s_loc_2}",
-                                image: ImageAssets.currentLocationSvg),
-                            ChatAddTile(
-                                svg: true,
-                                title: str.cp_choose,
-                                image: ImageAssets.chooseFromAppSvg),
                             InkWell(
-                              onTap: () {},
+                              onTap: () async {
+                                setState(() {
+                                  isMapmenuVisible = false;
+                                  ismenuVisible = false;
+                                });
+                                setState(() {
+                                  isLocationFetching = true;
+                                });
+                                await sendCurrentLocation(context);
+                                // await Future.delayed(
+                                //     const Duration(seconds: 13));
+                                setState(() {
+                                  isLocationFetching = false;
+                                });
+                              },
+                              child: ChatAddTile(
+                                  svg: true,
+                                  title: lang == 'ar'
+                                      ? str.cp_s_loc_1
+                                      : "${str.cp_s_loc_1}\n${str.cp_s_loc_2}",
+                                  image: ImageAssets.currentLocationSvg),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isMapmenuVisible = false;
+                                  ismenuVisible = false;
+                                });
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (ctx) {
+                                  return const SelectLocationFromApp();
+                                }));
+                              },
+                              child: ChatAddTile(
+                                  svg: true,
+                                  title: str.cp_choose,
+                                  image: ImageAssets.chooseFromAppSvg),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                print(userAddress);
+                                setState(() {
+                                  ismenuVisible = false;
+                                  isMapmenuVisible = false;
+                                });
+                                print(userAddress);
+
+                                if (userAddress == null) {
+                                  showAnimatedSnackBar(
+                                      context, "No Address Available");
+                                } else {
+                                  isAddressCardSelected = true;
+                                }
+                                // // print(
+                                // //     provider.viewProfileModel?.userdetails?.id);
+                              },
                               child: ChatAddTile(
                                 svg: true,
                                 title: str.cp_address,
@@ -376,43 +419,100 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ))
                 : Container(),
+
+            // * Is address card selected
+
+            isAddressCardSelected
+                ? Positioned(
+                    bottom: 60,
+                    // left: lang != 'ar' ? 2 : null,
+                    // right: lang != 'ar' ? 2 : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          borderRadius: BorderRadius.circular(5)),
+                      width: size.width,
+                      // height: 140,
+                      child: Padding(
+                          padding:
+                              const EdgeInsets.only(top: 5, bottom: 5, left: 0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () async {
+                                  final userAddressId = provider
+                                      .userAddressShow?.userAddress?[index].id
+                                      .toString();
+                                  // log(userAddressId!);
+                                  await sendAddressCard(userAddressId,
+                                      userAddress?[index].addressName);
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  height: 25,
+                                  color: ColorManager.primary,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                          userAddress?[index].addressName ?? '',
+                                          style: getBoldtStyle(
+                                              color: ColorManager.whiteColor,
+                                              fontSize: 13))
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: userAddress?.length,
+                          )),
+                    ))
+                : Container(),
+
+            // * Message box
             Positioned(
               bottom: 0,
-              // left: 0,
-              // right: 0,
               child: Container(
                 color: ColorManager.whiteColor,
                 height: 60,
+                width: w,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SizedBox(
-                      width: mob ? 7 : 2,
-                    ),
+                    // SizedBox(
+                    //   width: mob ? 7 : 2,
+                    // ),
                     InkWell(
                       onTap: () {
                         setState(() {
                           ismenuVisible = !ismenuVisible;
                         });
                       },
-                      child: Text(
-                        String.fromCharCode(Icons.add.codePoint),
-                        style: TextStyle(
-                          inherit: false,
-                          color: ColorManager.primary,
-                          fontSize: 35.0,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: Icons.add.fontFamily,
-                          package: Icons.add.fontPackage,
+                      child: SizedBox(
+                        // width: w * .09,
+                        child: Text(
+                          String.fromCharCode(Icons.add.codePoint),
+                          style: TextStyle(
+                            inherit: false,
+                            color: ColorManager.primary,
+                            fontSize: 35.0,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Icons.add.fontFamily,
+                            package: Icons.add.fontPackage,
+                          ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 3.0, bottom: 10),
+                      padding: const EdgeInsets.only(left: 0, bottom: 5),
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: ColorManager.primary)),
-                        width: mob ? size.width * 0.69 : size.width * 0.65,
+                        // width: mob ? size.width * 0.69 : size.width * 0.65,
+                        width: w * .64,
                         height: 40,
                         child: TextField(
                           controller: msgController,
@@ -438,45 +538,55 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 6,
-                    ),
+                    // SizedBox(
+                    //   width: w * .02,
+                    // ),
                     InkWell(
                       onTap: () async {
                         _onImageButtonPressed(ImageSource.camera, context);
                       },
-                      child: const Icon(
-                        Icons.camera_alt,
-                        size: 30,
-                        color: ColorManager.primary,
+                      child: const SizedBox(
+                        // width: w * .08,
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 30,
+                          color: ColorManager.primary,
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      width: mob ? 5 : 2,
-                    ),
+                    // SizedBox(
+                    //   width: w * .01,
+                    // ),
                     ismicVisible
                         ? InkWell(
                             onLongPress: () async {
                               _stopWatchTimer.onStartTimer();
+
+                              await record();
                               setState(() {
                                 isRecordingOn = true;
                               });
-                              await record();
 
                               // Vibration.hasVibrator() != null
                               // isVibrantFeatureAvailable
                               // ?
-                              Vibration.vibrate(duration: 200);
+                              // Vibration.vibrate(duration: 200);
                               // : Vibration.cancel();
                             },
                             onTap: () {
                               Vibration.vibrate(duration: 200);
                               showSnackBar(str.cp_long_press, context);
                             },
-                            child: const Icon(
-                              Icons.mic_none_outlined,
-                              size: 30,
-                              color: ColorManager.primary,
+                            child: SizedBox(
+                              width: w * .1,
+                              child: const CircleAvatar(
+                                backgroundColor: ColorManager.primary,
+                                child: Icon(
+                                  Icons.mic_none_outlined,
+                                  size: 25,
+                                  color: ColorManager.whiteColor,
+                                ),
+                              ),
                             ),
                           )
                         : InkWell(
@@ -492,19 +602,293 @@ class _ChatScreenState extends State<ChatScreen> {
                               // await Future.delayed(const Duration(seconds: 1));
                               // setState(() {});
                             },
-                            child: const Icon(
-                              Icons.send,
-                              size: 30,
-                              color: ColorManager.primary,
+                            child: SizedBox(
+                              width: w * .1,
+                              child: const CircleAvatar(
+                                backgroundColor: ColorManager.primary,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.send,
+                                    size: 25,
+                                    color: ColorManager.whiteColor,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                    const SizedBox(
-                      width: 35,
-                    ),
+                    // const SizedBox(
+                    //   width: 35,
+                    // ),
                   ],
                 ),
               ),
             ),
+
+            //     Positioned(
+            //   bottom: 0,
+            //   child: Container(
+            //     color: ColorManager.whiteColor,
+            //     height: 60,
+            //     child: Row(
+            //       children: [
+            //         // SizedBox(
+            //         //   width: mob ? 7 : 2,
+            //         // ),
+            //         InkWell(
+            //           onTap: () {
+            //             setState(() {
+            //               ismenuVisible = !ismenuVisible;
+            //             });
+            //           },
+            //           child: Text(
+            //             String.fromCharCode(Icons.add.codePoint),
+            //             style: TextStyle(
+            //               inherit: false,
+            //               color: ColorManager.primary,
+            //               fontSize: 35.0,
+            //               fontWeight: FontWeight.w600,
+            //               fontFamily: Icons.add.fontFamily,
+            //               package: Icons.add.fontPackage,
+            //             ),
+            //           ),
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.only(left: 3.0, bottom: 5),
+            //           child: Container(
+            //             decoration: BoxDecoration(
+            //                 borderRadius: BorderRadius.circular(5),
+            //                 border: Border.all(color: ColorManager.primary)),
+            //             width: mob ? size.width * 0.69 : size.width * 0.65,
+            //             height: 40,
+            //             child: TextField(
+            //               controller: msgController,
+            //               onChanged: (v) {
+            //                 if (v.isNotEmpty) {
+            //                   setState(() {
+            //                     ismicVisible = false;
+            //                   });
+            //                 } else {
+            //                   setState(() {
+            //                     ismicVisible = true;
+            //                   });
+            //                 }
+            //               },
+            //               onTap: () {
+            //                 setState(() {
+            //                   ismenuVisible = false;
+            //                   isMapmenuVisible = false;
+            //                 });
+            //               },
+            //               decoration:
+            //                   const InputDecoration(border: InputBorder.none),
+            //             ),
+            //           ),
+            //         ),
+            //         const SizedBox(
+            //           width: 6,
+            //         ),
+            //         InkWell(
+            //           onTap: () async {
+            //             _onImageButtonPressed(ImageSource.camera, context);
+            //           },
+            //           child: const Icon(
+            //             Icons.camera_alt,
+            //             size: 30,
+            //             color: ColorManager.primary,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           width: mob ? 5 : 2,
+            //         ),
+            //         ismicVisible
+            //             ? InkWell(
+            //                 onLongPress: () async {
+            //                   _stopWatchTimer.onStartTimer();
+
+            //                   await record();
+            //                   setState(() {
+            //                     isRecordingOn = true;
+            //                   });
+
+            //                   // Vibration.hasVibrator() != null
+            //                   // isVibrantFeatureAvailable
+            //                   // ?
+            //                   // Vibration.vibrate(duration: 200);
+            //                   // : Vibration.cancel();
+            //                 },
+            //                 onTap: () {
+            //                   Vibration.vibrate(duration: 200);
+            //                   showSnackBar(str.cp_long_press, context);
+            //                 },
+            //                 child: const CircleAvatar(
+            //                   backgroundColor: ColorManager.primary,
+            //                   child: Icon(
+            //                     Icons.mic_none_outlined,
+            //                     size: 30,
+            //                     color: ColorManager.whiteColor,
+            //                   ),
+            //                 ),
+            //               )
+            //             : InkWell(
+            //                 onTap: () async {
+            //                   await sendMessages();
+            //                   await viewChatMessages(
+            //                       context, servicerProvider.servicerId);
+            //                   setState(() {});
+            //                   // print(servicerProvider.servicerId);
+            //                   // await Future.delayed(
+            //                   //     const Duration(milliseconds: 100));
+            //                   // setState(() {});
+            //                   // await Future.delayed(const Duration(seconds: 1));
+            //                   // setState(() {});
+            //                 },
+            //                 child: const CircleAvatar(
+            //                   backgroundColor: ColorManager.primary,
+            //                   child: Center(
+            //                     child: Icon(
+            //                       Icons.send,
+            //                       size: 25,
+            //                       color: ColorManager.whiteColor,
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //         // const SizedBox(
+            //         //   width: 35,
+            //         // ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+            //        // * Message box
+            // Positioned(
+            //   bottom: 0,
+            //   child: Container(
+            //     color: ColorManager.whiteColor,
+            //     height: 60,
+            //     child: Row(
+            //       children: [
+            //         SizedBox(
+            //           width: mob ? 7 : 2,
+            //         ),
+            //         InkWell(
+            //           onTap: () {
+            //             setState(() {
+            //               ismenuVisible = !ismenuVisible;
+            //             });
+            //           },
+            //           child: Text(
+            //             String.fromCharCode(Icons.add.codePoint),
+            //             style: TextStyle(
+            //               inherit: false,
+            //               color: ColorManager.primary,
+            //               fontSize: 35.0,
+            //               fontWeight: FontWeight.w600,
+            //               fontFamily: Icons.add.fontFamily,
+            //               package: Icons.add.fontPackage,
+            //             ),
+            //           ),
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.only(left: 3.0, bottom: 10),
+            //           child: Container(
+            //             decoration: BoxDecoration(
+            //                 borderRadius: BorderRadius.circular(5),
+            //                 border: Border.all(color: ColorManager.primary)),
+            //             width: mob ? size.width * 0.69 : size.width * 0.65,
+            //             height: 40,
+            //             child: TextField(
+            //               controller: msgController,
+            //               onChanged: (v) {
+            //                 if (v.isNotEmpty) {
+            //                   setState(() {
+            //                     ismicVisible = false;
+            //                   });
+            //                 } else {
+            //                   setState(() {
+            //                     ismicVisible = true;
+            //                   });
+            //                 }
+            //               },
+            //               onTap: () {
+            //                 setState(() {
+            //                   ismenuVisible = false;
+            //                   isMapmenuVisible = false;
+            //                 });
+            //               },
+            //               decoration:
+            //                   const InputDecoration(border: InputBorder.none),
+            //             ),
+            //           ),
+            //         ),
+            //         const SizedBox(
+            //           width: 6,
+            //         ),
+            //         InkWell(
+            //           onTap: () async {
+            //             _onImageButtonPressed(ImageSource.camera, context);
+            //           },
+            //           child: const Icon(
+            //             Icons.camera_alt,
+            //             size: 30,
+            //             color: ColorManager.primary,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           width: mob ? 5 : 2,
+            //         ),
+            //         ismicVisible
+            //             ? InkWell(
+            //                 onLongPress: () async {
+            //                   _stopWatchTimer.onStartTimer();
+            //                   setState(() {
+            //                     isRecordingOn = true;
+            //                   });
+            //                   await record();
+
+            //                   // Vibration.hasVibrator() != null
+            //                   // isVibrantFeatureAvailable
+            //                   // ?
+            //                   // Vibration.vibrate(duration: 200);
+            //                   // : Vibration.cancel();
+            //                 },
+            //                 onTap: () {
+            //                   Vibration.vibrate(duration: 200);
+            //                   showSnackBar(str.cp_long_press, context);
+            //                 },
+            //                 child: const Icon(
+            //                   Icons.mic_none_outlined,
+            //                   size: 30,
+            //                   color: ColorManager.primary,
+            //                 ),
+            //               )
+            //             : InkWell(
+            //                 onTap: () async {
+            //                   await sendMessages();
+            //                   await viewChatMessages(
+            //                       context, servicerProvider.servicerId);
+            //                   setState(() {});
+            //                   // print(servicerProvider.servicerId);
+            //                   // await Future.delayed(
+            //                   //     const Duration(milliseconds: 100));
+            //                   // setState(() {});
+            //                   // await Future.delayed(const Duration(seconds: 1));
+            //                   // setState(() {});
+            //                 },
+            //                 child: const Icon(
+            //                   Icons.send,
+            //                   size: 30,
+            //                   color: ColorManager.primary,
+            //                 ),
+            //               ),
+            //         const SizedBox(
+            //           width: 35,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             // * Recording on container
 
@@ -639,6 +1023,20 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ))
+                : Container(),
+            isLocationFetching
+                ? Positioned(
+                    bottom: 60,
+                    child: Container(
+                      width: size.width,
+                      height: 30,
+                      color: ColorManager.whiteColor,
+                      child: const Center(
+                        child: Text(
+                          "Location Fetching...",
+                        ),
+                      ),
+                    ))
                 : Container()
           ],
         ),
@@ -742,18 +1140,19 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   sendMessages() async {
+    log(msgController.text);
     final provider = Provider.of<DataProvider>(context, listen: false);
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     provider.subServicesModel = null;
     final apiToken = Hive.box("token").get('api_token');
     final url =
         '$api/chat-store?receiver_id=$receiverId&type=text&message=${msgController.text}&page=1';
-
+    final text = msgController.text;
     msgController.text = '';
     setState(() {
       ismicVisible = true;
     });
-    print(url);
+
     if (apiToken == null) return;
     try {
       var response = await http.post(Uri.parse(url), headers: {
@@ -762,26 +1161,63 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
-
-        // msgController.text = '';
-
-        // log(response.body);
-        // if (jsonResponse['result'] == false) {
-        //   await Hive.box("token").clear();
-
-        //   return;
-        // }
-
-        // final subServicesData = SubServicesModel.fromJson(jsonResponse);
-        // provider.subServicesModelData(subServicesData);
-        // selectServiceType(context, id);
       } else {
+        msgController.text = text;
+        setState(() {
+          ismicVisible = false;
+        });
+        showAnimatedSnackBar(
+            context, "The Message can't be sent at the Moment");
         // print(response.statusCode);
         // print(response.body);
         // print('Something went wrong');
       }
     } on Exception catch (_) {
-      showSnackBar("Something Went Wrong1", context);
+      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+
+      setState(() {
+        ismicVisible = false;
+      });
+      msgController.text = text;
+    }
+  }
+
+  sendAddressCard(addressId, addressName) async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final receiverId = provider.serviceManDetails?.userData?.id.toString();
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
+    final apiToken = Hive.box("token").get('api_token');
+    final url =
+        '$api/chat-store?receiver_id=$receiverId&type=address_card&message=Address Card : $addressName&page=1&address_id=$addressId';
+
+    msgController.text = '';
+    setState(() {
+      isAddressCardSelected = false;
+      isMapmenuVisible = false;
+    });
+    print(url);
+
+    try {
+      var response = await http.post(Uri.parse(url), headers: {
+        "device-id": provider.deviceId ?? '',
+        "api-token": apiToken
+      });
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        await viewChatMessages(context, servicerProvider.servicerId);
+      } else {
+        showAnimatedSnackBar(
+            context, "The Message can't be sent at the Moment");
+        // print(response.statusCode);
+        // print(response.body);
+        // print('Something went wrong');
+      }
+    } on Exception catch (_) {
+      log(
+        "Something Went Wrong52",
+      );
+      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
     }
   }
 
@@ -800,6 +1236,8 @@ class _ChatScreenState extends State<ChatScreen> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final userData = provider.serviceManProfile?.userData;
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
 
     final length = imageFile.length;
     var uri =
@@ -837,6 +1275,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var response = await request.send();
     final res = await http.Response.fromStream(response);
     var jsonResponse = jsonDecode(res.body);
+    await viewChatMessages(context, servicerProvider.servicerId);
 
     if (jsonResponse["result"] == false) {
       showAnimatedSnackBar(
@@ -850,54 +1289,53 @@ class _ChatScreenState extends State<ChatScreen> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
-    final userData = provider.serviceManProfile?.userData;
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
-
     final length = imageFile.length;
-    var uri =
-        Uri.parse('$api/chat-store?receiver_id=$receiverId&type=audio&page=1');
-    var request = http.MultipartRequest(
-      "POST",
-      uri,
-    );
-
-    print(uri);
-
-    List<MultipartFile> multiPart = [];
-    for (var i = 0; i < length; i++) {
-      var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
-      var length = await imageFile[i].length();
-      final apiToken = Hive.box("token").get('api_token');
-
-      request.headers.addAll(
-          {"device-id": provider.deviceId ?? '', "api-token": apiToken});
-      var multipartFile = http.MultipartFile(
-        'file',
-        stream,
-        length,
-        filename: (imageFile[i].path),
+    try {
+      var uri = Uri.parse(
+          '$api/chat-store?receiver_id=$receiverId&type=audio&page=1');
+      var request = http.MultipartRequest(
+        "POST",
+        uri,
       );
-      multiPart.add(multipartFile);
-    }
 
-    length > 1
-        ? request.files.addAll(multiPart)
-        : request.files.add(multiPart[0]);
+      List<MultipartFile> multiPart = [];
+      for (var i = 0; i < length; i++) {
+        var stream = http.ByteStream(DelegatingStream(imageFile[i].openRead()));
+        var length = await imageFile[i].length();
+        final apiToken = Hive.box("token").get('api_token');
 
-    // "content-type": "multipart/form-data"
+        request.headers.addAll(
+            {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+        var multipartFile = http.MultipartFile(
+          'file',
+          stream,
+          length,
+          filename: (imageFile[i].path),
+        );
+        multiPart.add(multipartFile);
+      }
 
-    var response = await request.send();
-    final res = await http.Response.fromStream(response);
-    var jsonResponse = jsonDecode(res.body);
-    print(jsonResponse);
-    await viewChatMessages(context, servicerProvider.servicerId);
-    setState(() {});
+      length > 1
+          ? request.files.addAll(multiPart)
+          : request.files.add(multiPart[0]);
 
-    if (jsonResponse["result"] == false) {
-      showAnimatedSnackBar(context,
-          "The file must be a file of type: application/octet-stream, audio/mpeg, mpga, mp3, wav, ogg.");
+      var response = await request.send();
+
+      final res = await http.Response.fromStream(response);
+      var jsonResponse = jsonDecode(res.body);
+      // print(jsonResponse);
+      if (jsonResponse["result"] == false) {
+        showAnimatedSnackBar(
+            context, "The Message can't be sent at the Moment");
+        setState(() {});
+        return;
+      }
+      await viewChatMessages(context, servicerProvider.servicerId);
+      Future.delayed(const Duration(seconds: 2));
       setState(() {});
-      return;
+    } catch (e) {
+      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
     }
   }
 }

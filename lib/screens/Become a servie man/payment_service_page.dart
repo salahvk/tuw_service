@@ -717,16 +717,33 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final apiToken = Hive.box("token").get('api_token');
     if (apiToken == null) return;
+    final fieldData = provider.viewProfileModel?.userdetails;
     // final url =
     //     "${paymentSuccess}firstname=${ProfileServiceControllers.firstNameController}&lastname=${ProfileServiceControllers.lastNameController}&civil_card_no=${ProfileServiceControllers.civilCardController}&dob=${ProfileServiceControllers.dateController}&gender=female&country_id=101&state=kerala&region=sdf&address=dfsdf&package_id=40&service_id=12&coupon_code=ABC&total_amount=100.00&total_tax_amount=0.00&coupon_discount=0.00&grand_total=100.00";
-    final firstName = ProfileServiceControllers.firstNameController.text;
-    final lastName = ProfileServiceControllers.lastNameController.text;
-    final civilCardNo = ProfileServiceControllers.civilCardController.text;
-    final dob = ProfileServiceControllers.dateController.text;
-    final gender = provider.gender;
-    final state = ProfileServiceControllers.stateController.text;
-    final region = ProfileServiceControllers.regionController.text;
-    final address = ProfileServiceControllers.addressController.text;
+    final firstName = ProfileServiceControllers.firstNameController.text.isEmpty
+        ? fieldData?.firstname ?? ''
+        : ProfileServiceControllers.firstNameController.text;
+    final lastName = ProfileServiceControllers.lastNameController.text.isEmpty
+        ? fieldData?.lastname ?? ''
+        : ProfileServiceControllers.lastNameController.text;
+    final civilCardNo =
+        ProfileServiceControllers.civilCardController.text.isEmpty
+            ? fieldData?.civilCardNo ?? ''
+            : ProfileServiceControllers.civilCardController.text;
+    final dob = ProfileServiceControllers.dateController.text.isEmpty
+        ? fieldData?.dob ?? ''
+        : ProfileServiceControllers.dateController.text;
+    final gender =
+        provider.gender.isEmpty ? fieldData?.gender ?? '' : provider.gender;
+    final state = ProfileServiceControllers.stateController.text.isEmpty
+        ? fieldData?.state ?? ''
+        : ProfileServiceControllers.stateController.text;
+    final region = ProfileServiceControllers.regionController.text.isEmpty
+        ? fieldData?.region ?? ''
+        : ProfileServiceControllers.regionController.text;
+    final address = ProfileServiceControllers.addressController.text.isEmpty
+        ? fieldData?.about ?? ''
+        : ProfileServiceControllers.addressController.text;
     final serviceId = provider.serviceId;
     final coupenCode = PaymentServiceControllers.couponController.text;
     final countryId = provider.selectedCountryId ??
@@ -757,7 +774,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
           final placeOrderData = PlaceOrder.fromJson(jsonResponse);
           provider.getPlaceOrderData(placeOrderData);
         } else {
-          showSnackBar("Something Went Wrong", context);
+          log("Something Went Wrong1");
+
           setState(() {
             isPaymentLoading = false;
           });
@@ -765,10 +783,11 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         // final childData = ChildServiceModel.fromJson(jsonResponse);
         // provider.childModelData(childData);
       } else {
-        showSnackBar("Something Went Wrong2", context);
+        log("Something Went Wrong1");
       }
-    } on Exception catch (_) {
-      showSnackBar("Something Went Wrong1", context);
+    } on Exception catch (e) {
+      log("Something Went Wrong1");
+      print(e);
     }
   }
 }

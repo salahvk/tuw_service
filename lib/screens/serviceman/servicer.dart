@@ -18,6 +18,7 @@ import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Google%20Map/searchServicerLocation.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
@@ -85,10 +86,15 @@ class _ServicerPageState extends State<ServicerPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final w = MediaQuery.of(context).size.width;
     final mob = Responsive.isMobile(context);
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
     final serviceManData = provider.serviceManListModel?.serviceman;
+
+    print(mobWth);
 
     return GestureDetector(
       onTap: () {
@@ -106,7 +112,13 @@ class _ServicerPageState extends State<ServicerPage> {
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: isSerDrawerOpened ? size.height * 0.425 : size.height * 0.825,
-          width: isSerDrawerOpened ? size.width * 0.54 : size.width * 0.6,
+          width: isSerDrawerOpened
+              ? size.width * 0.54
+              : mobWth
+                  ? size.width * 0.6
+                  : smobWth
+                      ? w * .7
+                      : w * .75,
           child: isSerDrawerOpened
               ? SerDrawer(
                   id: widget.id,
@@ -270,15 +282,21 @@ class _ServicerPageState extends State<ServicerPage> {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                 children: [
-                                                  Container(
-                                                    width: .5,
-                                                    height: 48,
-                                                    color: const Color.fromARGB(
-                                                        255, 206, 205, 205),
+                                                  Center(
+                                                    child: Container(
+                                                      width: .5,
+                                                      height: 48,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              206,
+                                                              205,
+                                                              205),
+                                                    ),
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets
-                                                        .fromLTRB(10, 8, 10, 8),
+                                                        .fromLTRB(5, 0, 5, 0),
                                                     child: InkWell(
                                                       onTap: () async {
                                                         await searchServicer();
@@ -297,7 +315,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                                           inherit: false,
                                                           color: ColorManager
                                                               .primary,
-                                                          fontSize: 25.0,
+                                                          fontSize: 20.0,
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           fontFamily: Icons

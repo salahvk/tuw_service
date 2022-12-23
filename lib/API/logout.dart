@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -8,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 logoutFun(BuildContext context) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
@@ -23,9 +23,10 @@ logoutFun(BuildContext context) async {
     } else {
       print(response.statusCode);
       print(response.body);
-      print('Something went wrong');
+      log("Something Went Wrong15");
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong14");
+    print(e);
   }
 }

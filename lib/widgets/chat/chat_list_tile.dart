@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -33,6 +34,11 @@ class _ChatListTileState extends State<ChatListTile> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
+    var dateTime = DateFormat("HH:mm")
+        .parse(widget.profileData?.createdAt?.substring(11, 16) ?? '', true);
+    // print(dateTime);
+    var hour = dateTime.toLocal().hour;
+    var minute = dateTime.toLocal().minute;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -88,8 +94,14 @@ class _ChatListTileState extends State<ChatListTile> {
                       height: mob ? 55 : 35,
                       left: size.width * .045,
                       child: CircleAvatar(
-                          radius: mob ? 8 : 6,
-                          backgroundColor: ColorManager.primary),
+                        radius: mob ? 8 : 6,
+                        backgroundColor:
+                            widget.profileData?.onlineStatus == 'online'
+                                ? ColorManager.primary
+                                : widget.profileData?.onlineStatus == 'offline'
+                                    ? ColorManager.grayLight
+                                    : ColorManager.errorRed,
+                      ),
                     )
                   ],
                 ),
@@ -116,7 +128,14 @@ class _ChatListTileState extends State<ChatListTile> {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(widget.profileData?.message ?? '',
+                      Text(
+                          widget.profileData?.type == 'location'
+                              ? "Location"
+                              : widget.profileData?.type == 'image'
+                                  ? "image"
+                                  : widget.profileData?.type == 'audio'
+                                      ? "Audio"
+                                      : widget.profileData?.message ?? '',
                           style: getRegularStyle(
                               color: const Color.fromARGB(255, 139, 138, 138),
                               fontSize: mob ? 11 : 7)),
@@ -130,10 +149,10 @@ class _ChatListTileState extends State<ChatListTile> {
             ),
           ),
           Positioned(
-            top: 3,
+            top: 5,
             right: lang == 'ar' ? null : 10,
             left: lang == 'ar' ? 10 : null,
-            child: Text('3 min ago',
+            child: Text("$hour:$minute",
                 style: getRegularStyle(
                     color: const Color.fromARGB(255, 173, 173, 173),
                     fontSize: mob ? 10 : 7)),

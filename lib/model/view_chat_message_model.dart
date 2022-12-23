@@ -115,6 +115,7 @@ class Data {
   String? onlineStatus;
   String? chatMedia;
   String? profileImage;
+  var addressId;
 
   Data(
       {this.id,
@@ -130,7 +131,8 @@ class Data {
       this.firstname,
       this.onlineStatus,
       this.chatMedia,
-      this.profileImage});
+      this.profileImage,
+      this.addressId});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -147,6 +149,7 @@ class Data {
     onlineStatus = json['online_status'];
     chatMedia = json['chat_media'];
     profileImage = json['profile_image'];
+    addressId = json['address_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -165,6 +168,7 @@ class Data {
     data['online_status'] = onlineStatus;
     data['chat_media'] = chatMedia;
     data['profile_image'] = profileImage;
+    data['address_id'] = addressId;
     return data;
   }
 }

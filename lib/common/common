@@ -1,0 +1,7 @@
+final size = MediaQuery.of(context).size;
+    final w = MediaQuery.of(context).size.width;
+
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
+    final str = AppLocalizations.of(context)!;
+    final provider = Provider.of<DataProvider>(context, listen: false);

@@ -10,11 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/view_chat_message_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 viewChatMessages(BuildContext context, id) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
-  provider.subServicesModel = null;
+  // provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
   try {
@@ -36,7 +35,8 @@ viewChatMessages(BuildContext context, id) async {
       // print(response.body);
       // print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  } on Exception catch (e) {
+    log("Something Went Wrong18");
+    print(e);
   }
 }

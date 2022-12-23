@@ -3,9 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
@@ -30,6 +33,10 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final subscription = Provider.of<DataProvider>(context, listen: false)
+        .activeSubscription
+        ?.subscriptions;
+
     final size = MediaQuery.of(context).size;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -192,7 +199,7 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 8,
+                itemCount: subscription?.length ?? 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
@@ -219,26 +226,26 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Auto Car Package",
+                                  subscription?[index].packageName ?? '',
                                   style: getMediumtStyle(
                                       color: ColorManager.primary,
                                       fontSize: 16),
                                 ),
                                 // const SizedBox(height: 5),
                                 Text(
-                                  "1,999 Paid | 3 month",
+                                  "${subscription?[index].amount} Paid |${subscription?[index].validity}",
                                   style: getMediumtStyle(
                                       color: ColorManager.paymentPageColor1,
                                       fontSize: 12),
                                 ),
                                 Text(
-                                  "Purachase Date : 01/02/2023",
+                                  "Purachase Date : ${subscription?[index].subscriptionDate}",
                                   style: getMediumtStyle(
                                       color: ColorManager.paymentPageColor1,
                                       fontSize: 12),
                                 ),
                                 Text(
-                                  "Exp Date: 01/02/2023",
+                                  "Exp Date: ${subscription?[index].expiryDate}",
                                   style: getMediumtStyle(
                                       color: ColorManager.paymentPageColor1,
                                       fontSize: 12),
@@ -260,9 +267,9 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                                 )
                               ],
                             ),
-                            SvgPicture.asset(
+                            SvgPicture.network(
                               height: size.height * .1,
-                              'assets/Asset 38.svg',
+                              '$endPoint${subscription?[index].serviceImage}',
                               color: ColorManager.primary,
                             ),
                             // const SizedBox(
