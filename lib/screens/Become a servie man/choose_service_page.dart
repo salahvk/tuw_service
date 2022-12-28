@@ -16,6 +16,7 @@ import 'package:social_media_services/model/get_child_service.dart';
 import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_service_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -62,7 +63,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
         sGroup.add(provider.customerParentSer!.services![i]);
         i++;
       }
-      provider.customerChildSer!.documents!.clear();
+      provider.customerChildSer?.documents?.clear();
       // print(sGroup[0]);
 
       setState(() {});
@@ -76,13 +77,20 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: false);
     final mob = Responsive.isMobile(context);
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
 
     var isNotEmpty;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -475,7 +483,8 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                                                 .whiteText,
                                                             fontSize: 18))),
                                               ),
-                                              Text(fileName ?? '')
+                                              Expanded(
+                                                  child: Text(fileName ?? ''))
                                             ],
                                           ),
                                         ),

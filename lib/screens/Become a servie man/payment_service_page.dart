@@ -17,8 +17,10 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/demo/payment_selection.dart';
+import 'package:social_media_services/model/get_child_service.dart';
 import 'package:social_media_services/model/place_order.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -26,8 +28,8 @@ import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
-import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:http/http.dart' as http;
@@ -44,18 +46,22 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
 
   bool isTickSelected = false;
   IsCodeAvailable status = IsCodeAvailable.none;
-  PackageStatus packageStatus = PackageStatus.none;
+  Packages? packages;
+  bool isPackageSelected = false;
 
   bool coupenLoading = false;
   bool value = true;
   bool isPaymentLoading = false;
+  bool isVisible = false;
+  bool getCodeLoading = false;
 
   DateTime selectedDate = DateTime.now();
 
   int _selectedIndex = 2;
   int taxTotal = 0;
+  int tax = 0;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
-  double grandTotal = 0;
+  double? grandTotal;
   double taxTotalAmount = 0;
 
   String lang = '';
@@ -66,6 +72,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   getCoupenCodeList(context);
+    // });
   }
 
   @override
@@ -73,20 +82,20 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     final provider = Provider.of<DataProvider>(context, listen: true);
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
-    final package = provider.customerChildSer!.packages!.isNotEmpty
-        ? (provider.customerChildSer?.packages?[
-            packageStatus == PackageStatus.first
-                ? 0
-                : packageStatus == PackageStatus.second
-                    ? 1
-                    : 0])
-        : null;
-
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
+    taxTotal = 0;
+    // taxTotalAmount = 0;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -329,14 +338,23 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                         width: 10,
                                       ),
                                       InkWell(
-                                        onTap: () {
-                                          getCoupenCodeList(context);
-                                          print('object');
-                                        },
-                                        child: const Icon(
-                                          Icons.arrow_drop_down_circle,
-                                          color: ColorManager.primary2,
-                                        ),
+                                        onTap: getCoupenFunction,
+                                        child: getCodeLoading
+                                            ? const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                ))
+                                            : Icon(
+                                                isVisible
+                                                    ? Icons
+                                                        .arrow_drop_up_outlined
+                                                    : Icons
+                                                        .arrow_drop_down_circle,
+                                                color: ColorManager.primary2,
+                                              ),
                                       ),
                                       const SizedBox(
                                         width: 10,
@@ -353,57 +371,113 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                         ),
                       ),
 
-                      // * Region
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Visibility(
+                              visible: isVisible,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: ColorManager.primary,
+                                    borderRadius: BorderRadius.circular(5)),
+                                width: w * .5,
+                                height: 100,
+                                child: ListView.builder(
+                                  itemCount:
+                                      provider.coupenCodeModel?.coupons?.length,
+                                  itemBuilder: (context, index) {
+                                    return Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          // color: ColorManager.primary2,
+                                          // height: 30,
+                                          child: Text(provider.coupenCodeModel
+                                                  ?.coupons?[index].code ??
+                                              ''),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
                       provider.customerChildSer!.packages!.isNotEmpty
                           ? Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        onTap: chooseFirstPackage,
+                              child: SizedBox(
+                                height: size.height * .1,
+                                child: ListView.builder(
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  // shrinkWrap: true,
+                                  itemCount: provider
+                                          .customerChildSer?.packages?.length ??
+                                      0,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            isPackageSelected = true;
+                                            taxTotal = 0;
+                                            taxTotalAmount = 0;
+                                            packages = provider.customerChildSer
+                                                ?.packages?[index];
+
+                                            if (packages!.taxDetails!.isEmpty) {
+                                              setState(() {
+                                                taxTotalAmount = 0;
+                                              });
+
+                                              grandTotal = packages?.offerPrice
+                                                  ?.toDouble();
+                                            }
+                                          });
+
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 100));
+                                          setState(() {});
+                                        },
                                         child: MonthlyPlan(
                                           size: size,
-                                          plan: provider.customerChildSer
-                                                  ?.packages![0].packageName ??
+                                          plan: provider
+                                                  .customerChildSer
+                                                  ?.packages![index]
+                                                  .packageName ??
                                               '',
                                           amount: provider.customerChildSer
-                                                  ?.packages![0].amount
+                                                  ?.packages![index].amount
                                                   .toString() ??
                                               '',
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        onTap: chooseSecondPackage,
-                                        child: MonthlyPlan(
-                                          size: size,
-                                          plan: provider.customerChildSer
-                                                  ?.packages![1].packageName ??
-                                              '',
-                                          amount: provider.customerChildSer
-                                                  ?.packages![1].amount
-                                                  .toString() ??
-                                              '',
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                    );
+                                  },
+                                ),
                               ),
                             )
                           : Container(),
-                      packageStatus != PackageStatus.none
+                      // SizedBox(
+                      //   height: 50,
+                      //   child: ListView.builder(
+                      //     scrollDirection: Axis.horizontal,
+                      //     itemBuilder: (context, index) {
+                      //       return Padding(
+                      //           padding: const EdgeInsets.all(2.0),
+                      //           child: Container(
+                      //             width: 50,
+                      //             height: 50,
+                      //             color: ColorManager.errorRed,
+                      //           ));
+                      //     },
+                      //     itemCount: 15,
+                      //   ),
+                      // ),
+                      isPackageSelected
                           ? Padding(
                               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                               child: Container(
@@ -428,19 +502,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                            provider
-                                                    .customerChildSer
-                                                    ?.packages![packageStatus ==
-                                                            PackageStatus.first
-                                                        ? 0
-                                                        : packageStatus ==
-                                                                PackageStatus
-                                                                    .second
-                                                            ? 1
-                                                            : 0]
-                                                    .packageName ??
-                                                '',
+                                        Text(packages?.packageName ?? '',
                                             style: getBoldtStyle(
                                                 color: ColorManager.black,
                                                 fontSize: 18)),
@@ -448,7 +510,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           height: 10,
                                         ),
                                         Text(
-                                            "Service Fee : ${package?.amount ?? ''}",
+                                            "Service Fee : ${packages?.amount ?? ''}",
                                             style: getRegularStyle(
                                                 color: ColorManager.grayDark,
                                                 fontSize: 16)),
@@ -456,7 +518,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 5, 0, 5),
                                           child: Text(
-                                              "Discount      : ${package?.offerPrice ?? ''}",
+                                              "Discount      : ${packages?.offerPrice ?? ''}",
                                               style: getRegularStyle(
                                                   color: ColorManager.grayDark,
                                                   fontSize: 16)),
@@ -465,32 +527,31 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 0, 0, 5),
                                           child: Text(
-                                              "Validity        : ${package?.validity ?? ''}",
+                                              "Validity        : ${packages?.validity ?? ''}",
                                               style: getRegularStyle(
                                                   color: ColorManager.grayDark,
                                                   fontSize: 16)),
+                                        ),
+                                        const SizedBox(
+                                          height: 15,
                                         ),
                                         ListView.builder(
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
-                                            WidgetsBinding.instance
-                                                .addPostFrameCallback((_) {
-                                              taxTotal = package
-                                                      ?.taxDetails?[index]
-                                                      .percentage ??
-                                                  0;
-                                              grandTotal =
-                                                  (package?.offerPrice)! +
-                                                      ((package?.offerPrice)! /
-                                                          taxTotal);
-                                              taxTotalAmount =
-                                                  (package?.offerPrice)! /
-                                                      taxTotal;
+                                            taxTotal = taxTotal +
+                                                (packages?.taxDetails?[index]
+                                                        .percentage ??
+                                                    0);
 
-                                              setState(() {});
-                                            });
+                                            taxTotalAmount =
+                                                (packages?.offerPrice)! *
+                                                    (taxTotal / 100);
+                                            grandTotal =
+                                                (packages?.offerPrice)! +
+                                                    taxTotalAmount;
+
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
@@ -498,7 +559,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                      "${package?.taxDetails![index].taxName}",
+                                                      "${packages?.taxDetails![index].taxName}",
                                                       style: getRegularStyle(
                                                           color: ColorManager
                                                               .grayDark,
@@ -507,7 +568,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                     width: 65,
                                                   ),
                                                   Text(
-                                                      ': ${package?.taxDetails![index].percentage ?? ''} %',
+                                                      ': ${packages?.taxDetails![index].percentage ?? ''} %',
                                                       style: getRegularStyle(
                                                           color: ColorManager
                                                               .grayDark,
@@ -516,33 +577,14 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                               ),
                                             );
                                           },
-                                          itemCount: provider
-                                                  .customerChildSer
-                                                  ?.packages![packageStatus ==
-                                                          PackageStatus.first
-                                                      ? 0
-                                                      : packageStatus ==
-                                                              PackageStatus
-                                                                  .second
-                                                          ? 1
-                                                          : 0]
-                                                  .taxDetails
-                                                  ?.length ??
-                                              0,
+                                          itemCount:
+                                              packages?.taxDetails?.length ?? 0,
                                         ),
-                                        Text(
-                                            provider
-                                                    .customerChildSer
-                                                    ?.packages![packageStatus ==
-                                                            PackageStatus.first
-                                                        ? 0
-                                                        : packageStatus ==
-                                                                PackageStatus
-                                                                    .second
-                                                            ? 1
-                                                            : 0]
-                                                    .packageDescription ??
-                                                '',
+                                        Text("Tax total      : $taxTotalAmount",
+                                            style: getRegularStyle(
+                                                color: ColorManager.grayDark,
+                                                fontSize: 16)),
+                                        Text(packages?.packageDescription ?? '',
                                             style: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),
@@ -556,7 +598,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           color: ColorManager.background,
                                           child: Center(
                                               child: Text(
-                                                  "Grand Total: $grandTotal")),
+                                                  "Grand Total: $grandTotal ")),
                                         )
                                       ],
                                     ),
@@ -650,29 +692,6 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     }
   }
 
-// * Functions
-
-  chooseFirstPackage() {
-    final provider = Provider.of<DataProvider>(context, listen: false);
-
-    setState(() {
-      packageStatus = PackageStatus.first;
-    });
-    provider.packageId = provider.customerChildSer?.packages![0].id;
-    print(provider.customerChildSer?.packages![0].id);
-    provider.packageAmount = provider.customerChildSer?.packages![0].amount;
-  }
-
-  chooseSecondPackage() {
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    setState(() {
-      packageStatus = PackageStatus.second;
-    });
-    provider.packageId = provider.customerChildSer?.packages![1].id;
-    print(provider.customerChildSer?.packages![1].id);
-    provider.packageAmount = provider.customerChildSer?.packages![1].amount;
-  }
-
   onContinue() {
     if (PaymentServiceControllers.cardHolderController.text.isEmpty) {
       showAnimatedSnackBar(context, "Please Enter A Card Holder Name");
@@ -682,7 +701,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
       showAnimatedSnackBar(context, "Please Enter Card Expiry Date");
     } else if (PaymentServiceControllers.cvvCodeController.text.isEmpty) {
       showAnimatedSnackBar(context, "Please Enter Your CVV Number");
-    } else if (packageStatus == PackageStatus.none) {
+    } else if (isPackageSelected == false) {
       showAnimatedSnackBar(context, "Please Choose a package to continue");
     } else {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -748,11 +767,14 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     final coupenCode = PaymentServiceControllers.couponController.text;
     final countryId = provider.selectedCountryId ??
         provider.viewProfileModel?.userdetails?.countryId;
-    final packageId = provider.packageId;
+    final packageId = packages?.id;
+
     final url =
-        '${placeOrderApi}firstname=$firstName&lastname=$lastName&civil_card_no=$civilCardNo&dob=$dob&gender=$gender&country_id=${countryId.toString()}&state=$state&region=$region&address=$address&package_id=$packageId&service_id=$serviceId&coupon_code=$coupenCode&total_amount=${provider.packageAmount}&total_tax_amount=$taxTotalAmount&coupon_discount=0.00&grand_total=$grandTotal';
+        '${placeOrderApi}firstname=$firstName&lastname=$lastName&civil_card_no=$civilCardNo&dob=$dob&gender=$gender&country_id=${countryId.toString()}&state=$state&region=$region&address=$address&package_id=$packageId&service_id=$serviceId&coupon_code=$coupenCode&total_amount=${packages?.amount}&total_tax_amount=$taxTotalAmount&coupon_discount=0.00&grand_total=$grandTotal';
     try {
+      print(packageId);
       print(url);
+
       var response = await http.post(Uri.parse(url), headers: {
         "device-id": provider.deviceId ?? '',
         "api-token": apiToken
@@ -790,8 +812,31 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
       print(e);
     }
   }
+
+  // * Get Coupen Function
+
+  getCoupenFunction() async {
+    if (!isVisible) {
+      setState(() {
+        getCodeLoading = true;
+      });
+      final value = await getCoupenCodeList(context);
+      setState(() {
+        getCodeLoading = false;
+      });
+      if (value) {
+        setState(() {
+          isVisible = !isVisible;
+        });
+      }
+    } else {
+      setState(() {
+        isVisible = false;
+      });
+    }
+  }
 }
 
 enum IsCodeAvailable { none, searching, available, notAvailable }
 
-enum PackageStatus { none, first, second }
+// enum PackageStatus { none, first, second }

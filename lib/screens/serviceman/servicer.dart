@@ -62,8 +62,11 @@ class _ServicerPageState extends State<ServicerPage> {
       'lang',
     );
     isAdvancedSearchEnabled = widget.isAdvancedSearchEnabled ?? false;
+    countryid = 165;
+    selectedValue = "Oman";
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final str = AppLocalizations.of(context)!;
       final provider = Provider.of<DataProvider>(context, listen: false);
       final servicerProvider =
           Provider.of<ServicerProvider>(context, listen: false);
@@ -77,7 +80,7 @@ class _ServicerPageState extends State<ServicerPage> {
                   .servicerLatitude !=
               null
           ? "${servicerProvider.servicerLatitude} ${servicerProvider.servicerLongitude}"
-          : 'Map';
+          : str.s_map;
       provider.servicerSelectedCountry = '';
       setState(() {});
     });
@@ -512,8 +515,8 @@ class _ServicerPageState extends State<ServicerPage> {
                                                                         10,
                                                                     vertical: 8,
                                                                   ),
-                                                                  hintText:
-                                                                      'Search a country',
+                                                                  hintText: str
+                                                                      .s_search_country,
                                                                   hintStyle:
                                                                       const TextStyle(
                                                                           fontSize:
@@ -785,7 +788,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                               setState(() {});
                                             },
                                             child: Text(
-                                              "Search",
+                                              str.s_search,
                                               style: getSemiBoldtStyle(
                                                   color:
                                                       ColorManager.whiteColor,
@@ -836,7 +839,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Advanced Search',
+                                            str.s_advanced_search,
                                             style: getRegularStyle(
                                                 color: ColorManager.black,
                                                 fontSize: 12),

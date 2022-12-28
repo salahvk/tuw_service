@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -39,11 +40,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? size.width * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       bottomNavigationBar: Stack(

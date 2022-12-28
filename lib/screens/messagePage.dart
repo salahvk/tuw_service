@@ -16,9 +16,11 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/loading%20screens/chat_loading_screen.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/widgets/chat/chat_list_tile.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MessagePage extends StatefulWidget {
   final bool isHome;
@@ -77,6 +79,10 @@ class _MessagePageState extends State<MessagePage> {
     final provider = Provider.of<DataProvider>(context, listen: true);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: true);
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
+    final str = AppLocalizations.of(context)!;
 
     return WillPopScope(
       onWillPop: () async {
@@ -86,7 +92,11 @@ class _MessagePageState extends State<MessagePage> {
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: size.height * 0.825,
-          width: size.width * 0.6,
+          width: mobWth
+              ? size.width * 0.6
+              : smobWth
+                  ? w * .7
+                  : w * .75,
           child: const CustomDrawer(),
         ),
         bottomNavigationBar: widget.isHome
@@ -183,7 +193,7 @@ class _MessagePageState extends State<MessagePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Message",
+                        str.mh_message,
                         style: getBoldtStyle(
                             color: ColorManager.black, fontSize: 20),
                       )
@@ -193,7 +203,7 @@ class _MessagePageState extends State<MessagePage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                   child: Text(
-                    "Recents",
+                    str.mh_recents,
                     style: getSemiBoldtStyle(
                         color: ColorManager.black, fontSize: 16),
                   ),

@@ -1,10 +1,10 @@
-class CoupenCode {
+class GetCoupenModel {
   bool? result;
   List<Coupons>? coupons;
 
-  CoupenCode({this.result, this.coupons});
+  GetCoupenModel({this.result, this.coupons});
 
-  CoupenCode.fromJson(Map<String, dynamic> json) {
+  GetCoupenModel.fromJson(Map<String, dynamic> json) {
     result = json['result'];
     if (json['coupons'] != null) {
       coupons = <Coupons>[];
@@ -28,38 +28,37 @@ class Coupons {
   int? id;
   String? code;
   String? description;
-  int? offerPrice;
+  String? discount;
   String? validity;
   String? conditions;
-  // void? rememberToken;
+  String? rememberToken;
   String? createdAt;
   String? updatedAt;
-  // void? deletedAt;
+  String? deletedAt;
 
-  Coupons({
-    this.id,
-    this.code,
-    this.description,
-    this.offerPrice,
-    this.validity,
-    this.conditions,
-    // this.rememberToken,
-    this.createdAt,
-    this.updatedAt,
-    // this.deletedAt
-  });
+  Coupons(
+      {this.id,
+      this.code,
+      this.description,
+      this.discount,
+      this.validity,
+      this.conditions,
+      this.rememberToken,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   Coupons.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     code = json['code'];
     description = json['description'];
-    offerPrice = json['offer_price'];
+    discount = json['discount'];
     validity = json['validity'];
     conditions = json['conditions'];
-    // rememberToken = json['remember_token'];
+    rememberToken = json['remember_token'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    // deletedAt = json['deleted_at'];
+    deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,13 +66,13 @@ class Coupons {
     data['id'] = id;
     data['code'] = code;
     data['description'] = description;
-    data['offer_price'] = offerPrice;
+    data['discount'] = discount;
     data['validity'] = validity;
     data['conditions'] = conditions;
-    // data['remember_token'] = rememberToken;
+    data['remember_token'] = rememberToken;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    // data['deleted_at'] = deletedAt;
+    data['deleted_at'] = deletedAt;
     return data;
   }
 }

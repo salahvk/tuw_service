@@ -9,6 +9,7 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
+import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/utils/initPlatformState.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -56,7 +57,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: str.d_my_profile,
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, Routes.myProfile);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const ProfilePage();
+                    },
+                  ), (route) => false);
                   getActiveServices(context);
                   getActiveSubscriptionData(context);
                 }),
@@ -73,7 +78,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               title:
                   provider.viewProfileModel?.userdetails?.userType == 'customer'
                       ? str.d_become
-                      : 'Add Service',
+                      : str.d_add_service,
               onTap: becomeService,
             ),
             CustomDrawerList(
@@ -124,8 +129,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   becomeService() {
     Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-      return const ProfileServicePage();
-    }));
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) {
+        return const ProfileServicePage();
+      },
+    ), (route) => false);
   }
 }

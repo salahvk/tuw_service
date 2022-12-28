@@ -17,6 +17,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/AddressBox/user_address_box.dart';
@@ -65,6 +66,9 @@ class _UserAddressCardState extends State<UserAddressCard> {
     // final userAddress = provider.pUserAddressShow?.userAddress;
     final userprofile = provider.otherUserProfile?.userdetails;
     final userAddressData = provider.pUserAddressShow?.userAddress;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     final currentLocator = LatLng(
         double.parse(userDetails?.latitude ?? '41.612849'),
         double.parse(userDetails?.longitude ?? '13.046816'));
@@ -72,7 +76,11 @@ class _UserAddressCardState extends State<UserAddressCard> {
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: size.height * 0.825,
-          width: size.width * 0.6,
+          width: mobWth
+              ? w * 0.6
+              : smobWth
+                  ? w * .7
+                  : w * .75,
           child: const CustomDrawer(),
         ),
         // * Custom bottom Nav

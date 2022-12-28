@@ -15,6 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -52,12 +53,18 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
     final userData = provider.serviceManProfile?.userData;
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
-    print(userData?.profile);
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav

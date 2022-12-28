@@ -21,6 +21,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
@@ -33,8 +34,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
-
-import 'package:social_media_services/utils/snack_bar.dart';
 
 class UserAddressUpdate extends StatefulWidget {
   final UserAddress userAddress;
@@ -79,6 +78,9 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
     final userDetails = provider.viewProfileModel?.userdetails;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     final currentLocator = LatLng(
         double.parse(userDetails?.latitude ?? '41.612849'),
         double.parse(userDetails?.longitude ?? '13.046816'));
@@ -86,7 +88,11 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: size.height * 0.825,
-          width: size.width * 0.6,
+          width: mobWth
+              ? w * 0.6
+              : smobWth
+                  ? w * .7
+                  : w * .75,
           child: const CustomDrawer(),
         ),
         // * Custom bottom Nav
@@ -567,7 +573,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                                 horizontal: 10,
                                                 vertical: 8,
                                               ),
-                                              hintText: 'Search a country',
+                                              hintText: str.s_search_country,
                                               hintStyle:
                                                   const TextStyle(fontSize: 12),
                                               border: OutlineInputBorder(

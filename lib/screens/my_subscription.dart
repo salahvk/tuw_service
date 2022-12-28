@@ -9,8 +9,10 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MySubscriptionPage extends StatefulWidget {
   const MySubscriptionPage({super.key});
@@ -38,11 +40,19 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
         ?.subscriptions;
 
     final size = MediaQuery.of(context).size;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? size.width * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -185,7 +195,7 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "My Subscription",
+                        str.pp_my_sub,
                         style: getSemiBoldtStyle(
                             color: ColorManager.black, fontSize: 18),
                       ),
@@ -238,17 +248,37 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                                       color: ColorManager.paymentPageColor1,
                                       fontSize: 12),
                                 ),
-                                Text(
-                                  "Purachase Date : ${subscription?[index].subscriptionDate}",
-                                  style: getMediumtStyle(
-                                      color: ColorManager.paymentPageColor1,
-                                      fontSize: 12),
+                                Row(
+                                  children: [
+                                    Text(
+                                      str.msb_pur,
+                                      style: getMediumtStyle(
+                                          color: ColorManager.paymentPageColor1,
+                                          fontSize: 12),
+                                    ),
+                                    Text(
+                                      " ${subscription?[index].subscriptionDate}",
+                                      style: getMediumtStyle(
+                                          color: ColorManager.paymentPageColor1,
+                                          fontSize: 12),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Exp Date: ${subscription?[index].expiryDate}",
-                                  style: getMediumtStyle(
-                                      color: ColorManager.paymentPageColor1,
-                                      fontSize: 12),
+                                Row(
+                                  children: [
+                                    Text(
+                                      str.msb_exp,
+                                      style: getMediumtStyle(
+                                          color: ColorManager.paymentPageColor1,
+                                          fontSize: 12),
+                                    ),
+                                    Text(
+                                      " ${subscription?[index].expiryDate}",
+                                      style: getMediumtStyle(
+                                          color: ColorManager.paymentPageColor1,
+                                          fontSize: 12),
+                                    ),
+                                  ],
                                 ),
                                 Container(
                                   width: 60,
@@ -258,7 +288,7 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Center(
                                     child: Text(
-                                      "RENEW",
+                                      str.msb_renew,
                                       style: getRegularStyle(
                                           color: ColorManager.whiteColor,
                                           fontSize: 10),
@@ -267,10 +297,13 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                                 )
                               ],
                             ),
-                            SvgPicture.network(
-                              height: size.height * .1,
-                              '$endPoint${subscription?[index].serviceImage}',
-                              color: ColorManager.primary,
+                            SizedBox(
+                              width: size.width * .2,
+                              child: SvgPicture.network(
+                                height: size.height * .1,
+                                '$endPoint${subscription?[index].serviceImage}',
+                                color: ColorManager.primary,
+                              ),
                             ),
                             // const SizedBox(
                             //   width: 10,

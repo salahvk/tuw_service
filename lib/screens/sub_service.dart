@@ -11,6 +11,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -33,14 +34,21 @@ class _SubServicesPageState extends State<SubServicesPage> {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final h = MediaQuery.of(context).size.height;
-    final w = MediaQuery.of(context).size.width;
+
     final provider = Provider.of<DataProvider>(context, listen: false);
     final homeData = provider.subServicesModel?.subservices;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: h * 0.825,
-        width: w * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       bottomNavigationBar: Stack(

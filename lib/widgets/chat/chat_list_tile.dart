@@ -135,7 +135,9 @@ class _ChatListTileState extends State<ChatListTile> {
                                   ? "image"
                                   : widget.profileData?.type == 'audio'
                                       ? "Audio"
-                                      : widget.profileData?.message ?? '',
+                                      : widget.profileData?.type == 'document'
+                                          ? "Document"
+                                          : widget.profileData?.message ?? '',
                           style: getRegularStyle(
                               color: const Color.fromARGB(255, 139, 138, 138),
                               fontSize: mob ? 11 : 7)),

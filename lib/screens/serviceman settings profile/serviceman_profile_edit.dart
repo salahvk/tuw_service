@@ -22,6 +22,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
@@ -99,11 +100,18 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
     final size = MediaQuery.of(context).size;
     final userData = provider.serviceManProfile?.userData;
     final str = AppLocalizations.of(context)!;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -491,7 +499,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                                     ),
                                                     // TODO: localisation
                                                     hintText:
-                                                        'Search a country',
+                                                        str.s_search_country,
                                                     hintStyle: const TextStyle(
                                                         fontSize: 12),
                                                     border: OutlineInputBorder(
@@ -678,34 +686,58 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               str.wd_ser,
                               style: getRegularStyle(
                                   color: ColorManager.black, fontSize: 16),
                             ),
-                            const SizedBox(
-                              width: 7,
-                            ),
                             SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: Image.asset(
-                                ImageAssets.tools,
-                                fit: BoxFit.contain,
+                              width: size.width * .05,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: ColorManager.whiteColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(5, 8.5),
+                                  ),
+                                ],
                               ),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(userData.serviceName ?? '',
-                                style: getRegularStyle(
-                                    color: ColorManager.engineWorkerColor,
-                                    fontSize: 15)),
+                              height: 40,
+                              width: size.width * .5,
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: Image.asset(
+                                      ImageAssets.tools,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(userData.serviceName ?? '',
+                                      style: getRegularStyle(
+                                          color: ColorManager.engineWorkerColor,
+                                          fontSize: 15)),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             str.wd_tran,
@@ -713,7 +745,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                 color: ColorManager.black, fontSize: 16),
                           ),
                           SizedBox(
-                            width: size.width * .06,
+                            width: size.width * .1,
                           ),
                           DropdownButtonHideUnderline(
                             child: DropdownButton2(

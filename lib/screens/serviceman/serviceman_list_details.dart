@@ -16,6 +16,7 @@ import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -49,12 +50,19 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
     final userData = provider.serviceManDetails?.userData;
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     print(userData?.profilePic);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -184,7 +192,7 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                             onTap: () {
                               userData!.profileImage!.isEmpty
                                   ? showAnimatedSnackBar(
-                                      context, "No images to display")
+                                      context, str.sv_no_images)
                                   : showDialog(
                                       context: context,
                                       builder: (context) => PopupImage(
@@ -321,8 +329,7 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                       return InkWell(
                         onTap: () {
                           galleryImages!.isEmpty
-                              ? showAnimatedSnackBar(
-                                  context, "No images to display")
+                              ? showAnimatedSnackBar(context, str.sv_no_images)
                               : showDialog(
                                   context: context,
                                   builder: (context) => PopupImage(

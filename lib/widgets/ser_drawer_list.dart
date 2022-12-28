@@ -10,12 +10,17 @@ import 'package:social_media_services/providers/data_provider.dart';
 class SerDrawerList extends StatefulWidget {
   final String image;
   final String title;
+  final String title2;
   final int id;
   // bool isResetSelected = false;
   // GestureTapCallback? onTap;
 
   const SerDrawerList(
-      {Key? key, required this.image, required this.title, this.id = 0})
+      {Key? key,
+      required this.image,
+      required this.title,
+      this.id = 0,
+      required this.title2})
       : super(key: key);
 
   @override
@@ -38,6 +43,7 @@ class _SerDrawerListState extends State<SerDrawerList> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DataProvider>(context, listen: false);
+
     // print(widget.isResetSelected);
 
     widget.key;
@@ -50,6 +56,11 @@ class _SerDrawerListState extends State<SerDrawerList> {
           });
 
           // }
+          if (isTickSelected == true) {
+            widget.title.contains('Four')
+                ? provider.isTwoSelected = false
+                : true;
+          }
           if (isTickSelected == false) {
             widget.title.contains('Four')
                 ? provider.isFourWheelerSelected = false
@@ -116,7 +127,7 @@ class _SerDrawerListState extends State<SerDrawerList> {
                       color: ColorManager.whiteColor,
                     ),
                   )),
-              Text(widget.title,
+              Text(widget.title2,
                   style: getRegularStyle(
                     color: ColorManager.whiteColor,
                   ))

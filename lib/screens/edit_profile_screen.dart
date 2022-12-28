@@ -17,6 +17,7 @@ import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/profile_page.dart';
@@ -93,13 +94,20 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     final h = MediaQuery.of(context).size.height;
     final str = AppLocalizations.of(context)!;
     final mob = Responsive.isMobile(context);
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     final provider = Provider.of<DataProvider>(context, listen: false);
 
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? size.width * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -480,8 +488,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                                 horizontal: 10,
                                                 vertical: 8,
                                               ),
-                                              // TODO: localisation
-                                              hintText: 'Search a country',
+                                              hintText: str.s_search_country,
                                               hintStyle:
                                                   const TextStyle(fontSize: 12),
                                               border: OutlineInputBorder(

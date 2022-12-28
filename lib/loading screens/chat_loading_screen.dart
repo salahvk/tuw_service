@@ -60,10 +60,10 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
       await getServiceManDetailsFun(context, widget.serviceManId);
       await viewChatMessages(context, widget.serviceManId);
       await getOtherUserAddress(context, widget.serviceManId ?? '');
-      // if (provider.otherUserAddress!.userAddress!.isEmpty) {
-      //   Navigator.pop(context);
-      //   return;
-      // }
+      if (provider.otherUserAddress?.userAddress == null) {
+        Navigator.pop(context);
+        return;
+      }
       updateReadStatus(context, widget.serviceManId);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
         return ChatScreen();

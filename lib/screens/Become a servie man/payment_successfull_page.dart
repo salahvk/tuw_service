@@ -8,10 +8,11 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/pdfApi.dart';
@@ -60,11 +61,18 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? w * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -266,7 +274,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                   '',
                             ),
                             PaymentListTile(
-                              text1: 'Grand Total (With discount)',
+                              text1: 'Grand Total',
                               text2: provider.paymentSuccess?.orderDetails
                                       ?.grandTotal ??
                                   '',
@@ -285,7 +293,9 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                               onPressed: () {
                                 Navigator.pushReplacement(context,
                                     MaterialPageRoute(builder: (ctx) {
-                                  return const AddressPage();
+                                  return const HomePage(
+                                    selectedIndex: 0,
+                                  );
                                 }));
                                 // player.stop();
                               },

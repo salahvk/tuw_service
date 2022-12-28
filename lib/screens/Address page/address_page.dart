@@ -14,6 +14,7 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Address%20page/address_edit.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -64,6 +65,9 @@ class _AddressPageState extends State<AddressPage> {
     final provider = Provider.of<DataProvider>(context, listen: true);
     final userDetails = provider.viewProfileModel?.userdetails;
     final userAddress = provider.userAddressShow?.userAddress;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     final currentLocator = LatLng(
         double.parse(userDetails?.latitude ?? '41.612849'),
         double.parse(userDetails?.longitude ?? '13.046816'));
@@ -71,7 +75,11 @@ class _AddressPageState extends State<AddressPage> {
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
           height: size.height * 0.825,
-          width: size.width * 0.6,
+          width: mobWth
+              ? w * 0.6
+              : smobWth
+                  ? w * .7
+                  : w * .75,
           child: const CustomDrawer(),
         ),
         // * Custom bottom Nav
@@ -486,6 +494,7 @@ class CoverImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return CachedNetworkImage(
       imageUrl: '$endPoint/assets/uploads/cover_image/${userDetails?.coverPic}',
       fit: BoxFit.cover,
@@ -494,7 +503,7 @@ class CoverImageWidget extends StatelessWidget {
         color: ColorManager.whiteColor,
         child: Center(
           child: Text(
-            "Please choose an cover photo",
+            str.a_cover,
             style: getRegularStyle(color: ColorManager.black, fontSize: 14),
           ),
         ),

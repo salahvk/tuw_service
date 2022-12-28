@@ -69,74 +69,17 @@ class _SerDrawerState extends State<SerDrawer> {
             SerDrawerList(
               id: widget.id ?? 0,
               image: ImageAssets.scooter,
-              title: 'Two-Wheeler',
+              title: 'Two-Wheeler', title2: str.s_two,
               // isResetSelected: isResetSelected,
               key: UniqueKey(),
             ),
             SerDrawerList(
               id: widget.id ?? 0,
               image: ImageAssets.car,
-              title: 'Four-Wheeler',
+              title: 'Four-Wheeler', title2: str.s_four,
               // isResetSelected: isResetSelected,
               key: UniqueKey(),
             ),
-            // SerDrawerList(
-            //   image: ImageAssets.truck,
-            //   title: 'Truck',
-            //   // isResetSelected: isResetSelected,
-            //   key: UniqueKey(),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(16.0, 30, 16, 0.0),
-            //   child: Row(
-            //     // mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text(
-            //         str.sd_type,
-            //         style: getSemiBoldtStyle(
-            //             color: ColorManager.whiteText, fontSize: mob ? 16 : 12),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SerDrawerList(
-            //   image: ImageAssets.fuel,
-            //   // isResetSelected: isResetSelected,
-            //   key: UniqueKey(),
-            // ),
-            // SerDrawerList(
-            //   image: ImageAssets.disc,
-            //   // isResetSelected: isResetSelected,
-            //   key: UniqueKey(),
-            // ),
-            // SerDrawerList(
-            //   image: ImageAssets.repair,
-            //   // isResetSelected: isResetSelected,
-            //   key: UniqueKey(),
-            // ),
-            // SerDrawerList(
-            //   image: ImageAssets.engine,
-            //   // isResetSelected: isResetSelected,
-            //   key: UniqueKey(),
-            // ),
-            // SerDrawerList(
-            //   image: ImageAssets.truck,
-            //   // isResetSelected: isResetSelected,
-            //   key: UniqueKey(),
-            // ),
-            // Expanded(
-            //   child: ListView.builder(
-            //     shrinkWrap: true,
-            //     itemBuilder: (context, index) {
-            //       return SerTypeDrawerList(
-            //         image: homeData![index].image ?? '',
-            //         title: homeData[index].service ?? '',
-            //         key: UniqueKey(),
-            //       );
-            //     },
-            //     itemCount: homeData?.length ?? 0,
-            //   ),
-            // ),
             const Spacer(),
             Padding(
               padding: mob
@@ -144,14 +87,8 @@ class _SerDrawerState extends State<SerDrawer> {
                   : const EdgeInsets.fromLTRB(0, 5, 0, 10),
               child: ElevatedButton(
                   onPressed: () async {
-                    // await searchServiceMan(
-                    //     context,
-                    //     widget.id.toString(),
-                    //     '',
-                    //     ServiceControllers.stateController.text,
-                    //     ServiceControllers.regionController.text,
-                    //     '',
-                    //     '');
+                    provider.isTwoSelected = provider.isTwoWheelerSelected;
+
                     Navigator.pop(context);
                     setState(() {
                       // isResetSelected = true;
@@ -163,7 +100,7 @@ class _SerDrawerState extends State<SerDrawer> {
                       backgroundColor: ColorManager.whiteColor,
                       padding: const EdgeInsets.fromLTRB(40, 0, 40, 0)),
                   child: Text(
-                    "Search",
+                    str.s_search,
                     style: getSemiBoldtStyle(
                         color: ColorManager.primary, fontSize: 16),
                   )),

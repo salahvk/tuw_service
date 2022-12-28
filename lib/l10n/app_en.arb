@@ -43,6 +43,7 @@
     "d_become":"Become a Service man",
     "d_privacy":"Privacy Policy",
     "d_logout":"Logout",
+    "d_add_service":"Add Service",
 
     "p_first_name":"First Name",
     "p_first_name_h":"Enter First Name",
@@ -81,7 +82,10 @@
     "s_state":"State",
     "s_continue":"Continue",
     "s_advanced_search":"Advanced Search",
+    "s_search":"Search",
     "s_search_country":"Search a country",
+    "s_two":"Two-Wheeler",
+    "s_four":"Four-Wheeler",
 
     "cp_photo1":"Photo & Video",
     "cp_photo2":"Library",
@@ -116,6 +120,8 @@
     "pp_favourites":"Favourites",
     "pp_address":"Address Book",
     "pp_settings":"Settings",
+    "pp_my_Services":"My Services",
+    "pp_my_sub":"My Subscription",
 
     "w_wishList":"WishList",
 
@@ -133,7 +139,7 @@
     "su_exp":"Exp Date",
     "su_save_pdf":"SAVE PDF",
     "su_home":"BACK TO HOME",
-    "su_grand_total":"Grand Total (With discount)",
+    "su_grand_total":"Grand Total",
     "su_coupon_discount":"Coupon Discount",
     "su_tax_amount":"Tax Amount",
     "su_sub_date":"Subscription Date",
@@ -144,6 +150,7 @@
     "a_add":"Add",
     "a_address":"Address",
     "a_home":"Home Address",
+    "a_cover":"Please choose cover Photo",
 
     "ae_home_locator":"Home Locator",
     "ae_add":"Add",
@@ -208,7 +215,19 @@
     "sv_edit_profile":"Edit Profile",
     "sv_no_images":"No images to display",
 
-    "se_transport_ty":"Select Transport Type"
+    "se_transport_ty":"Select Transport Type",
+
+    "ms_Sub":"Subscription Date :",
+    "ms_exp":"Exp Date :",
+    "ms_new":"New Services",
+    "ms_my":"My Services",
+    "ms_ordered":"Ordered Services",
+
+    "msb_renew":"RENEW",
+    "msb_exp":"Exp Date :",
+    "msb_pur":"Purchase Date :",
+    "msb_sub":"My Subscription"
+
 
 
 }

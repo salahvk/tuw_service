@@ -11,9 +11,11 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_more_services_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyServicesPage extends StatefulWidget {
   const MyServicesPage({super.key});
@@ -43,11 +45,19 @@ class _MyServicesPageState extends State<MyServicesPage> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final homeData = provider.homeModel?.services;
     final mob = Responsive.isMobile(context);
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
+    final str = AppLocalizations.of(context)!;
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? size.width * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -149,7 +159,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(18, 0, 0, 0),
+            padding: lang == 'ar'
+                ? const EdgeInsets.fromLTRB(0, 0, 18, 0)
+                : const EdgeInsets.fromLTRB(18, 0, 0, 0),
             child: Column(
               children: [
                 const SizedBox(
@@ -179,7 +191,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "My Services",
+                          str.ms_my,
                           style: getSemiBoldtStyle(
                               color: ColorManager.black, fontSize: 18),
                         ),
@@ -193,7 +205,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                 Row(
                   children: [
                     Text(
-                      "New Services",
+                      str.ms_new,
                       style: getSemiBoldtStyle(
                           color: ColorManager.serviceHomeGrey, fontSize: 16),
                     ),
@@ -218,7 +230,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
                           }));
                         },
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 18, 10),
+                          padding: lang == 'ar'
+                              ? const EdgeInsets.fromLTRB(18, 10, 0, 10)
+                              : const EdgeInsets.fromLTRB(0, 10, 18, 10),
                           child: Container(
                             decoration: BoxDecoration(
                               color: ColorManager.whiteColor,
@@ -293,7 +307,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                 Row(
                   children: [
                     Text(
-                      "Ordered Services",
+                      str.ms_ordered,
                       style: getSemiBoldtStyle(
                           color: ColorManager.serviceHomeGrey, fontSize: 16),
                     ),
@@ -308,7 +322,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   itemCount: provider.activeServices?.services?.length ?? 0,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 18, 10),
+                      padding: lang == 'ar'
+                          ? const EdgeInsets.fromLTRB(18, 10, 0, 10)
+                          : const EdgeInsets.fromLTRB(0, 10, 18, 10),
                       child: Container(
                         decoration: BoxDecoration(
                           color: ColorManager.whiteColor,
@@ -338,9 +354,9 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                     height: size.height * .14,
                                     child: Padding(
                                       padding: const EdgeInsets.all(18.0),
-                                      child: SvgPicture.asset(
+                                      child: SvgPicture.network(
                                         height: size.height * .1,
-                                        'assets/Asset 38.svg',
+                                        '$endPoint${provider.activeServices?.services?[index].serviceImage}',
                                         color: ColorManager.whiteColor,
                                       ),
                                     )),
@@ -364,18 +380,58 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                   //       color: ColorManager.paymentPageColor1,
                                   //       fontSize: 12),
                                   // ),
-                                  Text(
-                                    "Subscription Date : ${provider.activeServices?.services?[index].subscriptionDate}",
-                                    style: getMediumtStyle(
-                                        color: ColorManager.paymentPageColor1,
-                                        fontSize: 12),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        str.ms_Sub,
+                                        style: getSemiBoldtStyle(
+                                            color:
+                                                ColorManager.paymentPageColor1,
+                                            fontSize: mobWth
+                                                ? 12
+                                                : smobWth
+                                                    ? 11
+                                                    : 10),
+                                      ),
+                                      Text(
+                                        " ${provider.activeServices?.services?[index].subscriptionDate}",
+                                        style: getMediumtStyle(
+                                            color:
+                                                ColorManager.paymentPageColor1,
+                                            fontSize: mobWth
+                                                ? 12
+                                                : smobWth
+                                                    ? 11
+                                                    : 10),
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(height: 5),
-                                  Text(
-                                    "Exp Date: ${provider.activeServices?.services?[index].expiryDate}",
-                                    style: getMediumtStyle(
-                                        color: ColorManager.paymentPageColor1,
-                                        fontSize: 12),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        str.ms_exp,
+                                        style: getSemiBoldtStyle(
+                                            color:
+                                                ColorManager.paymentPageColor1,
+                                            fontSize: mobWth
+                                                ? 12
+                                                : smobWth
+                                                    ? 11
+                                                    : 10),
+                                      ),
+                                      Text(
+                                        " ${provider.activeServices?.services?[index].expiryDate}",
+                                        style: getMediumtStyle(
+                                            color:
+                                                ColorManager.paymentPageColor1,
+                                            fontSize: mobWth
+                                                ? 12
+                                                : smobWth
+                                                    ? 11
+                                                    : 10),
+                                      ),
+                                    ],
                                   ),
                                   // Container(
                                   //   width: 60,

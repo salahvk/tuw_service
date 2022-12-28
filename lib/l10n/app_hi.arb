@@ -43,6 +43,7 @@
     "d_become":"सर्विस मैन बनें",
     "d_privacy":"गोपनीयता नीति",
     "d_logout":"लॉग आउट",
+    "d_add_service":"Add Service",
 
     "p_first_name":"पहला नाम",
     "p_first_name_h":"प्रथम नाम दर्ज करें",
@@ -79,6 +80,9 @@
     "s_map":"नक्शा",
     "s_state":"राज्य",
     "s_continue":"जारी रखना",
+    "s_advanced_search":"Advanced Search",
+    "s_search":"Search",
+    "s_search_country":"Search a country",
 
     "cp_photo1":"फोटो और वीडियो",
     "cp_photo2":"पुस्तकालय",
@@ -113,6 +117,8 @@
     "pp_favourites":"Favourites",
     "pp_address":"Address Book",
     "pp_settings":"Settings",
+    "pp_my_Services":"My Services",
+    "pp_my_sub":"My Subscription",
 
     "w_wishList":"WishList",
 
@@ -134,6 +140,7 @@
     "a_add":"Add",
     "a_address":"Address",
     "a_home":"Home Address",
+    "a_cover":"Please choose cover Photo",
 
     "ae_home_locator":"Home Locator",
     "ae_add":"Add",
@@ -179,5 +186,10 @@
     "sd_status":"सेवा की स्थिति",  
     "sd_available":"Available Transport:",
     "sd_type":"Service Type:",
-    "sd_reset":"Reset"
+    "sd_reset":"Reset",
+
+    "ms_Sub":"Subscription Date",
+    "ms_exp":"Exp Date",
+    "ms_new":"New Services",
+    "ms_my":"My Services"
 }

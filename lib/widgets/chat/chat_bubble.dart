@@ -15,6 +15,7 @@ import 'package:social_media_services/screens/Google%20Map/share_location.dart';
 import 'package:social_media_services/widgets/chat/common.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomChatBubble extends StatefulWidget {
   final bool isSendByme;
@@ -256,12 +257,51 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                             fontSize: 14),
                                       ),
                                     )
-                                  : Text(
-                                      widget.text ?? '',
-                                      style: getRegularStyle(
-                                          color: ColorManager.black,
-                                          fontSize: 14),
-                                    ),
+                                  : widget.chatMessage?.type == 'document'
+                                      ? InkWell(
+                                          onTap: () {
+                                            final url = Uri.parse(
+                                                "$endPoint${widget.chatMessage?.chatMedia}");
+                                            print(url);
+                                            launchUrl(url,
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                          child: Container(
+                                            height: 60,
+                                            width: size.width * .6,
+                                            decoration: BoxDecoration(
+                                                color: widget.isSendByme
+                                                    ? ColorManager.primary
+                                                    : ColorManager.background,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(Icons.file_copy),
+                                                  const SizedBox(
+                                                    width: 3,
+                                                  ),
+                                                  Text(
+                                                    "${widget.chatMessage?.uploads}",
+                                                    style: getRegularStyle(
+                                                        color:
+                                                            ColorManager.black),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          widget.text ?? '',
+                                          style: getRegularStyle(
+                                              color: ColorManager.black,
+                                              fontSize: 14),
+                                        ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                     child: Row(

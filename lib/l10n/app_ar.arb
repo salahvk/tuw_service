@@ -1,6 +1,6 @@
 {
-    "l_heading":"Social Media Services",
-    "l_choose_language": "Choose Any Language",
+    "l_heading":"تو للخدمات",
+    "l_choose_language": "أختر اللغة المناسبة",
     "l_description": "Description",
     "l_description2":"Description2",
     "l_get_started":"إبدء",
@@ -9,7 +9,7 @@
     "m_sub1":"سنقوم بإرسال رسالة نصية برقم التحقق المكون من ٤ أرقام.",
     "m_continue":"متابعة",
     "m_snack":"الرجاء إدخال رقم هاتف صحيح",
-    "m_10digits":"يجب أن يتكون رقم الهاتف من ٨ أرقام",
+    "m_10digits":"يجب أن يتكون رقم الهاتف من أرقام صحيحة",
 
     "t_1":"بمجرد المتابعة سوف تكون موافق على ",
     "t_2":"الشروط و الأحكام",
@@ -43,6 +43,7 @@
     "d_become":"كن مزود خدمة",
     "d_privacy":"سياسة الخصوصية",
     "d_logout":"تسجيل الخروج",
+    "d_add_service":"إضافة خدمة",
 
     "p_first_name":"الأسم الأول",
     "p_first_name_h":"أدخل الأسم الأول",
@@ -80,6 +81,11 @@
     "s_map":"الخارطه",
     "s_state":"المدينة",
     "s_continue":"متابعة",
+    "s_advanced_search":"بحث متقدم",
+    "s_search":"بحث",
+    "s_search_country":"بحث البلد",
+     "s_two":"عجلتين",
+    "s_four":"أربع عجلات",
 
     "cp_photo1":"صور او فيديو",
     "cp_photo2":"معرض الصور",
@@ -114,6 +120,8 @@
     "pp_favourites":"المفضلة",
     "pp_address":"دفتر العناوين",
     "pp_settings":"الإعدادات",
+    "pp_my_Services":"خدماتي",
+    "pp_my_sub":"إشتراكاتي",
 
     "w_wishList":"المفضلة",
 
@@ -131,17 +139,18 @@
     "su_exp":"تاريخ الإنتهاء",
     "su_save_pdf":"حفظ PDF",
     "su_home":"العودة للقائمة الرئيسية",
-    "su_grand_total":"Grand Total (With discount)",
-    "su_coupon_discount":"Coupon Discount",
-    "su_tax_amount":"Tax Amount",
-    "su_sub_date":"Subscription Date",
-    "su_order_id":"Order Id",
-    "su_package_id":"Package Id",
+    "su_grand_total":"الإجمالي",
+    "su_coupon_discount":"رمز الخصم",
+    "su_tax_amount":"الضريبة",
+    "su_sub_date":"تاريخ الإشتراك",
+    "su_order_id":"رقم الطلب",
+    "su_package_id":"أسم الخدمة",
 
     "a_home_locator":"المواقع",
     "a_add":"إضافة",
     "a_address":"العنوان",
     "a_home":"رقم المنزل",
+    "a_cover":"الرجاء تعيين صورة الغلاف",
 
     "ae_home_locator":"المواقع",
     "ae_add":"إضافة",
@@ -161,7 +170,7 @@
     "ae_cancel":"إلغاء",
 
     "se_services":"الخدمات",
-    "se_sub_services":"Sub Services",
+    "se_sub_services":"الخدمات الملحقة",
 
     "wd_desc":"الوصف",
     "wd_ser":"نوع الخدمة",
@@ -190,21 +199,32 @@
     "sd_type":"نوع الخدمة:",
     "sd_reset":"إعادة ضبط",
 
-    "mh_message":"Message",
-    "mh_recents":"Recents",
+    "mh_message":"رسالة",
+    "mh_recents":"الأخيرة",
 
-    "ps_snack_card":"Please Enter A Card Holder Name",
-    "ps_snack_card_no":"Please Enter A Card Number",
-    "ps_snack_expiry":"Please Enter Card Expiry Date",
-    "ps_snack_cvv":"Please Enter Your CVV Number",
-    "ps_snack_package":"Please Choose a package to continue",
-    "ps_snack_coupen":"Please Enter a Coupen code to redeem",
-    "e_snack_name":"The name field is required",
-    "e_snack_dob":"DOB field can not be empty",
-    "e_snack_country_field":"Country field can not be empty",
+    "ps_snack_card":"الرجاء إدخال أسم حامل البطاقة",
+    "ps_snack_card_no":"الرجاء إدخال رقم البطاقة",
+    "ps_snack_expiry":"الرجاء إدخال تاريخ إنتهاء البطاقة",
+    "ps_snack_cvv":"الرجاء إدخال رمز CVV",
+    "ps_snack_package":"يرجى إختيار الباقة،للمتابعة",
+    "ps_snack_coupen":"يرجى إدخال رمز الخصم",
+    "e_snack_name":"يرجى تعبئة خانة الأسم",
+    "e_snack_dob":"يرجى تعيين تاريخ الميلاد",
+    "e_snack_country_field":"يرجى إختيار البلد",
 
-    "sv_edit_profile":"Edit Profile",
-    "sv_no_images":"No images to display",
+    "sv_edit_profile":"تعديل الملف الشخصي",
+    "sv_no_images":"لا توجد صورة للعرض",
 
-    "se_transport_ty":"Select Transport Type"
+    "se_transport_ty":"إختر وسيلة النقل",
+
+    "ms_Sub":"تاريخ الإشتراك :",
+    "ms_exp":"تاريخ إنتهاء الإشتراك :",
+    "ms_new":"خدمة جديدة",
+    "ms_my":"خدماتي",
+    "ms_ordered":"الطلبات",
+
+    "msb_renew":"تجديد الإشتراك",
+    "msb_exp":"تاريخ إنتهاء الإشتراك :",
+    "msb_pur":"تاريخ تقديم الطلب :",
+    "msb_sub":" إشتراكاتي"
 }

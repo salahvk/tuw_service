@@ -12,6 +12,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 
 getOtherUserAddress(BuildContext context, String id) async {
+  log("Other User Address Api");
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');

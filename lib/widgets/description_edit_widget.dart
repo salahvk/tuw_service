@@ -76,13 +76,17 @@ class _DescriptionEditWidgetState extends State<DescriptionEditWidget> {
                     )
                   : Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: Text(
-                        widget.controller.text.isEmpty
-                            ? 'Add  ${widget.title}'
-                            : widget.controller.text,
-                        style: getRegularStyle(
-                            color: ColorManager.engineWorkerColor,
-                            fontSize: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.controller.text.isEmpty
+                                ? 'Add  ${widget.title}'
+                                : widget.controller.text,
+                            style: getRegularStyle(
+                                color: ColorManager.engineWorkerColor,
+                                fontSize: 16),
+                          ),
+                        ],
                       ),
                     ),
             ],

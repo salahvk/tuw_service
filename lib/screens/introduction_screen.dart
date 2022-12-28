@@ -39,60 +39,18 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             ),
             Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                //   child: Text('Tuw Services',
-                //       // str.l_heading
-                //       style: GoogleFonts.robotoSlab(
-                //           textStyle: const TextStyle(
-                //               color: Color(0xff16a64c),
-                //               fontSize: 25,
-                //               shadows: [
-                //             Shadow(
-                //               blurRadius: 18.0,
-                //               color: Color.fromARGB(255, 218, 214, 214),
-                //               offset: Offset(0, 6.5),
-                //             ),
-                //           ]))),
-                // ),
                 SizedBox(
                   height: size.height * .15,
                 ),
                 SizedBox(
                     width: size.width * .6,
                     height: size.height * .3,
-                    child: SvgPicture.asset('assets/logo/app_logo_green.svg')),
-                // Padding(
-                //   // padding: const EdgeInsets.fromLTRB(0, 25, 0, 20),
-
-                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                //   child: Text(str.l_description,
-                //       textAlign: TextAlign.center,
-                //       style: GoogleFonts.robotoSlab(
-                //           textStyle: TextStyle(
-                //               color: ColorManager.black,
-                //               fontWeight: FontWeight.bold,
-                //               fontSize: 20,
-                //               shadows: [
-                //             Shadow(
-                //               blurRadius: 15.0,
-                //               color: Colors.grey.shade400,
-                //               offset: const Offset(0, 6.5),
-                //             ),
-                //           ]))),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                //   child: Text(str.l_description2,
-                //       textAlign: TextAlign.center,
-                //       style: getRegularStyle(
-                //           color: ColorManager.grayLight, fontSize: 16)),
-                // ),
+                    child: SvgPicture.asset('assets/logo/app_logo_shadow.svg')),
                 SizedBox(
                   height: size.height * .05,
                 ),
                 SizedBox(
-                    height: 32,
+                    height: 40,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemBuilder: (ctx, index) {

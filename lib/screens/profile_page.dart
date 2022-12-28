@@ -4,8 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_services/Remaining%20pages/my_services.dart';
-import 'package:social_media_services/Remaining%20pages/my_subscription.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
+import 'package:social_media_services/screens/my_services.dart';
+import 'package:social_media_services/screens/my_subscription.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -46,16 +47,32 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Future<bool> _willPopCallback() async {
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const HomePage(
+        selectedIndex: 0,
+      );
+    }));
+    return true; // return true if the route to be popped
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
     final str = AppLocalizations.of(context)!;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? size.width * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
@@ -92,8 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   leading: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (ctx) {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
                         return const HomePage(
                           selectedIndex: 0,
                         );
@@ -111,8 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   leading: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (ctx) {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
                         return const HomePage(
                           selectedIndex: 1,
                         );
@@ -158,137 +173,147 @@ class _ProfilePageState extends State<ProfilePage> {
               ))
         ],
       ),
-      body: SafeArea(
-          child: Column(
-        children: [
-          SizedBox(
-              height: size.height * 0.36,
-              child: FadeCustomAnimation(
+      body: WillPopScope(
+        onWillPop: () async {
+          return _willPopCallback();
+        },
+        child: SafeArea(
+            child: Column(
+          children: [
+            SizedBox(
+                height: size.height * 0.36,
+                child: FadeCustomAnimation(
+                  delay: .1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                          child: ProfileImage(
+                        isNavigationActive: false,
+                        iconSize: 18,
+                        profileSize: 60,
+                        iconRadius: 17,
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                        child: Text(
+                            '${provider.viewProfileModel?.userdetails?.firstname ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
+                            style: getBoldtStyle(
+                                color: ColorManager.black, fontSize: 20)),
+                      ),
+                      Text(provider.viewProfileModel?.userdetails?.phone ?? '',
+                          style: getRegularStyle(
+                              color: const Color(0xff6e6e6e), fontSize: 14)),
+                    ],
+                  ),
+                )),
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                  return EditProfileScreen(
+                    isregister: false,
+                  );
+                }));
+              },
+              child: FadeSlideCustomAnimation(
                 delay: .1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                        child: ProfileImage(
-                      isNavigationActive: false,
-                      iconSize: 18,
-                      profileSize: 60,
-                      iconRadius: 17,
-                    )),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                      child: Text(
-                          '${provider.viewProfileModel?.userdetails?.firstname ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
-                          style: getBoldtStyle(
-                              color: ColorManager.black, fontSize: 20)),
-                    ),
-                    Text(provider.viewProfileModel?.userdetails?.phone ?? '',
-                        style: getRegularStyle(
-                            color: const Color(0xff6e6e6e), fontSize: 14)),
-                  ],
+                child: ProfileTitleWidget(
+                  name: str.pp_my_profile,
+                  icon: Icons.person_outline,
                 ),
-              )),
-          InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                return EditProfileScreen(
-                  isregister: false,
-                );
-              }));
-            },
-            child: FadeSlideCustomAnimation(
-              delay: .1,
-              child: ProfileTitleWidget(
-                name: str.pp_my_profile,
-                icon: Icons.person_outline,
               ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Routes.chatScreen);
-            },
-            child: FadeSlideCustomAnimation(
-              delay: .2,
-              child: ProfileTitleWidget(
-                name: str.pp_message,
-                icon: FontAwesomeIcons.message,
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                  return const HomePage(
+                    selectedIndex: 1,
+                  );
+                }));
+              },
+              child: FadeSlideCustomAnimation(
+                delay: .2,
+                child: ProfileTitleWidget(
+                  name: str.pp_message,
+                  icon: FontAwesomeIcons.message,
+                ),
               ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Routes.wishList);
-            },
-            child: FadeSlideCustomAnimation(
-              delay: .3,
-              child: ProfileTitleWidget(
-                name: str.pp_favourites,
-                icon: Icons.favorite_border,
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, Routes.wishList);
+              },
+              child: FadeSlideCustomAnimation(
+                delay: .3,
+                child: ProfileTitleWidget(
+                  name: str.pp_favourites,
+                  icon: Icons.favorite_border,
+                ),
               ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Routes.addressPage);
-            },
-            child: FadeSlideCustomAnimation(
-              delay: .4,
-              child: ProfileTitleWidget(
-                name: str.pp_address,
-                icon: Icons.pin_drop_outlined,
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, Routes.addressPage);
+              },
+              child: FadeSlideCustomAnimation(
+                delay: .4,
+                child: ProfileTitleWidget(
+                  name: str.pp_address,
+                  icon: Icons.pin_drop_outlined,
+                ),
               ),
             ),
-          ),
-          provider.viewProfileModel?.userdetails?.userType == 'customer'
-              ? Container()
-              : InkWell(
-                  onTap: () {
-                    navigateToServiceManProfile();
-                  },
-                  child: FadeSlideCustomAnimation(
-                    delay: .5,
-                    child: ProfileTitleWidget(
-                      name: str.pp_settings,
-                      icon: Icons.settings_outlined,
+            provider.viewProfileModel?.userdetails?.userType == 'customer'
+                ? Container()
+                : InkWell(
+                    onTap: () {
+                      navigateToServiceManProfile();
+                    },
+                    child: FadeSlideCustomAnimation(
+                      delay: .5,
+                      child: ProfileTitleWidget(
+                        name: str.pp_settings,
+                        icon: Icons.settings_outlined,
+                      ),
                     ),
                   ),
-                ),
-          provider.viewProfileModel?.userdetails?.userType == 'customer'
-              ? Container()
-              : InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const MyServicesPage();
-                    }));
-                  },
-                  child: FadeSlideCustomAnimation(
-                    delay: .5,
-                    child: ProfileTitleWidget(
-                      name: 'My Services',
-                      icon: Icons.pin_drop_outlined,
-                      svg: 'assets/Myservice.svg',
+            provider.viewProfileModel?.userdetails?.userType == 'customer'
+                ? Container()
+                : InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                        return const MyServicesPage();
+                      }));
+                    },
+                    child: FadeSlideCustomAnimation(
+                      delay: .5,
+                      child: ProfileTitleWidget(
+                        name: str.pp_my_Services,
+                        icon: Icons.pin_drop_outlined,
+                        svg: 'assets/Myservice.svg',
+                      ),
                     ),
                   ),
-                ),
-          provider.viewProfileModel?.userdetails?.userType == 'customer'
-              ? Container()
-              : InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const MySubscriptionPage();
-                    }));
-                  },
-                  child: FadeSlideCustomAnimation(
-                    delay: .5,
-                    child: ProfileTitleWidget(
-                      name: 'My Subscription',
-                      icon: FontAwesomeIcons.bell,
+            provider.viewProfileModel?.userdetails?.userType == 'customer'
+                ? Container()
+                : InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                        return const MySubscriptionPage();
+                      }));
+                    },
+                    child: FadeSlideCustomAnimation(
+                      delay: .5,
+                      child: ProfileTitleWidget(
+                        name: str.pp_my_sub,
+                        icon: FontAwesomeIcons.bell,
+                      ),
                     ),
                   ),
-                ),
-        ],
-      )),
+          ],
+        )),
+      ),
     );
   }
 

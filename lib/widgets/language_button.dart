@@ -13,9 +13,11 @@ class LanguageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Container(
+        width: w * .25,
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
             blurRadius: 6.0,
@@ -23,16 +25,15 @@ class LanguageButton extends StatelessWidget {
             offset: const Offset(5, 6.5),
           ),
         ], color: color, borderRadius: BorderRadius.circular(5)),
-        height: 32,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
-          child: Center(
-            child: Text(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
               language,
               style:
-                  getRegularStyle(color: ColorManager.whiteText, fontSize: 16),
+                  getRegularStyle(color: ColorManager.whiteText, fontSize: 15),
             ),
-          ),
+          ],
         ),
       ),
     );

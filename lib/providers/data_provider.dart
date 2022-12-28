@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:social_media_services/model/active_services.dart';
 import 'package:social_media_services/model/active_subscription.dart';
 import 'package:social_media_services/model/chat_list.dart';
-import 'package:social_media_services/model/coupenCode.dart';
+
 import 'package:social_media_services/model/favorite_serviceMan.dart';
+import 'package:social_media_services/model/getCoupenModel.dart';
 import 'package:social_media_services/model/get_child_service.dart';
 
 import 'package:social_media_services/model/get_countries.dart';
@@ -23,6 +26,11 @@ import 'package:social_media_services/model/view_chat_message_model.dart';
 
 class DataProvider with ChangeNotifier {
   LanguageModel? languageModel;
+  Timer? timer;
+
+  void cancelTimer() {
+    timer?.cancel();
+  }
 
   void languageModelData(value) {
     languageModel = value;
@@ -66,7 +74,7 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  CoupenCode? coupenCodeModel;
+  GetCoupenModel? coupenCodeModel;
 
   void coupenCodeData(value) {
     coupenCodeModel = value;
@@ -181,6 +189,8 @@ class DataProvider with ChangeNotifier {
   bool isInternetConnected = false;
   bool isTwoWheelerSelected = false;
   bool isFourWheelerSelected = false;
+
+  bool isTwoSelected = false;
 
   String? servicerSelectedCountry;
 

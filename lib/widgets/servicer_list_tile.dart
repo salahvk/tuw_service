@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_favorites.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 
 class ServicerListTile extends StatefulWidget {
@@ -32,6 +34,8 @@ class _ServicerListTileState extends State<ServicerListTile> {
     final s = widget.serviceman?.distance.toString().split('.');
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -162,7 +166,9 @@ class _ServicerListTileState extends State<ServicerListTile> {
                             ),
                             Column(
                               children: [
-                                Image.asset(ImageAssets.car),
+                                Image.asset(provider.isTwoSelected
+                                    ? ImageAssets.scooter
+                                    : ImageAssets.car),
                                 Text(s![0],
                                     style: getMediumtStyle(
                                         color: const Color.fromARGB(

@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -56,11 +57,18 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final w = MediaQuery.of(context).size.width;
+    final mobWth = ResponsiveWidth.isMobile(context);
+    final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: size.height * 0.825,
-        width: size.width * 0.6,
+        width: mobWth
+            ? size.width * 0.6
+            : smobWth
+                ? w * .7
+                : w * .75,
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
