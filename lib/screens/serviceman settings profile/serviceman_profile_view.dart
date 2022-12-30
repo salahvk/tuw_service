@@ -278,7 +278,7 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                           onTap: () {
                             galleryImages!.isEmpty
                                 ? showAnimatedSnackBar(
-                                    context, "No images to display")
+                                    context, str.sv_no_images)
                                 : showDialog(
                                     context: context,
                                     builder: (context) => PopupImage(
@@ -456,7 +456,7 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                           style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
                           child: Text(
-                            'Edit Profile',
+                            str.sv_edit_profile,
                             style: getMediumtStyle(
                                 color: ColorManager.whiteText, fontSize: 14),
                           )),

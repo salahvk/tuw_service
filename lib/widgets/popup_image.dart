@@ -7,8 +7,10 @@ import 'package:social_media_services/utils/initPlatformState.dart';
 
 class PopupImage extends StatefulWidget {
   final String? image;
-  const PopupImage({
+  String? chatImage;
+  PopupImage({
     required this.image,
+    this.chatImage,
     Key? key,
   }) : super(key: key);
 
@@ -45,7 +47,7 @@ class _PopupImageState extends State<PopupImage> {
                 //     image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 //   ),
                 // ),
-                imageUrl: "$endPoint${widget.image}",
+                imageUrl: widget.chatImage ?? "$endPoint${widget.image}",
                 fit: BoxFit.cover,
                 // cacheManager: customCacheManager,
               ),

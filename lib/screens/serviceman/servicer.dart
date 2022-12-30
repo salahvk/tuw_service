@@ -53,6 +53,7 @@ class _ServicerPageState extends State<ServicerPage> {
   Timer? _debounce;
   List<String> r3 = [];
   int? countryid;
+  int? countryid2;
   List<Countries> r = [];
 
   @override
@@ -1020,7 +1021,7 @@ class _ServicerPageState extends State<ServicerPage> {
     searchServiceMan(
         context,
         widget.id.toString(),
-        countryid,
+        countryid2,
         ServiceControllers.stateController.text,
         ServiceControllers.regionController.text,
         ServiceControllers.servicerController.text,

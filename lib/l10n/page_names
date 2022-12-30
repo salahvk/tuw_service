@@ -25,3 +25,6 @@ sv = service man profile view
 se = service man profile edit
 ms = my Services
 msb = my Subscription
+gm = google map
+no = no connection screen
+di = diologue

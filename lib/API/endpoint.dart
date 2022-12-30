@@ -45,3 +45,5 @@ const String removeFavoritesListApi = '$api/favorite/remove';
 const String viewChatMessagesApi = '$api/chat-messages?receiver_id=';
 
 const String updateReadStatusApi = "$api/update/read-status";
+
+const String reportCustomerApi = "$api/report-customer";

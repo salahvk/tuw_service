@@ -38,10 +38,10 @@ getOtherUserProfile(BuildContext context, String id) async {
       // print('Something went wrong');
     }
   } on Exception catch (e) {
-    showAnimatedSnackBar(
-      context,
-      "Api Error Occured",
-    );
+    // showAnimatedSnackBar(
+    //   context,
+    //   "Api Error Occured",
+    // );
     log("Something Went Wrong50");
     print(e);
   }

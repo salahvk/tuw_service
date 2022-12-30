@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -17,12 +16,8 @@ deleteUserAddress(BuildContext context, String id) async {
     var response = await http.post(Uri.parse('$deleteUserAddressApi$id'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
       log(response.body);
-      print(jsonResponse);
     } else {
-      print(response.statusCode);
-      print(response.body);
       log('Something went wrong22');
     }
   } on Exception catch (e) {

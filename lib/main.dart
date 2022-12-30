@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          title: 'Social Media Services',
+          title: 'Tuw Services',
           debugShowCheckedModeBanner: false,
           theme: getApplicationTheme(context).copyWith(useMaterial3: true),
           initialRoute: Routes.splashScreen,

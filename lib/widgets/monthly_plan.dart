@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MonthlyPlan extends StatelessWidget {
   final String plan;
@@ -16,6 +17,7 @@ class MonthlyPlan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Container(
@@ -34,7 +36,7 @@ class MonthlyPlan extends StatelessWidget {
               color: ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(5)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -46,7 +48,10 @@ class MonthlyPlan extends StatelessWidget {
                     Text(amount,
                         style: getSemiBoldtStyle(
                             color: ColorManager.primary, fontSize: 15)),
-                    Text(" OMR",
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(str.omr,
                         style: getRegularStyle(
                             color: const Color.fromARGB(255, 173, 173, 173),
                             fontSize: 15))

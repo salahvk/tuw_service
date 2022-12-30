@@ -234,7 +234,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                               height: 30,
                             ),
                             PaymentListTile(
-                                text1: "Subscription Date",
+                                text1: str.su_sub_date,
                                 text2: provider.paymentSuccess?.subscription
                                         ?.subscriptionDate ??
                                     ''),
@@ -245,13 +245,13 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                   '',
                             ),
                             PaymentListTile(
-                              text1: 'Order Id',
+                              text1: str.su_order_id,
                               text2: provider.paymentSuccess?.subscription?.id
                                       .toString() ??
                                   '',
                             ),
                             PaymentListTile(
-                              text1: 'Package Id',
+                              text1: str.su_package_id,
                               text2: provider.paymentSuccess?.packageInfo?.id
                                       .toString() ??
                                   '',
@@ -263,18 +263,18 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                         ?.totalAmount ??
                                     ''),
                             PaymentListTile(
-                                text1: 'Tax Amount',
+                                text1: str.su_tax_amount,
                                 text2: provider.paymentSuccess?.orderDetails
                                         ?.totalTaxAmount ??
                                     ''),
                             PaymentListTile(
-                              text1: 'Coupon Discount',
+                              text1: str.su_coupon_discount,
                               text2: provider.paymentSuccess?.orderDetails
                                       ?.couponDiscount ??
                                   '',
                             ),
                             PaymentListTile(
-                              text1: 'Grand Total',
+                              text1: str.su_grand_total,
                               text2: provider.paymentSuccess?.orderDetails
                                       ?.grandTotal ??
                                   '',

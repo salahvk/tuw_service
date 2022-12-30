@@ -26,7 +26,7 @@ class PaymentFailurePage extends StatefulWidget {
 
 class _PaymentFailurePageState extends State<PaymentFailurePage> {
   int _selectedIndex = 2;
-  final List<Widget> _screens = [ServiceHomePage(), const MessagePage()];
+  final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   final player = AudioPlayer();
   bool isProgress = true;
   String lang = '';
@@ -186,30 +186,6 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
                                           ImageAssets.paymentFailure,
                                           repeat: false,
                                         ),
-                                        // Positioned(
-                                        //     bottom: 20,
-                                        //     // left: 2,
-                                        //     child: Column(
-                                        //       children: [
-                                        //         Text(
-                                        //           str.su_success,
-                                        //           style: getBoldtStyle(
-                                        //               color:
-                                        //                   ColorManager.primary,
-                                        //               fontSize: 16),
-                                        //         ),
-                                        //         const SizedBox(
-                                        //           height: 8,
-                                        //         ),
-                                        //         Text(
-                                        //           "Transaction no : #123456789",
-                                        //           style: getRegularStyle(
-                                        //               color: ColorManager
-                                        //                   .paymentPageColor1,
-                                        //               fontSize: 16),
-                                        //         ),
-                                        //       ],
-                                        //     )),
                                       ],
                                     ),
                                   ),
@@ -217,7 +193,7 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
                               // lang == 'ar'
                               //     ? str.su_title
                               //     : 'Your payment was successfully processed\nDetail of transaction are included',
-                              'Payment Failed',
+                              str.pay_fail,
                               textAlign: TextAlign.center,
                               style: getRegularStyle(
                                   color: ColorManager.errorRed, fontSize: 16),

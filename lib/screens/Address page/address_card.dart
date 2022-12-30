@@ -288,8 +288,8 @@ class _UserAddressCardState extends State<UserAddressCard> {
                                       markerId:
                                           const MarkerId('test_marker_id'),
                                       position: currentLocator,
-                                      infoWindow: const InfoWindow(
-                                        title: 'Home locator',
+                                      infoWindow: InfoWindow(
+                                        title: str.a_home_locator,
                                         snippet: '*',
                                       ),
                                     ),

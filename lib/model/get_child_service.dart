@@ -1,6 +1,8 @@
 class ChildServiceModel {
   bool? result;
   String? message;
+  String? serviceName;
+
   List<Childservices>? childservices;
   List<Document>? documents;
   List<Packages>? packages;
@@ -8,6 +10,7 @@ class ChildServiceModel {
   ChildServiceModel(
       {this.result,
       this.message,
+      this.serviceName,
       this.childservices,
       this.documents,
       this.packages});
@@ -15,6 +18,7 @@ class ChildServiceModel {
   ChildServiceModel.fromJson(Map<String, dynamic> json) {
     result = json['result'];
     message = json['message'];
+    serviceName = json['parent_service_name'];
     if (json['childservices'] != null) {
       childservices = <Childservices>[];
       json['childservices'].forEach((v) {
@@ -39,6 +43,7 @@ class ChildServiceModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['result'] = result;
     data['message'] = message;
+    data['parent_service_name'] = serviceName;
     if (childservices != null) {
       data['childservices'] = childservices!.map((v) => v.toJson()).toList();
     }

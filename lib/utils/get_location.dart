@@ -16,18 +16,20 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 requestLocationPermission(
   BuildContext context,
 ) async {
   LocationPermission permission = await Geolocator.checkPermission();
+  final str = AppLocalizations.of(context)!;
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
       print('Location permissions are denied');
     } else if (permission == LocationPermission.deniedForever) {
       print("'Location permissions are permanently denied");
-      showAnimatedSnackBar(context, 'Enable Location for further access');
+      showAnimatedSnackBar(context, str.snack_enable_loc);
     } else {
       print("GPS Location service is granted");
     }
@@ -49,13 +51,14 @@ sendCurrentLocation(
   BuildContext context,
 ) async {
   LocationPermission permission = await Geolocator.checkPermission();
+  final str = AppLocalizations.of(context)!;
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
       log('Location permissions are denied');
     } else if (permission == LocationPermission.deniedForever) {
       log("'Location permissions are permanently denied");
-      showAnimatedSnackBar(context, 'Enable Location for further access');
+      showAnimatedSnackBar(context, str.snack_enable_loc);
     } else {
       log("GPS Location service is granted");
     }
@@ -76,6 +79,7 @@ sendCurrentLocation(
 sendLocation(context, String latLon) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   final receiverId = provider.serviceManDetails?.userData?.id.toString();
+  final str = AppLocalizations.of(context)!;
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   final url =
@@ -95,11 +99,11 @@ sendLocation(context, String latLon) async {
       log("Location send");
       viewChatMessages(context, servicerProvider.servicerId);
     } else {
-      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+      showAnimatedSnackBar(context, str.snack_message_sent);
     }
   } on Exception catch (e) {
     log("Something Went Wrong1");
-    showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+    showAnimatedSnackBar(context, str.snack_message_sent);
     print(e);
   }
 }

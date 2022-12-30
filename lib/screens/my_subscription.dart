@@ -10,6 +10,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/renew_service.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -211,6 +212,7 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: subscription?.length ?? 0,
                 itemBuilder: (context, index) {
+                  print(subscription?[index].toJson());
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
                     child: Container(
@@ -243,7 +245,7 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                                 ),
                                 // const SizedBox(height: 5),
                                 Text(
-                                  "${subscription?[index].amount} Paid |${subscription?[index].validity}",
+                                  "${subscription?[index].amount} ${str.paid} |${subscription?[index].validity}",
                                   style: getMediumtStyle(
                                       color: ColorManager.paymentPageColor1,
                                       fontSize: 12),
@@ -280,18 +282,29 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  width: 60,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.primary,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Center(
-                                    child: Text(
-                                      str.msb_renew,
-                                      style: getRegularStyle(
-                                          color: ColorManager.whiteColor,
-                                          fontSize: 10),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (ctx) {
+                                      return RenewServicePage(
+                                        serviceId:
+                                            subscription?[index].serviceId,
+                                      );
+                                    }));
+                                  },
+                                  child: Container(
+                                    width: 80,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        color: ColorManager.primary,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Center(
+                                      child: Text(
+                                        str.msb_renew,
+                                        style: getRegularStyle(
+                                            color: ColorManager.whiteColor,
+                                            fontSize: 10),
+                                      ),
                                     ),
                                   ),
                                 )

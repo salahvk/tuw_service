@@ -38,10 +38,10 @@ getChatList(BuildContext context) async {
     }
   } on Exception catch (e) {
     log("Something Went Wrong1");
-    showAnimatedSnackBar(
-      context,
-      "Api Error Occured",
-    );
+    // showAnimatedSnackBar(
+    //   context,
+    //   "Api Error Occured",
+    // );
     print(e);
   }
 }

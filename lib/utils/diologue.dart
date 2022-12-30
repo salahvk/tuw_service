@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:social_media_services/API/address/deleteUserAddress.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/routes_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DialogueBox extends StatefulWidget {
   final String addressId;
@@ -19,6 +20,7 @@ class _DialogueBoxState extends State<DialogueBox> {
   bool loading = false;
   @override
   Widget build(context) {
+    final str = AppLocalizations.of(context)!;
     return Dialog(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
@@ -27,9 +29,9 @@ class _DialogueBoxState extends State<DialogueBox> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "Delete address field!",
-              style: TextStyle(
+            Text(
+              str.di_delete,
+              style: const TextStyle(
                   fontFamily: "Open",
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
@@ -38,10 +40,11 @@ class _DialogueBoxState extends State<DialogueBox> {
             SizedBox(
                 height: MediaQuery.of(context).size.height / 5,
                 child: LottieBuilder.asset("assets/delete_bin2.json")),
-            const Text(
-              "Are you sure you want to \nDelete",
+            Text(
+              "${str.di_delete2} \n${str.di_delete3}",
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: "Open", fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  fontFamily: "Open", fontWeight: FontWeight.bold),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,9 +53,9 @@ class _DialogueBoxState extends State<DialogueBox> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text(
-                      "I Don't Want To",
-                      style: TextStyle(
+                    child: Text(
+                      str.di_dont,
+                      style: const TextStyle(
                         fontFamily: "Open",
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
@@ -66,9 +69,9 @@ class _DialogueBoxState extends State<DialogueBox> {
                         onPressed: () async {
                           await deleteAddressBox(widget.addressId);
                         },
-                        child: const Text(
-                          "Allow",
-                          style: TextStyle(
+                        child: Text(
+                          str.di_allow,
+                          style: const TextStyle(
                             fontFamily: "Open",
                             fontWeight: FontWeight.bold,
                             color: Colors.green,

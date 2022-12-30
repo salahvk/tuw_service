@@ -231,12 +231,22 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                           child: CircleAvatar(
                                             radius: 9,
                                             backgroundColor:
-                                                ColorManager.primary,
+                                                userData?.onlineStatus ==
+                                                        'online'
+                                                    ? ColorManager.primary
+                                                    : userData?.onlineStatus ==
+                                                            'offline'
+                                                        ? ColorManager.grayLight
+                                                        : ColorManager.errorRed,
                                             child: isStatusVisible
                                                 ? const Icon(
-                                                    Icons.keyboard_arrow_up)
+                                                    Icons.keyboard_arrow_up,
+                                                    color: ColorManager.black,
+                                                  )
                                                 : const Icon(
-                                                    Icons.keyboard_arrow_down),
+                                                    Icons.keyboard_arrow_down,
+                                                    color: ColorManager.black,
+                                                  ),
                                           ),
                                         )),
                                   ],
@@ -255,45 +265,54 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                         borderRadius: BorderRadius.circular(5)),
                                     width: 95,
                                     height: 120,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(5, 8, 5, 0),
-                                      child: Column(
-                                        children: [
-                                          InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  checkBoxValue = 'online';
-                                                  isStatusVisible = false;
-                                                });
-                                              },
-                                              child: StatusLIstTile(
-                                                checkBoxValue: checkBoxValue,
-                                                title: 'online',
-                                              )),
-                                          InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  checkBoxValue = 'offline';
-                                                  isStatusVisible = false;
-                                                });
-                                              },
-                                              child: StatusLIstTile(
-                                                checkBoxValue: checkBoxValue,
-                                                title: 'offline',
-                                              )),
-                                          InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  checkBoxValue = 'busy';
-                                                  isStatusVisible = false;
-                                                });
-                                              },
-                                              child: StatusLIstTile(
-                                                checkBoxValue: checkBoxValue,
-                                                title: 'busy',
-                                              )),
-                                        ],
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 0, 0, 0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    checkBoxValue = 'online';
+                                                    isStatusVisible = false;
+                                                  });
+                                                },
+                                                child: StatusLIstTile(
+                                                  checkBoxValue: checkBoxValue,
+                                                  title2: str.wd_online,
+                                                  title: 'online',
+                                                )),
+                                            InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    checkBoxValue = 'offline';
+                                                    isStatusVisible = false;
+                                                  });
+                                                },
+                                                child: StatusLIstTile(
+                                                  checkBoxValue: checkBoxValue,
+                                                  title2: str.wd_offline,
+                                                  title: 'offline',
+                                                )),
+                                            InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    checkBoxValue = 'busy';
+                                                    isStatusVisible = false;
+                                                  });
+                                                },
+                                                child: StatusLIstTile(
+                                                  checkBoxValue: checkBoxValue,
+                                                  title2: str.wd_busy,
+                                                  title: 'busy',
+                                                )),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -688,14 +707,17 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              str.wd_ser,
-                              style: getRegularStyle(
-                                  color: ColorManager.black, fontSize: 16),
-                            ),
                             SizedBox(
-                              width: size.width * .05,
+                              width: w * .3,
+                              child: Text(
+                                str.wd_ser,
+                                style: getRegularStyle(
+                                    color: ColorManager.black, fontSize: 16),
+                              ),
                             ),
+                            // SizedBox(
+                            //   width: size.width * .05,
+                            // ),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
@@ -739,14 +761,17 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            str.wd_tran,
-                            style: getRegularStyle(
-                                color: ColorManager.black, fontSize: 16),
-                          ),
                           SizedBox(
-                            width: size.width * .1,
+                            width: w * .3,
+                            child: Text(
+                              str.wd_tran,
+                              style: getRegularStyle(
+                                  color: ColorManager.black, fontSize: 16),
+                            ),
                           ),
+                          // SizedBox(
+                          //   width: size.width * .1,
+                          // ),
                           DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               isExpanded: true,
@@ -754,7 +779,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'Select Transport Type',
+                                      str.se_transport_ty,
                                       style: getRegularStyle(
                                           color: ColorManager.grayLight),
                                       overflow: TextOverflow.ellipsis,
@@ -831,7 +856,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                         child: DescriptionEditWidget(
                             controller: ServiceManProfileEdit.detailsController,
                             hint: 'Details',
-                            title: "More Details"),
+                            title: str.wd_more),
                       ),
                       const SizedBox(
                         height: 15,
@@ -860,7 +885,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                         strokeWidth: 5,
                                       )))
                                   : Text(
-                                      "SAVE",
+                                      str.e_save,
                                       style: getMediumtStyle(
                                           color: ColorManager.whiteText,
                                           fontSize: 14),

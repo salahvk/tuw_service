@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/my_services.dart';
@@ -64,6 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
+    final firstName = toBeginningOfSentenceCase(
+        provider.viewProfileModel?.userdetails?.firstname);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -197,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
                         child: Text(
-                            '${provider.viewProfileModel?.userdetails?.firstname ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
+                            '${firstName ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
                             style: getBoldtStyle(
                                 color: ColorManager.black, fontSize: 20)),
                       ),

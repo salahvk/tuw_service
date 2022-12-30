@@ -68,3 +68,13 @@ class ServiceManProfileEdit {
   static TextEditingController descriptionController = TextEditingController();
   static TextEditingController detailsController = TextEditingController();
 }
+
+class ReportCustomerControllers {
+  static TextEditingController reasonController = TextEditingController();
+  static TextEditingController commentController = TextEditingController();
+}
+
+clearReportControllers() {
+  ReportCustomerControllers.reasonController.clear();
+  ReportCustomerControllers.commentController.clear();
+}

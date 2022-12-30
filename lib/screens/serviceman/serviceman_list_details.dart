@@ -22,6 +22,7 @@ import 'package:social_media_services/screens/serviceman%20settings%20profile/se
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
+import 'package:social_media_services/widgets/report_user_diologue.dart';
 
 class ServiceManDetails extends StatefulWidget {
   Serviceman? serviceman;
@@ -240,22 +241,6 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                         color: ColorManager.black, fontSize: 16),
                   ),
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Image.asset(ImageAssets.tools),
-                //     const SizedBox(
-                //       width: 5,
-                //     ),
-                //     Text(widget.serviceman?.about ?? '',
-                //         style: getRegularStyle(
-                //             color: ColorManager.engineWorkerColor,
-                //             fontSize: 15)),
-                //   ],
-                // ),
-                // const SizedBox(
-                //   height: 5,
-                // ),
                 Text(
                     '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
                     style: getRegularStyle(
@@ -263,31 +248,6 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // InkWell(
-                    //   onTap: navToChatLoadingScreen,
-                    //   child: Container(
-                    //     width: 40,
-                    //     height: 30,
-                    //     decoration: BoxDecoration(
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //           blurRadius: 9.5,
-                    //           color: Colors.grey.shade400,
-                    //           offset: const Offset(6, 6),
-                    //         ),
-                    //       ],
-                    //       borderRadius: BorderRadius.circular(5),
-                    //       color: ColorManager.primary,
-                    //     ),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(5.0),
-                    //       child: SvgPicture.asset(
-                    //         ImageAssets.chatIconSvg,
-                    //         color: ColorManager.whiteColor,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -481,12 +441,17 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => const ReportUserDiologue(),
+                              barrierDismissible: true);
+                        },
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.fromLTRB(
                                 size.width * .1, 0, size.width * .1, 0)),
                         child: Text(
-                          'Report',
+                          str.wd_report,
                           style: getMediumtStyle(
                               color: ColorManager.whiteText, fontSize: 14),
                         )),

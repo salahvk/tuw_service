@@ -6,10 +6,12 @@ import 'package:social_media_services/components/styles_manager.dart';
 
 class StatusLIstTile extends StatefulWidget {
   final String title;
+  final String title2;
   final String checkBoxValue;
   const StatusLIstTile({
     Key? key,
     required this.title,
+    required this.title2,
     required this.checkBoxValue,
   }) : super(key: key);
 
@@ -51,7 +53,7 @@ class _StatusLIstTileState extends State<StatusLIstTile> {
           width: 3,
         ),
         Text(
-          widget.title,
+          widget.title2,
           style: getRegularStyle(
               color: ColorManager.whiteColor, fontSize: lang == 'ar' ? 11 : 14),
         )

@@ -79,9 +79,11 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         r3.add(provider.countriesModel!.countries![i].countryName!);
         i++;
       }
-      widget.isregister ? null : fillFields(provider);
+      widget.isregister ? emptyFields() : fillFields(provider);
       viewProfile(context);
-      selectedValue = otpProvider.userCountryName;
+      if (widget.isregister) {
+        selectedValue = otpProvider.userCountryName;
+      }
 
       setState(() {});
       // getCustomerParent(context);
@@ -728,19 +730,20 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   // * Update profile
 
   updateProfileValidation() async {
+    final str = AppLocalizations.of(context)!;
     // ! Trim removed
     final firstname = EditProfileControllers.firstNameController.text;
     final lastname = EditProfileControllers.lastNameController.text;
     final dob = EditProfileControllers.dateController.text;
     final country = EditProfileControllers.countryController.text;
     if (firstname.isEmpty) {
-      showAnimatedSnackBar(context, "The name field is required");
+      showAnimatedSnackBar(context, str.e_snack_name);
     }
     //  else if (lastname.isEmpty) {
     //   showAnimatedSnackBar(context, "Last Name field is requires");
     // }
     else if (dob.isEmpty) {
-      showAnimatedSnackBar(context, "DOB field can not be empty");
+      showAnimatedSnackBar(context, str.e_snack_dob);
     }
     // else if (countryid == null) {
     //   showAnimatedSnackBar(context, "Country field can not be empty");
@@ -769,7 +772,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     try {
       var response = await http.post(
           Uri.parse(
-              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$state&country_id=${countryId.toString()}&state=$region&lastname=$lastname"),
+              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$region&country_id=${countryId.toString()}&state=$state&lastname=$lastname"),
           headers: {
             "device-id": provider.deviceId ?? '',
             "api-token": apiToken
@@ -831,11 +834,20 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         provider.viewProfileModel?.userdetails?.region ?? '';
     EditProfileControllers.stateController.text =
         provider.viewProfileModel?.userdetails?.state ?? '';
-    EditProfileControllers.regionController.text =
-        provider.viewProfileModel?.userdetails?.region ?? '';
+    EditProfileControllers.aboutController.text =
+        provider.viewProfileModel?.userdetails?.about ?? '';
     selectedValue = provider.viewProfileModel?.userdetails?.countryName;
     countryid = provider.viewProfileModel?.userdetails?.countryId;
     value = userDetails?.gender == 'female' ? false : true;
     print(provider.viewProfileModel?.userdetails?.gender);
+  }
+
+  emptyFields() {
+    EditProfileControllers.firstNameController.text = '';
+    EditProfileControllers.lastNameController.text = '';
+    EditProfileControllers.dateController.text = '';
+    EditProfileControllers.regionController.text = '';
+    EditProfileControllers.stateController.text = '';
+    EditProfileControllers.aboutController.text = '';
   }
 }

@@ -43,6 +43,7 @@
     "d_become":"Become a Service man",
     "d_privacy":"Privacy Policy",
     "d_logout":"Logout",
+    "d_add_service":"Add Service",
 
     "p_first_name":"First Name",
     "p_first_name_h":"Enter First Name",
@@ -68,6 +69,7 @@
     "c_service_group":"Service Group",
     "c_service_group_h":"Enter Group",
     "c_service_list":"Service List",
+     "c_service_list_h":"Service List",
     "c_vehicle":"Vehicle Registration Card/ CR Copy",
     "c_browse":"Browse",
     "c_pay":"CONTINUE TO PAY",  
@@ -79,6 +81,11 @@
     "s_map":"Map",
     "s_state":"State",
     "s_continue":"Continue",
+    "s_advanced_search":"Advanced Search",
+    "s_search":"Search",
+    "s_search_country":"Search a country",
+    "s_two":"Two-Wheeler",
+    "s_four":"Four-Wheeler",
 
     "cp_photo1":"Photo & Video",
     "cp_photo2":"Library",
@@ -113,6 +120,8 @@
     "pp_favourites":"Favourites",
     "pp_address":"Address Book",
     "pp_settings":"Settings",
+    "pp_my_Services":"My Services",
+    "pp_my_sub":"My Subscription",
 
     "w_wishList":"WishList",
 
@@ -122,6 +131,7 @@
     "su_title":"Your payment was successfully processed",
     "su_title_1":"Detail of transaction are included",
     "su_date":"Date",
+    "su_time":"Time",
     "su_service_fee":"Service Fee",
     "su_discount":"Discount",
     "su_vat":"VAT",
@@ -129,11 +139,18 @@
     "su_exp":"Exp Date",
     "su_save_pdf":"SAVE PDF",
     "su_home":"BACK TO HOME",
+    "su_grand_total":"Grand Total",
+    "su_coupon_discount":"Coupon Discount",
+    "su_tax_amount":"Tax Amount",
+    "su_sub_date":"Subscription Date",
+    "su_order_id":"Order Id",
+    "su_package_id":"Package Id",
 
     "a_home_locator":"Home Locator",
     "a_add":"Add",
     "a_address":"Address",
     "a_home":"Home Address",
+    "a_cover":"Please choose cover Photo",
 
     "ae_home_locator":"Home Locator",
     "ae_add":"Add",
@@ -153,6 +170,7 @@
     "ae_cancel":"CANCEL",
 
     "se_services":"Services",
+    "se_sub_services":"Sub Services",
 
     "wd_desc":"Description",
     "wd_ser":"Service Type",
@@ -167,12 +185,79 @@
     "we_save":"SAVE",
     "we_report":"Report",
     "we_block":"Block",
-     "wd_desc":"Description",
+    "wd_desc":"Description",
     "wd_ser":"Service Type",
     "wd_tran":"Transport",
     "wd_more":"More Details",
     "wd_report":"Report",
     "wd_online":"Online",
     "wd_offline":"Offline",
-    "wd_online":"Busy"
+    "wd_busy":"Busy",
+
+    "sd_status":"Service Status",  
+    "sd_available":"Available Transport:",
+    "sd_type":"Service Type:",
+    "sd_reset":"Reset",
+
+    "mh_message":"Message",
+    "mh_recents":"Recents",
+
+    "ps_snack_card":"Please Enter A Card Holder Name",
+    "ps_snack_card_no":"Please Enter A Card Number",
+    "ps_snack_expiry":"Please Enter Card Expiry Date",
+    "ps_snack_cvv":"Please Enter Your CVV Number",
+    "ps_snack_package":"Please Choose a package to continue",
+    "ps_snack_coupen":"Please Enter a Coupen code to redeem",
+    "e_snack_name":"The name field is required",
+    "e_snack_dob":"DOB field can not be empty",
+    "e_snack_country_field":"Country field can not be empty",
+
+    "sv_edit_profile":"Edit Profile",
+    "sv_no_images":"No images to display",
+
+    "se_transport_ty":"Select Transport Type",
+
+    "ms_Sub":"Subscription Date :",
+    "ms_exp":"Exp Date :",
+    "ms_new":"New Services",
+    "ms_my":"My Services",
+    "ms_ordered":"Ordered Services",
+
+    "msb_renew":"RENEW",
+    "msb_exp":"Exp Date :",
+    "msb_pur":"Purchase Date :",
+    "msb_sub":"My Subscription",
+
+    "snack_coupen_av":"No Coupen code available",
+    "snack_get_location":"Getting Current Location...",
+    "snack_done":"Done",
+    "snack_choose_group":"Please Choose a Service Group",
+    "snack_upload":"Please Upload a File",
+    "snack_no_address":"No Address Available",
+    "snack_phone_digits":"Mobile Number must not be below 8 digits",
+    "snack_enable_loc":"Enable Location for further access",
+    "snack_message_sent":"The Message can't be sent at the Moment",
+
+    "gm_new_location":"Confirm New Location",
+    "gm_search":"Search Google Maps",
+    "gm_search_servicer":"Search Servicer on this Location",
+
+    "no_connection":"Slow or no internet connection",
+    "no_check_connection":"Check your internet settings",
+    "no_oops":"Ooops !",
+
+    "di_delete":"Delete address field!",
+    "di_delete2":"Are you sure you want to",
+    "di_delete3":"delete",
+    "di_dont":"I Don't Want To",
+    "di_allow":"Allow",
+
+    "pay_fail":"Payment Failed",
+    "redeem":"Redeem",
+    "validity":"Validity",
+    "tax_total":"Tax total",
+    "fetch_loc":"Location Fetching...",
+    "paid":"paid",
+    "omr":"OMR"
+
 }

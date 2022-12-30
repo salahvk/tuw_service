@@ -13,6 +13,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/screens/serviceman/servicer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchServicerLocation extends StatefulWidget {
   const SearchServicerLocation({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _SearchServicerLocationState extends State<SearchServicerLocation> {
         Provider.of<ServicerProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     final userDetails = provider.viewProfileModel?.userdetails;
+    final str = AppLocalizations.of(context)!;
     currentLocator = LatLng(
         double.parse(servicerProvider.servicerLatitude ??
             userDetails?.latitude ??
@@ -78,7 +80,7 @@ class _SearchServicerLocationState extends State<SearchServicerLocation> {
                     },
                     child: isLoading
                         ? const CircularProgressIndicator()
-                        : const Text('Search Servicer on this Location')),
+                        : Text(str.gm_search_servicer)),
               )
             : null,
         body: Stack(
@@ -106,8 +108,8 @@ class _SearchServicerLocationState extends State<SearchServicerLocation> {
                 Marker(
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
-                  infoWindow: const InfoWindow(
-                    title: 'Home locator',
+                  infoWindow: InfoWindow(
+                    title: str.a_home_locator,
                     snippet: '*',
                   ),
                 ),
@@ -133,7 +135,7 @@ class _SearchServicerLocationState extends State<SearchServicerLocation> {
                       controller:
                           GoogleMapControllers.googleMapSearchController,
                       decoration: InputDecoration(
-                          hintText: 'Search Google Maps',
+                          hintText: str.gm_search,
                           suffixIcon: SizedBox(
                             width: size.width * .2,
                             child: Row(

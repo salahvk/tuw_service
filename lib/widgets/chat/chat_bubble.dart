@@ -12,9 +12,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:social_media_services/loading%20screens/address_card_loading.dart';
 import 'package:social_media_services/model/view_chat_message_model.dart';
 import 'package:social_media_services/screens/Google%20Map/share_location.dart';
-import 'package:social_media_services/widgets/chat/common.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:audio_session/audio_session.dart';
+import 'package:social_media_services/widgets/popup_image.dart';
+import 'package:social_media_services/widgets/voice/voice_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomChatBubble extends StatefulWidget {
@@ -54,14 +53,14 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   @override
   void initState() {
     super.initState();
-    _init();
-    log("Chat Bubble initiated");
-    log("hi");
-    Timer.periodic(const Duration(seconds: 30), (timer) {
-      if (mounted) {
-        _init();
-      }
-    });
+    // _init();
+    // log("Chat Bubble initiated");
+    // log("hi");
+    // Timer.periodic(const Duration(seconds: 30), (timer) {
+    //   if (mounted) {
+    //     _init();
+    //   }
+    // });
     Timer.periodic(const Duration(seconds: 5), (timer) {
       if (mounted) {
         if (widget.location.isNotEmpty) {
@@ -84,31 +83,31 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
     // print(latLong);
   }
 
-  Future<void> _init() async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
+  // Future<void> _init() async {
+  //   final session = await AudioSession.instance;
+  //   await session.configure(const AudioSessionConfiguration.speech());
 
-    _player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
-    });
-    // Try to load audio from a source and catch any errors.
-    try {
-      // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-      await _player.setAudioSource(
-          AudioSource.uri(Uri.parse("$endPoint${widget.audio}")));
-    } catch (e) {
-      print("Error loading audio source: $e");
-    }
-  }
+  //   _player.playbackEventStream.listen((event) {},
+  //       onError: (Object e, StackTrace stackTrace) {
+  //     print('A stream error occurred: $e');
+  //   });
+  //   // Try to load audio from a source and catch any errors.
+  //   try {
+  //     // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
+  //     await _player.setAudioSource(
+  //         AudioSource.uri(Uri.parse("$endPoint${widget.audio}")));
+  //   } catch (e) {
+  //     print("Error loading audio source: $e");
+  //   }
+  // }
 
-  Stream<PositionData> get _positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-          _player.positionStream,
-          _player.bufferedPositionStream,
-          _player.durationStream,
-          (position, bufferedPosition, duration) => PositionData(
-              position, bufferedPosition, duration ?? Duration.zero));
+  // Stream<PositionData> get _positionDataStream =>
+  //     Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+  //         _player.positionStream,
+  //         _player.bufferedPositionStream,
+  //         _player.durationStream,
+  //         (position, bufferedPosition, duration) => PositionData(
+  //             position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +115,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
     var dateTime = DateFormat("HH:mm").parse(widget.time, true);
     var hour = dateTime.toLocal().hour;
     var minute = dateTime.toLocal().minute;
+    String time = "$hour:$minute";
 
     // print(hour);
     // print(DateTime.now());
@@ -129,8 +129,8 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
           Container(
             decoration: BoxDecoration(
               color: widget.isSendByme
-                  ? ColorManager.whiteColor
-                  : ColorManager.primary,
+                  ? ColorManager.chatGreen
+                  : ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
@@ -148,8 +148,13 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                   widget.image.isNotEmpty
                       ? InkWell(
                           onTap: () {
-                            // PopupImage(image: widget.image);
-                            // print("object");
+                            showDialog(
+                                context: context,
+                                builder: (context) => PopupImage(
+                                      chatImage: widget.image,
+                                      image: '',
+                                    ),
+                                barrierDismissible: true);
                           },
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
@@ -164,31 +169,37 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                           ),
                         )
                       : widget.audio.isNotEmpty
-                          ? SizedBox(
-                              // width: size.width,
-                              height: 50,
-                              // color: ColorManager.primary,
-                              child: Row(
-                                children: [
-                                  ControlButtons(_player),
-                                  StreamBuilder<PositionData>(
-                                    stream: _positionDataStream,
-                                    builder: (context, snapshot) {
-                                      final positionData = snapshot.data;
-                                      return SeekBar(
-                                        duration: positionData?.duration ??
-                                            Duration.zero,
-                                        position: positionData?.position ??
-                                            Duration.zero,
-                                        bufferedPosition:
-                                            positionData?.bufferedPosition ??
-                                                Duration.zero,
-                                        onChangeEnd: _player.seek,
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
+                          // ? SizedBox(
+                          //     // width: size.width,
+                          //     height: 50,
+                          //     // color: ColorManager.primary,
+                          //     child: Row(
+                          //       children: [
+                          //         ControlButtons(_player),
+                          //         StreamBuilder<PositionData>(
+                          //           stream: _positionDataStream,
+                          //           builder: (context, snapshot) {
+                          //             final positionData = snapshot.data;
+                          //             return SeekBar(
+                          //               duration: positionData?.duration ??
+                          //                   Duration.zero,
+                          //               position: positionData?.position ??
+                          //                   Duration.zero,
+                          //               bufferedPosition:
+                          //                   positionData?.bufferedPosition ??
+                          //                       Duration.zero,
+                          //               onChangeEnd: _player.seek,
+                          //             );
+                          //           },
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   )
+                          ? VoiceWidget(
+                              path: "$endPoint${widget.audio}",
+                              seen: widget.seen,
+                              time: time,
+                              isSendByme: widget.isSendByme,
                             )
                           : widget.location.isNotEmpty
                               ? ClipRRect(
@@ -302,27 +313,33 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                               color: ColorManager.black,
                                               fontSize: 14),
                                         ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "$hour:$minute",
-                          style: getRegularStyle(
-                              color: ColorManager.grayLight, fontSize: 9),
-                        ),
-                        const SizedBox(
-                          width: 2,
-                        ),
-                        Icon(
-                          Icons.done_all,
-                          color: widget.seen ? Colors.blue : ColorManager.black,
-                          size: 12,
+                  widget.audio.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                time,
+                                style: getRegularStyle(
+                                    color: ColorManager.grayLight, fontSize: 9),
+                              ),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              widget.isSendByme
+                                  ? Icon(
+                                      Icons.done_all,
+                                      color: widget.seen
+                                          ? Colors.blue
+                                          : ColorManager.black,
+                                      size: 12,
+                                    )
+                                  : Container()
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  )
+                      : Container()
                 ],
               ),
             ),
@@ -333,97 +350,97 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   }
 }
 
-class ControlButtons extends StatelessWidget {
-  final AudioPlayer player;
+// class ControlButtons extends StatelessWidget {
+//   final AudioPlayer player;
 
-  const ControlButtons(this.player, {Key? key}) : super(key: key);
+//   const ControlButtons(this.player, {Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Opens volume slider dialog
-        // IconButton(
-        //   icon: const Icon(Icons.volume_up),
-        //   onPressed: () {
-        //     showSliderDialog(
-        //       context: context,
-        //       title: "Adjust volume",
-        //       divisions: 10,
-        //       min: 0.0,
-        //       max: 1.0,
-        //       value: player.volume,
-        //       stream: player.volumeStream,
-        //       onChanged: player.setVolume,
-        //     );
-        //   },
-        // ),
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         // Opens volume slider dialog
+//         // IconButton(
+//         //   icon: const Icon(Icons.volume_up),
+//         //   onPressed: () {
+//         //     showSliderDialog(
+//         //       context: context,
+//         //       title: "Adjust volume",
+//         //       divisions: 10,
+//         //       min: 0.0,
+//         //       max: 1.0,
+//         //       value: player.volume,
+//         //       stream: player.volumeStream,
+//         //       onChanged: player.setVolume,
+//         //     );
+//         //   },
+//         // ),
 
-        /// This StreamBuilder rebuilds whenever the player state changes, which
-        /// includes the playing/paused state and also the
-        /// loading/buffering/ready state. Depending on the state we show the
-        /// appropriate button or loading indicator.
-        StreamBuilder<PlayerState>(
-          stream: player.playerStateStream,
-          builder: (context, snapshot) {
-            final playerState = snapshot.data;
-            final processingState = playerState?.processingState;
-            final playing = playerState?.playing;
-            if (processingState == ProcessingState.loading ||
-                processingState == ProcessingState.buffering) {
-              return Container(
-                margin: const EdgeInsets.all(8.0),
-                width: 44.0,
-                height: 44.0,
-                child: const Icon(
-                  Icons.play_arrow,
-                  size: 44,
-                  color: ColorManager.grayLight,
-                ),
-              );
-            } else if (playing != true) {
-              return IconButton(
-                icon: const Icon(Icons.play_arrow),
-                iconSize: 44.0,
-                onPressed: player.play,
-              );
-            } else if (processingState != ProcessingState.completed) {
-              return IconButton(
-                icon: const Icon(Icons.pause),
-                iconSize: 44.0,
-                onPressed: player.pause,
-              );
-            } else {
-              return IconButton(
-                icon: const Icon(Icons.replay),
-                iconSize: 44.0,
-                onPressed: () => player.seek(Duration.zero),
-              );
-            }
-          },
-        ),
-        // Opens speed slider dialog
-        StreamBuilder<double>(
-          stream: player.speedStream,
-          builder: (context, snapshot) => IconButton(
-            icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-            onPressed: () {
-              showSliderDialog(
-                context: context,
-                title: "Adjust speed",
-                divisions: 10,
-                min: 0.5,
-                max: 1.5,
-                value: player.speed,
-                stream: player.speedStream,
-                onChanged: player.setSpeed,
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
+//         /// This StreamBuilder rebuilds whenever the player state changes, which
+//         /// includes the playing/paused state and also the
+//         /// loading/buffering/ready state. Depending on the state we show the
+//         /// appropriate button or loading indicator.
+//         StreamBuilder<PlayerState>(
+//           stream: player.playerStateStream,
+//           builder: (context, snapshot) {
+//             final playerState = snapshot.data;
+//             final processingState = playerState?.processingState;
+//             final playing = playerState?.playing;
+//             if (processingState == ProcessingState.loading ||
+//                 processingState == ProcessingState.buffering) {
+//               return Container(
+//                 margin: const EdgeInsets.all(8.0),
+//                 width: 44.0,
+//                 height: 44.0,
+//                 child: const Icon(
+//                   Icons.play_arrow,
+//                   size: 44,
+//                   color: ColorManager.grayLight,
+//                 ),
+//               );
+//             } else if (playing != true) {
+//               return IconButton(
+//                 icon: const Icon(Icons.play_arrow),
+//                 iconSize: 44.0,
+//                 onPressed: player.play,
+//               );
+//             } else if (processingState != ProcessingState.completed) {
+//               return IconButton(
+//                 icon: const Icon(Icons.pause),
+//                 iconSize: 44.0,
+//                 onPressed: player.pause,
+//               );
+//             } else {
+//               return IconButton(
+//                 icon: const Icon(Icons.replay),
+//                 iconSize: 44.0,
+//                 onPressed: () => player.seek(Duration.zero),
+//               );
+//             }
+//           },
+//         ),
+//         // Opens speed slider dialog
+//         // StreamBuilder<double>(
+//         //   stream: player.speedStream,
+//         //   builder: (context, snapshot) => IconButton(
+//         //     icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
+//         //         style: const TextStyle(fontWeight: FontWeight.bold)),
+//         //     onPressed: () {
+//         //       showSliderDialog(
+//         //         context: context,
+//         //         title: "Adjust speed",
+//         //         divisions: 10,
+//         //         min: 0.5,
+//         //         max: 1.5,
+//         //         value: player.speed,
+//         //         stream: player.speedStream,
+//         //         onChanged: player.setSpeed,
+//         //       );
+//         //     },
+//         //   ),
+//         // ),
+//       ],
+//     );
+//   }
+// }

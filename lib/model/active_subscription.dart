@@ -29,6 +29,7 @@ class ActiveSubscription {
 
 class Subscriptions {
   int? subscriptionId;
+  int? serviceId;
   String? packageName;
   int? amount;
   String? validity;
@@ -38,6 +39,7 @@ class Subscriptions {
 
   Subscriptions(
       {this.subscriptionId,
+      this.serviceId,
       this.packageName,
       this.amount,
       this.validity,
@@ -47,6 +49,7 @@ class Subscriptions {
 
   Subscriptions.fromJson(Map<String, dynamic> json) {
     subscriptionId = json['subscription_id'];
+    serviceId = json['service_id'];
     packageName = json['package_name'];
     amount = json['amount'];
     validity = json['validity'];
@@ -58,6 +61,7 @@ class Subscriptions {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['subscription_id'] = subscriptionId;
+    data['service_id'] = serviceId;
     data['package_name'] = packageName;
     data['amount'] = amount;
     data['validity'] = validity;

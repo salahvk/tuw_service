@@ -81,6 +81,7 @@ dependencies:
   flutter_sound_record: ^3.2.1
   record: ^4.4.3
   url_launcher: ^6.1.7
+  audioplayers: ^1.1.1
   # flutter_sound: ^9.2.13
 
 

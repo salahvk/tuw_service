@@ -226,8 +226,38 @@
     "msb_renew":"RENEW",
     "msb_exp":"Exp Date :",
     "msb_pur":"Purchase Date :",
-    "msb_sub":"My Subscription"
+    "msb_sub":"My Subscription",
 
+    "snack_coupen_av":"No Coupen code available",
+    "snack_get_location":"Getting Current Location...",
+    "snack_done":"Done",
+    "snack_choose_group":"Please Choose a Service Group",
+    "snack_upload":"Please Upload a File",
+    "snack_no_address":"No Address Available",
+    "snack_phone_digits":"Mobile Number must not be below 8 digits",
+    "snack_enable_loc":"Enable Location for further access",
+    "snack_message_sent":"The Message can't be sent at the Moment",
 
+    "gm_new_location":"Confirm New Location",
+    "gm_search":"Search Google Maps",
+    "gm_search_servicer":"Search Servicer on this Location",
+
+    "no_connection":"Slow or no internet connection",
+    "no_check_connection":"Check your internet settings",
+    "no_oops":"Ooops !",
+
+    "di_delete":"Delete address field!",
+    "di_delete2":"Are you sure you want to",
+    "di_delete3":"delete",
+    "di_dont":"I Don't Want To",
+    "di_allow":"Allow",
+
+    "pay_fail":"Payment Failed",
+    "redeem":"Redeem",
+    "validity":"Validity",
+    "tax_total":"Tax total",
+    "fetch_loc":"Location Fetching...",
+    "paid":"paid",
+    "omr":"OMR"
 
 }

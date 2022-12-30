@@ -392,7 +392,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                                 if (userAddress!.isEmpty) {
                                   showAnimatedSnackBar(
-                                      context, "No Address Available");
+                                      context, str.snack_no_address);
                                 } else {
                                   isAddressCardSelected = true;
                                 }
@@ -771,9 +771,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       width: size.width,
                       height: 30,
                       color: ColorManager.whiteColor,
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          "Location Fetching...",
+                          str.fetch_loc,
                         ),
                       ),
                     ))
@@ -886,6 +886,7 @@ class _ChatScreenState extends State<ChatScreen> {
     log(msgController.text);
     final provider = Provider.of<DataProvider>(context, listen: false);
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
+    final str = AppLocalizations.of(context)!;
     provider.subServicesModel = null;
     final apiToken = Hive.box("token").get('api_token');
     final url =
@@ -909,14 +910,13 @@ class _ChatScreenState extends State<ChatScreen> {
         setState(() {
           ismicVisible = false;
         });
-        showAnimatedSnackBar(
-            context, "The Message can't be sent at the Moment");
+        showAnimatedSnackBar(context, str.snack_message_sent);
         // print(response.statusCode);
         // print(response.body);
         // print('Something went wrong');
       }
     } on Exception catch (_) {
-      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+      showAnimatedSnackBar(context, str.snack_message_sent);
 
       setState(() {
         ismicVisible = false;
@@ -930,6 +930,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
+    final str = AppLocalizations.of(context)!;
     final apiToken = Hive.box("token").get('api_token');
     final url =
         '$api/chat-store?receiver_id=$receiverId&type=address_card&message=Address Card : $addressName&page=1&address_id=$addressId';
@@ -950,8 +951,7 @@ class _ChatScreenState extends State<ChatScreen> {
         var jsonResponse = jsonDecode(response.body);
         await viewChatMessages(context, servicerProvider.servicerId);
       } else {
-        showAnimatedSnackBar(
-            context, "The Message can't be sent at the Moment");
+        showAnimatedSnackBar(context, str.snack_message_sent);
         // print(response.statusCode);
         // print(response.body);
         // print('Something went wrong');
@@ -960,7 +960,7 @@ class _ChatScreenState extends State<ChatScreen> {
       log(
         "Something Went Wrong52",
       );
-      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+      showAnimatedSnackBar(context, str.snack_message_sent);
     }
   }
 
@@ -1033,6 +1033,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
+    final str = AppLocalizations.of(context)!;
     final length = imageFile.length;
     try {
       var uri = Uri.parse(
@@ -1069,8 +1070,7 @@ class _ChatScreenState extends State<ChatScreen> {
       var jsonResponse = jsonDecode(res.body);
       // print(jsonResponse);
       if (jsonResponse["result"] == false) {
-        showAnimatedSnackBar(
-            context, "The Message can't be sent at the Moment");
+        showAnimatedSnackBar(context, str.snack_message_sent);
         setState(() {});
         return;
       }
@@ -1078,7 +1078,7 @@ class _ChatScreenState extends State<ChatScreen> {
       Future.delayed(const Duration(seconds: 2));
       setState(() {});
     } catch (e) {
-      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+      showAnimatedSnackBar(context, str.snack_message_sent);
     }
   }
 
@@ -1088,6 +1088,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Provider.of<ServicerProvider>(context, listen: false);
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final length = imageFile.length;
+    final str = AppLocalizations.of(context)!;
     try {
       var uri = Uri.parse(
           '$api/chat-store?receiver_id=$receiverId&type=document&page=1');
@@ -1123,8 +1124,7 @@ class _ChatScreenState extends State<ChatScreen> {
       var jsonResponse = jsonDecode(res.body);
       // print(jsonResponse);
       if (jsonResponse["result"] == false) {
-        showAnimatedSnackBar(
-            context, "The Message can't be sent at the Moment");
+        showAnimatedSnackBar(context, str.snack_message_sent);
         setState(() {});
         return;
       }
@@ -1132,7 +1132,7 @@ class _ChatScreenState extends State<ChatScreen> {
       Future.delayed(const Duration(seconds: 2));
       setState(() {});
     } catch (e) {
-      showAnimatedSnackBar(context, "The Message can't be sent at the Moment");
+      showAnimatedSnackBar(context, str.snack_message_sent);
     }
   }
 }

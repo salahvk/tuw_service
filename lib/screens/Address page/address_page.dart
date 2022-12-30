@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
@@ -26,6 +27,7 @@ import 'package:social_media_services/widgets/AddressBox/addressPage_box.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 
@@ -68,6 +70,9 @@ class _AddressPageState extends State<AddressPage> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
+
+    final firstName = toBeginningOfSentenceCase(
+        provider.viewProfileModel?.userdetails?.firstname);
     final currentLocator = LatLng(
         double.parse(userDetails?.latitude ?? '41.612849'),
         double.parse(userDetails?.longitude ?? '13.046816'));
@@ -181,9 +186,7 @@ class _AddressPageState extends State<AddressPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                provider.viewProfileModel?.userdetails
-                                        ?.firstname ??
-                                    '',
+                                firstName ?? '',
                                 style: getBoldtStyle(
                                     color: ColorManager.black, fontSize: 13),
                               ),
@@ -353,8 +356,8 @@ class _AddressPageState extends State<AddressPage> {
                                       markerId:
                                           const MarkerId('test_marker_id'),
                                       position: currentLocator,
-                                      infoWindow: const InfoWindow(
-                                        title: 'Home locator',
+                                      infoWindow: InfoWindow(
+                                        title: str.a_home_locator,
                                         snippet: '*',
                                       ),
                                     ),

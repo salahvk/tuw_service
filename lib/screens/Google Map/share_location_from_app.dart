@@ -13,6 +13,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/utils/get_location.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectLocationFromApp extends StatefulWidget {
   const SelectLocationFromApp({Key? key}) : super(key: key);
@@ -41,6 +42,7 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
           Provider.of<ServicerProvider>(context, listen: false);
       final provider = Provider.of<DataProvider>(context, listen: false);
       final userDetails = provider.viewProfileModel?.userdetails;
+      final str = AppLocalizations.of(context)!;
       currentLocator = LatLng(
           double.parse(userDetails?.latitude ?? '41.612849'),
           double.parse(userDetails?.longitude ?? '13.046816'));
@@ -57,6 +59,7 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
         Provider.of<ServicerProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     final userDetails = provider.viewProfileModel?.userdetails;
+    final str = AppLocalizations.of(context)!;
     currentLocator = LatLng(
         double.parse(servicerProvider.servicerLatitude ??
             userDetails?.latitude ??
@@ -99,7 +102,7 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
                     },
                     child: isLoading
                         ? const CircularProgressIndicator()
-                        : const Text('Share Location')),
+                        : Text(str.cp_loc)),
               )
             : null,
         body: Stack(
@@ -127,8 +130,8 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
                 Marker(
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
-                  infoWindow: const InfoWindow(
-                    title: 'Home locator',
+                  infoWindow: InfoWindow(
+                    title: str.a_home_locator,
                     snippet: '*',
                   ),
                 ),
@@ -154,7 +157,7 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
                       controller:
                           GoogleMapControllers.googleMapSearchController,
                       decoration: InputDecoration(
-                          hintText: 'Search Google Maps',
+                          hintText: str.gm_search,
                           suffixIcon: SizedBox(
                             width: size.width * .2,
                             child: Row(

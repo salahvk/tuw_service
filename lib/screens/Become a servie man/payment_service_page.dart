@@ -327,7 +327,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                     child:
                                                         CircularProgressIndicator())
                                                 : Text(
-                                                    'Redeem',
+                                                    str.redeem,
                                                     style: getSemiBoldtStyle(
                                                         color: ColorManager
                                                             .whiteColor,
@@ -407,7 +407,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                           ? Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: SizedBox(
-                                height: size.height * .1,
+                                height: size.height * .11,
                                 child: ListView.builder(
                                   // physics: const NeverScrollableScrollPhysics(),
                                   // shrinkWrap: true,
@@ -510,7 +510,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           height: 10,
                                         ),
                                         Text(
-                                            "Service Fee : ${packages?.amount ?? ''}",
+                                            "${str.su_service_fee} : ${packages?.amount ?? ''}",
                                             style: getRegularStyle(
                                                 color: ColorManager.grayDark,
                                                 fontSize: 16)),
@@ -518,7 +518,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 5, 0, 5),
                                           child: Text(
-                                              "Discount      : ${packages?.offerPrice ?? ''}",
+                                              "${str.su_discount}     : ${packages?.offerPrice ?? ''}",
                                               style: getRegularStyle(
                                                   color: ColorManager.grayDark,
                                                   fontSize: 16)),
@@ -527,7 +527,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 0, 0, 5),
                                           child: Text(
-                                              "Validity        : ${packages?.validity ?? ''}",
+                                              "${str.validity}     : ${packages?.validity ?? ''}",
                                               style: getRegularStyle(
                                                   color: ColorManager.grayDark,
                                                   fontSize: 16)),
@@ -580,7 +580,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           itemCount:
                                               packages?.taxDetails?.length ?? 0,
                                         ),
-                                        Text("Tax total      : $taxTotalAmount",
+                                        Text(
+                                            "${str.tax_total}  : $taxTotalAmount",
                                             style: getRegularStyle(
                                                 color: ColorManager.grayDark,
                                                 fontSize: 16)),
@@ -598,7 +599,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           color: ColorManager.background,
                                           child: Center(
                                               child: Text(
-                                                  "Grand Total: $grandTotal ")),
+                                                  "${str.su_grand_total}: $grandTotal ")),
                                         )
                                       ],
                                     ),
@@ -693,16 +694,17 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   }
 
   onContinue() {
+    final str = AppLocalizations.of(context)!;
     if (PaymentServiceControllers.cardHolderController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter A Card Holder Name");
+      showAnimatedSnackBar(context, str.ps_snack_card);
     } else if (PaymentServiceControllers.cardNumberController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter A Card Number");
+      showAnimatedSnackBar(context, str.ps_snack_card_no);
     } else if (PaymentServiceControllers.dateController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter Card Expiry Date");
+      showAnimatedSnackBar(context, str.ps_snack_expiry);
     } else if (PaymentServiceControllers.cvvCodeController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter Your CVV Number");
+      showAnimatedSnackBar(context, str.ps_snack_cvv);
     } else if (isPackageSelected == false) {
-      showAnimatedSnackBar(context, "Please Choose a package to continue");
+      showAnimatedSnackBar(context, str.ps_snack_package);
     } else {
       FocusManager.instance.primaryFocus?.unfocus();
       placeOrder(context);
@@ -712,12 +714,13 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   }
 
   redeem() async {
+    final str = AppLocalizations.of(context)!;
     setState(() {
       coupenLoading = true;
     });
     final code = PaymentServiceControllers.couponController.text;
     if (code.isEmpty) {
-      showAnimatedSnackBar(context, 'Please Enter a Coupen code to redeem');
+      showAnimatedSnackBar(context, str.ps_snack_coupen);
       setState(() {
         coupenLoading = false;
       });
@@ -796,7 +799,11 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
           final placeOrderData = PlaceOrder.fromJson(jsonResponse);
           provider.getPlaceOrderData(placeOrderData);
         } else {
-          log("Something Went Wrong1");
+          print(response.statusCode);
+          showAnimatedSnackBar(
+            context,
+            jsonResponse['errors'],
+          );
 
           setState(() {
             isPaymentLoading = false;

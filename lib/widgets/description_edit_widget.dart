@@ -80,7 +80,7 @@ class _DescriptionEditWidgetState extends State<DescriptionEditWidget> {
                         children: [
                           Text(
                             widget.controller.text.isEmpty
-                                ? 'Add  ${widget.title}'
+                                ? widget.title
                                 : widget.controller.text,
                             style: getRegularStyle(
                                 color: ColorManager.engineWorkerColor,

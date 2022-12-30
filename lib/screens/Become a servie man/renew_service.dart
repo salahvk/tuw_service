@@ -27,15 +27,15 @@ import 'package:social_media_services/widgets/terms_and_condition.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ChooseMoreServicePage extends StatefulWidget {
-  Services? services;
-  ChooseMoreServicePage({Key? key, this.services}) : super(key: key);
+class RenewServicePage extends StatefulWidget {
+  int? serviceId;
+  RenewServicePage({Key? key, this.serviceId}) : super(key: key);
 
   @override
-  State<ChooseMoreServicePage> createState() => _ChooseMoreServicePageState();
+  State<RenewServicePage> createState() => _RenewServicePageState();
 }
 
-class _ChooseMoreServicePageState extends State<ChooseMoreServicePage> {
+class _RenewServicePageState extends State<RenewServicePage> {
   Childservices? childSelectedValue;
   Services? selectedValue;
   Childservices? selectedChildServices;
@@ -46,7 +46,7 @@ class _ChooseMoreServicePageState extends State<ChooseMoreServicePage> {
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
-  List<Services> sGroup = [];
+  // List<Services> sGroup = [];
   List<Childservices> childGroup = [];
 
   @override
@@ -55,22 +55,22 @@ class _ChooseMoreServicePageState extends State<ChooseMoreServicePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    selectedValue = widget.services;
+    // selectedValue = widget.services;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final provider = Provider.of<DataProvider>(context, listen: false);
+      await getCustomerChild(context, widget.serviceId);
+      // int? n = provider.customerParentSer?.services?.length;
+      // int i = 0;
 
-      int? n = provider.customerParentSer?.services?.length;
-      int i = 0;
-
-      while (i < n!.toInt()) {
-        sGroup.add(provider.customerParentSer!.services![i]);
-        i++;
-      }
+      // while (i < n!.toInt()) {
+      //   sGroup.add(provider.customerParentSer!.services![i]);
+      //   i++;
+      // }
       // provider.customerChildSer!.documents!.clear();
       // print(sGroup[0]);
-      provider.serviceId = selectedValue?.id;
-      print(provider.serviceId);
-      await getChildData();
+      provider.serviceId = widget.serviceId;
+      // print(provider.serviceId);
+      // await getChildData();
       setState(() {
         isChild = provider.customerChildSer!.childservices!.isNotEmpty;
       });
@@ -217,64 +217,73 @@ class _ChooseMoreServicePageState extends State<ChooseMoreServicePage> {
                                 color: ColorManager.whiteColor,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton2(
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 35,
-                                    color: ColorManager.black,
-                                  ),
-                                  hint: Text(str.c_service_group_h,
-                                      style: getRegularStyle(
-                                          color: const Color.fromARGB(
-                                              255, 173, 173, 173),
-                                          fontSize: 15)),
-                                  items: sGroup
-                                      .map((item) => DropdownMenuItem<Services>(
-                                            value: item,
-                                            child: Text(item.service ?? '',
-                                                style: getRegularStyle(
-                                                    color: ColorManager.black,
-                                                    fontSize: 15)),
-                                          ))
-                                      .toList(),
-                                  // value: selectedValue,
-                                  customButton: selectedValue == null
-                                      ? null
-                                      : Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              10, 10, 10, 10),
-                                          child: Text(
-                                              selectedValue?.service ?? ''),
-                                        ),
-                                  onChanged: (value) async {
-                                    // provider.serviceId =
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: SizedBox(
+                                  height: size.height * .04,
+                                  // width: 100,
+                                  child: Center(
+                                      child: Text(
+                                          provider.customerChildSer?.message ??
+                                              '')),
+                                )
+                                // DropdownButtonHideUnderline(
+                                //   child: DropdownButton2(
+                                //     icon: const Icon(
+                                //       Icons.keyboard_arrow_down,
+                                //       size: 35,
+                                //       color: ColorManager.black,
+                                //     ),
+                                //     hint: Text(str.c_service_group_h,
+                                //         style: getRegularStyle(
+                                //             color: const Color.fromARGB(
+                                //                 255, 173, 173, 173),
+                                //             fontSize: 15)),
+                                //     items: sGroup
+                                //         .map((item) => DropdownMenuItem<Services>(
+                                //               value: item,
+                                //               child: Text(item.service ?? '',
+                                //                   style: getRegularStyle(
+                                //                       color: ColorManager.black,
+                                //                       fontSize: 15)),
+                                //             ))
+                                //         .toList(),
+                                //     // value: selectedValue,
+                                //     customButton: selectedValue == null
+                                //         ? null
+                                //         : Padding(
+                                //             padding: const EdgeInsets.fromLTRB(
+                                //                 10, 10, 10, 10),
+                                //             child: Text(
+                                //                 selectedValue?.service ?? ''),
+                                //           ),
+                                //     onChanged: (value) async {
+                                //       // provider.serviceId =
 
-                                    setState(() {
-                                      selectedValue = value as Services;
-                                      childGroup.clear();
-                                      childSelectedValue = null;
-                                    });
-                                    provider.serviceId = selectedValue?.id;
-                                    print(provider.serviceId);
-                                    await getChildData();
-                                    setState(() {
-                                      isChild = provider.customerChildSer!
-                                          .childservices!.isNotEmpty;
-                                    });
-                                  },
-                                  buttonHeight: 40,
-                                  // buttonWidth: 140,
-                                  itemHeight: 40,
-                                  buttonPadding:
-                                      const EdgeInsets.fromLTRB(12, 0, 8, 0),
-                                  // dropdownWidth: size.width,
-                                  itemPadding:
-                                      const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                //       setState(() {
+                                //         selectedValue = value as Services;
+                                //         childGroup.clear();
+                                //         childSelectedValue = null;
+                                //       });
+                                //       provider.serviceId = selectedValue?.id;
+                                //       print(provider.serviceId);
+                                //       await getChildData();
+                                //       setState(() {
+                                //         isChild = provider.customerChildSer!
+                                //             .childservices!.isNotEmpty;
+                                //       });
+                                //     },
+                                //     buttonHeight: 40,
+                                //     // buttonWidth: 140,
+                                //     itemHeight: 40,
+                                //     buttonPadding:
+                                //         const EdgeInsets.fromLTRB(12, 0, 8, 0),
+                                //     // dropdownWidth: size.width,
+                                //     itemPadding:
+                                //         const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                                //   ),
+                                // ),
                                 ),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -579,9 +588,11 @@ class _ChooseMoreServicePageState extends State<ChooseMoreServicePage> {
           .show(
         context,
       );
-    } else if (selectedValue == null) {
-      showAnimatedSnackBar(context, str.snack_choose_group);
-    } else if (provider.customerChildSer!.documents!.isNotEmpty &&
+    }
+    //  else if (selectedValue == null) {
+    //   showAnimatedSnackBar(context, str.snack_choose_group);
+    // }
+    else if (provider.customerChildSer!.documents!.isNotEmpty &&
         fileName == null) {
       showAnimatedSnackBar(context, str.snack_upload);
     } else {

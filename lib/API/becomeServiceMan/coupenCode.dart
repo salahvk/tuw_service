@@ -13,10 +13,12 @@ import 'package:social_media_services/model/getCoupenModel.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<bool> getCoupenCodeList(BuildContext context) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
+  final str = AppLocalizations.of(context)!;
 
   try {
     var response = await http.get(Uri.parse(customerCoupenList),
@@ -28,7 +30,7 @@ Future<bool> getCoupenCodeList(BuildContext context) async {
       final coupenCodeData = GetCoupenModel.fromJson(jsonResponse);
       provider.coupenCodeData(coupenCodeData);
       if (coupenCodeData.coupons!.isEmpty) {
-        showAnimatedSnackBar(context, 'No Coupen code available');
+        showAnimatedSnackBar(context, str.snack_coupen_av);
         return false;
       }
     } else {}

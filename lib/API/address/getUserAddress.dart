@@ -75,8 +75,6 @@ showUserAddress(BuildContext context, String id) async {
       provider.getUserAddressShowData(userAddressData);
       print(jsonResponse);
     } else {
-      // print(response.statusCode);
-      // print(response.body);
       print('Something went wrong');
     }
   } on Exception catch (_) {

@@ -12,6 +12,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShareLocation extends StatefulWidget {
   LatLng? currentLocator;
@@ -50,6 +51,7 @@ class _ShareLocationState extends State<ShareLocation> {
         Provider.of<ServicerProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     final userDetails = provider.viewProfileModel?.userdetails;
+    final str = AppLocalizations.of(context)!;
     // currentLocator = LatLng(
     //     double.parse(servicerProvider.servicerLatitude ??
     //         userDetails?.latitude ??
@@ -60,40 +62,6 @@ class _ShareLocationState extends State<ShareLocation> {
 
     return SafeArea(
       child: Scaffold(
-        // bottomNavigationBar: isLocationChanged
-        //     ? Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: ElevatedButton(
-        //             onPressed: () async {
-        //               setState(() {
-        //                 isLoading = true;
-        //               });
-        //               servicerProvider.servicerLatitude =
-        //                   _lastTap!.latitude.toString();
-        //               servicerProvider.servicerLongitude =
-        //                   _lastTap!.longitude.toString();
-        //               // await updateLocationFunction(
-        //               //     context,
-        //               //     [_lastTap?.latitude, _lastTap?.longitude],
-        //               //     locality ?? '');
-        //               // await viewProfile(context);
-        //               setState(() {
-        //                 isLoading = false;
-        //               });
-        //               Navigator.pop(context);
-        //               Navigator.pushReplacement(context,
-        //                   MaterialPageRoute(builder: (ctx) {
-        //                 return ServicerPage(
-        //                   id: servicerProvider.serviceId,
-        //                   isAdvancedSearchEnabled: true,
-        //                 );
-        //               }));
-        //             },
-        //             child: isLoading
-        //                 ? const CircularProgressIndicator()
-        //                 : const Text('Search Servicer on this Location')),
-        //       )
-        //     : null,
         body: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
@@ -119,8 +87,8 @@ class _ShareLocationState extends State<ShareLocation> {
                 Marker(
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
-                  infoWindow: const InfoWindow(
-                    title: 'Home locator',
+                  infoWindow: InfoWindow(
+                    title: str.a_home_locator,
                     snippet: '*',
                   ),
                 ),
@@ -146,7 +114,7 @@ class _ShareLocationState extends State<ShareLocation> {
                       controller:
                           GoogleMapControllers.googleMapSearchController,
                       decoration: InputDecoration(
-                          hintText: 'Search Google Maps',
+                          hintText: str.gm_search,
                           suffixIcon: SizedBox(
                             width: size.width * .2,
                             child: Row(

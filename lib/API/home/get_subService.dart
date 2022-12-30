@@ -15,6 +15,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/sub_service.dart';
 import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 getSubService(BuildContext context, id) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
@@ -50,7 +51,7 @@ getSubService(BuildContext context, id) async {
 selectServiceType(context, id) async {
   print(id);
   final provider = Provider.of<DataProvider>(context, listen: false);
-  // print(provider.viewProfileModel?.userdetails?.latitude);
+  final str = AppLocalizations.of(context)!;
   if (provider.subServicesModel?.type == 'service') {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
       return const SubServicesPage();
@@ -61,7 +62,7 @@ selectServiceType(context, id) async {
     );
     Navigator.pop(context);
 
-    AnimatedSnackBar.material("Getting Current Location...",
+    AnimatedSnackBar.material(str.snack_get_location,
             type: AnimatedSnackBarType.info,
             borderRadius: BorderRadius.circular(6),
             duration: const Duration(seconds: 1))
@@ -70,7 +71,7 @@ selectServiceType(context, id) async {
     );
     await Future.delayed(const Duration(seconds: 2));
 
-    AnimatedSnackBar.material("Done",
+    AnimatedSnackBar.material(str.snack_done,
             type: AnimatedSnackBarType.success,
             borderRadius: BorderRadius.circular(6),
             duration: const Duration(seconds: 3))

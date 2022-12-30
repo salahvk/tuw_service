@@ -19,6 +19,7 @@ class ColorManager {
   static const blue = Color(0xff00A3FF);
   static const blueLight = Color.fromARGB(255, 61, 220, 212);
   static const selectedGreen = Color.fromARGB(255, 5, 187, 99);
+  static const chatGreen = Color(0xffD8FCD3);
   static const darkGreen = Color(0xff091c23);
   static const indicatorBorGreen = Color(0xff204428);
 

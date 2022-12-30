@@ -573,10 +573,10 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
         context,
       );
     } else if (selectedValue == null) {
-      showAnimatedSnackBar(context, 'Please Choose a Service Group');
+      showAnimatedSnackBar(context, str.snack_choose_group);
     } else if (provider.customerChildSer!.documents!.isNotEmpty &&
         fileName == null) {
-      showAnimatedSnackBar(context, 'Please Upload a File');
+      showAnimatedSnackBar(context, str.snack_upload);
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (ctx) {
         return const PaymentServicePage();
