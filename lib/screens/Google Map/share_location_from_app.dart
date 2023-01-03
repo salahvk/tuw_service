@@ -80,26 +80,12 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
                       });
                       final lat = _lastTap!.latitude.toString();
                       final lon = _lastTap!.longitude.toString();
-                      print(lat);
-                      print(lon);
                       await sendLocation(context, "$lat,$lon");
 
-                      // await updateLocationFunction(
-                      //     context,
-                      //     [_lastTap?.latitude, _lastTap?.longitude],
-                      //     locality ?? '');
-                      // await viewProfile(context);
                       setState(() {
                         isLoading = false;
                       });
                       Navigator.pop(context);
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (ctx) {
-                      //   return ServicerPage(
-                      //     id: servicerProvider.serviceId,
-                      //     isAdvancedSearchEnabled: true,
-                      //   );
-                      // }));
                     },
                     child: isLoading
                         ? const CircularProgressIndicator()

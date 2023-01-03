@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -126,44 +125,62 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                     )
                                   : ClipRRect(
                                       borderRadius: BorderRadius.circular(5),
-                                      child: SizedBox(
-                                        height: 140,
-                                        width: size.width * .6,
-                                        child: GoogleMap(
-                                          // liteModeEnabled: true,
-                                          onTap: (argyment) {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (ctx) {
-                                              return ShareLocation(
-                                                currentLocator: currentLocator,
-                                              );
-                                            }));
-                                          },
-                                          // myLocationEnabled: true,
-                                          zoomControlsEnabled: false,
-                                          // zoomGesturesEnabled: false,
-                                          onMapCreated: (controller) {
-                                            setState(() {
-                                              mapController = controller;
-                                            });
-                                          },
-                                          initialCameraPosition: CameraPosition(
-                                            target: currentLocator ??
-                                                const LatLng(0, 0),
-                                            zoom: 12.0,
-                                          ),
-                                          markers: <Marker>{
-                                            Marker(
-                                              markerId: const MarkerId(''),
-                                              position: currentLocator ??
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (ctx) {
+                                            return ShareLocation(
+                                              currentLocator: currentLocator,
+                                            );
+                                          }));
+                                        },
+                                        child: SizedBox(
+                                          height: 140,
+                                          width: size.width * .6,
+                                          child:
+                                              // CachedNetworkImage(
+                                              //     height: 20,
+                                              //     width: 20,
+                                              //     imageUrl:
+                                              //         "https://www.pngall.com/wp-content/uploads/5/Google-Maps-Location-Mark.png")
+                                              GoogleMap(
+                                            liteModeEnabled: true,
+                                            onTap: (argyment) {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (ctx) {
+                                                return ShareLocation(
+                                                  currentLocator:
+                                                      currentLocator,
+                                                );
+                                              }));
+                                            },
+                                            // myLocationEnabled: true,
+                                            zoomControlsEnabled: false,
+                                            // zoomGesturesEnabled: false,
+                                            onMapCreated: (controller) {
+                                              setState(() {
+                                                mapController = controller;
+                                              });
+                                            },
+                                            initialCameraPosition:
+                                                CameraPosition(
+                                              target: currentLocator ??
                                                   const LatLng(0, 0),
-                                              // infoWindow: const InfoWindow(
-                                              //   title: 'Home locator',
-                                              //   snippet: '*',
-                                              // ),
+                                              zoom: 12.0,
                                             ),
-                                          },
+                                            markers: <Marker>{
+                                              Marker(
+                                                markerId: const MarkerId(''),
+                                                position: currentLocator ??
+                                                    const LatLng(0, 0),
+                                                // infoWindow: const InfoWindow(
+                                                //   title: 'Home locator',
+                                                //   snippet: '*',
+                                                // ),
+                                              ),
+                                            },
+                                          ),
                                         ),
                                       ),
                                     )
@@ -284,27 +301,40 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   }
 
   initfunction() {
-    log("Chat bubble init function");
-    print(latLong[0]);
     final provider = Provider.of<DataProvider>(context, listen: false);
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (mounted) {
-        if (widget.chatMessage?.type == 'location') {
-          final locationMessage = '${widget.chatMessage?.message}';
-          latLong = locationMessage.split(",");
-          currentLocator =
-              LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-          mapController?.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: currentLocator!, zoom: 12)));
-        }
+    if (mounted) {
+      if (widget.chatMessage?.type == 'location') {
+        final locationMessage = '${widget.chatMessage?.message}';
+        latLong = locationMessage.split(",");
+
+        currentLocator =
+            LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: currentLocator!, zoom: 12)));
       }
-    });
+      setState(() {});
+    }
+
     // log(widget.location);
     if (widget.chatMessage?.type == 'location') {
-      final locationMessage = '${widget.chatMessage?.message}';
-      latLong = locationMessage.split(",");
-      currentLocator =
-          LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+      Timer.periodic(const Duration(seconds: 2), (timer) {
+        if (mounted) {
+          if (widget.chatMessage?.type == 'location') {
+            final locationMessage = '${widget.chatMessage?.message}';
+            latLong = locationMessage.split(",");
+
+            currentLocator =
+                LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+            mapController?.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(target: currentLocator!, zoom: 12)));
+          }
+          setState(() {});
+        }
+      });
+      // final locationMessage = '${widget.chatMessage?.message}';
+      // latLong = locationMessage.split(",");
+      // currentLocator =
+      //     LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
     }
     if (widget.chatMessage?.type == 'document') {
       isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;

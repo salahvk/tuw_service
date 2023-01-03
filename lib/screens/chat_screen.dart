@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -62,8 +63,9 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isVibrantFeatureAvailable = false;
 
   List<ChatData>? chatMessages = [];
-//
-  // late Timer timer;
+
+  late Timer timer;
+  late Timer Ltimer;
   String lang = '';
   VideoPlayerController? _controller;
   VideoPlayerController? _toBeDisposed;
@@ -100,17 +102,19 @@ class _ChatScreenState extends State<ChatScreen> {
       'lang',
     );
     chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
-    //     if (mounted) {
-    //       final servicerProvider =
-    //           Provider.of<ServicerProvider>(context, listen: false);
+    provider.isSendingSuccessFull = false;
+    provider.isLocationSending = false;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+        if (mounted) {
+          final servicerProvider =
+              Provider.of<ServicerProvider>(context, listen: false);
 
-    //       await viewChatMessages(context, servicerProvider.servicerId);
-    //       chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
-    //     }
-    //   });
-    // });
+          await viewChatMessages(context, servicerProvider.servicerId);
+          chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
+        }
+      });
+    });
   }
 
   Future initRecorder() async {
@@ -132,7 +136,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() async {
     super.dispose();
     recorder.stop();
-    // timer.cancel();
+    timer.cancel();
+    // Ltimer.cancel();
     await _stopWatchTimer.dispose();
   }
 
@@ -244,8 +249,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ismenuVisible = false;
                                 });
                                 await selectImage();
-                                await viewChatMessages(
-                                    context, servicerProvider.servicerId);
+                                // await viewChatMessages(
+                                //     context, servicerProvider.servicerId);
                                 await Future.delayed(
                                     const Duration(seconds: 2));
                                 setState(() {});
@@ -317,24 +322,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           children: [
                             InkWell(
                               onTap: () async {
-                                setState(() {
-                                  isMapmenuVisible = false;
-                                  ismenuVisible = false;
-                                });
-                                setState(() {
-                                  isLocationFetching = true;
-                                });
-                                await sendCurrentLocation(context);
-
-                                // await Future.delayed(
-                                //     const Duration(seconds: 13));
-                                setState(() {
-                                  isLocationFetching = false;
-                                });
-                                // Navigator.pushReplacement(context,
-                                //     MaterialPageRoute(builder: (ctx) {
-                                //   return ChatScreen();
-                                // }));
+                                sendingCurrentLocationFunction();
                               },
                               child: ChatAddTile(
                                   svg: true,
@@ -345,14 +333,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                setState(() {
-                                  isMapmenuVisible = false;
-                                  ismenuVisible = false;
-                                });
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (ctx) {
-                                  return const SelectLocationFromApp();
-                                }));
+                                navToSelectLocation();
                               },
                               child: ChatAddTile(
                                   svg: true,
@@ -548,6 +529,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             onTap: () {
                               Vibration.vibrate(duration: 200);
                               showSnackBar(str.cp_long_press, context);
+                              print(provider.isLocationSending);
+                              print(provider.isSendingSuccessFull);
                             },
                             child: SizedBox(
                               width: w * .1,
@@ -806,9 +789,12 @@ class _ChatScreenState extends State<ChatScreen> {
       );
       print(pickedFile);
       final list = [pickedFile!];
+
       await uploadImages(list);
       await viewChatMessages(context, servicerProvider.servicerId);
-      await Future.delayed(const Duration(seconds: 2));
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
+      // await Future.delayed(const Duration(seconds: 2));
       setState(() {});
     } catch (e) {
       setState(() {
@@ -955,6 +941,23 @@ class _ChatScreenState extends State<ChatScreen> {
     final length = imageFile.length;
     var uri =
         Uri.parse('$api/chat-store?receiver_id=$receiverId&type=image&page=1');
+    final datetime = DateTime.now();
+
+    ChatData waitingMessage = ChatData(
+        message: msgController.text,
+        type: 'image',
+        status: 'waiting',
+        createdAt: '2022-12-23T05:03:41.000000Z',
+        localTime: datetime.toString(),
+        // sendUserId: 42,
+        // firstname: 'sergio',
+        // onlineStatus: 'busy',
+        // chatMedia: '/assets/uploads/chatmedia/',
+        // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
+        addressId: null);
+    chatMessages?.insert(0, waitingMessage);
+    setState(() {});
+    // return;
     var request = http.MultipartRequest(
       "POST",
       uri,
@@ -1005,6 +1008,18 @@ class _ChatScreenState extends State<ChatScreen> {
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final str = AppLocalizations.of(context)!;
     final length = imageFile.length;
+    final datetime = DateTime.now();
+    log("audio senting");
+    ChatData waitingMessage = ChatData(
+        message: msgController.text,
+        type: 'audio',
+        status: 'waiting',
+        createdAt: '2022-12-23T05:03:41.000000Z',
+        localTime: datetime.toString(),
+        addressId: null);
+    chatMessages?.insert(0, waitingMessage);
+    setState(() {});
+    // return;
     try {
       var uri = Uri.parse(
           '$api/chat-store?receiver_id=$receiverId&type=audio&page=1');
@@ -1045,6 +1060,7 @@ class _ChatScreenState extends State<ChatScreen> {
         return;
       }
       await viewChatMessages(context, servicerProvider.servicerId);
+      chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
       Future.delayed(const Duration(seconds: 2));
       setState(() {});
     } catch (e) {
@@ -1059,6 +1075,22 @@ class _ChatScreenState extends State<ChatScreen> {
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final length = imageFile.length;
     final str = AppLocalizations.of(context)!;
+    final datetime = DateTime.now();
+
+    ChatData waitingMessage = ChatData(
+        message: msgController.text,
+        type: 'image',
+        status: 'waiting',
+        createdAt: '2022-12-23T05:03:41.000000Z',
+        localTime: datetime.toString(),
+        // sendUserId: 42,
+        // firstname: 'sergio',
+        // onlineStatus: 'busy',
+        // chatMedia: '/assets/uploads/chatmedia/',
+        // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
+        addressId: null);
+    chatMessages?.insert(0, waitingMessage);
+    setState(() {});
     try {
       var uri = Uri.parse(
           '$api/chat-store?receiver_id=$receiverId&type=document&page=1');
@@ -1099,10 +1131,101 @@ class _ChatScreenState extends State<ChatScreen> {
         return;
       }
       await viewChatMessages(context, servicerProvider.servicerId);
+      chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
       Future.delayed(const Duration(seconds: 2));
       setState(() {});
     } catch (e) {
       showAnimatedSnackBar(context, str.snack_message_sent);
     }
+  }
+
+  sendingCurrentLocationFunction() async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
+    setState(() {
+      isMapmenuVisible = false;
+      ismenuVisible = false;
+    });
+    // setState(() {
+    //   isLocationFetching = true;
+    // });
+    final datetime = DateTime.now();
+
+    ChatData waitingMessage = ChatData(
+        message: msgController.text,
+        type: 'location',
+        status: 'waiting',
+        createdAt: '2022-12-23T05:03:41.000000Z',
+        localTime: datetime.toString(),
+        // sendUserId: 42,
+        // firstname: 'sergio',
+        // onlineStatus: 'busy',
+        // chatMedia: '/assets/uploads/chatmedia/',
+        // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
+        addressId: null);
+    chatMessages?.insert(0, waitingMessage);
+    setState(() {});
+
+    // return;
+    await sendCurrentLocation(context);
+    await viewChatMessages(context, servicerProvider.servicerId);
+    chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
+    provider.isLocationSending = false;
+    provider.isSendingSuccessFull = false;
+
+    // setState(() {
+    //   isLocationFetching = false;
+    // });
+  }
+
+  navToSelectLocation() async {
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
+    setState(() {
+      isMapmenuVisible = false;
+      ismenuVisible = false;
+    });
+
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+      return const SelectLocationFromApp();
+    }));
+    Ltimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      if (provider.isLocationSending) {
+        log("Loading started");
+        FocusManager.instance.primaryFocus?.unfocus();
+        final datetime = DateTime.now();
+
+        ChatData waitingMessage = ChatData(
+            message: msgController.text,
+            type: 'location',
+            status: 'waiting',
+            createdAt: '2022-12-23T05:03:41.000000Z',
+            localTime: datetime.toString(),
+            // sendUserId: 42,
+            // firstname: 'sergio',
+            // onlineStatus: 'busy',
+            // chatMedia: '/assets/uploads/chatmedia/',
+            // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
+            addressId: null);
+        chatMessages?.insert(0, waitingMessage);
+        setState(() {});
+
+        if (provider.isSendingSuccessFull) {
+          log("Location sended successfully get");
+          provider.isLocationSending = false;
+          provider.isSendingSuccessFull = false;
+          print(provider.isLocationSending);
+          await viewChatMessages(context, servicerProvider.servicerId);
+          chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
+          Ltimer.cancel();
+          setState(() {});
+        }
+
+        // return;
+
+      }
+    });
   }
 }

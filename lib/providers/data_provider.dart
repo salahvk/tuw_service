@@ -191,7 +191,8 @@ class DataProvider with ChangeNotifier {
   bool isFourWheelerSelected = false;
 
   bool isTwoSelected = false;
-  // bool isLocationSending = false;
+  bool isLocationSending = false;
+  bool isSendingSuccessFull = false;
 
   String? servicerSelectedCountry;
 

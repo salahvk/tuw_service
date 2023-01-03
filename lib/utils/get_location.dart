@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/updateLocation.dart';
 import 'package:social_media_services/API/viewProfile.dart';
-import 'package:social_media_services/API/view_chat_messages.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -68,10 +67,11 @@ sendCurrentLocation(
     // final location = await getPlaceAddress(latLon);
     final latlonString = "${latLon[0]},${latLon[1]}";
     print(latlonString);
-    sendLocation(
+    await sendLocation(
       context,
       latlonString,
     );
+    log("Location send");
   }
   // searchController.text.isEmpty ? getCurrentLocation() : null;
 }
@@ -86,18 +86,20 @@ sendLocation(context, String latLon) async {
       '$api/chat-store?receiver_id=$receiverId&type=location&message=$latLon&page=1';
 
   print(url);
-  if (apiToken == null) return;
+
+  provider.isLocationSending = true;
+  print(provider.isLocationSending);
+  // return;
   try {
     var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
+      log("Location sended successfully");
+      provider.isSendingSuccessFull = true;
       log(response.body);
       final servicerProvider =
           Provider.of<ServicerProvider>(context, listen: false);
-
-      log("Location send");
-      viewChatMessages(context, servicerProvider.servicerId);
     } else {
       showAnimatedSnackBar(context, str.snack_message_sent);
     }
