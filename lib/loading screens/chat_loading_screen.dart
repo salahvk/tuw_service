@@ -13,13 +13,11 @@ import 'package:social_media_services/API/view_chat_messages.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/custom/links.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/chat_screen.dart';
 import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
-import 'package:social_media_services/widgets/chat/chat_bubble.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -143,52 +141,34 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
               child: Column(
-                children: [
-                  Shimmer.fromColors(
-                    baseColor: ColorManager.whiteColor,
-                    highlightColor: Colors.green,
-                    child: CustomChatBubble(
-                      senderId: '',
-                      addressCard: '',
-                      isSendByme: true,
-                      seen: true,
-                      text: 'How can help you',
-                      image: "",
-                      time: "2:05 PM",
-                      audio: '',
-                      location: '',
-                    ),
-                  ),
-                  Shimmer.fromColors(
-                    baseColor: ColorManager.whiteColor,
-                    highlightColor: Colors.green,
-                    child: CustomChatBubble(
-                      senderId: '',
-                      addressCard: '',
-                      isSendByme: false,
-                      seen: false,
-                      time: "3:00 PM",
-                      image: switzeland,
-                      text: 'Hi friend',
-                      audio: '',
-                      location: '',
-                    ),
-                  ),
-                  Shimmer.fromColors(
-                    baseColor: ColorManager.whiteColor,
-                    highlightColor: Colors.green,
-                    child: CustomChatBubble(
-                      senderId: '',
-                      addressCard: '',
-                      isSendByme: true,
-                      seen: false,
-                      time: "5:00 PM",
-                      image: '',
-                      text: 'Where are you now',
-                      audio: '',
-                      location: '',
-                    ),
-                  ),
+                children: const [
+                  // Shimmer.fromColors(
+                  //   baseColor: ColorManager.whiteColor,
+                  //   highlightColor: Colors.green,
+                  //   child: Container(
+                  //     width: size.width * .5,
+                  //     height: 50,
+                  //     color: ColorManager.whiteColor,
+                  //   ),
+                  // ),
+                  // Shimmer.fromColors(
+                  //   baseColor: ColorManager.whiteColor,
+                  //   highlightColor: Colors.green,
+                  //   child: Container(
+                  //     width: size.width * .5,
+                  //     height: 50,
+                  //     color: ColorManager.whiteColor,
+                  //   ),
+                  // ),
+                  // Shimmer.fromColors(
+                  //   baseColor: ColorManager.whiteColor,
+                  //   highlightColor: Colors.green,
+                  //   child: Container(
+                  //     width: size.width * .5,
+                  //     height: 50,
+                  //     color: ColorManager.whiteColor,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

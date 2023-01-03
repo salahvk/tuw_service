@@ -9,7 +9,7 @@ import 'package:social_media_services/model/chat_list.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 
 class ChatListTile extends StatefulWidget {
-  final Data? profileData;
+  final MessageData? profileData;
   const ChatListTile({
     super.key,
     required this.profileData,

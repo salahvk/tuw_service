@@ -258,6 +258,15 @@
     "tax_total":"Tax total",
     "fetch_loc":"Location Fetching...",
     "paid":"paid",
-    "omr":"OMR"
+    "omr":"OMR",
+
+    "re_reason":"Enter A reason to proceed",
+    "re_reason2":"Reason",
+    "re_comment":"Enter A Comment to proceed",
+    "re_comment2":"Comment",
+    "re_report_user":"Report User",
+    "re_bother":"is this person bothering you?",
+    "re_tell_us":"Tell us what they did.",
+    "re_report_success":"Reported Customer Successfully"
 
 }

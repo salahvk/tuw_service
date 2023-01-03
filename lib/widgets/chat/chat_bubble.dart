@@ -3,134 +3,68 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/network_image_url.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:social_media_services/loading%20screens/address_card_loading.dart';
+import 'package:social_media_services/loading%20screens/loading_voice_widget.dart';
 import 'package:social_media_services/model/view_chat_message_model.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Google%20Map/share_location.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/voice/voice_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomChatBubble extends StatefulWidget {
-  final bool isSendByme;
-  final bool seen;
-  String? text;
-  String audio;
-  final String time;
-  String image;
-  String location;
-  String addressCard;
-  String senderId;
-  Data? chatMessage;
-  CustomChatBubble(
-      {Key? key,
-      this.text,
-      required this.audio,
-      required this.image,
-      required this.isSendByme,
-      required this.time,
-      required this.seen,
-      required this.addressCard,
-      required this.senderId,
-      required this.location,
-      this.chatMessage})
-      : super(key: key);
+  ChatData? chatMessage;
+  CustomChatBubble({Key? key, this.chatMessage}) : super(key: key);
 
   @override
   State<CustomChatBubble> createState() => _CustomChatBubbleState();
 }
 
 class _CustomChatBubbleState extends State<CustomChatBubble> {
-  final _player = AudioPlayer();
   List latLong = [];
   LatLng? currentLocator;
   GoogleMapController? mapController;
+
+  bool isPdf = false;
+  bool isSendByme = false;
+  bool isSeen = false;
+  String? text;
+  String? audio;
+
   @override
   void initState() {
     super.initState();
-    // _init();
-    // log("Chat Bubble initiated");
-    // log("hi");
-    // Timer.periodic(const Duration(seconds: 30), (timer) {
-    //   if (mounted) {
-    //     _init();
-    //   }
-    // });
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (mounted) {
-        if (widget.location.isNotEmpty) {
-          latLong = widget.location.split(",");
-          currentLocator =
-              LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-          mapController?.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: currentLocator!, zoom: 12)));
-        }
-      }
-    });
-    log(widget.location);
-    if (widget.location.isNotEmpty) {
-      latLong = widget.location.split(",");
-      currentLocator =
-          LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-    }
-    // print(widget.location);
-
-    // print(latLong);
+    initfunction();
   }
-
-  // Future<void> _init() async {
-  //   final session = await AudioSession.instance;
-  //   await session.configure(const AudioSessionConfiguration.speech());
-
-  //   _player.playbackEventStream.listen((event) {},
-  //       onError: (Object e, StackTrace stackTrace) {
-  //     print('A stream error occurred: $e');
-  //   });
-  //   // Try to load audio from a source and catch any errors.
-  //   try {
-  //     // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-  //     await _player.setAudioSource(
-  //         AudioSource.uri(Uri.parse("$endPoint${widget.audio}")));
-  //   } catch (e) {
-  //     print("Error loading audio source: $e");
-  //   }
-  // }
-
-  // Stream<PositionData> get _positionDataStream =>
-  //     Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-  //         _player.positionStream,
-  //         _player.bufferedPositionStream,
-  //         _player.durationStream,
-  //         (position, bufferedPosition, duration) => PositionData(
-  //             position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    var dateTime = DateFormat("HH:mm").parse(widget.time, true);
+    var dateTime = DateFormat("HH:mm")
+        .parse(widget.chatMessage!.createdAt!.substring(11, 16), true);
     var hour = dateTime.toLocal().hour;
     var minute = dateTime.toLocal().minute;
-    String time = "$hour:$minute";
-
-    // print(hour);
-    // print(DateTime.now());
+    String time =
+        widget.chatMessage?.localTime?.substring(11, 16) ?? "$hour:$minute";
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: Row(
         mainAxisAlignment:
-            widget.isSendByme ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isSendByme ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           Container(
             decoration: BoxDecoration(
-              color: widget.isSendByme
-                  ? ColorManager.chatGreen
-                  : ColorManager.whiteColor,
+              color:
+                  isSendByme ? ColorManager.chatGreen : ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
@@ -145,106 +79,95 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  widget.image.isNotEmpty
-                      ? InkWell(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => PopupImage(
-                                      chatImage: widget.image,
-                                      image: '',
-                                    ),
-                                barrierDismissible: true);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
-                            child: SizedBox(
-                              width: size.width * .6,
-                              height: 240,
-                              child: CachedNetworkImage(
-                                imageUrl: widget.image,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        )
-                      : widget.audio.isNotEmpty
-                          // ? SizedBox(
-                          //     // width: size.width,
-                          //     height: 50,
-                          //     // color: ColorManager.primary,
-                          //     child: Row(
-                          //       children: [
-                          //         ControlButtons(_player),
-                          //         StreamBuilder<PositionData>(
-                          //           stream: _positionDataStream,
-                          //           builder: (context, snapshot) {
-                          //             final positionData = snapshot.data;
-                          //             return SeekBar(
-                          //               duration: positionData?.duration ??
-                          //                   Duration.zero,
-                          //               position: positionData?.position ??
-                          //                   Duration.zero,
-                          //               bufferedPosition:
-                          //                   positionData?.bufferedPosition ??
-                          //                       Duration.zero,
-                          //               onChangeEnd: _player.seek,
-                          //             );
-                          //           },
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   )
-                          ? VoiceWidget(
-                              path: "$endPoint${widget.audio}",
-                              seen: widget.seen,
-                              time: time,
-                              isSendByme: widget.isSendByme,
-                            )
-                          : widget.location.isNotEmpty
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: SizedBox(
-                                    height: 140,
-                                    width: size.width * .6,
-                                    child: GoogleMap(
-                                      liteModeEnabled: true,
-                                      onTap: (argyment) {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (ctx) {
-                                          return ShareLocation(
-                                            currentLocator: currentLocator,
-                                          );
-                                        }));
-                                      },
-                                      // myLocationEnabled: true,
-                                      zoomControlsEnabled: false,
-                                      // zoomGesturesEnabled: false,
-                                      onMapCreated: (controller) {
-                                        setState(() {
-                                          mapController = controller;
-                                        });
-                                      },
-                                      initialCameraPosition: CameraPosition(
-                                        target: currentLocator ??
-                                            const LatLng(0, 0),
-                                        zoom: 12.0,
-                                      ),
-                                      markers: <Marker>{
-                                        Marker(
-                                          markerId: const MarkerId(''),
-                                          position: currentLocator ??
-                                              const LatLng(0, 0),
-                                          // infoWindow: const InfoWindow(
-                                          //   title: 'Home locator',
-                                          //   snippet: '*',
-                                          // ),
+                  widget.chatMessage?.type == 'image'
+                      ? widget.chatMessage?.status == 'waiting'
+                          ? ImageLoadingWidget(size: size)
+                          : InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => PopupImage(
+                                          chatImage:
+                                              "$endPoint${widget.chatMessage?.chatMedia}",
+                                          image: '',
                                         ),
-                                      },
-                                    ),
+                                    barrierDismissible: true);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
+                                child: SizedBox(
+                                  width: size.width * .6,
+                                  height: 240,
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "$endPoint${widget.chatMessage?.chatMedia}",
+                                    fit: BoxFit.cover,
                                   ),
+                                ),
+                              ),
+                            )
+                      : widget.chatMessage?.type == 'audio'
+                          ? widget.chatMessage?.status == 'waiting'
+                              ? const LoadingVoice()
+                              : VoiceWidget(
+                                  path:
+                                      "$endPoint${widget.chatMessage?.chatMedia}",
+                                  seen: isSeen,
+                                  time: time,
+                                  isSendByme: isSendByme,
                                 )
-                              : widget.addressCard.isNotEmpty
+                          : widget.chatMessage?.type == 'location'
+                              ? widget.chatMessage?.status == 'waiting'
+                                  ? SizedBox(
+                                      height: 140,
+                                      width: size.width * .6,
+                                      child: const Center(
+                                          child: CircularProgressIndicator()),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(5),
+                                      child: SizedBox(
+                                        height: 140,
+                                        width: size.width * .6,
+                                        child: GoogleMap(
+                                          // liteModeEnabled: true,
+                                          onTap: (argyment) {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (ctx) {
+                                              return ShareLocation(
+                                                currentLocator: currentLocator,
+                                              );
+                                            }));
+                                          },
+                                          // myLocationEnabled: true,
+                                          zoomControlsEnabled: false,
+                                          // zoomGesturesEnabled: false,
+                                          onMapCreated: (controller) {
+                                            setState(() {
+                                              mapController = controller;
+                                            });
+                                          },
+                                          initialCameraPosition: CameraPosition(
+                                            target: currentLocator ??
+                                                const LatLng(0, 0),
+                                            zoom: 12.0,
+                                          ),
+                                          markers: <Marker>{
+                                            Marker(
+                                              markerId: const MarkerId(''),
+                                              position: currentLocator ??
+                                                  const LatLng(0, 0),
+                                              // infoWindow: const InfoWindow(
+                                              //   title: 'Home locator',
+                                              //   snippet: '*',
+                                              // ),
+                                            ),
+                                          },
+                                        ),
+                                      ),
+                                    )
+                              : widget.chatMessage?.type == 'address_card'
                                   ? InkWell(
                                       onTap: () {
                                         final addressId = widget
@@ -253,16 +176,17 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
                                           return UserAddressCardLoading(
-                                            id: widget.senderId,
+                                            id: widget.chatMessage!.senderId
+                                                .toString(),
                                             addressId: addressId,
                                           );
                                         }));
                                         print(addressId);
                                       },
                                       child: Text(
-                                        widget.text ?? '',
+                                        widget.chatMessage?.message ?? '',
                                         style: getRegularStyle(
-                                            color: widget.isSendByme
+                                            color: isSendByme
                                                 ? ColorManager.primary3
                                                 : ColorManager.whiteColor,
                                             fontSize: 14),
@@ -279,28 +203,33 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                                     .externalApplication);
                                           },
                                           child: Container(
-                                            height: 60,
-                                            width: size.width * .6,
+                                            height: size.height * .2,
+                                            width: size.width * .3,
                                             decoration: BoxDecoration(
-                                                color: widget.isSendByme
-                                                    ? ColorManager.primary
+                                                color: isSendByme
+                                                    ? ColorManager.chatGreen
                                                     : ColorManager.background,
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Center(
-                                              child: Row(
+                                              child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  const Icon(Icons.file_copy),
-                                                  const SizedBox(
-                                                    width: 3,
+                                                  CachedNetworkImage(
+                                                    imageUrl: isPdf
+                                                        ? pdfImage
+                                                        : documentImage,
+                                                    fit: BoxFit.cover,
+                                                    height: size.height * .18,
                                                   ),
+                                                  const Spacer(),
                                                   Text(
                                                     "${widget.chatMessage?.uploads}",
                                                     style: getRegularStyle(
                                                         color:
-                                                            ColorManager.black),
+                                                            ColorManager.black,
+                                                        fontSize: 8),
                                                   ),
                                                 ],
                                               ),
@@ -308,12 +237,12 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                           ),
                                         )
                                       : Text(
-                                          widget.text ?? '',
+                                          widget.chatMessage?.message ?? '',
                                           style: getRegularStyle(
                                               color: ColorManager.black,
                                               fontSize: 14),
                                         ),
-                  widget.audio.isEmpty
+                  widget.chatMessage?.type != 'audio'
                       ? Padding(
                           padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                           child: Row(
@@ -327,15 +256,20 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                               const SizedBox(
                                 width: 2,
                               ),
-                              widget.isSendByme
-                                  ? Icon(
-                                      Icons.done_all,
-                                      color: widget.seen
-                                          ? Colors.blue
-                                          : ColorManager.black,
-                                      size: 12,
+                              widget.chatMessage?.status == 'waiting'
+                                  ? const Icon(
+                                      FontAwesomeIcons.clock,
+                                      size: 10,
                                     )
-                                  : Container()
+                                  : isSendByme
+                                      ? Icon(
+                                          Icons.done_all,
+                                          color: isSeen
+                                              ? Colors.blue
+                                              : ColorManager.black,
+                                          size: 12,
+                                        )
+                                      : Container()
                             ],
                           ),
                         )
@@ -348,99 +282,62 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
       ),
     );
   }
+
+  initfunction() {
+    log("Chat bubble init function");
+    print(latLong[0]);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (mounted) {
+        if (widget.chatMessage?.type == 'location') {
+          final locationMessage = '${widget.chatMessage?.message}';
+          latLong = locationMessage.split(",");
+          currentLocator =
+              LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: currentLocator!, zoom: 12)));
+        }
+      }
+    });
+    // log(widget.location);
+    if (widget.chatMessage?.type == 'location') {
+      final locationMessage = '${widget.chatMessage?.message}';
+      latLong = locationMessage.split(",");
+      currentLocator =
+          LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    }
+    if (widget.chatMessage?.type == 'document') {
+      isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
+    }
+
+    if (widget.chatMessage?.senderId ==
+        provider.viewProfileModel?.userdetails?.id) {
+      isSendByme = true;
+    }
+    if (widget.chatMessage?.status == 'read') {
+      isSeen = true;
+    }
+  }
 }
 
-// class ControlButtons extends StatelessWidget {
-//   final AudioPlayer player;
+class ImageLoadingWidget extends StatelessWidget {
+  const ImageLoadingWidget({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
 
-//   const ControlButtons(this.player, {Key? key}) : super(key: key);
+  final Size size;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         // Opens volume slider dialog
-//         // IconButton(
-//         //   icon: const Icon(Icons.volume_up),
-//         //   onPressed: () {
-//         //     showSliderDialog(
-//         //       context: context,
-//         //       title: "Adjust volume",
-//         //       divisions: 10,
-//         //       min: 0.0,
-//         //       max: 1.0,
-//         //       value: player.volume,
-//         //       stream: player.volumeStream,
-//         //       onChanged: player.setVolume,
-//         //     );
-//         //   },
-//         // ),
-
-//         /// This StreamBuilder rebuilds whenever the player state changes, which
-//         /// includes the playing/paused state and also the
-//         /// loading/buffering/ready state. Depending on the state we show the
-//         /// appropriate button or loading indicator.
-//         StreamBuilder<PlayerState>(
-//           stream: player.playerStateStream,
-//           builder: (context, snapshot) {
-//             final playerState = snapshot.data;
-//             final processingState = playerState?.processingState;
-//             final playing = playerState?.playing;
-//             if (processingState == ProcessingState.loading ||
-//                 processingState == ProcessingState.buffering) {
-//               return Container(
-//                 margin: const EdgeInsets.all(8.0),
-//                 width: 44.0,
-//                 height: 44.0,
-//                 child: const Icon(
-//                   Icons.play_arrow,
-//                   size: 44,
-//                   color: ColorManager.grayLight,
-//                 ),
-//               );
-//             } else if (playing != true) {
-//               return IconButton(
-//                 icon: const Icon(Icons.play_arrow),
-//                 iconSize: 44.0,
-//                 onPressed: player.play,
-//               );
-//             } else if (processingState != ProcessingState.completed) {
-//               return IconButton(
-//                 icon: const Icon(Icons.pause),
-//                 iconSize: 44.0,
-//                 onPressed: player.pause,
-//               );
-//             } else {
-//               return IconButton(
-//                 icon: const Icon(Icons.replay),
-//                 iconSize: 44.0,
-//                 onPressed: () => player.seek(Duration.zero),
-//               );
-//             }
-//           },
-//         ),
-//         // Opens speed slider dialog
-//         // StreamBuilder<double>(
-//         //   stream: player.speedStream,
-//         //   builder: (context, snapshot) => IconButton(
-//         //     icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-//         //         style: const TextStyle(fontWeight: FontWeight.bold)),
-//         //     onPressed: () {
-//         //       showSliderDialog(
-//         //         context: context,
-//         //         title: "Adjust speed",
-//         //         divisions: 10,
-//         //         min: 0.5,
-//         //         max: 1.5,
-//         //         value: player.speed,
-//         //         stream: player.speedStream,
-//         //         onChanged: player.setSpeed,
-//         //       );
-//         //     },
-//         //   ),
-//         // ),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
+      child: SizedBox(
+          width: size.width * .6,
+          height: 240,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          )),
+    );
+  }
+}

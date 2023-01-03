@@ -148,7 +148,7 @@ class Packages {
   String? packageName;
   String? packageDescription;
   String? validity;
-  int? amount;
+  var amount;
   int? offerPrice;
   String? taxIds;
   List<TaxDetails>? taxDetails;

@@ -407,56 +407,64 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                           ? Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: SizedBox(
-                                height: size.height * .11,
-                                child: ListView.builder(
-                                  // physics: const NeverScrollableScrollPhysics(),
-                                  // shrinkWrap: true,
-                                  itemCount: provider
-                                          .customerChildSer?.packages?.length ??
-                                      0,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 0, 10, 0),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          setState(() {
-                                            isPackageSelected = true;
-                                            taxTotal = 0;
-                                            taxTotalAmount = 0;
-                                            packages = provider.customerChildSer
-                                                ?.packages?[index];
-
-                                            if (packages!.taxDetails!.isEmpty) {
-                                              setState(() {
-                                                taxTotalAmount = 0;
-                                              });
-
-                                              grandTotal = packages?.offerPrice
-                                                  ?.toDouble();
-                                            }
-                                          });
-
-                                          await Future.delayed(const Duration(
-                                              milliseconds: 100));
-                                          setState(() {});
-                                        },
-                                        child: MonthlyPlan(
-                                          size: size,
-                                          plan: provider
+                                height: size.height * .125,
+                                child: Center(
+                                  child: ListView.builder(
+                                    // physics:
+                                    //     const NeverScrollableScrollPhysics(),
+                                    // shrinkWrap: true,
+                                    itemCount: provider.customerChildSer
+                                            ?.packages?.length ??
+                                        0,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 10, 0),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            setState(() {
+                                              isPackageSelected = true;
+                                              taxTotal = 0;
+                                              taxTotalAmount = 0;
+                                              packages = provider
                                                   .customerChildSer
-                                                  ?.packages![index]
-                                                  .packageName ??
-                                              '',
-                                          amount: provider.customerChildSer
-                                                  ?.packages![index].amount
-                                                  .toString() ??
-                                              '',
+                                                  ?.packages?[index];
+
+                                              if (packages!
+                                                  .taxDetails!.isEmpty) {
+                                                setState(() {
+                                                  taxTotalAmount = 0;
+                                                });
+
+                                                grandTotal = packages
+                                                    ?.offerPrice
+                                                    ?.toDouble();
+                                              }
+                                            });
+
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 100));
+                                            setState(() {});
+                                          },
+                                          child: Center(
+                                            child: MonthlyPlan(
+                                              size: size,
+                                              plan: provider
+                                                      .customerChildSer
+                                                      ?.packages![index]
+                                                      .packageName ??
+                                                  '',
+                                              amount: provider.customerChildSer
+                                                      ?.packages![index].amount
+                                                      .toString() ??
+                                                  '',
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             )
@@ -514,15 +522,19 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                             style: getRegularStyle(
                                                 color: ColorManager.grayDark,
                                                 fontSize: 16)),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 5, 0, 5),
-                                          child: Text(
-                                              "${str.su_discount}     : ${packages?.offerPrice ?? ''}",
-                                              style: getRegularStyle(
-                                                  color: ColorManager.grayDark,
-                                                  fontSize: 16)),
-                                        ),
+                                        packages?.offerPrice != null
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 5, 0, 5),
+                                                child: Text(
+                                                    "${str.su_discount}     : ${packages?.offerPrice ?? ''}",
+                                                    style: getRegularStyle(
+                                                        color: ColorManager
+                                                            .grayDark,
+                                                        fontSize: 16)),
+                                              )
+                                            : Container(),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 0, 0, 5),
@@ -546,10 +558,12 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                     0);
 
                                             taxTotalAmount =
-                                                (packages?.offerPrice)! *
+                                                (packages?.offerPrice ??
+                                                        packages?.amount) *
                                                     (taxTotal / 100);
                                             grandTotal =
-                                                (packages?.offerPrice)! +
+                                                (packages?.offerPrice ??
+                                                        packages?.amount) +
                                                     taxTotalAmount;
 
                                             return Padding(

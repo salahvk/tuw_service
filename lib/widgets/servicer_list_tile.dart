@@ -135,7 +135,7 @@ class _ServicerListTileState extends State<ServicerListTile> {
                 : Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: SizedBox(
-                      width: size.width * 0.1,
+                      width: size.width * 0.145,
                       child: InkWell(
                         onTap: () {
                           setState(() {

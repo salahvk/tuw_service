@@ -83,6 +83,7 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
                       print(lat);
                       print(lon);
                       await sendLocation(context, "$lat,$lon");
+
                       // await updateLocationFunction(
                       //     context,
                       //     [_lastTap?.latitude, _lastTap?.longitude],

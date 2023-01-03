@@ -23,7 +23,7 @@ class ChatListModel {
 
 class ChatMessage {
   int? currentPage;
-  List<Data>? data;
+  List<MessageData>? data;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -54,9 +54,9 @@ class ChatMessage {
   ChatMessage.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <MessageData>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(MessageData.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -100,7 +100,7 @@ class ChatMessage {
   }
 }
 
-class Data {
+class MessageData {
   int? id;
   var senderId;
   var receiverId;
@@ -118,7 +118,7 @@ class Data {
   String? profilePic;
   int? unreadCount;
 
-  Data(
+  MessageData(
       {this.id,
       this.senderId,
       this.receiverId,
@@ -136,7 +136,7 @@ class Data {
       this.profilePic,
       this.unreadCount});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  MessageData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     senderId = json['sender_id'];
     receiverId = json['receiver_id'];

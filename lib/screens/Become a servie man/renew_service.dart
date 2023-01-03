@@ -224,8 +224,12 @@ class _RenewServicePageState extends State<RenewServicePage> {
                                   // width: 100,
                                   child: Center(
                                       child: Text(
-                                          provider.customerChildSer?.message ??
-                                              '')),
+                                    provider.customerChildSer?.serviceName ??
+                                        '',
+                                    style: getRegularStyle(
+                                        color: ColorManager.black,
+                                        fontSize: 14),
+                                  )),
                                 )
                                 // DropdownButtonHideUnderline(
                                 //   child: DropdownButton2(

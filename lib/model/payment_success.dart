@@ -118,7 +118,7 @@ class PackageInfo {
   String? packages;
   String? description;
   String? validity;
-  int? amount;
+  var amount;
   int? offerPrice;
   String? createdAt;
   String? updatedAt;

@@ -31,7 +31,7 @@ class Subscriptions {
   int? subscriptionId;
   int? serviceId;
   String? packageName;
-  int? amount;
+  var amount;
   String? validity;
   String? subscriptionDate;
   String? expiryDate;

@@ -78,3 +78,5 @@ clearReportControllers() {
   ReportCustomerControllers.reasonController.clear();
   ReportCustomerControllers.commentController.clear();
 }
+
+TextEditingController msgController = TextEditingController();
