@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -301,6 +302,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   }
 
   initfunction() {
+    log("chat bubble");
     final provider = Provider.of<DataProvider>(context, listen: false);
     if (mounted) {
       if (widget.chatMessage?.type == 'location') {
@@ -316,37 +318,41 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
     }
 
     // log(widget.location);
-    if (widget.chatMessage?.type == 'location') {
-      Timer.periodic(const Duration(seconds: 2), (timer) {
-        if (mounted) {
-          if (widget.chatMessage?.type == 'location') {
-            final locationMessage = '${widget.chatMessage?.message}';
-            latLong = locationMessage.split(",");
+    // if (widget.chatMessage?.type == 'location') {
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (mounted) {
+        if (widget.chatMessage?.type == 'location') {
+          final locationMessage = '${widget.chatMessage?.message}';
+          latLong = locationMessage.split(",");
 
-            currentLocator =
-                LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-            mapController?.animateCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(target: currentLocator!, zoom: 12)));
-          }
-          setState(() {});
+          currentLocator =
+              LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: currentLocator!, zoom: 12)));
         }
-      });
-      // final locationMessage = '${widget.chatMessage?.message}';
-      // latLong = locationMessage.split(",");
-      // currentLocator =
-      //     LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-    }
-    if (widget.chatMessage?.type == 'document') {
-      isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
-    }
+        setState(() {});
+      }
+      if (widget.chatMessage?.type == 'document') {
+        setState(() {
+          isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
+        });
+      }
 
-    if (widget.chatMessage?.senderId ==
-        provider.viewProfileModel?.userdetails?.id) {
-      isSendByme = true;
-    }
-    if (widget.chatMessage?.status == 'read') {
-      isSeen = true;
-    }
+      if (widget.chatMessage?.senderId ==
+          provider.viewProfileModel?.userdetails?.id) {
+        isSendByme = true;
+        // log(isSendByme.toString());
+        // log("___________________________");
+      }
+      if (widget.chatMessage?.status == 'read') {
+        isSeen = true;
+      }
+    });
+    // final locationMessage = '${widget.chatMessage?.message}';
+    // latLong = locationMessage.split(",");
+    // currentLocator =
+    //     LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    // }
   }
 }
 

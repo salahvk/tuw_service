@@ -879,7 +879,6 @@ class _ChatScreenState extends State<ChatScreen> {
         status: 'waiting',
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
-        senderId: provider.viewProfileModel?.userdetails?.id,
         // sendUserId: 42,
         // firstname: 'sergio',
         // onlineStatus: 'busy',
@@ -904,7 +903,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (response.statusCode == 200) {
         await viewChatMessages(context, servicerProvider.servicerId);
         chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
-
+        chatMessages?.remove(0);
         setState(() {});
       } else {
         msgController.text = text;
@@ -952,7 +951,6 @@ class _ChatScreenState extends State<ChatScreen> {
         status: 'waiting',
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
-        senderId: provider.viewProfileModel?.userdetails?.id,
         // sendUserId: 42,
         // firstname: 'sergio',
         // onlineStatus: 'busy',
@@ -1005,18 +1003,15 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // * Upload audio
-
   uploadAudio(List<File> imageFile) async {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
-
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final str = AppLocalizations.of(context)!;
     final length = imageFile.length;
     final datetime = DateTime.now();
-    log("audio senting.................................");
+    log("audio senting");
     ChatData waitingMessage = ChatData(
         message: msgController.text,
         type: 'audio',
@@ -1067,7 +1062,6 @@ class _ChatScreenState extends State<ChatScreen> {
         return;
       }
       await viewChatMessages(context, servicerProvider.servicerId);
-      // chatMessages?.remove(0);
       chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
       Future.delayed(const Duration(seconds: 2));
       setState(() {});
