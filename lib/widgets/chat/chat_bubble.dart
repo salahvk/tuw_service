@@ -42,18 +42,84 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   @override
   void initState() {
     super.initState();
-    initfunction();
+    // Timer.periodic(const Duration(seconds: 2), (timer) {
+    log("chat bubble");
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    if (widget.chatMessage?.type == 'document') {
+      setState(() {
+        isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
+      });
+    }
+
+    // if (widget.chatMessage?.senderId ==
+    //     provider.viewProfileModel?.userdetails?.id) {
+    //   // setState(() {
+    //   isSendByme = true;
+    //   // });
+
+    //   // log(isSendByme.toString());
+    //   // log("___________________________");
+    // }
+    // if (widget.chatMessage?.status == 'read') {
+    //   setState(() {
+    //     isSeen = true;
+    //   });
+    // }
+    // });
+
+    // if (mounted) {
+    //   if (widget.chatMessage?.type == 'location') {
+    //     final locationMessage = '${widget.chatMessage?.message}';
+    //     latLong = locationMessage.split(",");
+
+    //     currentLocator =
+    //         LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    //     mapController?.animateCamera(CameraUpdate.newCameraPosition(
+    //         CameraPosition(target: currentLocator!, zoom: 12)));
+    //   }
+    //   setState(() {});
+    // }
+
+    // // log(widget.location);
+    // // if (widget.chatMessage?.type == 'location') {
+    // Timer.periodic(const Duration(seconds: 2), (timer) {
+    //   if (mounted) {
+    //     if (widget.chatMessage?.type == 'location') {
+    //       final locationMessage = '${widget.chatMessage?.message}';
+    //       latLong = locationMessage.split(",");
+
+    //       currentLocator =
+    //           LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    //       mapController?.animateCamera(CameraUpdate.newCameraPosition(
+    //           CameraPosition(target: currentLocator!, zoom: 12)));
+    //     }
+    //     setState(() {});
+    //   }
+    // });
+    // final locationMessage = '${widget.chatMessage?.message}';
+    // latLong = locationMessage.split(",");
+    // currentLocator =
+    //     LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
+    log("Build");
     final size = MediaQuery.of(context).size;
+
     var dateTime = DateFormat("HH:mm")
         .parse(widget.chatMessage!.createdAt!.substring(11, 16), true);
     var hour = dateTime.toLocal().hour;
     var minute = dateTime.toLocal().minute;
     String time =
         widget.chatMessage?.localTime?.substring(11, 16) ?? "$hour:$minute";
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    isSendByme = widget.chatMessage?.senderId ==
+            provider.viewProfileModel?.userdetails?.id
+        ? true
+        : false;
+    isSeen = widget.chatMessage?.status == 'read' ? true : false;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -303,7 +369,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
 
   initfunction() {
     log("chat bubble");
-    final provider = Provider.of<DataProvider>(context, listen: false);
+
     if (mounted) {
       if (widget.chatMessage?.type == 'location') {
         final locationMessage = '${widget.chatMessage?.message}';
@@ -331,21 +397,6 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
               CameraPosition(target: currentLocator!, zoom: 12)));
         }
         setState(() {});
-      }
-      if (widget.chatMessage?.type == 'document') {
-        setState(() {
-          isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
-        });
-      }
-
-      if (widget.chatMessage?.senderId ==
-          provider.viewProfileModel?.userdetails?.id) {
-        isSendByme = true;
-        // log(isSendByme.toString());
-        // log("___________________________");
-      }
-      if (widget.chatMessage?.status == 'read') {
-        isSeen = true;
       }
     });
     // final locationMessage = '${widget.chatMessage?.message}';

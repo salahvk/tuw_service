@@ -21,7 +21,7 @@ viewChatMessages(BuildContext context, id) async {
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      log(response.body);
+      // log(response.body);
       // if (jsonResponse['result'] == false) {
       //   await Hive.box("token").clear();
 

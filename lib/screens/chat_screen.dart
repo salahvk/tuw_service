@@ -105,13 +105,17 @@ class _ChatScreenState extends State<ChatScreen> {
     provider.isSendingSuccessFull = false;
     provider.isLocationSending = false;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+      timer = Timer.periodic(const Duration(seconds: 20), (timer) async {
         if (mounted) {
           final servicerProvider =
               Provider.of<ServicerProvider>(context, listen: false);
-
+          // setState(() {
+          //   chatMessages = [];
+          // });
+          print(chatMessages);
           await viewChatMessages(context, servicerProvider.servicerId);
           chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
+          // setState(() {});
         }
       });
     });
@@ -151,8 +155,8 @@ class _ChatScreenState extends State<ChatScreen> {
     final provider = Provider.of<DataProvider>(context, listen: true);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: true);
-    // final chatData = provider.viewChatMessageModel?.chatMessage;
-    final chatData = chatMessages;
+    final chatData = provider.viewChatMessageModel?.chatMessage;
+    // final chatData = chatMessages;
     final oUserAddress = provider.pUserAddressShow?.userAddress;
     final userAddress = provider.userAddressShow?.userAddress;
     return GestureDetector(
@@ -218,10 +222,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: const EdgeInsets.fromLTRB(5, 15, 15, 60),
                 child: ListView.builder(
                   reverse: true,
-                  itemCount: chatData?.length ?? 0,
+                  itemCount: chatData?.data?.length ?? 0,
+                  // itemCount: chatData?.length ?? 0,
                   itemBuilder: (context, index) {
                     return CustomChatBubble(
-                      chatMessage: chatData?[index],
+                      // chatMessage: chatData?[index],
+                      chatMessage: chatData?.data?[index],
                     );
                   },
                 )),
@@ -529,8 +535,6 @@ class _ChatScreenState extends State<ChatScreen> {
                             onTap: () {
                               Vibration.vibrate(duration: 200);
                               showSnackBar(str.cp_long_press, context);
-                              print(provider.isLocationSending);
-                              print(provider.isSendingSuccessFull);
                             },
                             child: SizedBox(
                               width: w * .1,
@@ -853,7 +857,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Provider.of<ServicerProvider>(context, listen: false);
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final str = AppLocalizations.of(context)!;
-    provider.subServicesModel = null;
+    // provider.subServicesModel = null;
     final apiToken = Hive.box("token").get('api_token');
     final datetime = DateTime.now();
 
@@ -880,14 +884,11 @@ class _ChatScreenState extends State<ChatScreen> {
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
         senderId: provider.viewProfileModel?.userdetails?.id,
-        // sendUserId: 42,
-        // firstname: 'sergio',
-        // onlineStatus: 'busy',
-        // chatMedia: '/assets/uploads/chatmedia/',
-        // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
         addressId: null);
     chatMessages?.insert(0, waitingMessage);
     setState(() {});
+    print(chatMessages?[0].toJson());
+    // return;
 
     final text = msgController.text;
     msgController.text = '';
@@ -903,6 +904,9 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       if (response.statusCode == 200) {
         await viewChatMessages(context, servicerProvider.servicerId);
+        setState(() {
+          chatMessages?.clear();
+        });
         chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
 
         setState(() {});
@@ -1023,6 +1027,7 @@ class _ChatScreenState extends State<ChatScreen> {
         status: 'waiting',
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
+        senderId: provider.viewProfileModel?.userdetails?.id,
         addressId: null);
     chatMessages?.insert(0, waitingMessage);
     setState(() {});
