@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -768,11 +769,12 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     final state = EditProfileControllers.stateController.text;
     final countryId =
         countryid ?? otpProvider.otpVerification?.customerdetails?.countryId;
+    final firstName = toBeginningOfSentenceCase(firstname);
 
     try {
       var response = await http.post(
           Uri.parse(
-              "$endPoint/api/update/userprofile?firstname=$firstname&gender=$gender&dob=$dob&about=$about&region=$region&country_id=${countryId.toString()}&state=$state&lastname=$lastname"),
+              "$endPoint/api/update/userprofile?firstname=$firstName&gender=$gender&dob=$dob&about=$about&region=$region&country_id=${countryId.toString()}&state=$state&lastname=$lastname"),
           headers: {
             "device-id": provider.deviceId ?? '',
             "api-token": apiToken

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/OTP_screen.dart';
 import 'package:social_media_services/screens/Terms&Conditions.dart';
@@ -65,7 +66,10 @@ class RouteGenerator {
       // case Routes.workerDetails:
       //   return MaterialPageRoute(builder: (_) => const WorkerDetailed());
       case Routes.privacyPolicy:
-        return MaterialPageRoute(builder: (_) => const PrivacyPolicy());
+        return PageTransition(
+          type: PageTransitionType.rightToLeft,
+          child: const PrivacyPolicy(),
+        );
       case Routes.termsAndConditions:
         return MaterialPageRoute(builder: (_) => const TermsAndConditionPage());
       case Routes.wishList:

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
@@ -56,6 +57,11 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
+    String? transport;
+    if (userData != null && userData.transport != null) {
+      transport = userData.transport!.contains('four') ? str.s_four : str.s_two;
+    }
+
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -101,12 +107,14 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                   leading: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (ctx) {
-                        return const HomePage(
-                          selectedIndex: 0,
-                        );
-                      }));
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: const HomePage(
+                              selectedIndex: 0,
+                            ),
+                          ));
                     },
                     child: SizedBox(
                       width: 24,
@@ -120,12 +128,14 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                   leading: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (ctx) {
-                        return const HomePage(
-                          selectedIndex: 1,
-                        );
-                      }));
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: const HomePage(
+                              selectedIndex: 1,
+                            ),
+                          ));
                     },
                     child: SizedBox(
                       width: 24,
@@ -403,7 +413,7 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                       const SizedBox(
                         width: 5,
                       ),
-                      Text(userData?.transport ?? '',
+                      Text(transport ?? '',
                           style: getRegularStyle(
                               color: ColorManager.engineWorkerColor,
                               fontSize: 15)),

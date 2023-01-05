@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 
@@ -31,11 +32,13 @@ class _ServiceManDetailsState extends State<ProfileLoading> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await getServiceManDetailsFun(
           context, widget.serviceId ?? widget.serviceman?.id.toString());
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-        return ServiceManDetails(
-          serviceman: widget.serviceman,
-        );
-      }));
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              type: PageTransitionType.bottomToTop,
+              child: ServiceManDetails(
+                serviceman: widget.serviceman,
+              )));
     });
   }
 

@@ -98,8 +98,6 @@ class _ServicerPageState extends State<ServicerPage> {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final serviceManData = provider.serviceManListModel?.serviceman;
 
-    print(mobWth);
-
     return GestureDetector(
       onTap: () {
         setState(() {

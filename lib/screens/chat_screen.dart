@@ -219,7 +219,8 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Stack(
           children: [
             Padding(
-                padding: const EdgeInsets.fromLTRB(5, 15, 15, 60),
+                padding:
+                    EdgeInsets.fromLTRB(5, 15, 15, isRecordingOn ? 100 : 60),
                 child: ListView.builder(
                   reverse: true,
                   itemCount: chatData?.data?.length ?? 0,
@@ -381,11 +382,11 @@ class _ChatScreenState extends State<ChatScreen> {
             isAddressCardSelected
                 ? Positioned(
                     bottom: 60,
-                    // left: lang != 'ar' ? 2 : null,
-                    // right: lang != 'ar' ? 2 : null,
+                    left: 5,
+                    right: 5,
                     child: Container(
                       decoration: BoxDecoration(
-                          color: ColorManager.primary,
+                          // color: ColorManager.primary,
                           borderRadius: BorderRadius.circular(5)),
                       width: size.width,
                       // height: 140,
@@ -410,8 +411,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                   setState(() {});
                                 },
                                 child: Container(
-                                  height: 25,
-                                  color: ColorManager.primary,
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.primary,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                          color: ColorManager.black,
+                                          width: .3)),
+                                  height: 35,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -730,6 +736,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ))
                 : Container(),
+
+            // * is recording on end
             isLocationFetching
                 ? Positioned(
                     bottom: 60,
@@ -1092,10 +1100,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
     ChatData waitingMessage = ChatData(
         message: msgController.text,
-        type: 'image',
+        type: 'document',
         status: 'waiting',
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
+        senderId: provider.viewProfileModel?.userdetails?.id,
         // sendUserId: 42,
         // firstname: 'sergio',
         // onlineStatus: 'busy',
@@ -1171,6 +1180,7 @@ class _ChatScreenState extends State<ChatScreen> {
         status: 'waiting',
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
+        senderId: provider.viewProfileModel?.userdetails?.id,
         // sendUserId: 42,
         // firstname: 'sergio',
         // onlineStatus: 'busy',
@@ -1216,6 +1226,7 @@ class _ChatScreenState extends State<ChatScreen> {
             status: 'waiting',
             createdAt: '2022-12-23T05:03:41.000000Z',
             localTime: datetime.toString(),
+            senderId: provider.viewProfileModel?.userdetails?.id,
             // sendUserId: 42,
             // firstname: 'sergio',
             // onlineStatus: 'busy',

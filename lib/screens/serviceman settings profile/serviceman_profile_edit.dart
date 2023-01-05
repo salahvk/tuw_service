@@ -62,7 +62,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
   bool isLoading = false;
 
   List<String> r3 = [];
-  final List<String> items = [
+  List<String> items = [
     'four wheeler',
     'two wheeler',
   ];
@@ -76,6 +76,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
       // print(timeStamp);
       final provider = Provider.of<DataProvider>(context, listen: false);
       final userData = provider.serviceManProfile?.userData;
+      final str = AppLocalizations.of(context)!;
       int? n = provider.countriesModel?.countries?.length;
       int i = 0;
       while (i < n!.toInt()) {
@@ -85,11 +86,13 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
       await getServiceManProfileFun(context);
       ServiceManProfileEdit.descriptionController.text = userData?.about ?? '';
       ServiceManProfileEdit.detailsController.text = userData?.profile ?? '';
+      items = [str.s_two, str.s_four];
       // print('object');
       // print(userData?.transport ?? 's');
       setState(() {
         checkBoxValue = userData?.onlineStatus ?? '';
-        selectedValue = userData?.transport;
+        selectedValue =
+            userData!.transport!.contains('four') ? str.s_four : str.s_two;
       });
     });
   }
@@ -801,11 +804,63 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                         ),
                                       ))
                                   .toList(),
-                              value: selectedValue,
+                              // value: selectedValue,
+                              customButton: selectedValue == null
+                                  ? null
+                                  : Container(
+                                      height: 40,
+                                      width: size.width * .5,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: ColorManager.whiteColor,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.grey.shade300,
+                                            offset: const Offset(5, 8.5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  selectedValue ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    // fontWeight: FontWeight.bold,
+                                                    color:
+                                                        ColorManager.grayLight,
+                                                  ),
+                                                ),
+                                                const Icon(
+                                                  Icons
+                                                      .arrow_forward_ios_outlined,
+                                                  color: ColorManager.primary,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
                               onChanged: (value) {
                                 setState(() {
                                   selectedValue = value as String;
                                 });
+                                print(value);
                               },
                               icon: const Icon(
                                 Icons.arrow_forward_ios_outlined,
@@ -902,6 +957,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
 
   onSaveFunction() {
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final str = AppLocalizations.of(context)!;
     final userData = provider.serviceManProfile?.userData;
     final state = ServiceManProfileEdit.stateController.text.isEmpty
         ? userData?.state ?? ''
@@ -913,8 +969,14 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
         ? userData?.profile ?? ''
         : ServiceManProfileEdit.detailsController.text;
     final countryId = countryid ?? userData?.countryId.toString();
-
-    final transport = selectedValue ?? '';
+    String transport = '';
+    if (selectedValue != null) {
+      if (selectedValue!.contains(str.s_two)) {
+        transport = 'two wheeler';
+      } else {
+        transport = 'four wheeler';
+      }
+    }
 
     updateServiceManApiFun(context, state, countryId.toString(), about, profile,
         transport, checkBoxValue);
@@ -956,6 +1018,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
   upload(List<XFile> imageFile) async {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final userData = provider.serviceManProfile?.userData;
+    final str = AppLocalizations.of(context)!;
     final state = ServiceManProfileEdit.stateController.text.isEmpty
         ? userData?.state ?? ''
         : ServiceManProfileEdit.stateController.text;
@@ -967,7 +1030,14 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
         : ServiceManProfileEdit.detailsController.text;
     final cntryId = countryid ?? userData?.countryId.toString();
 
-    final transport = selectedValue ?? '';
+    String transport = '';
+    if (selectedValue != null) {
+      if (selectedValue!.contains(str.s_two)) {
+        transport = 'two wheeler';
+      } else {
+        transport = 'four wheeler';
+      }
+    }
 
     final length = imageFile.length;
     var uri = Uri.parse(

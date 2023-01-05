@@ -10,10 +10,8 @@ import 'package:social_media_services/responsive/responsive.dart';
 
 class ChatListTile extends StatefulWidget {
   final MessageData? profileData;
-  const ChatListTile({
-    super.key,
-    required this.profileData,
-  });
+  String? time;
+  ChatListTile({super.key, required this.profileData, required this.time});
 
   @override
   State<ChatListTile> createState() => _ChatListTileState();
@@ -22,6 +20,7 @@ class ChatListTile extends StatefulWidget {
 class _ChatListTileState extends State<ChatListTile> {
   bool isFavorite = false;
   String lang = '';
+  String? time;
   @override
   void initState() {
     super.initState();
@@ -36,9 +35,30 @@ class _ChatListTileState extends State<ChatListTile> {
     bool mob = Responsive.isMobile(context);
     var dateTime = DateFormat("HH:mm")
         .parse(widget.profileData?.createdAt?.substring(11, 16) ?? '', true);
-    // print(dateTime);
+    var date = DateFormat("dd-MM-yyyy").format(
+        DateTime.parse(widget.profileData?.createdAt?.substring(0, 10) ?? ''));
+
     var hour = dateTime.toLocal().hour;
     var minute = dateTime.toLocal().minute;
+
+    var day = dateTime.toLocal().weekday;
+    // if (DateTime.now().weekday == day) {
+    //   setState(() {
+    //     time = "$hour:$minute";
+    //   });
+    // } else if (DateTime.now().weekday == (day - 1)) {
+    //   setState(() {
+    //     time = "Yesterday";
+    //   });
+    // } else {
+    //   setState(() {
+    //     time = date;
+    //   });
+    // }
+    // print(widget.profileData?.firstname);
+    // print("object");
+    // print(DateTime.now().weekday);
+    // print(date);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -114,10 +134,18 @@ class _ChatListTileState extends State<ChatListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(widget.profileData?.firstname ?? '',
-                          style: getRegularStyle(
-                              color: ColorManager.black,
-                              fontSize: mob ? 16 : 10)),
+                      Row(
+                        children: [
+                          Text(widget.profileData?.firstname ?? '',
+                              style: getRegularStyle(
+                                  color: ColorManager.black,
+                                  fontSize: mob ? 16 : 10)),
+                          //     Text(widget.profileData?. ?? '',
+                          // style: getRegularStyle(
+                          //     color: ColorManager.black,
+                          //     fontSize: mob ? 16 : 10)),
+                        ],
+                      ),
                       const SizedBox(
                         height: 4,
                       ),
@@ -139,7 +167,7 @@ class _ChatListTileState extends State<ChatListTile> {
                                           ? "Document"
                                           : widget.profileData?.message ?? '',
                           style: getRegularStyle(
-                              color: const Color.fromARGB(255, 139, 138, 138),
+                              color: ColorManager.chatTimeColor,
                               fontSize: mob ? 11 : 7)),
                       // const SizedBox(
                       //   height: 4,
@@ -151,13 +179,16 @@ class _ChatListTileState extends State<ChatListTile> {
             ),
           ),
           Positioned(
-            top: 5,
+            top: 10,
             right: lang == 'ar' ? null : 10,
             left: lang == 'ar' ? 10 : null,
-            child: Text("$hour:$minute",
-                style: getRegularStyle(
-                    color: const Color.fromARGB(255, 173, 173, 173),
-                    fontSize: mob ? 10 : 7)),
+            child: Text(widget.time ?? '',
+                style: widget.profileData?.unreadCount == 0
+                    ? getRegularStyle(
+                        color: ColorManager.chatTimeColor,
+                        fontSize: mob ? 11 : 8)
+                    : getMediumtStyle(
+                        color: ColorManager.primary, fontSize: mob ? 11 : 8)),
           ),
           widget.profileData?.unreadCount == 0
               ? Container()
@@ -168,12 +199,13 @@ class _ChatListTileState extends State<ChatListTile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        decoration: BoxDecoration(
-                            color: ColorManager.primary2,
-                            borderRadius: BorderRadius.circular(2)),
+                      CircleAvatar(
+                        radius: 11, backgroundColor: ColorManager.primary,
+                        // width: 15,
+                        // height: 15,
+                        // decoration: BoxDecoration(
+                        //     color: ColorManager.primary2,
+                        //     borderRadius: BorderRadius.circular(2)),
                         child: Center(
                           child: Text(
                             widget.profileData?.unreadCount.toString() ?? '',

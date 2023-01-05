@@ -30,7 +30,7 @@ class CustomChatBubble extends StatefulWidget {
 
 class _CustomChatBubbleState extends State<CustomChatBubble> {
   List latLong = [];
-  LatLng? currentLocator;
+  LatLng currentLocator = const LatLng(18.216307, 54.831270);
   GoogleMapController? mapController;
 
   bool isPdf = false;
@@ -38,69 +38,49 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   bool isSeen = false;
   String? text;
   String? audio;
+  String locationMessage = '11.254251,75.8369142';
 
   @override
   void initState() {
     super.initState();
     // Timer.periodic(const Duration(seconds: 2), (timer) {
     log("chat bubble");
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    if (widget.chatMessage?.type == 'document') {
-      setState(() {
-        isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
-      });
+
+    if (mounted) {
+      if (widget.chatMessage?.type == 'location') {
+        final locationMessage = '${widget.chatMessage?.message}';
+        latLong = locationMessage.split(",");
+
+        currentLocator =
+            LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: currentLocator, zoom: 12)));
+      }
+      setState(() {});
     }
 
-    // if (widget.chatMessage?.senderId ==
-    //     provider.viewProfileModel?.userdetails?.id) {
-    //   // setState(() {
-    //   isSendByme = true;
-    //   // });
-
-    //   // log(isSendByme.toString());
-    //   // log("___________________________");
-    // }
-    // if (widget.chatMessage?.status == 'read') {
-    //   setState(() {
-    //     isSeen = true;
-    //   });
-    // }
-    // });
-
-    // if (mounted) {
-    //   if (widget.chatMessage?.type == 'location') {
-    //     final locationMessage = '${widget.chatMessage?.message}';
-    //     latLong = locationMessage.split(",");
-
-    //     currentLocator =
-    //         LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-    //     mapController?.animateCamera(CameraUpdate.newCameraPosition(
-    //         CameraPosition(target: currentLocator!, zoom: 12)));
-    //   }
-    //   setState(() {});
-    // }
-
-    // // log(widget.location);
-    // // if (widget.chatMessage?.type == 'location') {
+    // if (widget.chatMessage?.type == 'location') {
     // Timer.periodic(const Duration(seconds: 2), (timer) {
     //   if (mounted) {
     //     if (widget.chatMessage?.type == 'location') {
-    //       final locationMessage = '${widget.chatMessage?.message}';
-    //       latLong = locationMessage.split(",");
-
-    //       currentLocator =
-    //           LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    //       print("location updating");
+    //       setState(() {
+    //         final locationMessage = '${widget.chatMessage?.message}';
+    //         print(locationMessage);
+    //         latLong = locationMessage.split(",");
+    //         currentLocator =
+    //             LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+    //       });
     //       mapController?.animateCamera(CameraUpdate.newCameraPosition(
-    //           CameraPosition(target: currentLocator!, zoom: 12)));
+    //           CameraPosition(target: currentLocator, zoom: 12)));
+    //       setState(() {});
     //     }
-    //     setState(() {});
     //   }
     // });
     // final locationMessage = '${widget.chatMessage?.message}';
     // latLong = locationMessage.split(",");
     // currentLocator =
     //     LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
-    // }
   }
 
   @override
@@ -120,6 +100,25 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
         ? true
         : false;
     isSeen = widget.chatMessage?.status == 'read' ? true : false;
+    if (widget.chatMessage?.type == 'document') {
+      // setState(() {
+      isPdf = widget.chatMessage?.uploads?.contains('pdf') ?? false;
+      // });
+    }
+    if (widget.chatMessage?.type == 'location') {
+      // setState(() {
+      locationMessage = '${widget.chatMessage?.message}';
+
+      latLong = locationMessage.split(",");
+
+      if (locationMessage.isNotEmpty) {
+        currentLocator =
+            LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
+        // });
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: currentLocator, zoom: 12)));
+      }
+    }
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -232,20 +231,18 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                             },
                                             initialCameraPosition:
                                                 CameraPosition(
-                                              target: currentLocator ??
-                                                  const LatLng(0, 0),
+                                              target: currentLocator,
                                               zoom: 12.0,
                                             ),
                                             markers: <Marker>{
                                               Marker(
-                                                markerId: const MarkerId(''),
-                                                position: currentLocator ??
-                                                    const LatLng(0, 0),
-                                                // infoWindow: const InfoWindow(
-                                                //   title: 'Home locator',
-                                                //   snippet: '*',
-                                                // ),
-                                              ),
+                                                  markerId: const MarkerId(''),
+                                                  position: currentLocator
+                                                  // infoWindow: const InfoWindow(
+                                                  //   title: 'Home locator',
+                                                  //   snippet: '*',
+                                                  // ),
+                                                  ),
                                             },
                                           ),
                                         ),
@@ -270,56 +267,66 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                       child: Text(
                                         widget.chatMessage?.message ?? '',
                                         style: getRegularStyle(
-                                            color: isSendByme
-                                                ? ColorManager.primary3
-                                                : ColorManager.whiteColor,
+                                            color: ColorManager.primary3,
                                             fontSize: 14),
                                       ),
                                     )
                                   : widget.chatMessage?.type == 'document'
-                                      ? InkWell(
-                                          onTap: () {
-                                            final url = Uri.parse(
-                                                "$endPoint${widget.chatMessage?.chatMedia}");
-                                            print(url);
-                                            launchUrl(url,
-                                                mode: LaunchMode
-                                                    .externalApplication);
-                                          },
-                                          child: Container(
-                                            height: size.height * .2,
-                                            width: size.width * .3,
-                                            decoration: BoxDecoration(
-                                                color: isSendByme
-                                                    ? ColorManager.chatGreen
-                                                    : ColorManager.background,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  CachedNetworkImage(
-                                                    imageUrl: isPdf
-                                                        ? pdfImage
-                                                        : documentImage,
-                                                    fit: BoxFit.cover,
-                                                    height: size.height * .18,
+                                      ? widget.chatMessage?.status == 'waiting'
+                                          ? SizedBox(
+                                              height: size.height * .2,
+                                              width: size.width * .3,
+                                              child: const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ))
+                                          : InkWell(
+                                              onTap: () {
+                                                final url = Uri.parse(
+                                                    "$endPoint${widget.chatMessage?.chatMedia}");
+                                                print(url);
+                                                launchUrl(url,
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                              child: Container(
+                                                height: size.height * .2,
+                                                width: size.width * .3,
+                                                decoration: BoxDecoration(
+                                                    color: isSendByme
+                                                        ? ColorManager.chatGreen
+                                                        : ColorManager
+                                                            .background,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      CachedNetworkImage(
+                                                        imageUrl: isPdf
+                                                            ? pdfImage
+                                                            : documentImage,
+                                                        fit: BoxFit.cover,
+                                                        height:
+                                                            size.height * .18,
+                                                      ),
+                                                      const Spacer(),
+                                                      Text(
+                                                        "${widget.chatMessage?.uploads}",
+                                                        style: getRegularStyle(
+                                                            color: ColorManager
+                                                                .black,
+                                                            fontSize: 8),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  const Spacer(),
-                                                  Text(
-                                                    "${widget.chatMessage?.uploads}",
-                                                    style: getRegularStyle(
-                                                        color:
-                                                            ColorManager.black,
-                                                        fontSize: 8),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        )
+                                            )
                                       : Text(
                                           widget.chatMessage?.message ?? '',
                                           style: getRegularStyle(
@@ -378,7 +385,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
         currentLocator =
             LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
         mapController?.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(target: currentLocator!, zoom: 12)));
+            CameraPosition(target: currentLocator, zoom: 12)));
       }
       setState(() {});
     }
@@ -394,7 +401,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
           currentLocator =
               LatLng(double.parse(latLong[0]), double.parse(latLong[1]));
           mapController?.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: currentLocator!, zoom: 12)));
+              CameraPosition(target: currentLocator, zoom: 12)));
         }
         setState(() {});
       }

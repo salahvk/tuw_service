@@ -4,8 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:social_media_services/API/get_chat_list.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/API/other%20User/other_user_address_list.dart';
 import 'package:social_media_services/API/update_read_status.dart';
@@ -62,10 +64,16 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
         Navigator.pop(context);
         return;
       }
-      updateReadStatus(context, widget.serviceManId);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-        return ChatScreen();
-      }));
+      await updateReadStatus(context, widget.serviceManId);
+      getChatList(
+        context,
+      );
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: ChatScreen(),
+          ));
     });
   }
 

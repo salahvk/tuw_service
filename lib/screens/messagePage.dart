@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_chat_list.dart';
@@ -33,6 +34,7 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
   String lang = '';
   late Timer timer;
+  String? time;
   @override
   void initState() {
     super.initState();
@@ -288,6 +290,29 @@ class _MessagePageState extends State<MessagePage> {
                   itemBuilder: ((context, index) {
                     final profileDetails =
                         provider.chatListDetails?.chatMessage?.data?[index];
+
+                    var dtime = DateFormat("HH:mm").parse(
+                        profileDetails?.createdAt?.substring(11, 16) ?? '',
+                        true);
+
+                    var date = DateFormat("yyyy-MM-dd").parse(
+                        profileDetails?.createdAt?.substring(0, 10) ?? '',
+                        true);
+                    String localDate =
+                        DateFormat.yMd('es').format(date.toLocal());
+
+                    var hour = dtime.toLocal().hour;
+                    var minute = dtime.toLocal().minute;
+
+                    var day = date.toLocal().weekday;
+                    if (DateTime.now().weekday == day) {
+                      time = "$hour:$minute";
+                    } else if (day == DateTime.now().weekday - 1) {
+                      time = "Yesterday";
+                    } else {
+                      time = localDate;
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                       child: InkWell(
@@ -296,6 +321,7 @@ class _MessagePageState extends State<MessagePage> {
                         },
                         child: ChatListTile(
                           profileData: profileDetails,
+                          time: time,
                         ),
                       ),
                     );

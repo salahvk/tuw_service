@@ -297,7 +297,6 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                     selectedIndex: 0,
                                   );
                                 }));
-                                // player.stop();
                               },
                               style: ElevatedButton.styleFrom(
                                   padding:

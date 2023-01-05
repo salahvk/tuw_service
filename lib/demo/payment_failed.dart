@@ -7,10 +7,10 @@ import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
-import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/pdfApi.dart';
@@ -241,9 +241,10 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
                               onPressed: () {
                                 Navigator.pushReplacement(context,
                                     MaterialPageRoute(builder: (ctx) {
-                                  return const AddressPage();
+                                  return const HomePage(
+                                    selectedIndex: 0,
+                                  );
                                 }));
-                                // player.stop();
                               },
                               style: ElevatedButton.styleFrom(
                                   padding:

@@ -22,6 +22,7 @@ class ColorManager {
   static const chatGreen = Color(0xffD8FCD3);
   static const darkGreen = Color(0xff091c23);
   static const indicatorBorGreen = Color(0xff204428);
+  static const chatTimeColor = Color.fromARGB(255, 139, 138, 138);
 
   // * Service Home color
 

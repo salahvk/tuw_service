@@ -82,6 +82,7 @@ dependencies:
   record: ^4.4.3
   url_launcher: ^6.1.7
   audioplayers: ^1.1.1
+  page_transition: ^2.0.9
   # flutter_sound: ^9.2.13
 
 

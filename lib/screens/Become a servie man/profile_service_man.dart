@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/customerParent.dart';
 import 'package:social_media_services/animations/animtions.dart';
@@ -135,11 +136,14 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                   leading: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                        return const HomePage(
-                          selectedIndex: 0,
-                        );
-                      }));
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: const HomePage(
+                              selectedIndex: 0,
+                            ),
+                          ));
                     },
                     child: SizedBox(
                       width: 24,
@@ -153,11 +157,14 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                   leading: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                        return const HomePage(
-                          selectedIndex: 1,
-                        );
-                      }));
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: const HomePage(
+                              selectedIndex: 1,
+                            ),
+                          ));
                     },
                     child: SizedBox(
                       width: 24,
