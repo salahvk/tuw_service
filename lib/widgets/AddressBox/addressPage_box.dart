@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/user_address_show.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 
 import 'package:social_media_services/screens/Address%20page/address_update.dart';
 import 'package:social_media_services/utils/diologue.dart';
@@ -31,7 +33,7 @@ class _AddressBoxState extends State<AddressBox> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    final provider = Provider.of<DataProvider>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Stack(
@@ -49,13 +51,37 @@ class _AddressBoxState extends State<AddressBox> {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 20),
-              child: Text(
-                "${widget.userAddress?.addressName}\n${widget.userAddress?.address}\n${widget.userAddress?.homeNo}\n${widget.userAddress?.region}, ${widget.userAddress?.state}, ${widget.userAddress?.country}",
-                style: getRegularStyle(
-                    color: ColorManager.grayLight, fontSize: 14),
-              ),
+            child: Row(
+              children: [
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                //   child: CircleAvatar(
+                //     backgroundColor: ColorManager.whiteColor.withOpacity(0.8),
+                //     radius: 30,
+                //     backgroundImage:
+                //         provider.viewProfileModel?.userdetails?.profilePic ==
+                //                 null
+                //             ? null
+                //             : CachedNetworkImageProvider(
+                //                 "$profileImageApi/${provider.viewProfileModel?.userdetails?.profilePic}",
+                //               ),
+                //     child: provider.viewProfileModel?.userdetails?.profilePic ==
+                //             null
+                //         ? Image.asset(
+                //             'assets/user.png',
+                //           )
+                //         : null,
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 20),
+                  child: Text(
+                    "${widget.userAddress?.addressName}\n${widget.userAddress?.address}\n${widget.userAddress?.homeNo}\n${widget.userAddress?.region}, ${widget.userAddress?.state}, ${widget.userAddress?.country}",
+                    style: getRegularStyle(
+                        color: ColorManager.grayLight, fontSize: 14),
+                  ),
+                ),
+              ],
             ),
           ),
           Positioned(

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -226,9 +227,30 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: chatData?.data?.length ?? 0,
                   // itemCount: chatData?.length ?? 0,
                   itemBuilder: (context, index) {
-                    return CustomChatBubble(
-                      // chatMessage: chatData?[index],
-                      chatMessage: chatData?.data?[index],
+                    // print(chatData?.data?[index].createdAt?.substring(0, 10));
+                    final len = chatData?.data?.length;
+                    var date = DateFormat("yyyy-MM-dd").parse(
+                        chatData?.data?[index].createdAt?.substring(0, 10) ??
+                            '',
+                        true);
+                    String localDate = DateFormat.yMEd().format(date.toLocal());
+                    print(localDate);
+                    return Column(
+                      children: [
+                        (len! - 1) == index
+                            ? ChatDateWidget(localDate: localDate)
+                            : Container(),
+                        (len - 1) != index &&
+                                chatData?.data?[index].createdAt
+                                        ?.substring(0, 10) !=
+                                    chatData?.data?[index + 1].createdAt
+                                        ?.substring(0, 10)
+                            ? ChatDateWidget(localDate: localDate)
+                            : Container(),
+                        CustomChatBubble(
+                          chatMessage: chatData?.data?[index],
+                        ),
+                      ],
                     );
                   },
                 )),
@@ -1256,5 +1278,34 @@ class _ChatScreenState extends State<ChatScreen> {
 
       }
     });
+  }
+}
+
+class ChatDateWidget extends StatelessWidget {
+  const ChatDateWidget({
+    Key? key,
+    required this.localDate,
+  }) : super(key: key);
+
+  final String localDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 3, 0, 6),
+      child: Container(
+        width: 100,
+        height: 30,
+        decoration: BoxDecoration(
+          color: ColorManager.whiteColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+            child: Text(
+          localDate,
+          style: getSemiBoldtStyle(color: ColorManager.grayDark),
+        )),
+      ),
+    );
   }
 }

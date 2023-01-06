@@ -54,6 +54,10 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
+    String? transport;
+    if (userData != null && userData.transport != null) {
+      transport = userData.transport!.contains('four') ? str.s_four : str.s_two;
+    }
     print(userData?.profilePic);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -343,20 +347,23 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        userData?.about ?? '',
-                        style: getRegularStyle(
-                            color: ColorManager.engineWorkerColor,
-                            fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
+                userData?.about != null
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              userData?.about ?? '',
+                              style: getRegularStyle(
+                                  color: ColorManager.engineWorkerColor,
+                                  fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+                  padding: EdgeInsets.fromLTRB(
+                      0, userData?.about != null ? 15 : 0, 0, 10),
                   child: Row(
                     children: [
                       Text(
@@ -401,7 +408,7 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text(userData?.transport ?? '',
+                    Text(transport ?? '',
                         style: getRegularStyle(
                             color: ColorManager.engineWorkerColor,
                             fontSize: 15)),

@@ -23,7 +23,7 @@ getChatList(BuildContext context) async {
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      // log(response.body);
+      log(response.body);
 
       final chatDetails = ChatListModel.fromJson(jsonResponse);
       provider.getChatListDetails(chatDetails);

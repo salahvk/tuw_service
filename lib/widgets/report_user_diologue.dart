@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_state_button/multi_state_button.dart';
 import 'package:social_media_services/API/report_customer.dart';
@@ -6,6 +5,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReportUserDiologue extends StatefulWidget {
   const ReportUserDiologue({
@@ -28,6 +28,7 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
   @override
   Widget build(context) {
     final size = MediaQuery.of(context).size;
+    final str = AppLocalizations.of(context)!;
     return Dialog(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
@@ -45,26 +46,25 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
                     children: [
                       Column(
                         children: [
-                          CachedNetworkImage(
-                            imageUrl:
-                                'https://www.downloadclipart.net/large/22280-warning-sign-design.png',
+                          Image.asset(
+                            'assets/report.png',
                             width: size.width * .2,
                           ),
                           Text(
-                            "Report User",
+                            str.re_report_user,
                             style: getBoldtStyle(
                                 color: ColorManager.black, fontSize: 20),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 5, bottom: 3),
                             child: Text(
-                              "is this person bothering you?",
+                              str.re_bother,
                               style: getRegularStyle(
                                   color: ColorManager.black, fontSize: 15),
                             ),
                           ),
                           Text(
-                            "Tell us what they did.",
+                            str.re_tell_us,
                             style: getRegularStyle(
                                 color: ColorManager.black, fontSize: 15),
                           ),
@@ -102,7 +102,7 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
                                           right: 10,
                                           top: 0,
                                           bottom: 0),
-                                      hintText: "Reason",
+                                      hintText: str.re_reason2,
                                       hintStyle: getRegularStyle(
                                           color: ColorManager.grayLight,
                                           fontSize: 15)))),
@@ -130,7 +130,7 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
                                           right: 10,
                                           top: 0,
                                           bottom: 0),
-                                      hintText: "Comment",
+                                      hintText: str.re_comment2,
                                       hintStyle: getRegularStyle(
                                           color: ColorManager.grayLight,
                                           fontSize: 15)))),
@@ -233,13 +233,14 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
     // final provider = Provider.of<DataProvider>(context, listen: false);
     final reason = ReportCustomerControllers.reasonController.text;
     final comment = ReportCustomerControllers.commentController.text;
+    final str = AppLocalizations.of(context)!;
 
     if (reason.isEmpty) {
-      showAnimatedSnackBar(context, "Enter A reason to proceed");
+      showAnimatedSnackBar(context, str.re_reason);
       setState(() {});
       return;
     } else if (comment.isEmpty) {
-      showAnimatedSnackBar(context, "Enter A Comment to proceed");
+      showAnimatedSnackBar(context, str.re_comment);
       setState(() {});
       return;
     }
