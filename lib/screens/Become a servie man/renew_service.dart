@@ -69,6 +69,7 @@ class _RenewServicePageState extends State<RenewServicePage> {
       // provider.customerChildSer!.documents!.clear();
       // print(sGroup[0]);
       provider.serviceId = widget.serviceId;
+      childGroup = provider.customerChildSer!.childservices!;
       // print(provider.serviceId);
       // await getChildData();
       setState(() {

@@ -284,6 +284,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                 Positioned(
                                   bottom: 30,
                                   child: Text(homeData![index].service ?? '',
+                                      // maxLines: 2,
                                       textAlign: TextAlign.center,
                                       style: getMediumtStyle(
                                           color: ColorManager.black,

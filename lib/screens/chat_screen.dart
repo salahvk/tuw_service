@@ -449,23 +449,28 @@ class _ChatScreenState extends State<ChatScreen> {
                     // SizedBox(
                     //   width: mob ? 7 : 2,
                     // ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          ismenuVisible = !ismenuVisible;
-                        });
-                      },
-                      child: SizedBox(
-                        // width: w * .09,
-                        child: Text(
-                          String.fromCharCode(Icons.add.codePoint),
-                          style: TextStyle(
-                            inherit: false,
-                            color: ColorManager.primary,
-                            fontSize: 35.0,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: Icons.add.fontFamily,
-                            package: Icons.add.fontPackage,
+                    Material(
+                      color: ColorManager.whiteColor,
+                      child: InkWell(
+                        splashColor: ColorManager.primary,
+                        customBorder: const CircleBorder(),
+                        onTap: () {
+                          setState(() {
+                            ismenuVisible = !ismenuVisible;
+                          });
+                        },
+                        child: SizedBox(
+                          // width: w * .09,
+                          child: Text(
+                            String.fromCharCode(Icons.add.codePoint),
+                            style: TextStyle(
+                              inherit: false,
+                              color: ColorManager.primary,
+                              fontSize: 35.0,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: Icons.add.fontFamily,
+                              package: Icons.add.fontPackage,
+                            ),
                           ),
                         ),
                       ),

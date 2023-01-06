@@ -144,7 +144,7 @@
     "su_tax_amount":"Tax Amount",
     "su_sub_date":"Subscription Date",
     "su_order_id":"Order Id",
-    "su_package_id":"Package Id",
+    "su_package_id":"Package Name",
 
     "a_home_locator":"Home Locator",
     "a_add":"Add",

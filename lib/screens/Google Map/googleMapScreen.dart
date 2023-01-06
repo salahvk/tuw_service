@@ -96,8 +96,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
                   infoWindow: InfoWindow(
-                    title: str.a_home_locator,
-                    snippet: '*',
+                    title: place,
+                    // snippet: '*',
                   ),
                 ),
               },

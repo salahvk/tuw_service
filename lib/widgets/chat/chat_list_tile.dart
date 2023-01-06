@@ -140,10 +140,13 @@ class _ChatListTileState extends State<ChatListTile> {
                               style: getRegularStyle(
                                   color: ColorManager.black,
                                   fontSize: mob ? 16 : 10)),
-                          //     Text(widget.profileData?. ?? '',
-                          // style: getRegularStyle(
-                          //     color: ColorManager.black,
-                          //     fontSize: mob ? 16 : 10)),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(widget.profileData?.lastname ?? '',
+                              style: getRegularStyle(
+                                  color: ColorManager.black,
+                                  fontSize: mob ? 16 : 10)),
                         ],
                       ),
                       const SizedBox(

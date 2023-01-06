@@ -113,6 +113,7 @@ class MessageData {
   String? updatedAt;
   int? sendUserId;
   String? firstname;
+  String? lastname;
   String? onlineStatus;
   String? serviceName;
   String? profilePic;
@@ -131,6 +132,7 @@ class MessageData {
       this.updatedAt,
       this.sendUserId,
       this.firstname,
+      this.lastname,
       this.onlineStatus,
       this.serviceName,
       this.profilePic,
@@ -149,6 +151,7 @@ class MessageData {
     updatedAt = json['updated_at'];
     sendUserId = json['send_user_id'];
     firstname = json['firstname'];
+    lastname = json['lastname'];
     onlineStatus = json['online_status'];
     serviceName = json['service_name'];
     profilePic = json['profile_pic'];
@@ -169,6 +172,7 @@ class MessageData {
     data['updated_at'] = updatedAt;
     data['send_user_id'] = sendUserId;
     data['firstname'] = firstname;
+    data['lastname'] = lastname;
     data['online_status'] = onlineStatus;
     data['service_name'] = serviceName;
     data['profile_pic'] = profilePic;

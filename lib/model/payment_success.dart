@@ -58,6 +58,8 @@ class Subscription {
   String? couponCode;
   String? transactionId;
   String? transactionStatus;
+  String? packageName;
+  String? serviceName;
 
   Subscription(
       {this.id,
@@ -73,7 +75,9 @@ class Subscription {
       this.orderId,
       this.couponCode,
       this.transactionId,
-      this.transactionStatus});
+      this.transactionStatus,
+      this.packageName,
+      this.serviceName});
 
   Subscription.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -90,6 +94,8 @@ class Subscription {
     couponCode = json['coupon_code'];
     transactionId = json['transaction_id'];
     transactionStatus = json['transaction_status'];
+    packageName = json['package_name'];
+    serviceName = json['service_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -108,6 +114,8 @@ class Subscription {
     data['coupon_code'] = couponCode;
     data['transaction_id'] = transactionId;
     data['transaction_status'] = transactionStatus;
+    data['package_name'] = packageName;
+    data['service_name'] = serviceName;
     return data;
   }
 }
@@ -124,6 +132,8 @@ class PackageInfo {
   String? updatedAt;
   String? deletedAt;
   String? taxIds;
+  String? packageName;
+  String? serviceName;
 
   PackageInfo(
       {this.id,
@@ -136,7 +146,9 @@ class PackageInfo {
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
-      this.taxIds});
+      this.taxIds,
+      this.packageName,
+      this.serviceName});
 
   PackageInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -150,6 +162,8 @@ class PackageInfo {
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
     taxIds = json['tax_ids'];
+    packageName = json['package_name'];
+    serviceName = json['service_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -165,6 +179,8 @@ class PackageInfo {
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
     data['tax_ids'] = taxIds;
+    data['package_name'] = packageName;
+    data['service_name'] = serviceName;
     return data;
   }
 }
