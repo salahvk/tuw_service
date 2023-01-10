@@ -164,6 +164,16 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                   width: size.width * .6,
                                   height: 240,
                                   child: CachedNetworkImage(
+                                    progressIndicatorBuilder:
+                                        (context, url, progress) {
+                                      return const Center(
+                                          child: SizedBox(
+                                              width: 45,
+                                              height: 45,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              )));
+                                    },
                                     imageUrl:
                                         "$endPoint${widget.chatMessage?.chatMedia}",
                                     fit: BoxFit.cover,
@@ -264,11 +274,65 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                         }));
                                         print(addressId);
                                       },
-                                      child: Text(
-                                        widget.chatMessage?.message ?? '',
-                                        style: getRegularStyle(
-                                            color: ColorManager.primary3,
-                                            fontSize: 14),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            width: size.width * .6,
+                                            height: 240,
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "$endPoint${widget.chatMessage?.addressImage}",
+                                              fit: BoxFit.cover,
+                                              // placeholder: (context, url) {
+                                              //   return const Center(
+                                              //     child: SizedBox(
+                                              //         width: 30,
+                                              //         height: 30,
+                                              //         child:
+                                              //             CircularProgressIndicator(
+                                              //           strokeWidth: 1,
+                                              //         )),
+                                              //   );
+                                              // },
+                                              progressIndicatorBuilder:
+                                                  (context, url, progress) {
+                                                return const Center(
+                                                    child: SizedBox(
+                                                        width: 45,
+                                                        height: 45,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                        )));
+                                              },
+                                              // imageBuilder:
+                                              //     (context, imageProvider) =>
+                                              //         Container(
+                                              //   width: 25,
+                                              //   height: 20,
+                                              //   decoration: BoxDecoration(
+                                              //     // shape: BoxShape.circle,
+                                              //     image: DecorationImage(
+                                              //         image: imageProvider,
+                                              //         fit: BoxFit.cover),
+                                              //   ),
+                                              // ),
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                return const Center(
+                                                  child: Text(
+                                                      "No Image to display"),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            widget.chatMessage?.message ?? '',
+                                            style: getRegularStyle(
+                                                color: ColorManager.primary3,
+                                                fontSize: 14),
+                                          ),
+                                        ],
                                       ),
                                     )
                                   : widget.chatMessage?.type == 'document'

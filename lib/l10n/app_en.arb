@@ -267,6 +267,8 @@
     "re_report_user":"Report User",
     "re_bother":"is this person bothering you?",
     "re_tell_us":"Tell us what they did.",
-    "re_report_success":"Reported Customer Successfully"
+    "re_report_success":"Reported Customer Successfully",
+
+    "yesterday":"Yesterday"
 
 }

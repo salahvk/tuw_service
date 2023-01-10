@@ -115,6 +115,7 @@ class ChatData {
   String? onlineStatus;
   String? chatMedia;
   String? profileImage;
+  String? addressImage;
   String? localTime;
   var addressId;
 
@@ -133,6 +134,7 @@ class ChatData {
       this.onlineStatus,
       this.chatMedia,
       this.profileImage,
+      this.addressImage,
       this.localTime,
       this.addressId});
 
@@ -150,6 +152,7 @@ class ChatData {
     firstname = json['firstname'];
     onlineStatus = json['online_status'];
     chatMedia = json['chat_media'];
+    addressImage = json['address_image'];
     profileImage = json['profile_image'];
     addressId = json['address_id'];
   }
@@ -169,6 +172,7 @@ class ChatData {
     data['firstname'] = firstname;
     data['online_status'] = onlineStatus;
     data['chat_media'] = chatMedia;
+    data['address_image'] = addressImage;
     data['profile_image'] = profileImage;
     data['address_id'] = addressId;
     return data;

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:social_media_services/model/active_services.dart';
 import 'package:social_media_services/model/active_subscription.dart';
 import 'package:social_media_services/model/chat_list.dart';
@@ -201,5 +202,11 @@ class DataProvider with ChangeNotifier {
   int? selectedCountryId;
   int? packageId;
   int? packageAmount;
+
+  double? addressLatitude;
+  double? addressLongitude;
+  String? locality;
+
+  XFile? image;
   // String country
 }

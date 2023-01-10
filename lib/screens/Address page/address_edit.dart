@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -13,7 +13,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -21,8 +20,7 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
-import 'package:social_media_services/screens/Address%20page/address_page.dart';
-import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
+import 'package:social_media_services/screens/Google%20Map/address_locator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -45,7 +43,11 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   Countries? selectedValue;
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
+
   String lang = '';
+  String? imagePath;
+  XFile? imageFile;
+
   List<Countries> r2 = [];
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
@@ -64,6 +66,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
         r2.add(provider.countriesModel!.countries![i]);
         i++;
       }
+      clearAddressController();
     });
   }
 
@@ -78,8 +81,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
     final currentLocator = LatLng(
-        double.parse(userDetails?.latitude ?? '41.612849'),
-        double.parse(userDetails?.longitude ?? '13.046816'));
+        provider.addressLatitude ?? double.parse('41.612849'),
+        provider.addressLongitude ?? double.parse('13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -171,7 +174,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
             ? _screens[_selectedIndex]
             : SafeArea(
                 child: SingleChildScrollView(
-                  reverse: true,
+                  // reverse: true,
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
@@ -212,18 +215,36 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                           const SizedBox(
                             height: 2,
                           ),
-                          Text(
-                            "mail @gmail.com",
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
-                          ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            provider.viewProfileModel?.userdetails?.phone ?? '',
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
+                          // Text(
+                          //   "mail @gmail.com",
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.grayLight, fontSize: 13),
+                          // ),
+                          // const SizedBox(
+                          //   height: 2,
+                          // ),
+                          // Text(
+                          //   provider.viewProfileModel?.userdetails?.phone ?? '',
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.grayLight, fontSize: 13),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5, top: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  str.ae_address,
+                                  style: getBoldtStyle(
+                                      color: ColorManager.black, fontSize: 14),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.primary,
+                                      borderRadius: BorderRadius.circular(5)),
+                                )
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
@@ -241,8 +262,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                             child: const Center(
                                                 child:
                                                     CircularProgressIndicator()))
-                                        : CoverImageWidget(
-                                            userDetails: userDetails),
+                                        : AddressImageWidget(
+                                            imagePath: imagePath),
                                   ),
                                 ),
                                 Positioned(
@@ -292,14 +313,13 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    userDetails!.homeLocation ?? '',
+                                    provider.locality ?? '',
                                     style: getRegularStyle(
-                                        color: ColorManager.black,
-                                        fontSize:
-                                            userDetails.homeLocation!.length >
-                                                    10
-                                                ? 10
-                                                : 12),
+                                      color: ColorManager.black,
+                                      // fontSize: provider.locality!.length > 10
+                                      //     ? 10
+                                      //     : 12
+                                    ),
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
@@ -315,7 +335,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                         // }));
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return const GoogleMapScreen();
+                                          return AddressLocatorScreen();
                                         }));
                                       },
                                       child: Padding(
@@ -328,7 +348,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                               color: ColorManager.whiteColor,
                                             ),
                                             Text(
-                                              str.ae_home_locator,
+                                              // str.ae_home_locator,
+                                              "Address Locator",
                                               style: getRegularStyle(
                                                   color:
                                                       ColorManager.whiteColor),
@@ -371,40 +392,6 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                             ),
                           ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                str.ae_address,
-                                style: getBoldtStyle(
-                                    color: ColorManager.black, fontSize: 14),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: ColorManager.primary,
-                                    borderRadius: BorderRadius.circular(5)),
-
-                                // width: 30,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        color: ColorManager.whiteColor,
-                                      ),
-                                      Text(
-                                        str.ae_add,
-                                        style: getRegularStyle(
-                                            color: ColorManager.whiteColor),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
                           MandatoryHeader(heading: str.ae_address_n),
                           TextFieldProfileService(
                               hintText: str.ae_address_h,
@@ -768,6 +755,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
       showAnimatedSnackBar(context, "state is required");
     } else if (flat.isEmpty) {
       showAnimatedSnackBar(context, "Flat No is required");
+    } else if (imageFile == null) {
+      showAnimatedSnackBar(context, "Please Choose an address Photo");
     } else {
       setState(() {
         isSaveAddressLoading = true;
@@ -783,45 +772,45 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     final region = AddressEditControllers.regionController.text;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
-    //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     final provider = Provider.of<DataProvider>(context, listen: false);
-    provider.subServicesModel = null;
+    final latitude = provider.addressLatitude;
+    final longitude = provider.addressLongitude;
     final apiToken = Hive.box("token").get('api_token');
-    if (apiToken == null) return;
+
+    var stream = http.ByteStream(DelegatingStream(imageFile!.openRead()));
+    var length = await imageFile!.length();
+
     try {
-      var response = await http.post(
-          Uri.parse(
-              '$userAddressCreate?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat'),
-          headers: {
-            "device-id": provider.deviceId ?? '',
-            "api-token": apiToken
-          });
+      var uri = Uri.parse(
+          '$userAddressCreate?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat&latitude=$latitude&longitude=$longitude');
+      var request = http.MultipartRequest(
+        "POST",
+        uri,
+      );
+
+      request.headers.addAll(
+          {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+      var multipartFile = http.MultipartFile(
+        'image',
+        stream,
+        length,
+        filename: (imageFile!.path),
+      );
+      request.files.add(multipartFile);
+      var response = await request.send();
+
       if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        log(response.body);
+        // var jsonResponse = jsonDecode(response.body);
+
         await getUserAddress(context);
         setState(() {
           isSaveAddressLoading = false;
         });
 
         navigateToAddressPage();
-        if (jsonResponse['result'] == false) {
-          await Hive.box("token").clear();
-
-          return;
-        }
-
-        // final subServicesData = SubServicesModel.fromJson(jsonResponse);
-        // provider.subServicesModelData(subServicesData);
-
-      } else {
-        // print(response.statusCode);
-        // print(response.body);
-        // print('Something went wrong');
-      }
-    } on Exception catch (e) {
+      } else {}
+    } on Exception catch (_) {
       log("Something Went Wrong1");
-      print(e);
     }
   }
 
@@ -832,7 +821,11 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   selectImage() async {
     print("Img picker");
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    final imagePath = image?.path;
+    setState(() {
+      imagePath = image?.path;
+      imageFile = image;
+    });
+
     final imageName = image?.name;
     print(image?.name);
     print(image?.path);
@@ -845,35 +838,72 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     setState(() {
       isLoading = true;
     });
-    await upload(image);
+    // await upload(image);
     setState(() {
       isLoading = false;
     });
   }
 
-  upload(XFile imageFile) async {
-    var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
-    var length = await imageFile.length();
-    final apiToken = Hive.box("token").get('api_token');
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    var uri = Uri.parse(updateCoverPictureApi);
-    var request = http.MultipartRequest(
-      "POST",
-      uri,
+  // upload(XFile imageFile) async {
+  //   var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
+  //   var length = await imageFile.length();
+  //   final apiToken = Hive.box("token").get('api_token');
+  //   final provider = Provider.of<DataProvider>(context, listen: false);
+  //   var uri = Uri.parse(updateCoverPictureApi);
+  //   var request = http.MultipartRequest(
+  //     "POST",
+  //     uri,
+  //   );
+  //   // "content-type": "multipart/form-data"
+  //   request.headers
+  //       .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
+  //   var multipartFile = http.MultipartFile(
+  //     'cover_image',
+  //     stream,
+  //     length,
+  //     filename: (imageFile.path),
+  //   );
+  //   request.files.add(multipartFile);
+  //   var response = await request.send();
+  //   print(response.statusCode);
+  //   await viewProfile(context);
+  //   setState(() {});
+  // }
+}
+
+class AddressImageWidget extends StatelessWidget {
+  const AddressImageWidget({
+    Key? key,
+    this.imagePath,
+  }) : super(key: key);
+
+  final String? imagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
+    return Image.file(
+      File(
+        imagePath ?? '',
+      ),
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          height: 20,
+          color: ColorManager.whiteColor,
+          child: Center(
+            child: Text(
+              "Please choose an address Photo",
+              style: getRegularStyle(color: ColorManager.black, fontSize: 14),
+            ),
+          ),
+        );
+      },
     );
-    // "content-type": "multipart/form-data"
-    request.headers
-        .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
-    var multipartFile = http.MultipartFile(
-      'cover_image',
-      stream,
-      length,
-      filename: (imageFile.path),
-    );
-    request.files.add(multipartFile);
-    var response = await request.send();
-    print(response.statusCode);
-    await viewProfile(context);
-    setState(() {});
+    //  CachedNetworkImage(
+    //   imageUrl: '$endPoint/assets/uploads/cover_image/${userDetails?.coverPic}',
+    //   fit: BoxFit.cover,
+
+    // );
   }
 }

@@ -10,58 +10,98 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
+import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/screens/Address%20page/address_edit.dart';
+import 'package:social_media_services/screens/Address%20page/address_update.dart';
 
-class ShareLocation extends StatefulWidget {
-  LatLng? currentLocator;
-  ShareLocation({Key? key, this.currentLocator}) : super(key: key);
+class AddressLocatorScreen extends StatefulWidget {
+  bool isUpdate;
+  UserAddress? userAddress;
+  AddressLocatorScreen({Key? key, this.isUpdate = false, this.userAddress})
+      : super(key: key);
 
   @override
-  State<ShareLocation> createState() => _ShareLocationState();
+  State<AddressLocatorScreen> createState() => _AddressLocatorScreenState();
 }
 
-class _ShareLocationState extends State<ShareLocation> {
+class _AddressLocatorScreenState extends State<AddressLocatorScreen> {
   LatLng? _lastTap;
-  bool isLocationChanged = false;
+  bool isLocationChanged = true;
   bool isLoading = false;
   String? locality;
   String? country;
   String? place;
   LatLng? currentLocator;
   GoogleMapController? mapController;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    currentLocator = widget.currentLocator;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await getPlaceAddress(currentLocator ?? widget.currentLocator);
-      isLocationChanged = true;
-      setState(() {});
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      currentLocator = LatLng(
+          provider.addressLatitude ??
+              double.parse(widget.userAddress?.latitude ?? "41.612849"),
+          provider.addressLongitude ??
+              double.parse(widget.userAddress?.longitude ?? "13.046816"));
+
+      getPlaceAddress(currentLocator);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DataProvider>(context, listen: false);
-    final servicerProvider =
-        Provider.of<ServicerProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
-    final userDetails = provider.viewProfileModel?.userdetails;
+
     final str = AppLocalizations.of(context)!;
     // currentLocator = LatLng(
-    //     double.parse(servicerProvider.servicerLatitude ??
-    //         userDetails?.latitude ??
-    //         '41.612849'),
-    //     double.parse(servicerProvider.servicerLongitude ??
-    //         userDetails?.longitude ??
-    //         '13.046816'));
+    //     provider.addressLatitude ?? double.parse('41.612849'),
+    //     provider.addressLongitude ?? double.parse('13.046816'));
 
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar: isLocationChanged
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      provider.addressLatitude = _lastTap?.latitude;
+                      provider.addressLongitude = _lastTap?.longitude;
+                      provider.locality = locality;
+                      // await updateLocationFunction(
+                      //     context,
+                      //     [_lastTap?.latitude, _lastTap?.longitude],
+                      //     locality ?? '');
+                      // await viewProfile(context);
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.pop(context);
+                      if (widget.isUpdate == true) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (ctx) {
+                          return UserAddressUpdate(
+                              isUpdate: true, userAddress: widget.userAddress!);
+                        }));
+                      } else {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (ctx) {
+                          return const UserAddressEdit();
+                        }));
+                      }
+                    },
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        :
+                        //  Text(str.gm_new_location)
+                        const Text("Confirm Location")),
+              )
+            : null,
         body: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
@@ -93,8 +133,8 @@ class _ShareLocationState extends State<ShareLocation> {
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
                   infoWindow: InfoWindow(
-                    title: str.a_home_locator,
-                    snippet: '*',
+                    title: place,
+                    // snippet: '*',
                   ),
                 ),
               },

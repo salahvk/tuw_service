@@ -33,6 +33,15 @@ class _PopupImageState extends State<PopupImage> {
               height: MediaQuery.of(context).size.height * .7,
               width: size.width * .9,
               child: CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) {
+                  return const Center(
+                      child: SizedBox(
+                          width: 45,
+                          height: 45,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          )));
+                },
                 // errorWidget: (context, url, error) {
                 //   return Container(
                 //     height: 80,

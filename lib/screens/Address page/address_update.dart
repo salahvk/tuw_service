@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -13,7 +14,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
-import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -23,7 +23,7 @@ import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
-import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
+import 'package:social_media_services/screens/Google%20Map/address_locator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -37,7 +37,9 @@ import 'package:async/async.dart';
 
 class UserAddressUpdate extends StatefulWidget {
   final UserAddress userAddress;
-  const UserAddressUpdate({super.key, required this.userAddress});
+  bool isUpdate;
+  UserAddressUpdate(
+      {super.key, required this.userAddress, this.isUpdate = false});
 
   @override
   State<UserAddressUpdate> createState() => _UserAddressUpdateState();
@@ -54,13 +56,21 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
   bool isSaveAddressLoading = false;
+  String? imagePath;
+  XFile? imageFile;
+  GoogleMapController? mapController;
   @override
   void initState() {
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    fillFields();
+    if (widget.isUpdate == false) {
+      fillFields();
+    } else {
+      countryValue = widget.userAddress.country;
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = Provider.of<DataProvider>(context, listen: false);
       int? n = provider.countriesModel?.countries?.length;
@@ -68,6 +78,19 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
       while (i < n!.toInt()) {
         r2.add(provider.countriesModel!.countries![i]);
         i++;
+      }
+      if (widget.isUpdate == true) {
+        imageFile = provider.image;
+        imagePath = provider.image?.path;
+      } else {
+        imageFile = XFile('');
+        imagePath = '';
+
+        // final currentLocator = LatLng(
+        //     double.parse(widget.userAddress.latitude ?? '1.612849'),
+        //     double.parse(widget.userAddress.longitude ?? '1.046816'));
+        // mapController?.animateCamera(CameraUpdate.newCameraPosition(
+        //     CameraPosition(target: currentLocator, zoom: 12)));
       }
     });
   }
@@ -81,9 +104,12 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
+    print("$endPoint${widget.userAddress.image}");
     final currentLocator = LatLng(
-        double.parse(userDetails?.latitude ?? '41.612849'),
-        double.parse(userDetails?.longitude ?? '13.046816'));
+        provider.addressLatitude ??
+            double.parse(widget.userAddress.latitude ?? '41.612849'),
+        provider.addressLongitude ??
+            double.parse(widget.userAddress.longitude ?? '13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -175,7 +201,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
             ? _screens[_selectedIndex]
             : SafeArea(
                 child: SingleChildScrollView(
-                  reverse: true,
+                  // reverse: true,
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
@@ -216,18 +242,36 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                           const SizedBox(
                             height: 2,
                           ),
-                          Text(
-                            "mail @gmail.com",
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
-                          ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            provider.viewProfileModel?.userdetails?.phone ?? '',
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
+                          // Text(
+                          //   "mail @gmail.com",
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.grayLight, fontSize: 13),
+                          // ),
+                          // const SizedBox(
+                          //   height: 2,
+                          // ),
+                          // Text(
+                          //   provider.viewProfileModel?.userdetails?.phone ?? '',
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.grayLight, fontSize: 13),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5, top: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  str.ae_address,
+                                  style: getBoldtStyle(
+                                      color: ColorManager.black, fontSize: 14),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.primary,
+                                      borderRadius: BorderRadius.circular(5)),
+                                )
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
@@ -245,8 +289,9 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                             child: const Center(
                                                 child:
                                                     CircularProgressIndicator()))
-                                        : CoverImageWidget(
-                                            userDetails: userDetails),
+                                        : AddressImageWidget2(
+                                            userAddress: widget.userAddress,
+                                            imagePath: imagePath ?? ''),
                                   ),
                                 ),
                                 Positioned(
@@ -296,14 +341,17 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    userDetails!.homeLocation ?? '',
+                                    provider.locality ??
+                                        widget.userAddress.country ??
+                                        '',
                                     style: getRegularStyle(
-                                        color: ColorManager.black,
-                                        fontSize:
-                                            userDetails.homeLocation!.length >
-                                                    10
-                                                ? 10
-                                                : 12),
+                                      color: ColorManager.black,
+                                      // fontSize:
+                                      // userDetails.homeLocation!.length >
+                                      //         10
+                                      //     ? 10
+                                      //     : 12
+                                    ),
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
@@ -319,7 +367,10 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                         // }));
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return const GoogleMapScreen();
+                                          return AddressLocatorScreen(
+                                            isUpdate: true,
+                                            userAddress: widget.userAddress,
+                                          );
                                         }));
                                       },
                                       child: Padding(
@@ -332,7 +383,8 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                               color: ColorManager.whiteColor,
                                             ),
                                             Text(
-                                              str.ae_home_locator,
+                                              // str.ae_home_locator,
+                                              "Address Locator",
                                               style: getRegularStyle(
                                                   color:
                                                       ColorManager.whiteColor),
@@ -359,6 +411,11 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                     target: currentLocator,
                                     zoom: 4.0,
                                   ),
+                                  onMapCreated: (controller) {
+                                    setState(() {
+                                      mapController = controller;
+                                    });
+                                  },
                                   markers: <Marker>{
                                     Marker(
                                       markerId:
@@ -790,6 +847,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
   }
 
   addressUpdaeFun(BuildContext context) async {
+    final provider = Provider.of<DataProvider>(context, listen: false);
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
     final country = selectedValue != null
@@ -799,19 +857,39 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
     final id = widget.userAddress.id;
+    final latitude = provider.addressLatitude ?? widget.userAddress.latitude;
+    final longitude = provider.addressLongitude ?? widget.userAddress.longitude;
     //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    provider.subServicesModel = null;
+
     final apiToken = Hive.box("token").get('api_token');
-    if (apiToken == null) return;
+
     try {
-      var response = await http.post(
-          Uri.parse(
-              '$updateUserAddressApi?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat&address_id=$id'),
-          headers: {
-            "device-id": provider.deviceId ?? '',
-            "api-token": apiToken
-          });
+      var uri = Uri.parse(
+          '$updateUserAddressApi?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat&address_id=$id&latitude=$latitude&longitude=$longitude');
+      var request = http.MultipartRequest(
+        "POST",
+        uri,
+      );
+      if (imagePath!.isNotEmpty) {
+        var stream = http.ByteStream(DelegatingStream(imageFile!.openRead()));
+        var length = await imageFile!.length();
+        print("imagepath not empty");
+        request.headers.addAll(
+            {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+        var multipartFile = http.MultipartFile(
+          'image',
+          stream,
+          length,
+          filename: (imageFile!.path),
+        );
+        request.files.add(multipartFile);
+        var response = await request.send();
+      }
+
+      var response = await http.post(uri, headers: {
+        "device-id": provider.deviceId ?? '',
+        "api-token": apiToken
+      });
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         log(response.body);
@@ -821,11 +899,6 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
         });
 
         navigateToAddressPage();
-        if (jsonResponse['result'] == false) {
-          await Hive.box("token").clear();
-
-          return;
-        }
 
         // final subServicesData = SubServicesModel.fromJson(jsonResponse);
         // provider.subServicesModelData(subServicesData);
@@ -849,53 +922,53 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     }));
   }
 
-  selectImage() async {
-    print("Img picker");
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    final imagePath = image?.path;
-    final imageName = image?.name;
-    print(image?.name);
-    print(image?.path);
-    // final XFile? photo =
-    //     await _picker.pickImage(source: ImageSource.camera);
-    if (image == null) {
-      return;
-    }
-    // updateProfile(imageName);
-    setState(() {
-      isLoading = true;
-    });
-    await upload(image);
-    setState(() {
-      isLoading = false;
-    });
-  }
+  // selectImage() async {
+  //   print("Img picker");
+  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  //   final imagePath = image?.path;
+  //   final imageName = image?.name;
+  //   print(image?.name);
+  //   print(image?.path);
+  //   // final XFile? photo =
+  //   //     await _picker.pickImage(source: ImageSource.camera);
+  //   if (image == null) {
+  //     return;
+  //   }
+  //   // updateProfile(imageName);
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   await upload(image);
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
-  upload(XFile imageFile) async {
-    var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
-    var length = await imageFile.length();
-    final apiToken = Hive.box("token").get('api_token');
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    var uri = Uri.parse(updateCoverPictureApi);
-    var request = http.MultipartRequest(
-      "POST",
-      uri,
-    );
-    // "content-type": "multipart/form-data"
-    request.headers
-        .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
-    var multipartFile = http.MultipartFile(
-      'cover_image',
-      stream,
-      length,
-      filename: (imageFile.path),
-    );
-    request.files.add(multipartFile);
-    var response = await request.send();
-    print(response.statusCode);
-    await viewProfile(context);
-    setState(() {});
-  }
+  // upload(XFile imageFile) async {
+  //   var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
+  //   var length = await imageFile.length();
+  //   final apiToken = Hive.box("token").get('api_token');
+  //   final provider = Provider.of<DataProvider>(context, listen: false);
+  //   var uri = Uri.parse(updateCoverPictureApi);
+  //   var request = http.MultipartRequest(
+  //     "POST",
+  //     uri,
+  //   );
+  //   // "content-type": "multipart/form-data"
+  //   request.headers
+  //       .addAll({"device-id": provider.deviceId ?? '', "api-token": apiToken});
+  //   var multipartFile = http.MultipartFile(
+  //     'cover_image',
+  //     stream,
+  //     length,
+  //     filename: (imageFile.path),
+  //   );
+  //   request.files.add(multipartFile);
+  //   var response = await request.send();
+  //   print(response.statusCode);
+  //   await viewProfile(context);
+  //   setState(() {});
+  // }
 
   fillFields() {
     AddressEditControllers.addressNameController.text =
@@ -917,5 +990,77 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     AddressEditControllers.regionController.text = '';
     AddressEditControllers.stateController.text = '';
     AddressEditControllers.flatNoController.text = '';
+  }
+
+  selectImage() async {
+    print("Img picker");
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    setState(() {
+      imagePath = image?.path;
+      imageFile = image;
+      provider.image = image;
+    });
+
+    final imageName = image?.name;
+    print(image?.name);
+    print(image?.path);
+    // final XFile? photo =
+    //     await _picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    // updateProfile(imageName);
+    setState(() {
+      isLoading = true;
+    });
+    // await upload(image);
+    setState(() {
+      isLoading = false;
+    });
+  }
+}
+
+class AddressImageWidget2 extends StatelessWidget {
+  const AddressImageWidget2({Key? key, this.imagePath, this.userAddress})
+      : super(key: key);
+
+  final String? imagePath;
+  final UserAddress? userAddress;
+
+  @override
+  Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
+    return SizedBox(
+      child: imagePath!.isEmpty
+          ? CachedNetworkImage(
+              imageUrl: "$endPoint${userAddress?.image}",
+              fit: BoxFit.cover,
+            )
+          : Image.file(
+              File(
+                imagePath ?? '',
+              ),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 20,
+                  color: ColorManager.whiteColor,
+                  child: Center(
+                    child: Text(
+                      "Please choose an address Photo",
+                      style: getRegularStyle(
+                          color: ColorManager.black, fontSize: 14),
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+    //  CachedNetworkImage(
+    //   imageUrl: '$endPoint/assets/uploads/cover_image/${userDetails?.coverPic}',
+    //   fit: BoxFit.cover,
+
+    // );
   }
 }

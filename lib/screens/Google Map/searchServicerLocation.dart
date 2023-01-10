@@ -106,6 +106,11 @@ class _SearchServicerLocationState extends State<SearchServicerLocation> {
               ),
               markers: <Marker>{
                 Marker(
+                  onDragEnd: (value) async {
+                    print(value);
+                    await getPlaceAddress(value);
+                  },
+                  draggable: true,
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
                   infoWindow: InfoWindow(

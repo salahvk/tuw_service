@@ -228,7 +228,7 @@
     "msb_pur":"تاريخ تقديم الطلب :",
     "msb_sub":" إشتراكاتي",
 
-    "snack_coupen_av":"رم الخصم غير متاح",
+    "snack_coupen_av":"رمز الخصم غير متاح",
     "snack_get_location":"...الموقع الحالي قيد التوفير",
     "snack_done":"تم بنجاح",
     "snack_choose_group":"يرجى اختيار نوع الخدمة",
@@ -260,13 +260,16 @@
     "paid":"دفع",
     "omr":"ريال عماني",
 
-    "re_reason":"Enter A reason to proceed",
-    "re_reason2":"Reason",
-    "re_comment":"Enter A Comment to proceed",
-    "re_comment2":"Comment",
-    "re_report_user":"Report User",
-    "re_bother":"is this person bothering you?",
-    "re_tell_us":"Tell us what they did.",
-    "re_report_success":"Reported Customer Successfully"
+    
+    "re_reason":"ضع سبب للمتابعة",
+    "re_reason2":"السبب",
+    "re_comment":"اكتب تعليق للمتابعة",
+    "re_comment2":"التعليق",
+    "re_report_user":"أبلغ عن مستخدم",
+    "re_bother":"هل هذا الشخص يزعجك؟?",
+    "re_tell_us":"قم بتزويدنا بتفاصيل الشكوى.",
+    "re_report_success":"تمت عملية تقديم الشكوى بنجاح",
+
+    "yesterday":"Yesterday"
 
 }

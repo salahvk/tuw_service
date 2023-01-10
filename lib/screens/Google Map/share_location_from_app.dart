@@ -115,11 +115,16 @@ class _SelectLocationFromAppState extends State<SelectLocationFromApp> {
               ),
               markers: <Marker>{
                 Marker(
+                  onDragEnd: (value) async {
+                    print(value);
+                    await getPlaceAddress(value);
+                  },
+                  draggable: true,
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
                   infoWindow: InfoWindow(
-                    title: str.a_home_locator,
-                    snippet: '*',
+                    title: locality,
+                    // snippet: '*',
                   ),
                 ),
               },

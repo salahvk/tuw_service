@@ -31,11 +31,14 @@ class UserAddress {
   String? address;
   int? countryId;
   String? region;
+  String? image;
   String? state;
   String? homeNo;
   String? createdAt;
   String? updatedAt;
   String? country;
+  String? latitude;
+  String? longitude;
 
   UserAddress(
       {this.id,
@@ -44,11 +47,14 @@ class UserAddress {
       this.address,
       this.countryId,
       this.region,
+      this.image,
       this.state,
       this.homeNo,
       this.createdAt,
       this.updatedAt,
-      this.country});
+      this.country,
+      this.latitude,
+      this.longitude});
 
   UserAddress.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -57,11 +63,14 @@ class UserAddress {
     address = json['address'];
     countryId = json['country_id'];
     region = json['region'];
+    image = json['image'];
     state = json['state'];
     homeNo = json['home_no'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     country = json['country'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
   }
 
   Map<String, dynamic> toJson() {
@@ -72,11 +81,14 @@ class UserAddress {
     data['address'] = address;
     data['country_id'] = countryId;
     data['region'] = region;
+    data['image'] = image;
     data['state'] = state;
     data['home_no'] = homeNo;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['country'] = country;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }

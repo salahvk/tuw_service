@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/address/getUserAddress.dart';
 import 'package:social_media_services/API/endpoint.dart';
@@ -18,6 +19,7 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
+import 'package:social_media_services/screens/Google%20Map/view_location.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/AddressBox/user_address_box.dart';
@@ -69,9 +71,11 @@ class _UserAddressCardState extends State<UserAddressCard> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
+    final homeLocation =
+        "${userAddressData?.country} | ${userAddressData?.state}";
     final currentLocator = LatLng(
-        double.parse(userDetails?.latitude ?? '41.612849'),
-        double.parse(userDetails?.longitude ?? '13.046816'));
+        double.parse(userAddressData?.latitude ?? '41.612849'),
+        double.parse(userAddressData?.longitude ?? '13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -253,9 +257,9 @@ class _UserAddressCardState extends State<UserAddressCard> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  userDetails?.homeLocation != null
+                                  userAddressData?.country != null
                                       ? Text(
-                                          userprofile?.homeLocation ?? '',
+                                          homeLocation,
                                           style: getRegularStyle(
                                               color: ColorManager.black,
                                               fontSize: userDetails!
@@ -283,6 +287,20 @@ class _UserAddressCardState extends State<UserAddressCard> {
                                     target: currentLocator,
                                     zoom: 4.0,
                                   ),
+                                  onTap: (argument) {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.rightToLeft,
+                                            child: ViewLocationScreen(
+                                                latitude:
+                                                    userAddressData?.latitude ??
+                                                        '',
+                                                longitude: userAddressData
+                                                        ?.longitude ??
+                                                    '')));
+                                  },
                                   markers: <Marker>{
                                     Marker(
                                       markerId:
@@ -328,8 +346,22 @@ class _UserAddressCardState extends State<UserAddressCard> {
                           //   },
                           //   itemCount:  0,
                           // )
-                          UserAddressBox(
-                            userAddress: userAddressData,
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: ViewLocationScreen(
+                                          latitude:
+                                              userAddressData?.latitude ?? '',
+                                          longitude:
+                                              userAddressData?.longitude ??
+                                                  '')));
+                            },
+                            child: UserAddressBox(
+                              userAddress: userAddressData,
+                            ),
                           )
                         ],
                       ),

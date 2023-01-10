@@ -13,6 +13,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/Google%20Map/share_location_from_app.dart';
+import 'package:social_media_services/screens/serviceman/serviceman_list_details.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
@@ -170,25 +172,38 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 2),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundImage: provider
-                          .serviceManDetails?.userData?.profileImage ==
-                      null
-                  ? const AssetImage('assets/user.png') as ImageProvider
-                  : CachedNetworkImageProvider(
-                      '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
+          leading: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.topToBottom,
+                      child: ServiceManDetails(
+                        serviceman: widget.serviceman,
+                      )));
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 0, 2),
+              child: CircleAvatar(
+                radius: 16,
+                backgroundImage: provider
+                            .serviceManDetails?.userData?.profileImage ==
+                        null
+                    ? const AssetImage('assets/user.png') as ImageProvider
+                    : CachedNetworkImageProvider(
+                        '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
+              ),
             ),
           ),
           title: InkWell(
             onTap: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-              //   return ServiceManDetails(
-              //     serviceman: widget.serviceman,
-              //   );
-              // }));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.topToBottom,
+                      child: ServiceManDetails(
+                        serviceman: widget.serviceman,
+                      )));
             },
             child: Column(
               children: [
@@ -909,7 +924,7 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       msgController.text = 'Address Card';
       url =
-          '$api/chat-store?receiver_id=$receiverId&type=address_card&message=Address Card : $addressName&page=1&address_id=$addressId';
+          '$api/chat-store?receiver_id=$receiverId&type=address_card&message=${str.cp_address} : $addressName&page=1&address_id=$addressId';
     }
 
     ChatData waitingMessage = ChatData(
@@ -1294,7 +1309,10 @@ class ChatDateWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 3, 0, 6),
       child: Container(
-        width: 100,
+        constraints: const BoxConstraints(
+          maxWidth: 130,
+          minWidth: 110,
+        ),
         height: 30,
         decoration: BoxDecoration(
           color: ColorManager.whiteColor,
@@ -1308,4 +1326,21 @@ class ChatDateWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onTap;
+  final AppBar appBar;
+
+  const CustomAppBar({Key? key, required this.onTap, required this.appBar})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(onTap: onTap, child: appBar);
+  }
+
+  // TODO: implement preferredSize
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -11,57 +11,81 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ShareLocation extends StatefulWidget {
-  LatLng? currentLocator;
-  ShareLocation({Key? key, this.currentLocator}) : super(key: key);
+class ViewLocationScreen extends StatefulWidget {
+  String latitude;
+  String longitude;
+  ViewLocationScreen(
+      {Key? key, required this.latitude, required this.longitude})
+      : super(key: key);
 
   @override
-  State<ShareLocation> createState() => _ShareLocationState();
+  State<ViewLocationScreen> createState() => _ViewLocationState();
 }
 
-class _ShareLocationState extends State<ShareLocation> {
+class _ViewLocationState extends State<ViewLocationScreen> {
   LatLng? _lastTap;
-  bool isLocationChanged = false;
+  bool isLocationChanged = true;
   bool isLoading = false;
   String? locality;
   String? country;
   String? place;
   LatLng? currentLocator;
   GoogleMapController? mapController;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    currentLocator = widget.currentLocator;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await getPlaceAddress(currentLocator ?? widget.currentLocator);
-      isLocationChanged = true;
-      setState(() {});
+      LatLng position =
+          LatLng(double.parse(widget.latitude), double.parse(widget.longitude));
+      getPlaceAddress(position);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DataProvider>(context, listen: false);
-    final servicerProvider =
-        Provider.of<ServicerProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     final userDetails = provider.viewProfileModel?.userdetails;
     final str = AppLocalizations.of(context)!;
-    // currentLocator = LatLng(
-    //     double.parse(servicerProvider.servicerLatitude ??
-    //         userDetails?.latitude ??
-    //         '41.612849'),
-    //     double.parse(servicerProvider.servicerLongitude ??
-    //         userDetails?.longitude ??
-    //         '13.046816'));
+    currentLocator =
+        LatLng(double.parse(widget.latitude), double.parse(widget.longitude));
 
     return SafeArea(
       child: Scaffold(
+        // bottomNavigationBar: isLocationChanged
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: ElevatedButton(
+        //             onPressed: () async {
+        //               setState(() {
+        //                 isLoading = true;
+        //               });
+        //               provider.addressLatitude = _lastTap?.latitude;
+        //               provider.addressLongitude = _lastTap?.longitude;
+        //               provider.locality = locality;
+        //               // await updateLocationFunction(
+        //               //     context,
+        //               //     [_lastTap?.latitude, _lastTap?.longitude],
+        //               //     locality ?? '');
+        //               // await viewProfile(context);
+        //               setState(() {
+        //                 isLoading = false;
+        //               });
+        //               Navigator.pop(context);
+        //               Navigator.pushReplacement(context,
+        //                   MaterialPageRoute(builder: (ctx) {
+        //                 return const UserAddressEdit();
+        //               }));
+        //             },
+        //             child: isLoading
+        //                 ? const CircularProgressIndicator()
+        //                 :
+        //                 //  Text(str.gm_new_location)
+        //                 const Text("Confirm Location")),
+        //       )
+        //     : null,
         body: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
@@ -69,9 +93,9 @@ class _ShareLocationState extends State<ShareLocation> {
               myLocationEnabled: true, buildingsEnabled: true,
               // compassEnabled: true,
 
-              onTap: (LatLng pos) async {
-                await getPlaceAddress(pos);
-              },
+              // onTap: (LatLng pos) async {
+              //   await getPlaceAddress(pos);
+              // },
 
               onMapCreated: (controller) {
                 setState(() {
@@ -85,16 +109,11 @@ class _ShareLocationState extends State<ShareLocation> {
               ),
               markers: <Marker>{
                 Marker(
-                  onDragEnd: (value) async {
-                    print(value);
-                    await getPlaceAddress(value);
-                  },
-                  draggable: true,
                   markerId: const MarkerId('test_marker_id'),
                   position: _lastTap ?? currentLocator!,
                   infoWindow: InfoWindow(
-                    title: str.a_home_locator,
-                    snippet: '*',
+                    title: place,
+                    // snippet: '*',
                   ),
                 ),
               },
@@ -105,45 +124,45 @@ class _ShareLocationState extends State<ShareLocation> {
                 ),
               },
             ),
-            Positioned(
-                top: 10,
-                left: size.width * .05,
-                right: size.width * .05,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: ColorManager.whiteColor,
-                      borderRadius: BorderRadius.circular(5)),
-                  width: size.width * .9,
-                  height: 50,
-                  child: TextField(
-                      controller:
-                          GoogleMapControllers.googleMapSearchController,
-                      decoration: InputDecoration(
-                          hintText: str.gm_search,
-                          suffixIcon: SizedBox(
-                            width: size.width * .2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                InkWell(
-                                    onTap: searchLocation,
-                                    child: const Icon(Icons.search)),
-                                Container(
-                                  height: 35,
-                                  width: .1,
-                                  color: ColorManager.black,
-                                ),
-                                InkWell(
-                                    onTap: () {
-                                      GoogleMapControllers
-                                          .googleMapSearchController
-                                          .clear();
-                                    },
-                                    child: const Icon(Icons.close))
-                              ],
-                            ),
-                          ))),
-                )),
+            // Positioned(
+            //     top: 10,
+            //     left: size.width * .05,
+            //     right: size.width * .05,
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //           color: ColorManager.whiteColor,
+            //           borderRadius: BorderRadius.circular(5)),
+            //       width: size.width * .9,
+            //       height: 50,
+            //       child: TextField(
+            //           controller:
+            //               GoogleMapControllers.googleMapSearchController,
+            //           decoration: InputDecoration(
+            //               hintText: str.gm_search,
+            //               suffixIcon: SizedBox(
+            //                 width: size.width * .2,
+            //                 child: Row(
+            //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //                   children: [
+            //                     InkWell(
+            //                         onTap: searchLocation,
+            //                         child: const Icon(Icons.search)),
+            //                     Container(
+            //                       height: 35,
+            //                       width: .1,
+            //                       color: ColorManager.black,
+            //                     ),
+            //                     InkWell(
+            //                         onTap: () {
+            //                           GoogleMapControllers
+            //                               .googleMapSearchController
+            //                               .clear();
+            //                         },
+            //                         child: const Icon(Icons.close))
+            //                   ],
+            //                 ),
+            //               ))),
+            //     )),
             isLocationChanged
                 ? Positioned(
                     // left: size.width * .3,

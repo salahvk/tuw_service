@@ -49,6 +49,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
     final str = AppLocalizations.of(context)!;
+    print(mobWth);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
@@ -345,8 +346,13 @@ class _MyServicesPageState extends State<MyServicesPage> {
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(25, 0, 35, 0),
+                                padding: mobWth
+                                    ? const EdgeInsets.fromLTRB(25, 0, 35, 0)
+                                    : smobWth
+                                        ? const EdgeInsets.fromLTRB(
+                                            20, 0, 20, 0)
+                                        : const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 0),
                                 child: Container(
                                     decoration: BoxDecoration(
                                         color: ColorManager.primary,

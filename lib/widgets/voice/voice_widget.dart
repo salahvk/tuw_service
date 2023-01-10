@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -42,7 +41,7 @@ class _VoiceWidgetState extends State<VoiceWidget> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    log("Voice Widget init Calling");
+
     audioPlayer = AudioPlayer();
     loadAudio();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {

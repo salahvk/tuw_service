@@ -80,3 +80,12 @@ clearReportControllers() {
 }
 
 TextEditingController msgController = TextEditingController();
+
+clearAddressController() {
+  AddressEditControllers.addressNameController.clear();
+  AddressEditControllers.addressController.clear();
+  AddressEditControllers.countryController.clear();
+  AddressEditControllers.regionController.clear();
+  AddressEditControllers.stateController.clear();
+  AddressEditControllers.flatNoController.clear();
+}
