@@ -210,10 +210,11 @@ class _AddressBoxState extends State<AddressBox> {
                 ],
               ),
             ),
-            const Positioned(
+            Positioned(
               top: 130,
-              right: 5,
-              child: Icon(Icons.navigate_next_sharp,
+              right: lang == 'ar' ? null : 5,
+              left: lang == 'ar' ? 5 : null,
+              child: const Icon(Icons.navigate_next_sharp,
                   color: ColorManager.primary, size: 30),
             )
           ],

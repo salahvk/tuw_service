@@ -270,6 +270,8 @@
     "re_tell_us":"قم بتزويدنا بتفاصيل الشكوى.",
     "re_report_success":"تمت عملية تقديم الشكوى بنجاح",
 
-    "yesterday":"Yesterday"
+    "yesterday":"Yesterday",
+    "address_locator":"Address Locator",
+    "a_address_photo":"Please choose an address Photo"
 
 }

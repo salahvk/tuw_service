@@ -90,40 +90,50 @@ class _ViewLocationState extends State<ViewLocationScreen> {
           alignment: AlignmentDirectional.bottomCenter,
           children: [
             GoogleMap(
-              myLocationEnabled: true, buildingsEnabled: true,
-              // compassEnabled: true,
+                buildingsEnabled: true,
+                indoorViewEnabled: true,
+                // liteModeEnabled: true,
+                zoomControlsEnabled: true,
+                trafficEnabled: true,
+                // mapToolbarEnabled: false,
+                // tiltGesturesEnabled: true,
 
-              // onTap: (LatLng pos) async {
-              //   await getPlaceAddress(pos);
-              // },
+                // compassEnabled: true,
 
-              onMapCreated: (controller) {
-                setState(() {
-                  mapController = controller;
-                });
-              },
+                // onTap: (LatLng pos) async {
+                //   await getPlaceAddress(pos);
+                // },
 
-              initialCameraPosition: CameraPosition(
-                target: currentLocator!,
-                zoom: 11.0,
-              ),
-              markers: <Marker>{
-                Marker(
-                  markerId: const MarkerId('test_marker_id'),
-                  position: _lastTap ?? currentLocator!,
-                  infoWindow: InfoWindow(
-                    title: place,
-                    // snippet: '*',
+                onMapCreated: (controller) {
+                  setState(() {
+                    mapController = controller;
+                  });
+                },
+                initialCameraPosition: CameraPosition(
+                  target: currentLocator!,
+                  zoom: 11.0,
+                ),
+                markers: <Marker>{
+                  Marker(
+                    markerId: const MarkerId('test_marker_id'),
+                    position: _lastTap ?? currentLocator!,
+                    infoWindow: InfoWindow(
+                      title: place,
+                      // snippet: '*',
+                    ),
                   ),
-                ),
-              },
-              gestureRecognizers: //
-                  <Factory<OneSequenceGestureRecognizer>>{
-                Factory<OneSequenceGestureRecognizer>(
-                  () => EagerGestureRecognizer(),
-                ),
-              },
-            ),
+                },
+                // gestureRecognizers: //
+                //     <Factory<OneSequenceGestureRecognizer>>{
+                //   Factory<OneSequenceGestureRecognizer>(
+                //     () => EagerGestureRecognizer(),
+                //   ),
+                // },
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                  Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer(),
+                  ),
+                }),
             // Positioned(
             //     top: 10,
             //     left: size.width * .05,
@@ -171,12 +181,13 @@ class _ViewLocationState extends State<ViewLocationScreen> {
                       decoration: BoxDecoration(
                           color: ColorManager.whiteColor,
                           borderRadius: BorderRadius.circular(10)),
-                      width: size.width * .43,
+                      constraints: BoxConstraints(minWidth: size.width * .43),
+                      // width: size.width * .43,
                       height: 80,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
                                 height: 25,

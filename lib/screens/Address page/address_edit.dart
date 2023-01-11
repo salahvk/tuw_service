@@ -33,7 +33,8 @@ import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 
 class UserAddressEdit extends StatefulWidget {
-  const UserAddressEdit({super.key});
+  bool isUpdate;
+  UserAddressEdit({super.key, this.isUpdate = false});
 
   @override
   State<UserAddressEdit> createState() => _UserAddressEditState();
@@ -66,7 +67,11 @@ class _UserAddressEditState extends State<UserAddressEdit> {
         r2.add(provider.countriesModel!.countries![i]);
         i++;
       }
-      clearAddressController();
+      if (widget.isUpdate == false) {
+        clearAddressController();
+      } else {
+        selectedValue = provider.selectedAddressCountry;
+      }
     });
   }
 
@@ -526,6 +531,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                           setState(() {
                                             selectedValue = value as Countries;
                                           });
+                                          provider.selectedAddressCountry =
+                                              value as Countries;
                                         },
                                         buttonHeight: 40,
                                         dropdownMaxHeight: size.height * .6,
@@ -736,12 +743,15 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   }
 
   validateAddressFields() {
+    final provider = Provider.of<DataProvider>(context, listen: false);
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
     final country = selectedValue?.countryId;
     final region = AddressEditControllers.regionController.text;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
+    final latitude = provider.addressLatitude;
+    final longitude = provider.addressLongitude;
 
     if (addressName.isEmpty) {
       showAnimatedSnackBar(context, "Address name field is required");
@@ -757,6 +767,8 @@ class _UserAddressEditState extends State<UserAddressEdit> {
       showAnimatedSnackBar(context, "Flat No is required");
     } else if (imageFile == null) {
       showAnimatedSnackBar(context, "Please Choose an address Photo");
+    } else if (latitude == null || longitude == null) {
+      showAnimatedSnackBar(context, "Please Choose an address Location");
     } else {
       setState(() {
         isSaveAddressLoading = true;

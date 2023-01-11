@@ -269,6 +269,8 @@
     "re_tell_us":"हमें बताएं कि उन्होंने क्या किया।",
     "re_report_success":"ग्राहक को सफलतापूर्वक रिपोर्ट किया गया",
 
-    "yesterday":"Yesterday"
+    "yesterday":"Yesterday",
+    "address_locator":"Address Locator",
+    "a_address_photo":"Please choose an address Photo"
 
 }

@@ -80,8 +80,8 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
         i++;
       }
       if (widget.isUpdate == true) {
-        imageFile = provider.image;
-        imagePath = provider.image?.path;
+        imageFile = provider.image ?? XFile('');
+        imagePath = provider.image?.path ?? '';
       } else {
         imageFile = XFile('');
         imagePath = '';

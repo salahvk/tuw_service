@@ -269,6 +269,15 @@
     "re_tell_us":"Tell us what they did.",
     "re_report_success":"Reported Customer Successfully",
 
-    "yesterday":"Yesterday"
+    "yesterday":"Yesterday",
+    "address_locator":"Address Locator",
+    "a_address_photo":"Please choose an address Photo",
+    "a_address_name_req":"Address name field is required",
+    "a_address_req":"Address field is required",
+    "a_country":"Select a country",
+    "a_region":"Region is required",
+    "a_state":"state is required",
+    "a_flat":"Flat No is required",
+    "a_loc":"Please Choose an address Location"
 
 }

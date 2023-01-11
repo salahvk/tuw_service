@@ -91,7 +91,9 @@ class _AddressLocatorScreenState extends State<AddressLocatorScreen> {
                       } else {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (ctx) {
-                          return const UserAddressEdit();
+                          return UserAddressEdit(
+                            isUpdate: true,
+                          );
                         }));
                       }
                     },
@@ -107,6 +109,11 @@ class _AddressLocatorScreenState extends State<AddressLocatorScreen> {
           children: [
             GoogleMap(
               myLocationEnabled: true, buildingsEnabled: true,
+
+              indoorViewEnabled: true,
+              // liteModeEnabled: true,
+              zoomControlsEnabled: true,
+              trafficEnabled: true,
               // compassEnabled: true,
 
               onTap: (LatLng pos) async {
