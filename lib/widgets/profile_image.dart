@@ -68,6 +68,7 @@ class _ProfileImageState extends State<ProfileImage> {
                     ? null
                     : CachedNetworkImageProvider(
                         "$profileImageApi/${provider.viewProfileModel?.userdetails?.profilePic}",
+                        errorListener: () {},
                       ),
             child: provider.viewProfileModel?.userdetails?.profilePic == null
                 ? Image.asset(

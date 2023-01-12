@@ -209,5 +209,6 @@ class DataProvider with ChangeNotifier {
 
   XFile? image;
   Countries? selectedAddressCountry;
+  XFile? sendImage;
   // String country
 }

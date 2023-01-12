@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,6 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   void initState() {
     super.initState();
     // Timer.periodic(const Duration(seconds: 2), (timer) {
-    log("chat bubble");
 
     if (mounted) {
       if (widget.chatMessage?.type == 'location') {
@@ -85,7 +84,6 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
 
   @override
   Widget build(BuildContext context) {
-    log("Build");
     final size = MediaQuery.of(context).size;
 
     var dateTime = DateFormat("HH:mm")
@@ -439,8 +437,6 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
   }
 
   initfunction() {
-    log("chat bubble");
-
     if (mounted) {
       if (widget.chatMessage?.type == 'location') {
         final locationMessage = '${widget.chatMessage?.message}';
@@ -488,14 +484,45 @@ class ImageLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DataProvider>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 3),
-      child: SizedBox(
-          width: size.width * .6,
-          height: 240,
-          child: const Center(
-            child: CircularProgressIndicator(),
-          )),
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          SizedBox(
+              width: size.width * .6,
+              height: 240,
+              child: Image.file(
+                File(
+                  provider.sendImage?.path ?? '',
+                ),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 20,
+                    color: ColorManager.whiteColor,
+                    child: Center(
+                      child: Text(
+                        "Failed",
+                        style: getRegularStyle(
+                            color: ColorManager.black, fontSize: 14),
+                      ),
+                    ),
+                  );
+                },
+              )),
+          const Positioned(
+              child: Center(
+            child: SizedBox(
+                width: 45,
+                height: 45,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                )),
+          ))
+        ],
+      ),
     );
   }
 }

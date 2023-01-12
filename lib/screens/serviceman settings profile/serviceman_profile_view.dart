@@ -347,25 +347,28 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                     ),
                   ),
                 ),
-                FadeSlideCustomAnimation(
-                  delay: .35,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          userData?.about ?? '',
-                          style: getRegularStyle(
-                              color: ColorManager.engineWorkerColor,
-                              fontSize: 16),
+                userData?.about != null
+                    ? FadeSlideCustomAnimation(
+                        delay: .35,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                userData?.about ?? '',
+                                style: getRegularStyle(
+                                    color: ColorManager.engineWorkerColor,
+                                    fontSize: 16),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                      )
+                    : Container(),
                 FadeSlideCustomAnimation(
                   delay: .4,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    padding: EdgeInsets.fromLTRB(
+                        0, userData?.about != null ? 15 : 0, 0, 10),
                     child: Row(
                       children: [
                         Text(

@@ -152,8 +152,8 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
                                 //     Border.all(color: ColorManager.black)
                               ),
                               stateName: _report,
-                              child: const Text(
-                                _report,
+                              child: Text(
+                                str.we_report,
                               ),
                               textStyle: const TextStyle(
                                   color: Colors.white, fontSize: 20),

@@ -19,6 +19,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/update_read_status.dart';
 import 'package:social_media_services/API/view_chat_messages.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -28,7 +29,6 @@ import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/model/view_chat_message_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
-import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/Google%20Map/share_location_from_app.dart';
 import 'package:social_media_services/screens/serviceman/serviceman_list_details.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -36,6 +36,7 @@ import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat/chat_bubble.dart';
+import 'package:social_media_services/widgets/chat/chat_date_widget.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,8 +65,10 @@ class _ChatScreenState extends State<ChatScreen> {
   // bool isAnimationVisible = false;
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
+  bool isScrolling = false;
 
   List<ChatData>? chatMessages = [];
+  final ScrollController _scrollController = ScrollController();
 
   late Timer timer;
   late Timer Ltimer;
@@ -80,13 +83,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future record() async {
     final dir2 = await getExternalStorageDirectory();
-    // final file = File('${dir2!.path}/$name');
     await initRecorder();
     await recorder.start(
-      path: '${dir2?.path}/myFile.aac', // required
-      encoder: AudioEncoder.aacLc, // by default
-      // bitRate: 128000, // by default
-      // sampleRate: 44100, // by default
+      path: '${dir2?.path}/myFile.aac',
+      encoder: AudioEncoder.aacLc,
     );
   }
 
@@ -107,20 +107,44 @@ class _ChatScreenState extends State<ChatScreen> {
     chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
     provider.isSendingSuccessFull = false;
     provider.isLocationSending = false;
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       timer = Timer.periodic(const Duration(seconds: 20), (timer) async {
         if (mounted) {
           final servicerProvider =
               Provider.of<ServicerProvider>(context, listen: false);
-          // setState(() {
-          //   chatMessages = [];
-          // });
-          print(chatMessages);
-          await viewChatMessages(context, servicerProvider.servicerId);
+
+          await viewChatMessages(
+            context,
+            servicerProvider.servicerId,
+          );
           chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
-          // setState(() {});
+          updateReadStatus(context, servicerProvider.servicerId);
         }
       });
+      // if (_scrollController.position.axisDirection == AxisDirection.up &&
+      //     _scrollController.position.atEdge) {
+      //   log("pagination");
+      //   final servicerProvider =
+      //       Provider.of<ServicerProvider>(context, listen: false);
+      //   await viewChatMessages(context, servicerProvider.servicerId, page: 2);
+      // }
+    });
+    _scrollController.addListener(() {
+      setState(() {
+        isScrolling = true;
+      });
+      // print(_scrollController.position.axisDirection);
+      // print(_scrollController.position.axisDirection == AxisDirection.up &&
+      //     _scrollController.position.atEdge);
+
+      if (_scrollController.position.atEdge) {
+        setState(() {
+          isScrolling = false;
+        });
+      }
+
+      // _scrollController.dispose();
     });
   }
 
@@ -151,16 +175,10 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final w = size.width;
-
     final provider = Provider.of<DataProvider>(context, listen: true);
-    final servicerProvider =
-        Provider.of<ServicerProvider>(context, listen: true);
     final chatData = provider.viewChatMessageModel?.chatMessage;
-    // final chatData = chatMessages;
-    final oUserAddress = provider.pUserAddressShow?.userAddress;
     final userAddress = provider.userAddressShow?.userAddress;
     return GestureDetector(
       onTap: () {
@@ -236,31 +254,39 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Padding(
                 padding:
-                    EdgeInsets.fromLTRB(5, 15, 15, isRecordingOn ? 100 : 60),
+                    EdgeInsets.fromLTRB(15, 15, 15, isRecordingOn ? 100 : 60),
                 child: ListView.builder(
+                  controller: _scrollController,
                   reverse: true,
                   itemCount: chatData?.data?.length ?? 0,
-                  // itemCount: chatData?.length ?? 0,
                   itemBuilder: (context, index) {
-                    // print(chatData?.data?[index].createdAt?.substring(0, 10));
+                    final status = chatData?.data?[index].status;
+
                     final len = chatData?.data?.length;
                     var date = DateFormat("yyyy-MM-dd").parse(
                         chatData?.data?[index].createdAt?.substring(0, 10) ??
                             '',
                         true);
                     String localDate = DateFormat.yMEd().format(date.toLocal());
-                    print(localDate);
+
                     return Column(
                       children: [
-                        (len! - 1) == index
-                            ? ChatDateWidget(localDate: localDate)
-                            : Container(),
-                        (len - 1) != index &&
-                                chatData?.data?[index].createdAt
-                                        ?.substring(0, 10) !=
-                                    chatData?.data?[index + 1].createdAt
-                                        ?.substring(0, 10)
-                            ? ChatDateWidget(localDate: localDate)
+                        status != 'waiting'
+                            ? Column(
+                                children: [
+                                  (len! - 1) == index
+                                      ? ChatDateWidget(localDate: localDate)
+                                      : Container(),
+                                  (len - 1) != index &&
+                                          chatData?.data?[index].createdAt
+                                                  ?.substring(0, 10) !=
+                                              chatData
+                                                  ?.data?[index + 1].createdAt
+                                                  ?.substring(0, 10)
+                                      ? ChatDateWidget(localDate: localDate)
+                                      : Container(),
+                                ],
+                              )
                             : Container(),
                         CustomChatBubble(
                           chatMessage: chatData?.data?[index],
@@ -793,6 +819,34 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ))
+                : Container(),
+            isScrolling
+                ? Positioned(
+                    left: lang == 'ar' ? 5 : null,
+                    right: lang != 'ar' ? 5 : null,
+                    bottom: 70,
+                    child: InkWell(
+                      onTap: () {
+                        scrollToBottom();
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 5,
+                                color: Colors.black87,
+                                spreadRadius: .1)
+                          ],
+                        ),
+                        child: const CircleAvatar(
+                            maxRadius: 16,
+                            backgroundColor: ColorManager.whiteColor,
+                            child:
+                                Icon(Icons.keyboard_double_arrow_down_rounded)),
+                      ),
+                    ))
                 : Container()
           ],
         ),
@@ -848,34 +902,12 @@ class _ChatScreenState extends State<ChatScreen> {
       await viewChatMessages(context, servicerProvider.servicerId);
       final provider = Provider.of<DataProvider>(context, listen: false);
       chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
-      // await Future.delayed(const Duration(seconds: 2));
+
       setState(() {});
     } catch (e) {
-      setState(() {
-        // _pickImageError = e;
-      });
+      setState(() {});
     }
-    // });
-    // }
   }
-
-  // pickGallery() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowMultiple: true,
-  //     allowedExtensions: ['jpg', 'mp4', 'png'],
-  //   );
-
-  //   if (result != null) {
-  //     PlatformFile file = result.files.first;
-  //     setState(() {
-  //       // fileName = file.name;
-  //     });
-  //   } else {}
-  //   setState(() {
-  //     ismenuVisible = false;
-  //   });
-  // }
 
   pickDoc() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -910,6 +942,8 @@ class _ChatScreenState extends State<ChatScreen> {
     // provider.subServicesModel = null;
     final apiToken = Hive.box("token").get('api_token');
     final datetime = DateTime.now();
+
+    scrollToBottom();
 
     // * Selecting Url
 
@@ -994,6 +1028,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final receiverId = provider.serviceManDetails?.userData?.id.toString();
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
+    provider.sendImage = imageFile[0];
 
     final length = imageFile.length;
     var uri =
@@ -1269,11 +1304,6 @@ class _ChatScreenState extends State<ChatScreen> {
             createdAt: '2022-12-23T05:03:41.000000Z',
             localTime: datetime.toString(),
             senderId: provider.viewProfileModel?.userdetails?.id,
-            // sendUserId: 42,
-            // firstname: 'sergio',
-            // onlineStatus: 'busy',
-            // chatMedia: '/assets/uploads/chatmedia/',
-            // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
             addressId: null);
         chatMessages?.insert(0, waitingMessage);
         setState(() {});
@@ -1287,6 +1317,8 @@ class _ChatScreenState extends State<ChatScreen> {
           chatMessages = provider.viewChatMessageModel?.chatMessage?.data;
           Ltimer.cancel();
           setState(() {});
+        } else {
+          Ltimer.cancel();
         }
 
         // return;
@@ -1294,53 +1326,9 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
   }
-}
 
-class ChatDateWidget extends StatelessWidget {
-  const ChatDateWidget({
-    Key? key,
-    required this.localDate,
-  }) : super(key: key);
-
-  final String localDate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 3, 0, 6),
-      child: Container(
-        constraints: const BoxConstraints(
-          maxWidth: 130,
-          minWidth: 110,
-        ),
-        height: 30,
-        decoration: BoxDecoration(
-          color: ColorManager.whiteColor,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-            child: Text(
-          localDate,
-          style: getSemiBoldtStyle(color: ColorManager.grayDark),
-        )),
-      ),
-    );
+  scrollToBottom() {
+    _scrollController.animateTo(_scrollController.position.minScrollExtent,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
   }
-}
-
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onTap;
-  final AppBar appBar;
-
-  const CustomAppBar({Key? key, required this.onTap, required this.appBar})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(onTap: onTap, child: appBar);
-  }
-
-  // TODO: implement preferredSize
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

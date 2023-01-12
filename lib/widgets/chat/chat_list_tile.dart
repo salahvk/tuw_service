@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/model/chat_list.dart';
+import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatListTile extends StatefulWidget {
   final MessageData? profileData;
@@ -33,15 +35,17 @@ class _ChatListTileState extends State<ChatListTile> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool mob = Responsive.isMobile(context);
-    var dateTime = DateFormat("HH:mm")
-        .parse(widget.profileData?.createdAt?.substring(11, 16) ?? '', true);
-    var date = DateFormat("dd-MM-yyyy").format(
-        DateTime.parse(widget.profileData?.createdAt?.substring(0, 10) ?? ''));
+    // var dateTime = DateFormat("HH:mm")
+    // .parse(widget.profileData?.createdAt?.substring(11, 16) ?? '', true);
+    final str = AppLocalizations.of(context)!;
+    // var date = DateFormat("dd-MM-yyyy").format(
+    //     DateTime.parse(widget.profileData?.createdAt?.substring(0, 10) ?? ''));
 
-    var hour = dateTime.toLocal().hour;
-    var minute = dateTime.toLocal().minute;
+    // var hour = dateTime.toLocal().hour;
+    // var minute = dateTime.toLocal().minute;
 
-    var day = dateTime.toLocal().weekday;
+    // var day = dateTime.toLocal().weekday;
+    final provider = Provider.of<DataProvider>(context, listen: false);
     // if (DateTime.now().weekday == day) {
     //   setState(() {
     //     time = "$hour:$minute";
@@ -136,7 +140,10 @@ class _ChatListTileState extends State<ChatListTile> {
                     children: [
                       Row(
                         children: [
-                          Text(widget.profileData?.firstname ?? '',
+                          Text(
+                              widget.profileData?.firstname ??
+                                  widget.profileData?.phone ??
+                                  '',
                               style: getRegularStyle(
                                   color: ColorManager.black,
                                   fontSize: mob ? 16 : 10)),
@@ -159,19 +166,43 @@ class _ChatListTileState extends State<ChatListTile> {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                          widget.profileData?.type == 'location'
-                              ? "Location"
-                              : widget.profileData?.type == 'image'
-                                  ? "image"
-                                  : widget.profileData?.type == 'audio'
-                                      ? "Audio"
-                                      : widget.profileData?.type == 'document'
-                                          ? "Document"
-                                          : widget.profileData?.message ?? '',
-                          style: getRegularStyle(
-                              color: ColorManager.chatTimeColor,
-                              fontSize: mob ? 11 : 7)),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          widget.profileData?.senderId ==
+                                  provider.viewProfileModel?.userdetails?.id
+                              ? widget.profileData?.status == "read"
+                                  ? const Icon(
+                                      Icons.done_all,
+                                      color: Colors.blue,
+                                      size: 14,
+                                    )
+                                  : const Icon(
+                                      Icons.done_all,
+                                      color: ColorManager.black,
+                                      size: 14,
+                                    )
+                              : Container(),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                              widget.profileData?.type == 'location'
+                                  ? "Location"
+                                  : widget.profileData?.type == 'image'
+                                      ? "image"
+                                      : widget.profileData?.type == 'audio'
+                                          ? "Audio"
+                                          : widget.profileData?.type ==
+                                                  'document'
+                                              ? "Document"
+                                              : widget.profileData?.message ??
+                                                  '',
+                              style: getRegularStyle(
+                                  color: ColorManager.chatTimeColor,
+                                  fontSize: mob ? 11 : 7)),
+                        ],
+                      ),
                       // const SizedBox(
                       //   height: 4,
                       // ),

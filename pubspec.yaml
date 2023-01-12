@@ -83,6 +83,7 @@ dependencies:
   url_launcher: ^6.1.7
   audioplayers: ^1.1.1
   page_transition: ^2.0.9
+  pull_to_refresh: ^2.0.0
   # flutter_sound: ^9.2.13
 
 

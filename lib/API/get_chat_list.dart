@@ -13,6 +13,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 
 getChatList(BuildContext context) async {
+  log("message list api");
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');

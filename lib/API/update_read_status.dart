@@ -11,6 +11,7 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
 updateReadStatus(BuildContext context, id) async {
+  log("Update Read status API");
   final provider = Provider.of<DataProvider>(context, listen: false);
 
   final apiToken = Hive.box("token").get('api_token');

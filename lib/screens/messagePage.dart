@@ -42,13 +42,11 @@ class _MessagePageState extends State<MessagePage> {
       'lang',
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      log("Chat List Api calling");
       getChatList(
         context,
       );
       timer = Timer.periodic(const Duration(seconds: 30), (timer) {
         if (mounted) {
-          log("Chat List Api calling");
           getChatList(
             context,
           );

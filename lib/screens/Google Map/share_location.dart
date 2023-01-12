@@ -152,12 +152,12 @@ class _ShareLocationState extends State<ShareLocation> {
                       decoration: BoxDecoration(
                           color: ColorManager.whiteColor,
                           borderRadius: BorderRadius.circular(10)),
-                      width: size.width * .43,
+                      constraints: BoxConstraints(minWidth: size.width * .43),
                       height: 80,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
                                 height: 25,

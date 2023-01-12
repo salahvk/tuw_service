@@ -118,6 +118,7 @@ class MessageData {
   String? serviceName;
   String? profilePic;
   int? unreadCount;
+  String? phone;
 
   MessageData(
       {this.id,
@@ -136,7 +137,8 @@ class MessageData {
       this.onlineStatus,
       this.serviceName,
       this.profilePic,
-      this.unreadCount});
+      this.unreadCount,
+      this.phone});
 
   MessageData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -156,6 +158,7 @@ class MessageData {
     serviceName = json['service_name'];
     profilePic = json['profile_pic'];
     unreadCount = json['unread_count'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -177,6 +180,7 @@ class MessageData {
     data['service_name'] = serviceName;
     data['profile_pic'] = profilePic;
     data['unread_count'] = unreadCount;
+    data['phone'] = phone;
     return data;
   }
 }

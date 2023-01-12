@@ -432,40 +432,40 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                             ),
                           ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                str.ae_address,
-                                style: getBoldtStyle(
-                                    color: ColorManager.black, fontSize: 14),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: ColorManager.primary,
-                                    borderRadius: BorderRadius.circular(5)),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text(
+                          //       str.ae_address,
+                          //       style: getBoldtStyle(
+                          //           color: ColorManager.black, fontSize: 14),
+                          //     ),
+                          //     Container(
+                          //       decoration: BoxDecoration(
+                          //           color: ColorManager.primary,
+                          //           borderRadius: BorderRadius.circular(5)),
 
-                                // width: 30,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        color: ColorManager.whiteColor,
-                                      ),
-                                      Text(
-                                        str.ae_add,
-                                        style: getRegularStyle(
-                                            color: ColorManager.whiteColor),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                          //       // width: 30,
+                          //       child: Padding(
+                          //         padding:
+                          //             const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                          //         child: Row(
+                          //           children: [
+                          //             const Icon(
+                          //               Icons.location_on,
+                          //               color: ColorManager.whiteColor,
+                          //             ),
+                          //             Text(
+                          //               str.ae_add,
+                          //               style: getRegularStyle(
+                          //                   color: ColorManager.whiteColor),
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
                           MandatoryHeader(heading: str.ae_address_n),
                           TextFieldProfileService(
                               hintText: str.ae_address_h,
