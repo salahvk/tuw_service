@@ -9,8 +9,10 @@ import 'package:social_media_services/model/viewProfileModel.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/initPlatformState.dart';
 
 viewProfile(BuildContext context) async {
+  log("View profile");
   final apiToken = Hive.box("token").get('api_token');
   final provider = Provider.of<DataProvider>(context, listen: false);
 
@@ -20,8 +22,16 @@ viewProfile(BuildContext context) async {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
-      var viewProfileData = ViewProfileModel.fromJson(jsonResponse);
-      provider.viewProfileData(viewProfileData);
+      bool isLogOut =
+          jsonResponse["message"].toString().contains("Please login again");
+      if (isLogOut) {
+        showAnimatedSnackBar(context, "Please login again");
+
+        initPlatformState(context);
+      } else {
+        var viewProfileData = ViewProfileModel.fromJson(jsonResponse);
+        provider.viewProfileData(viewProfileData);
+      }
     } else {
       // ignore: use_build_context_synchronously
       log("Something Went Wrong19");

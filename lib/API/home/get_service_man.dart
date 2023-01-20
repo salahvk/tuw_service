@@ -10,6 +10,7 @@ import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/screens/serviceman/servicer.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getServiceMan(BuildContext context, id) async {
@@ -37,6 +38,9 @@ getServiceMan(BuildContext context, id) async {
 
       final serviceManListData = ServiceManListModel.fromJson(jsonResponse);
       provider.getServiceManData(serviceManListData);
+      if (provider.serviceManListModel?.serviceman?.isEmpty ?? false) {
+        showAnimatedSnackBar(context, "No ServiceMan Available");
+      }
     } else {
       // print(response.statusCode);
       // print(response.body);
@@ -47,8 +51,8 @@ getServiceMan(BuildContext context, id) async {
   }
 }
 
-searchServiceMan(BuildContext context, id, countryIdd, state, region, name,
-    transport) async {
+searchServiceMan(
+    BuildContext context, id, countryId, state, region, name, transport) async {
   final servicerProvider =
       Provider.of<ServicerProvider>(context, listen: false);
   final provider = Provider.of<DataProvider>(context, listen: false);
@@ -58,7 +62,7 @@ searchServiceMan(BuildContext context, id, countryIdd, state, region, name,
   if (apiToken == null) return;
   try {
     final url =
-        '$servicemanList?service_id=$id&page=1&latitude=${servicerProvider.servicerLatitude ?? userDetails?.latitude}&longitude=${servicerProvider.servicerLatitude ?? userDetails?.longitude}&sel_country_id=${countryIdd ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
+        '$servicemanList?service_id=$id&page=1&latitude=${servicerProvider.servicerLatitude ?? userDetails?.latitude}&longitude=${servicerProvider.servicerLatitude ?? userDetails?.longitude}&sel_country_id=${countryId ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
     print(url);
     var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
@@ -67,7 +71,11 @@ searchServiceMan(BuildContext context, id, countryIdd, state, region, name,
       log(response.body);
 
       final serviceManListData = ServiceManListModel.fromJson(jsonResponse);
+
       provider.getServiceManData(serviceManListData);
+      if (provider.serviceManListModel?.serviceman?.isEmpty ?? false) {
+        showAnimatedSnackBar(context, "No ServiceMan Available");
+      }
     } else {
       // print(response.statusCode);
       // print(response.body);

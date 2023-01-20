@@ -75,7 +75,7 @@ class _SerDrawerState extends State<SerDrawer> {
             ),
             SerDrawerList(
               id: widget.id ?? 0,
-              image: ImageAssets.car,
+              image: ImageAssets.car,                                                                                                                                                                                                                                         
               title: 'Four-Wheeler', title2: str.s_four,
               // isResetSelected: isResetSelected,
               key: UniqueKey(),

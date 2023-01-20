@@ -169,13 +169,7 @@ class _AddressBoxState extends State<AddressBox> {
                           builder: (context) =>
                               DialogueBox(addressId: addressId),
                           barrierDismissible: false);
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (ctx) {
-                      //   return UserAddressUpdate(
-                      //     userAddress: userAddress[index],
-                      //   );
-                      // }));
-                      // selectImage();
+                    
                     },
                     child: Container(
                       decoration: BoxDecoration(

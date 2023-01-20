@@ -47,9 +47,9 @@ ThemeData getApplicationTheme(BuildContext context) {
           color: ColorManager.black,
           fontSize: 20,
         ),
-        subtitle1: getMediumtStyle(
+        subtitle1: getRegularStyle(
           color: ColorManager.black,
-          fontSize: 18,
+          fontSize: 16,
         ),
         subtitle2: getRegularStyle(
           color: ColorManager.black,

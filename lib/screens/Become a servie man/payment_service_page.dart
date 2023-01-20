@@ -791,7 +791,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
     try {
       print(packageId);
       print(url);
-
+      // return;
       var response = await http.post(Uri.parse(url), headers: {
         "device-id": provider.deviceId ?? '',
         "api-token": apiToken

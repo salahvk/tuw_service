@@ -190,7 +190,7 @@ class _ChatListTileState extends State<ChatListTile> {
                               widget.profileData?.type == 'location'
                                   ? "Location"
                                   : widget.profileData?.type == 'image'
-                                      ? "image"
+                                      ? "Image"
                                       : widget.profileData?.type == 'audio'
                                           ? "Audio"
                                           : widget.profileData?.type ==

@@ -130,14 +130,23 @@ class _ChatScreenState extends State<ChatScreen> {
       //   await viewChatMessages(context, servicerProvider.servicerId, page: 2);
       // }
     });
-    _scrollController.addListener(() {
+    _scrollController.addListener(() async {
       setState(() {
         isScrolling = true;
       });
-      // print(_scrollController.position.axisDirection);
-      // print(_scrollController.position.axisDirection == AxisDirection.up &&
-      //     _scrollController.position.atEdge);
 
+      // if (_scrollController.position.axisDirection == AxisDirection.up) {
+      //   if (_scrollController.position.atEdge &&
+      //       _scrollController.offset != 0.0) {
+      //     final servicerProvider =
+      //         Provider.of<ServicerProvider>(context, listen: false);
+      //     print("UP and top");
+      // await    viewChatMessages(context, servicerProvider.servicerId, page: 2);
+      //      final provider = Provider.of<DataProvider>(context, listen: false);
+      //     final chat = provider.viewChatMessageModel?.chatMessage?.data;
+      //     chatMessages?.insertAll(50, chat ?? []);
+      //   }
+      // }
       if (_scrollController.position.atEdge) {
         setState(() {
           isScrolling = false;
@@ -226,7 +235,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Column(
               children: [
                 Text(
-                  " ${provider.serviceManDetails?.userData?.firstname ?? ''} ${provider.serviceManDetails?.userData?.lastname ?? ''}",
+                  " ${provider.serviceManDetails?.userData?.firstname ?? provider.serviceManDetails?.userData?.phone} ${provider.serviceManDetails?.userData?.lastname ?? ''}",
                   style:
                       getRegularStyle(color: ColorManager.black, fontSize: 16),
                 ),
@@ -539,7 +548,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 0, bottom: 5),
+                      padding: const EdgeInsets.only(
+                        left: 0,
+                        bottom: 10,
+                        top: 10,
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
@@ -593,9 +606,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ismicVisible
                         ? InkWell(
                             onLongPress: () async {
-                              _stopWatchTimer.onStartTimer();
-
                               await record();
+                              _stopWatchTimer.onStartTimer();
                               setState(() {
                                 isRecordingOn = true;
                               });
@@ -971,7 +983,7 @@ class _ChatScreenState extends State<ChatScreen> {
         addressId: null);
     chatMessages?.insert(0, waitingMessage);
     setState(() {});
-    print(chatMessages?[0].toJson());
+    // print(chatMessages?[0].toJson());
     // return;
 
     final text = msgController.text;

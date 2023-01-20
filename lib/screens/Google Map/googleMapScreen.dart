@@ -144,9 +144,28 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                                 ),
                                 InkWell(
                                     onTap: () {
-                                      GoogleMapControllers
+                                      if (isLocationChanged) {
+                                        GoogleMapControllers
+                                            .googleMapSearchController
+                                            .clear();
+                                        setState(() {
+                                          isLocationChanged = false;
+                                        });
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      } else if (GoogleMapControllers
                                           .googleMapSearchController
-                                          .clear();
+                                          .text
+                                          .isNotEmpty) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                        // Navigator.pop(context);
+                                        GoogleMapControllers
+                                            .googleMapSearchController
+                                            .clear();
+                                      } else {
+                                        Navigator.pop(context);
+                                      }
                                     },
                                     child: const Icon(Icons.close))
                               ],

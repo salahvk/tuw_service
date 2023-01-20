@@ -272,6 +272,9 @@
 
     "yesterday":"Yesterday",
     "address_locator":"Address Locator",
-    "a_address_photo":"Please choose an address Photo"
+    "a_address_photo":"Please choose an address Photo",
+    "login_again":"Please Login Again",
+    "no_serviceMan":"No Service Man Available",
+    "search_servicer":"Enter a Servicer name to search"
 
 }

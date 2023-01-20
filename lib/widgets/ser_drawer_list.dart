@@ -48,7 +48,7 @@ class _SerDrawerListState extends State<SerDrawerList> {
 
     widget.key;
     return SizedBox(
-      height: 30,
+      height: 35,
       child: InkWell(
         onTap: () async {
           setState(() {

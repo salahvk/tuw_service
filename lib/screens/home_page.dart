@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
               color: ColorManager.black,
               tabs: [
                 GButton(
+                  // text: ' Home',
                   icon: FontAwesomeIcons.message,
                   leading: SizedBox(
                       width: 24,
@@ -91,6 +92,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 GButton(
                   icon: FontAwesomeIcons.message,
+                  // text: ' Chat',
                   leading: InkWell(
                     child: SizedBox(
                         width: 24,

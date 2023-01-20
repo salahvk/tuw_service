@@ -206,6 +206,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                           ),
                           child: Container(
                             width: size.width,
+                            height: 65,
                             decoration: BoxDecoration(
                                 color: ColorManager.whiteColor,
                                 borderRadius: BorderRadius.circular(8)),
@@ -309,7 +310,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                           ],
                                         ),
                                         child: Container(
-                                          height: 60,
+                                          height: 65,
                                           width: size.width,
                                           decoration: BoxDecoration(
                                               color: ColorManager.whiteColor,
@@ -357,6 +358,8 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                                       context,
                                                       childSelectedValue?.id);
                                                   setState(() {});
+                                                  provider.serviceId =
+                                                      childSelectedValue?.id;
                                                 },
                                                 customButton:
                                                     childSelectedValue == null
@@ -366,9 +369,9 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                                                 const EdgeInsets
                                                                         .fromLTRB(
                                                                     10,
-                                                                    5,
                                                                     10,
-                                                                    5),
+                                                                    10,
+                                                                    10),
                                                             child: Text(
                                                                 childSelectedValue
                                                                         ?.serviceName ??
@@ -435,7 +438,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                         ),
                                         child: Container(
                                           width: size.width,
-                                          height: 60,
+                                          height: 65,
                                           decoration: BoxDecoration(
                                               color: ColorManager.whiteColor,
                                               borderRadius:

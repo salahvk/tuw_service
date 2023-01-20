@@ -27,6 +27,7 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/delete_image.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/description_edit_widget.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
@@ -659,12 +660,23 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                               padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
                               child: InkWell(
                                 onTap: () {
+                                  galleryImages!.isEmpty
+                                      ? showAnimatedSnackBar(
+                                          context, str.sv_no_images)
+                                      : showDialog(
+                                          context: context,
+                                          builder: (context) => PopupImage(
+                                              image: galleryImages[index]
+                                                  .galleryImage),
+                                          barrierDismissible: true);
+                                },
+                                onLongPress: () {
+                                  final imageId = galleryImages?[index].id;
                                   showDialog(
                                       context: context,
-                                      builder: (context) => PopupImage(
-                                          image: galleryImages?[index]
-                                              .galleryImage),
-                                      barrierDismissible: true);
+                                      builder: (context) => DeleteImage(
+                                          imageId: imageId.toString()),
+                                      barrierDismissible: false);
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),

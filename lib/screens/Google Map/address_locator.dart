@@ -324,6 +324,7 @@ class _AddressLocatorScreenState extends State<AddressLocatorScreen> {
   }
 
   getLocationName(List<Placemark> placemarks) {
+    print(placemarks[0]);
     if (placemarks[0].subLocality!.isNotEmpty) {
       setState(() {
         locality = '${placemarks[0].subLocality} | ${placemarks[0].country}';

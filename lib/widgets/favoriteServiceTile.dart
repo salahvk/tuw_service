@@ -92,7 +92,7 @@ class _FavoriteServiceListTileState extends State<FavoriteServiceListTile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${widget.serviceman?.firstname} ${widget.serviceman?.lastname ?? ''}',
+                      '${widget.serviceman?.firstname ?? widget.serviceman?.phone} ${widget.serviceman?.lastname ?? ''}',
                       style: getRegularStyle(
                           color: ColorManager.black, fontSize: mob ? 16 : 10)),
                   const SizedBox(
@@ -105,13 +105,13 @@ class _FavoriteServiceListTileState extends State<FavoriteServiceListTile> {
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(widget.serviceman?.phone ?? '',
-                      style: getRegularStyle(
-                          color: const Color.fromARGB(255, 173, 173, 173),
-                          fontSize: mob ? 15 : 10)),
-                  const SizedBox(
-                    height: 4,
-                  ),
+                  // Text(widget.serviceman?.phone ?? '',
+                  //     style: getRegularStyle(
+                  //         color: const Color.fromARGB(255, 173, 173, 173),
+                  //         fontSize: mob ? 15 : 10)),
+                  // const SizedBox(
+                  //   height: 4,
+                  // ),
                 ],
               ),
             ),

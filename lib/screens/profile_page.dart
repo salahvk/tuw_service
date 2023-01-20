@@ -6,6 +6,8 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/get_active_services.dart';
+import 'package:social_media_services/API/get_active_subscription.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/my_services.dart';
 import 'package:social_media_services/screens/my_subscription.dart';
@@ -47,6 +49,10 @@ class _ProfilePageState extends State<ProfilePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await getActiveServices(context);
+      getActiveSubscriptionData(context);
+    });
   }
 
   Future<bool> _willPopCallback() async {
@@ -198,8 +204,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Center(
+                      //     child: ProfileImage(
+                      //   isNavigationActive: false,
+                      //   iconSize: 18,
+                      //   profileSize: 60,
+                      //   iconRadius: 17,
+                      // )),
                       Center(
-                          child: ProfileImage(
+                          child: ProfileImage3(
                         isNavigationActive: false,
                         iconSize: 18,
                         profileSize: 60,

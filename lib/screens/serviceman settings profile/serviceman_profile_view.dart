@@ -8,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
+import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -20,6 +21,7 @@ import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/delete_image.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
@@ -295,6 +297,18 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                                         image:
                                             galleryImages[index].galleryImage),
                                     barrierDismissible: true);
+                          },
+                          onLongPress: () {
+                            final imageId = galleryImages?[index].id;
+                        galleryImages!.isEmpty
+                                ? showAnimatedSnackBar(
+                                    context, str.sv_no_images)
+                                :       showDialog( 
+                                context: context,
+                                builder: (context) =>
+                                    DeleteImage(imageId: imageId.toString()),
+                                barrierDismissible: false);
+                            
                           },
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),

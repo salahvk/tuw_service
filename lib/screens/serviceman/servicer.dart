@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/animations/animtions.dart';
@@ -24,6 +25,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/loading%20screens/profile_loading.dart';
+import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -167,12 +169,20 @@ class _ServicerPageState extends State<ServicerPage> {
                       leading: InkWell(
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (ctx) {
-                            return const HomePage(
-                              selectedIndex: 0,
-                            );
-                          }));
+                          Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.fade,
+                                child: const HomePage(
+                                  selectedIndex: 0,
+                                ),
+                              ));
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (ctx) {
+                          //   return const HomePage(
+                          //     selectedIndex: 0,
+                          //   );
+                          // }));
                         },
                         child: SizedBox(
                           width: 24,
@@ -186,12 +196,14 @@ class _ServicerPageState extends State<ServicerPage> {
                       leading: InkWell(
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (ctx) {
-                            return const HomePage(
-                              selectedIndex: 1,
-                            );
-                          }));
+                          Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.fade,
+                                child: const HomePage(
+                                  selectedIndex: 1,
+                                ),
+                              ));
                         },
                         child: SizedBox(
                           width: 24,
@@ -526,6 +538,25 @@ class _ServicerPageState extends State<ServicerPage> {
                                                                         BorderRadius
                                                                             .circular(8),
                                                                   ),
+                                                                  suffixIcon:
+                                                                      InkWell(
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        selectedValue =
+                                                                            null;
+                                                                        countryid =
+                                                                            null;
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: const Icon(
+                                                                        size:
+                                                                            25,
+                                                                        Icons
+                                                                            .close),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
@@ -638,6 +669,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                                     ],
                                                   ),
                                                   child: TextField(
+                                                    readOnly: true,
                                                     style: const TextStyle(
                                                         fontSize: 12),
                                                     controller:
@@ -647,42 +679,71 @@ class _ServicerPageState extends State<ServicerPage> {
                                                         suffixIcon: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(6.0),
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (ctx) {
-                                                                return const SearchServicerLocation();
-                                                              }));
-                                                            },
-                                                            child: Container(
-                                                                width: mob
-                                                                    ? 30
-                                                                    : 20,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5),
-                                                                  color: ColorManager
-                                                                      .primary,
+                                                                      .only(
+                                                                  right: 5),
+                                                          child: SizedBox(
+                                                            width: size.width *
+                                                                .15,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    final servicerProvider = Provider.of<
+                                                                            ServicerProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false);
+                                                                    ServiceControllers
+                                                                        .mapController
+                                                                        .clear();
+                                                                    servicerProvider
+                                                                            .servicerLatitude =
+                                                                        null;
+                                                                  },
+                                                                  child: const Icon(
+                                                                      size: 25,
+                                                                      Icons
+                                                                          .close),
                                                                 ),
-                                                                height: mob
-                                                                    ? 30
-                                                                    : 25,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .add_location_alt_outlined,
-                                                                  color: ColorManager
-                                                                      .whiteColor,
-                                                                  size: mob
-                                                                      ? 20
-                                                                      : 15,
-                                                                )),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(builder:
+                                                                            (ctx) {
+                                                                      return const SearchServicerLocation();
+                                                                    }));
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                          width: mob
+                                                                              ? 30
+                                                                              : 20,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5),
+                                                                            color:
+                                                                                ColorManager.primary,
+                                                                          ),
+                                                                          height: mob
+                                                                              ? 30
+                                                                              : 25,
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.add_location_alt_outlined,
+                                                                            color:
+                                                                                ColorManager.whiteColor,
+                                                                            size: mob
+                                                                                ? 20
+                                                                                : 15,
+                                                                          )),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                         hintText: 'Map',
@@ -1016,19 +1077,24 @@ class _ServicerPageState extends State<ServicerPage> {
 
   searchServicer() {
     final provider = Provider.of<DataProvider>(context, listen: false);
-    searchServiceMan(
-        context,
-        widget.id.toString(),
-        countryid2,
-        ServiceControllers.stateController.text,
-        ServiceControllers.regionController.text,
-        ServiceControllers.servicerController.text,
-        provider.isFourWheelerSelected && provider.isTwoWheelerSelected
-            ? ''
-            : provider.isFourWheelerSelected
-                ? 'four wheeler'
-                : provider.isTwoWheelerSelected
-                    ? 'two wheeler'
-                    : '');
+    print(ServiceControllers.stateController.text);
+    if (ServiceControllers.servicerController.text.isEmpty) {
+      showAnimatedSnackBar(context, "Enter a Servicer name to search");
+    } else {
+      searchServiceMan(
+          context,
+          widget.id.toString(),
+          countryid2,
+          ServiceControllers.stateController.text,
+          ServiceControllers.regionController.text,
+          ServiceControllers.servicerController.text,
+          provider.isFourWheelerSelected && provider.isTwoWheelerSelected
+              ? ''
+              : provider.isFourWheelerSelected
+                  ? 'four wheeler'
+                  : provider.isTwoWheelerSelected
+                      ? 'two wheeler'
+                      : '');
+    }
   }
 }

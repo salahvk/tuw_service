@@ -29,6 +29,8 @@ getUserAddress(BuildContext context) async {
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
       if (jsonResponse['result'] == false) {
+        log("Token not valid");
+
         await Hive.box("token").clear();
 
         return;
@@ -50,26 +52,19 @@ getUserAddress(BuildContext context) async {
 showUserAddress(BuildContext context, String id) async {
   log(id);
   log('Show user Address 1');
-  //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
+
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
 
   try {
-    final url =
-        "http://projects.techoriz.in/serviceapp/public/api/address/show?address_id=$id";
+    final url = "$api/address/show?address_id=$id";
     print(url);
     var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       log(response.body);
-      log('Show user Address 2');
-      var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
-      // if (jsonResponse['result'] == false) {
-      //   await Hive.box("token").clear();
 
-      //   return;
-      // }
+      var jsonResponse = jsonDecode(response.body);
 
       final userAddressData = ShowUserAddress.fromJson(jsonResponse);
       provider.getUserAddressShowData(userAddressData);

@@ -90,8 +90,12 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
         .parse(widget.chatMessage!.createdAt!.substring(11, 16), true);
     var hour = dateTime.toLocal().hour;
     var minute = dateTime.toLocal().minute;
-    String time =
+    // var minute = dateTime.toLocal().minute;
+    String time24 =
         widget.chatMessage?.localTime?.substring(11, 16) ?? "$hour:$minute";
+ String time =   DateFormat.jm().format(DateFormat("hh:mm").parse(time24));
+    // print("$hour:$minute");
+    // print(time);
     final provider = Provider.of<DataProvider>(context, listen: false);
     isSendByme = widget.chatMessage?.senderId ==
             provider.viewProfileModel?.userdetails?.id

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/active_subscription.dart';
 import 'package:social_media_services/providers/data_provider.dart';
+import 'package:social_media_services/utils/initPlatformState.dart';
 
 getActiveSubscriptionData(BuildContext context) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
@@ -22,9 +23,14 @@ getActiveSubscriptionData(BuildContext context) async {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
-
-      final activeSubscription = ActiveSubscription.fromJson(jsonResponse);
-      provider.getActiveSubscriptionData(activeSubscription);
+      bool isLogOut =
+          jsonResponse["message"].toString().contains("Please login again");
+      if (isLogOut) {
+        initPlatformState(context);
+      } else {
+        final activeSubscription = ActiveSubscription.fromJson(jsonResponse);
+        provider.getActiveSubscriptionData(activeSubscription);
+      }
     } else {
       log("Something Went Wrong50");
       // print(response.statusCode);

@@ -235,32 +235,28 @@ class _MessagePageState extends State<MessagePage> {
                                         ),
                                       ],
                                     ),
-                                    child: Stack(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            navToChatLoadingScreen(index);
-                                          },
-                                          child: CircleAvatar(
-                                            backgroundColor: ColorManager
-                                                .whiteColor
-                                                .withOpacity(0.8),
-                                            radius: 25,
-                                            backgroundImage: profileDetails
-                                                        ?.profilePic ==
-                                                    null
-                                                ? const AssetImage(
-                                                        'assets/user.png')
-                                                    as ImageProvider
-                                                : CachedNetworkImageProvider(
-                                                    '$endPoint${profileDetails?.profilePic}'),
-                                          ),
-                                        ),
-                                      ],
+                                    child: InkWell(
+                                      onTap: () {
+                                        navToChatLoadingScreen(index);
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: ColorManager.whiteColor
+                                            .withOpacity(0.8),
+                                        radius: 25,
+                                        backgroundImage: profileDetails
+                                                    ?.profilePic ==
+                                                null
+                                            ? const AssetImage(
+                                                    'assets/user.png')
+                                                as ImageProvider
+                                            : CachedNetworkImageProvider(
+                                                '$endPoint${profileDetails?.profilePic}'),
+                                      ),
                                     ),
                                   ),
                                   Positioned(
-                                    height: 40,
+                                    top: 5,
+                                    left: 1,
                                     // left: size.width * .0,
                                     child: CircleAvatar(
                                       radius: 5,
@@ -276,7 +272,9 @@ class _MessagePageState extends State<MessagePage> {
                                   )
                                 ],
                               ),
-                              Text(profileDetails?.firstname ?? ''),
+                              Text(profileDetails?.firstname ??
+                                  profileDetails?.phone ??
+                                  ''),
                             ],
                           ),
                         );
@@ -304,7 +302,9 @@ class _MessagePageState extends State<MessagePage> {
 
                     var day = date.toLocal().weekday;
                     if (DateTime.now().weekday == day) {
-                      time = "$hour:$minute";
+                      String time24 = "$hour:$minute";
+                      time = DateFormat.jm()
+                          .format(DateFormat("hh:mm").parse(time24));
                     } else if (day == DateTime.now().weekday - 1) {
                       time = "Yesterday";
                     } else {

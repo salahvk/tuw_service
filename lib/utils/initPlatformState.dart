@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +39,7 @@ Future<void> initPlatformState(BuildContext context) async {
   }
 
   if (apiToken == null) {
+    log("API token is null");
     gotoNextPage(context);
   } else {
     await viewProfile(context);

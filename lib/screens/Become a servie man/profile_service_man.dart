@@ -292,7 +292,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                             child: TextField(
                                               style: const TextStyle(),
                                               readOnly: true,
-                                              controller:
+                                              controller: 
                                                   ProfileServiceControllers
                                                       .dateController,
                                               decoration: InputDecoration(
@@ -340,7 +340,6 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                               InkWell(
                                                 onTap: () {
                                                   provider.gender = 'male';
-                                                  print(provider.gender);
                                                   setState(() {
                                                     value = true;
                                                   });
