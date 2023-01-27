@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:social_media_services/utils/snack_bar.dart';
 
 getPaymentSuccess(BuildContext context, status, id) async {
+  log("Payment Success API calling");
+  print(id);
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
   print(status);

@@ -1,8 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,13 +9,11 @@ import 'package:page_transition/page_transition.dart';
 
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/coupenCode.dart';
-import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_child_service.dart';
-import 'package:social_media_services/model/place_order.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_integaration/views/payment_screen.dart';
@@ -30,7 +25,6 @@ import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
-import 'package:http/http.dart' as http;
 
 class PaymentServicePage extends StatefulWidget {
   const PaymentServicePage({Key? key}) : super(key: key);
@@ -724,110 +718,18 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
       // setState(() {
       //   isPaymentLoading = false;
       // });
-
-      placeOrder(context);
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.leftToRight,
+              child: PaymentScreen(
+                amount: grandTotal ?? 0,
+                packages: packages!,
+                taxTotalAmount: taxTotalAmount.toString(),
+              )));
+      // placeOrder(context);
       // Navigator.pushNamedAndRemoveUntil(
       //     context, Routes.paymentSuccessfull, (route) => false);
-    }
-  }
-
-  placeOrder(BuildContext context) async {
-    setState(() {
-      isPaymentLoading = true;
-    });
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    final apiToken = Hive.box("token").get('api_token');
-    if (apiToken == null) return;
-    final fieldData = provider.viewProfileModel?.userdetails;
-    // final url =
-    //     "${paymentSuccess}firstname=${ProfileServiceControllers.firstNameController}&lastname=${ProfileServiceControllers.lastNameController}&civil_card_no=${ProfileServiceControllers.civilCardController}&dob=${ProfileServiceControllers.dateController}&gender=female&country_id=101&state=kerala&region=sdf&address=dfsdf&package_id=40&service_id=12&coupon_code=ABC&total_amount=100.00&total_tax_amount=0.00&coupon_discount=0.00&grand_total=100.00";
-    final firstName = ProfileServiceControllers.firstNameController.text.isEmpty
-        ? fieldData?.firstname ?? ''
-        : ProfileServiceControllers.firstNameController.text;
-    final lastName = ProfileServiceControllers.lastNameController.text.isEmpty
-        ? fieldData?.lastname ?? ''
-        : ProfileServiceControllers.lastNameController.text;
-    final civilCardNo =
-        ProfileServiceControllers.civilCardController.text.isEmpty
-            ? fieldData?.civilCardNo ?? ''
-            : ProfileServiceControllers.civilCardController.text;
-    final dob = ProfileServiceControllers.dateController.text.isEmpty
-        ? fieldData?.dob ?? ''
-        : ProfileServiceControllers.dateController.text;
-    final gender =
-        provider.gender.isEmpty ? fieldData?.gender ?? '' : provider.gender;
-    final state = ProfileServiceControllers.stateController.text.isEmpty
-        ? fieldData?.state ?? ''
-        : ProfileServiceControllers.stateController.text;
-    final region = ProfileServiceControllers.regionController.text.isEmpty
-        ? fieldData?.region ?? ''
-        : ProfileServiceControllers.regionController.text;
-    final address = ProfileServiceControllers.addressController.text.isEmpty
-        ? fieldData?.about ?? ''
-        : ProfileServiceControllers.addressController.text;
-    final serviceId = provider.serviceId;
-    final coupenCode = PaymentServiceControllers.couponController.text;
-    final countryId = provider.selectedCountryId ??
-        provider.viewProfileModel?.userdetails?.countryId;
-    final packageId = packages?.id;
-
-    final url =
-        '${placeOrderApi}firstname=$firstName&lastname=$lastName&civil_card_no=$civilCardNo&dob=$dob&gender=$gender&country_id=${countryId.toString()}&state=$state&region=$region&address=$address&package_id=$packageId&service_id=$serviceId&coupon_code=$coupenCode&total_amount=${packages?.amount}&total_tax_amount=$taxTotalAmount&coupon_discount=0.00&grand_total=$grandTotal';
-    try {
-      print(packageId);
-      print(url);
-      // return;
-      var response = await http.post(Uri.parse(url), headers: {
-        "device-id": provider.deviceId ?? '',
-        "api-token": apiToken
-      });
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        log(response.body);
-        if (jsonResponse['result'] == true) {
-          print('true');
-
-          log(
-            jsonResponse['message'],
-          );
-
-          // Navigator.push(context, MaterialPageRoute(builder: ((context) {
-          //   return const PaymentSelection();
-          // })));
-          Navigator.push(
-              context,
-              PageTransition(
-                  type: PageTransitionType.leftToRight,
-                  child: PaymentScreen(
-                    amount: grandTotal ?? 0,
-                    // packages: packages!,
-                    // taxTotalAmount: taxTotalAmount.toString(),
-                  )));
-          setState(() {
-            isPaymentLoading = false;
-          });
-
-          final placeOrderData = PlaceOrder.fromJson(jsonResponse);
-          provider.getPlaceOrderData(placeOrderData);
-        } else {
-          print(response.statusCode);
-          showAnimatedSnackBar(
-            context,
-            jsonResponse['errors'],
-          );
-
-          setState(() {
-            isPaymentLoading = false;
-          });
-        }
-        // final childData = ChildServiceModel.fromJson(jsonResponse);
-        // provider.childModelData(childData);
-      } else {
-        log("Something Went Wrong1");
-      }
-    } on Exception catch (e) {
-      log("Something Went Wrong1");
-      print(e);
     }
   }
 

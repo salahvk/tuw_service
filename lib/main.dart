@@ -10,6 +10,7 @@ import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_integaration/providers/payment_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => DataProvider()),
           ChangeNotifierProvider(create: (_) => OTPProvider()),
           ChangeNotifierProvider(create: (_) => ServicerProvider()),
+          ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ],
         child: MaterialApp(
           supportedLocales: const [
