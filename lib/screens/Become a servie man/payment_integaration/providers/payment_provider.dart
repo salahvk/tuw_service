@@ -65,14 +65,20 @@ class PaymentProvider extends DefaultChangeNotifier {
         callBack: PayFortResultCallback(
           onSucceeded: (result) {
             if (call == 0) {
+              final resCode = result.responseCode;
+              final resMessage = result.responseMessage;
+              final authCode = result.authorizationCode;
+              final fortId = result.fortId;
               log("success");
-              getOrderSuccessData(context);
+              getOrderSuccessData(
+                  context, resCode, resMessage, authCode, fortId);
               call = call + 1;
               log(result.fortId!);
             }
           },
           onFailed: (result) {
             log("failed");
+
             log(result);
           },
           onCancelled: onCancelled,
@@ -80,6 +86,7 @@ class PaymentProvider extends DefaultChangeNotifier {
       );
     } catch (e) {
       onFailed(e.toString());
+      print(e);
     }
   }
 
@@ -240,14 +247,22 @@ class PaymentProvider extends DefaultChangeNotifier {
 
 //* Get order successData API
 
-  getOrderSuccessData(BuildContext context) async {
+  getOrderSuccessData(
+      BuildContext context, resCode, resMessage, authCode, fortId) async {
     final provider = Provider.of<DataProvider>(context, listen: false);
     // setState(() {
     //   isLoading = true;
     // });
     await getPaymentSuccess(
-        context, 'success', provider.placeOrder?.orderId.toString());
+        context,
+        'success',
+        provider.placeOrder?.orderId.toString(),
+        resCode,
+        resMessage,
+        authCode,
+        fortId);
     await viewProfile(context);
+    log("Finished");
     // setState(() {
     //   isLoading = false;
     // });

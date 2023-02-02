@@ -251,6 +251,13 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                   '',
                             ),
                             PaymentListTile(
+                              text1: "Transaction Id",
+                              text2: provider
+                                      .paymentSuccess?.orderDetails?.fortId
+                                      .toString() ??
+                                  '',
+                            ),
+                            PaymentListTile(
                               text1: str.su_package_id,
                               text2: provider
                                       .paymentSuccess?.subscription?.packageName

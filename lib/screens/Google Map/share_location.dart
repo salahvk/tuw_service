@@ -6,12 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
-import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShareLocation extends StatefulWidget {
@@ -46,11 +43,11 @@ class _ShareLocationState extends State<ShareLocation> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    final servicerProvider =
-        Provider.of<ServicerProvider>(context, listen: false);
+    // final provider = Provider.of<DataProvider>(context, listen: false);
+    // final servicerProvider =
+    //     Provider.of<ServicerProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
-    final userDetails = provider.viewProfileModel?.userdetails;
+    // final userDetails = provider.viewProfileModel?.userdetails;
     final str = AppLocalizations.of(context)!;
     // currentLocator = LatLng(
     //     double.parse(servicerProvider.servicerLatitude ??

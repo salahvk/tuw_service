@@ -23,11 +23,7 @@ getFavoritesListFun(BuildContext context) async {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);
 
-      // if (jsonResponse['result'] == false) {
-      //   await Hive.box("token").clear();
-
-      //   return;
-      // }
+     
 
       final serviceManListData = FavoriteServiceManModel.fromJson(jsonResponse);
       provider.getServiceManFavoriteData(serviceManListData);

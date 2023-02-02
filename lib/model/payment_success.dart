@@ -207,6 +207,7 @@ class OrderDetails {
   String? paymentStatus;
   String? createdAt;
   String? updatedAt;
+  String? fortId;
 
   OrderDetails(
       {this.id,
@@ -229,7 +230,7 @@ class OrderDetails {
       this.grandTotal,
       this.paymentStatus,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,this.fortId});
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -253,6 +254,7 @@ class OrderDetails {
     paymentStatus = json['payment_status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    fortId = json['fort_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -278,6 +280,7 @@ class OrderDetails {
     data['payment_status'] = paymentStatus;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['fort_id'] = fortId;
     return data;
   }
 }

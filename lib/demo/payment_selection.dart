@@ -59,8 +59,8 @@ class _PaymentSelectionState extends State<PaymentSelection> {
     setState(() {
       isLoading = true;
     });
-    await getPaymentSuccess(
-        context, 'success', provider.placeOrder?.orderId.toString());
+    // await getPaymentSuccess(
+    //     context, 'success', provider.placeOrder?.orderId.toString());
     await viewProfile(context);
     setState(() {
       isLoading = false;
