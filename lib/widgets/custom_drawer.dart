@@ -37,7 +37,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
 
-    return DrawerHeader(
+    return Container(
         decoration: BoxDecoration(
           color: ColorManager.primary3,
           borderRadius: lang == 'ar'
@@ -46,8 +46,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               : const BorderRadius.only(
                   topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
         ),
-        margin: const EdgeInsets.all(0.0),
-        padding: const EdgeInsets.all(0.0),
+        // margin: const EdgeInsets.all(0.0),
+        // padding: const EdgeInsets.all(0.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -95,9 +95,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     title: str.d_logout,
                     onTap: logOUtFunction,
                   ),
-            const SizedBox(
-              height: 150,
-            )
+            // const SizedBox(
+            //   height: 150,
+            // )
           ],
         ));
   }

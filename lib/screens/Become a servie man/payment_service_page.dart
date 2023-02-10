@@ -21,7 +21,7 @@ import 'package:social_media_services/model/get_child_service.dart';
 import 'package:social_media_services/model/place_order.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
-import 'package:social_media_services/screens/Become%20a%20servie%20man/payment_integaration/views/payment_screen.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/thawani_payment.dart/pay_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -798,10 +798,13 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
               context,
               PageTransition(
                   type: PageTransitionType.leftToRight,
-                  child: PaymentScreen(
+                  // child: PaymentScreen(
+                  //   amount: grandTotal ?? 0,
+                  //   // packages: packages!,
+                  //   // taxTotalAmount: taxTotalAmount.toString(),
+                  // )
+                  child: PayPage(
                     amount: grandTotal ?? 0,
-                    // packages: packages!,
-                    // taxTotalAmount: taxTotalAmount.toString(),
                   )));
           setState(() {
             isPaymentLoading = false;

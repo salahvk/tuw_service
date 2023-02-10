@@ -147,7 +147,8 @@ class _ChatScreenState extends State<ChatScreen> {
       //     chatMessages?.insertAll(50, chat ?? []);
       //   }
       // }
-      if (_scrollController.position.atEdge) {
+      if (_scrollController.position.atEdge &&
+          _scrollController.offset != 0.0) {
         setState(() {
           isScrolling = false;
         });
@@ -855,8 +856,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: const CircleAvatar(
                             maxRadius: 16,
                             backgroundColor: ColorManager.whiteColor,
-                            child:
-                                Icon(Icons.keyboard_double_arrow_down_rounded)),
+                            child: Icon(
+                              Icons.keyboard_double_arrow_down_rounded,
+                              color: ColorManager.black,
+                            )),
                       ),
                     ))
                 : Container()
@@ -1334,7 +1337,6 @@ class _ChatScreenState extends State<ChatScreen> {
         }
 
         // return;
-
       }
     });
   }
