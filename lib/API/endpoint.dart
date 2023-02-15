@@ -24,7 +24,8 @@ const String customerChildService = '$api/childservices';
 const String subServices = '$api/subservices';
 const String servicemanList = '$api/servicemanlist';
 const String placeOrderApi = '$api/place-order?';
-const String paymentSuccess = '$api/update/payment-status';
+const String payFortpaymentSuccess = '$api/update/payment-status';
+const String thawaniPaymentSuccess = '$api/payment-success';
 
 const String userAddressCreate = '$api/address/create';
 const String getUserAddressApi = '$api/address/list';

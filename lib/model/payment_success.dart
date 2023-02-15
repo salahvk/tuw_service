@@ -61,23 +61,24 @@ class Subscription {
   String? packageName;
   String? serviceName;
 
-  Subscription(
-      {this.id,
-      this.serviceId,
-      this.userId,
-      this.packageId,
-      this.subscriptionDate,
-      this.expiryDate,
-      this.type,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.orderId,
-      this.couponCode,
-      this.transactionId,
-      this.transactionStatus,
-      this.packageName,
-      this.serviceName});
+  Subscription({
+    this.id,
+    this.serviceId,
+    this.userId,
+    this.packageId,
+    this.subscriptionDate,
+    this.expiryDate,
+    this.type,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.orderId,
+    this.couponCode,
+    this.transactionId,
+    this.transactionStatus,
+    this.packageName,
+    this.serviceName,
+  });
 
   Subscription.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -116,6 +117,7 @@ class Subscription {
     data['transaction_status'] = transactionStatus;
     data['package_name'] = packageName;
     data['service_name'] = serviceName;
+
     return data;
   }
 }
@@ -181,6 +183,7 @@ class PackageInfo {
     data['tax_ids'] = taxIds;
     data['package_name'] = packageName;
     data['service_name'] = serviceName;
+
     return data;
   }
 }
@@ -207,7 +210,7 @@ class OrderDetails {
   String? paymentStatus;
   String? createdAt;
   String? updatedAt;
-  String? fortId;
+  String? invoiceId;
 
   OrderDetails(
       {this.id,
@@ -230,7 +233,8 @@ class OrderDetails {
       this.grandTotal,
       this.paymentStatus,
       this.createdAt,
-      this.updatedAt,this.fortId});
+      this.updatedAt,
+      this.invoiceId});
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -254,7 +258,7 @@ class OrderDetails {
     paymentStatus = json['payment_status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    fortId = json['fort_id'];
+    invoiceId = json['invoice_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -280,7 +284,7 @@ class OrderDetails {
     data['payment_status'] = paymentStatus;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    data['fort_id'] = fortId;
+    data['invoice_id'] = invoiceId;
     return data;
   }
 }

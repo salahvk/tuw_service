@@ -632,7 +632,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                       const EdgeInsets.fromLTRB(28, 0, 28, 0)),
                               onPressed: onContinue,
                               child: !isPaymentLoading
-                                  ? Text(str.ps_pay,
+                                  ?
+                                  // Text(str.ps_pay,
+                                  Text("Proceed",
                                       style: getRegularStyle(
                                           color: ColorManager.whiteText,
                                           fontSize: 16))
@@ -785,7 +787,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         var jsonResponse = jsonDecode(response.body);
         log(response.body);
         if (jsonResponse['result'] == true) {
-          print('true');
+          // print(jsonResponse['order_id']);
+          String orderId = jsonResponse['order_id'].toString();
 
           log(
             jsonResponse['message'],
@@ -805,6 +808,11 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                   // )
                   child: PayPage(
                     amount: grandTotal ?? 0,
+                    orderId: orderId,
+                    serviceFee: packages?.amount,
+                    taxTotal: taxTotalAmount,
+                    // validity: packages?.validity ?? '',
+                    vat: 4,
                   )));
           setState(() {
             isPaymentLoading = false;
