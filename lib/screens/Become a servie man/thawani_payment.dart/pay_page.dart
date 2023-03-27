@@ -11,7 +11,9 @@ import 'package:thawani_payment/thawani_payment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PayPage extends StatelessWidget {
-  final double serviceFee;
+  final String serviceFee;
+  final String validity;
+  final String packageName;
   // final String validity;
   final int vat;
   final double taxTotal;
@@ -20,6 +22,8 @@ class PayPage extends StatelessWidget {
   const PayPage({
     super.key,
     required this.amount,
+    required this.validity,
+    required this.packageName,
     required this.orderId,
     required this.vat,
     required this.taxTotal,
@@ -33,6 +37,9 @@ class PayPage extends StatelessWidget {
     final conAmount = (amount * 1000).toInt();
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    final user = Provider.of<DataProvider>(context, listen: false)
+        .viewProfileModel
+        ?.userdetails;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thawani Payment'),
@@ -56,22 +63,44 @@ class PayPage extends StatelessWidget {
                   ],
                 ),
                 width: size.width,
-                height: 200,
+                height: 190,
                 child: Container(
                   decoration: BoxDecoration(
                       color: ColorManager.whiteColor,
                       borderRadius: BorderRadius.circular(5)),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${str.su_service_fee} : $serviceFee"),
-                      // Text("Validity : $validity"),
-                      Text("${str.tax_total}  : $taxTotal",
-                          style: getRegularStyle(
-                              color: ColorManager.grayDark, fontSize: 12)),
-                      // Spacer(),
+                      Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "$packageName",
+                            style: getSemiBoldtStyle(
+                                color: ColorManager.black, fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("${str.su_service_fee} : $serviceFee"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("${str.validity} : $validity"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          // Text("Validity : $validity"),
+                          Text(
+                            "${str.tax_total}  : $taxTotal",
+                            // style: getRegularStyle(
+                            //     color: ColorManager.grayDark, fontSize: 12)
+                          ),
+                          // Spacer(),
+                        ],
+                      ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
+                        padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
                         child: Container(
                           height: 60,
                           width: double.infinity,
@@ -96,7 +125,11 @@ class PayPage extends StatelessWidget {
                   pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
                   successUrl: "https://company.com/success",
                   cancelUrl: "https://company.com/cancel",
-
+                  metadata: {
+                    "Customer Name": "${user?.firstname} ${user?.lastname}",
+                    "Customer PhoneNumber": "${user?.phone}",
+                    "Customer Email": "${user?.email}"
+                  },
                   clintID: orderId,
 
                   onError: (e) {
@@ -105,26 +138,20 @@ class PayPage extends StatelessWidget {
                   },
                   products: [
                     {
-                      "name": "product 1",
+                      "name": packageName,
                       "quantity": 1,
                       "unit_amount": conAmount,
                     },
-                    // {"name": "product 2", "quantity": 1, "unit_amount": 200}
                   ],
                   onCreate: (v) {
                     print(v);
                   },
                   onCancelled: (v) {
-                    print(v);
                     Navigator.pop(context);
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (builder) => const C()));
                   },
                   onPaid: (v) {
-                    print(v.data?.entries);
+                    print(v.data);
                     getOrderSuccessData(context, v);
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (builder) => const V()));
                   },
                   // child: const Text("data"),
                 ),

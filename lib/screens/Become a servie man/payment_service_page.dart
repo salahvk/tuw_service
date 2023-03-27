@@ -807,9 +807,11 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                   //   // taxTotalAmount: taxTotalAmount.toString(),
                   // )
                   child: PayPage(
+                    packageName: packages?.packageName ?? '',
+                    validity: packages?.validity ?? '',
                     amount: grandTotal ?? 0,
                     orderId: orderId,
-                    serviceFee: packages?.amount,
+                    serviceFee: (packages?.amount.toString() ?? ''),
                     taxTotal: taxTotalAmount,
                     // validity: packages?.validity ?? '',
                     vat: 4,

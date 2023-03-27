@@ -445,17 +445,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           .show(
         context,
       );
-    }
-    // else if (phoneNumber != '8089852417') {
-    //   AnimatedSnackBar.material('Enter a valid Number',
-    //           type: AnimatedSnackBarType.error,
-    //           borderRadius: BorderRadius.circular(6),
-    //           duration: const Duration(seconds: 1))
-    //       .show(
-    //     context,
-    //   );
-    // }
-    else {
+    } else {
       final phoneNo = PhoneNumberControllers.phoneNumCon.text;
       OtpProvider.getPhoneNo(phoneNo);
       OtpProvider.getCountryCode(countryCode);
@@ -463,6 +453,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         loading = true;
       });
       await getOtp(context, countryCode, phoneNo, false);
+      print(OtpProvider.getOtp?.oTP.toString());
       setState(() {
         loading = false;
       });

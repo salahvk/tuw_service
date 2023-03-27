@@ -55,6 +55,7 @@ class Userdetails {
   String? longitude;
   String? coverImage;
   String? civilCardNo;
+  String? email;
 
   Userdetails(
       {this.id,
@@ -86,7 +87,8 @@ class Userdetails {
       this.latitude,
       this.longitude,
       this.coverImage,
-      this.civilCardNo});
+      this.civilCardNo,
+      this.email});
 
   Userdetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -119,6 +121,7 @@ class Userdetails {
     longitude = json['longitude'];
     coverImage = json['cover_image'];
     civilCardNo = json['civil_card_no'];
+    email = json['email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -152,6 +155,7 @@ class Userdetails {
     data['longitude'] = longitude;
     data['cover_image'] = coverImage;
     data['civil_card_no'] = civilCardNo;
+    data['email'] = email;
     return data;
   }
 }
