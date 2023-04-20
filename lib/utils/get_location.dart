@@ -110,6 +110,41 @@ sendLocation(context, String latLon) async {
   }
 }
 
+Future<List<double>> getCurrentLocationPermission(
+  BuildContext context,
+) async {
+  late List<double> latLon;
+  LocationPermission permission = await Geolocator.checkPermission();
+  final str = AppLocalizations.of(context)!;
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      log('Location permissions are denied');
+    } else if (permission == LocationPermission.deniedForever) {
+      log("'Location permissions are permanently denied");
+      showAnimatedSnackBar(context, str.snack_enable_loc);
+    } else {
+      log("GPS Location service is granted");
+      latLon = await getCurrentLocation();
+      // final location = await getPlaceAddress(latLon);
+      final latlonString = "${latLon[0]},${latLon[1]}";
+      print(latlonString);
+      return latLon;
+    }
+    return [0, 0];
+  } else {
+    log("GPS Location permission granted.");
+    latLon = await getCurrentLocation();
+    // final location = await getPlaceAddress(latLon);
+    final latlonString = "${latLon[0]},${latLon[1]}";
+    print(latlonString);
+
+    return latLon;
+  }
+
+  // searchController.text.isEmpty ? getCurrentLocation() : null;
+}
+
 Future<List<double>> getCurrentLocation() async {
   Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);

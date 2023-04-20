@@ -207,7 +207,6 @@ class _OTPscreenState extends State<OTPscreen> {
   }
 
   verifyNow() async {
-    print("s");
     final otpProvider = Provider.of<OTPProvider>(context, listen: false);
     print(PhoneNumberControllers.otpCon.text);
     print(otpProvider.getOtp?.oTP.toString());
@@ -216,7 +215,7 @@ class _OTPscreenState extends State<OTPscreen> {
     final str = AppLocalizations.of(context)!;
     if (PhoneNumberControllers.otpCon.text.length < 6 ||
         PhoneNumberControllers.otpCon.text.toString() !=
-            {otpProvider.getOtp?.oTP.toString()}) {
+            otpProvider.getOtp?.oTP.toString()) {
       AnimatedSnackBar.material(str.o_snack,
               type: AnimatedSnackBarType.error,
               borderRadius: BorderRadius.circular(6),

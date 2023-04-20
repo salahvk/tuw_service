@@ -32,7 +32,7 @@ class _LoadingListPageState extends State<LoadingListPage> {
             Expanded(
               child: Shimmer.fromColors(
                 baseColor: ColorManager.whiteColor,
-                highlightColor: Colors.green,
+                highlightColor: ColorManager.primary,
                 enabled: _enabled,
                 period: const Duration(milliseconds: 1500),
                 direction: ShimmerDirection.ltr,

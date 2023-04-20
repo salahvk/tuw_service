@@ -530,7 +530,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: TitleWidget(name: str.e_state),
+                                    child: TitleWidget(name: str.p_region),
                                   ),
                                   Padding(
                                     padding:
@@ -551,7 +551,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         controller: EditProfileControllers
                                             .stateController,
                                         decoration: InputDecoration(
-                                            hintText: str.e_state_h,
+                                            hintText: str.p_region_h,
                                             hintStyle: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),
@@ -570,7 +570,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: TitleWidget(name: str.e_region),
+                                    child: TitleWidget(name: str.p_city),
                                   ),
                                   Padding(
                                     padding:
@@ -591,7 +591,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         controller: EditProfileControllers
                                             .regionController,
                                         decoration: InputDecoration(
-                                            hintText: str.e_region_h,
+                                            hintText: str.p_city_h,
                                             hintStyle: getRegularStyle(
                                                 color: const Color.fromARGB(
                                                     255, 173, 173, 173),

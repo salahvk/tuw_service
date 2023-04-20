@@ -23,6 +23,7 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/widgets/AddressBox/addressPage_box.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
@@ -304,14 +305,22 @@ class _AddressPageState extends State<AddressPage> {
 
                                     // width: 30,
                                     child: InkWell(
-                                      onTap: () {
+                                      onTap: () async {
                                         // Navigator.push(context,
                                         //     MaterialPageRoute(builder: (ctx) {
                                         //   return CustomizeMarkerExample();
                                         // }));
+
+                                        final s =
+                                            await getCurrentLocationPermission(
+                                                context);
+                                        print(s);
+
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return const GoogleMapScreen();
+                                          return GoogleMapScreen(
+                                              lat: s[0].toString(),
+                                              lot: s[1].toString());
                                         }));
                                       },
                                       child: Padding(

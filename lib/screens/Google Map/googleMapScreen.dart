@@ -17,7 +17,9 @@ import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GoogleMapScreen extends StatefulWidget {
-  const GoogleMapScreen({Key? key}) : super(key: key);
+  final String? lat;
+  final String? lot;
+  const GoogleMapScreen({Key? key, this.lat, this.lot}) : super(key: key);
 
   @override
   State<GoogleMapScreen> createState() => _GoogleMapScreenState();
@@ -38,8 +40,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     final size = MediaQuery.of(context).size;
     final userDetails = provider.viewProfileModel?.userdetails;
     final str = AppLocalizations.of(context)!;
-    currentLocator = LatLng(double.parse(userDetails?.latitude ?? '41.612849'),
-        double.parse(userDetails?.longitude ?? '13.046816'));
+    currentLocator = LatLng(
+        double.parse(userDetails?.latitude ?? widget.lat ?? '41.612849'),
+        double.parse(userDetails?.longitude ?? widget.lot ?? '13.046816'));
 
     return SafeArea(
       child: Scaffold(

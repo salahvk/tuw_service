@@ -292,7 +292,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                             child: TextField(
                                               style: const TextStyle(),
                                               readOnly: true,
-                                              controller: 
+                                              controller:
                                                   ProfileServiceControllers
                                                       .dateController,
                                               decoration: InputDecoration(
@@ -635,7 +635,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        MandatoryHeader(heading: str.p_state),
+                                        MandatoryHeader(heading: str.p_city),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 10, 0, 0),
@@ -656,7 +656,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                                   ProfileServiceControllers
                                                       .stateController,
                                               decoration: InputDecoration(
-                                                  hintText: str.p_state_h,
+                                                  hintText: str.p_city_h,
                                                   hintStyle: getRegularStyle(
                                                       color:
                                                           const Color.fromARGB(

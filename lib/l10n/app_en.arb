@@ -62,6 +62,8 @@
     "p_region_h":"Enter Region",
     "p_state":"State",
     "p_state_h":"Enter State",
+    "p_city":"City",
+    "p_city_h":"Enter City",
     "p_address":"Address",
     "p_address_h":"Enter Address",
     "p_continue":"CONTINUE",

@@ -1,5 +1,7 @@
 const String endPoint = "http://projects.techoriz.in/serviceapp/public";
 
+// const String endPoint = "https://tuw.om";
+
 const String api = "$endPoint/api";
 const String apiGet = "$endPoint/api/getall";
 const String apiUser = "$endPoint/api/user";
@@ -26,6 +28,7 @@ const String servicemanList = '$api/servicemanlist';
 const String placeOrderApi = '$api/place-order?';
 const String payFortpaymentSuccess = '$api/update/payment-status';
 const String thawaniPaymentSuccess = '$api/payment-success';
+const String thawaniPaymentfailed = '$api/payment-failed';
 
 const String userAddressCreate = '$api/address/create';
 const String getUserAddressApi = '$api/address/list';
@@ -48,3 +51,5 @@ const String viewChatMessagesApi = '$api/chat-messages?receiver_id=';
 const String updateReadStatusApi = "$api/update/read-status";
 
 const String reportCustomerApi = "$api/report-customer";
+
+const String getRegionApi = "$api/getregions?country_id=";

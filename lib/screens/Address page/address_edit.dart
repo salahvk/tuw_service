@@ -24,6 +24,7 @@ import 'package:social_media_services/screens/Google%20Map/address_locator.dart'
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
@@ -34,6 +35,7 @@ import 'package:async/async.dart';
 
 class UserAddressEdit extends StatefulWidget {
   bool isUpdate;
+
   UserAddressEdit({super.key, this.isUpdate = false});
 
   @override
@@ -52,6 +54,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   List<Countries> r2 = [];
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
+  bool isLocFetching = false;
   bool isSaveAddressLoading = false;
   @override
   void initState() {
@@ -333,34 +336,59 @@ class _UserAddressEditState extends State<UserAddressEdit> {
 
                                     // width: 30,
                                     child: InkWell(
-                                      onTap: () {
+                                      onTap: () async {
+                                        setState(() {
+                                          isLocFetching = true;
+                                        });
+                                        final s =
+                                            await getCurrentLocationPermission(
+                                                context);
+                                        print(s);
                                         // Navigator.push(context,
                                         //     MaterialPageRoute(builder: (ctx) {
                                         //   return CustomizeMarkerExample();
                                         // }));
+                                        // await Future.delayed(
+                                        //     Duration(seconds: 500));
+                                        setState(() {
+                                          isLocFetching = false;
+                                        });
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (ctx) {
-                                          return AddressLocatorScreen();
+                                          return AddressLocatorScreen(
+                                              lat: s[0].toString(),
+                                              lot: s[1].toString());
                                         }));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             5, 2, 5, 5),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.location_on,
-                                              color: ColorManager.whiteColor,
-                                            ),
-                                            Text(
-                                              // str.ae_home_locator,
-                                              "Address Locator",
-                                              style: getRegularStyle(
-                                                  color:
-                                                      ColorManager.whiteColor),
-                                            )
-                                          ],
-                                        ),
+                                        child: isLocFetching
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                              )
+                                            : Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on,
+                                                    color:
+                                                        ColorManager.whiteColor,
+                                                  ),
+                                                  Text(
+                                                    // str.ae_home_locator,
+                                                    "Address Locator",
+                                                    style: getRegularStyle(
+                                                        color: ColorManager
+                                                            .whiteColor),
+                                                  )
+                                                ],
+                                              ),
                                       ),
                                     ),
                                   )

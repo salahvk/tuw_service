@@ -59,7 +59,7 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
   int taxTotal = 0;
   int tax = 0;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
-  double? grandTotal;
+  var grandTotal;
   double taxTotalAmount = 0;
 
   String lang = '';
@@ -435,9 +435,15 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                   taxTotalAmount = 0;
                                                 });
 
-                                                grandTotal = packages
-                                                    ?.offerPrice
-                                                    ?.toDouble();
+                                                if (packages?.offerPrice !=
+                                                    null) {
+                                                  grandTotal = packages
+                                                      ?.offerPrice
+                                                      ?.toDouble();
+                                                } else {
+                                                  print("This value is Null");
+                                                  grandTotal = packages?.amount;
+                                                }
                                               }
                                             });
 
@@ -559,10 +565,12 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                 (packages?.offerPrice ??
                                                         packages?.amount) *
                                                     (taxTotal / 100);
+                                            // if (packages?.offerPrice != null) {
                                             grandTotal =
                                                 (packages?.offerPrice ??
                                                         packages?.amount) +
                                                     taxTotalAmount;
+                                            // }
 
                                             return Padding(
                                               padding:

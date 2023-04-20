@@ -19,7 +19,10 @@ import 'package:social_media_services/screens/Address%20page/address_update.dart
 class AddressLocatorScreen extends StatefulWidget {
   bool isUpdate;
   UserAddress? userAddress;
-  AddressLocatorScreen({Key? key, this.isUpdate = false, this.userAddress})
+  final String? lat;
+  final String? lot;
+  AddressLocatorScreen(
+      {Key? key, this.isUpdate = false, this.userAddress, this.lat, this.lot})
       : super(key: key);
 
   @override
@@ -42,9 +45,11 @@ class _AddressLocatorScreenState extends State<AddressLocatorScreen> {
       final provider = Provider.of<DataProvider>(context, listen: false);
       currentLocator = LatLng(
           provider.addressLatitude ??
-              double.parse(widget.userAddress?.latitude ?? "41.612849"),
+              double.parse(
+                  widget.lat ?? widget.userAddress?.latitude ?? "41.612849"),
           provider.addressLongitude ??
-              double.parse(widget.userAddress?.longitude ?? "13.046816"));
+              double.parse(
+                  widget.lot ?? widget.userAddress?.longitude ?? "13.046816"));
 
       getPlaceAddress(currentLocator);
     });
