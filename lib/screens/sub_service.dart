@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/home/get_subService.dart';
@@ -30,12 +31,21 @@ class _SubServicesPageState extends State<SubServicesPage> {
   String lang = '';
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final h = MediaQuery.of(context).size.height;
 
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
     final homeData = provider.subServicesModel?.subservices;
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
@@ -155,7 +165,7 @@ class _SubServicesPageState extends State<SubServicesPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                   child: Text(
-                    "Sub Services",
+                    str.se_sub_services,
                     style:
                         getBoldtStyle(color: ColorManager.black, fontSize: 20),
                   ),
@@ -180,7 +190,7 @@ class _SubServicesPageState extends State<SubServicesPage> {
                               return const LoadingListPage();
                             }));
                             final id = homeData![index].id;
-                            getSubService(context, id);
+                            getSubService(context, id, false);
 
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (ctx) {

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,14 +19,13 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
-import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
-import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Google%20Map/address_locator.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
@@ -36,43 +34,47 @@ import 'package:social_media_services/widgets/textField_Profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 
-class UserAddressUpdate extends StatefulWidget {
-  final UserAddress userAddress;
+class UserAddressEdit extends StatefulWidget {
   bool isUpdate;
-  UserAddressUpdate(
-      {super.key, required this.userAddress, this.isUpdate = false});
+  final String? lat;
+  final String? lot;
+  XFile? imageFile;
+  String? defaultReg;
+  bool locUpdate;
+  UserAddressEdit(
+      {super.key,
+      this.isUpdate = false,
+      this.lat,
+      this.lot,
+      this.locUpdate = false,
+      this.imageFile,
+      this.defaultReg});
 
   @override
-  State<UserAddressUpdate> createState() => _UserAddressUpdateState();
+  State<UserAddressEdit> createState() => _UserAddressEditState();
 }
 
-class _UserAddressUpdateState extends State<UserAddressUpdate> {
+class _UserAddressEditState extends State<UserAddressEdit> {
   Countries? selectedValue;
-  String? countryValue;
-
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
+
   String lang = '';
+  String? imagePath;
+  XFile? imageFile;
+  String? defaultReg;
+
   List<Countries> r2 = [];
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
+  bool isLocFetching = false;
   bool isSaveAddressLoading = false;
-  String? imagePath;
-  String? defaultReg;
-  XFile? imageFile;
-  GoogleMapController? mapController;
   @override
   void initState() {
     super.initState();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
-    if (widget.isUpdate == false) {
-      fillFields();
-    } else {
-      countryValue = widget.userAddress.country;
-    }
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final provider = Provider.of<DataProvider>(context, listen: false);
       int? n = provider.countriesModel?.countries?.length;
@@ -81,39 +83,43 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
         r2.add(provider.countriesModel!.countries![i]);
         i++;
       }
-      if (widget.isUpdate == true) {
-        imageFile = provider.image ?? XFile('');
-        imagePath = provider.image?.path ?? '';
+      if (widget.isUpdate == false) {
+        clearAddressController();
       } else {
-        imageFile = XFile('');
-        imagePath = '';
+        selectedValue = provider.selectedAddressCountry;
+        imageFile = widget.imageFile;
+        imagePath = imageFile?.path;
+        print("KKKKKKKKKKKKKKKKKKKKKK");
+        print(imageFile?.name);
+        print(defaultReg);
+        defaultReg = widget.defaultReg;
+        print(defaultReg);
 
-        // final currentLocator = LatLng(
-        //     double.parse(widget.userAddress.latitude ?? '1.612849'),
-        //     double.parse(widget.userAddress.longitude ?? '1.046816'));
-        // mapController?.animateCamera(CameraUpdate.newCameraPosition(
-        //     CameraPosition(target: currentLocator, zoom: 12)));
+        setState(() {});
       }
+      // await getRegionData(
+      //   context,
+      // );
       provider.clearRegions();
-      await getRegionData(context, widget.userAddress.countryId);
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
+
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<DataProvider>(context, listen: true);
     final userDetails = provider.viewProfileModel?.userdetails;
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
-    print("$endPoint${widget.userAddress.image}");
-    final currentLocator = LatLng(
-        provider.addressLatitude ??
-            double.parse(widget.userAddress.latitude ?? '41.612849'),
-        provider.addressLongitude ??
-            double.parse(widget.userAddress.longitude ?? '13.046816'));
+    final currentLocator = widget.locUpdate
+        ? LatLng(provider.addressLatitude ?? double.parse('41.612849'),
+            provider.addressLongitude ?? double.parse('13.046816'))
+        : LatLng(double.parse(widget.lat ?? '41.612849'),
+            double.parse(widget.lot ?? '13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(
@@ -292,9 +298,8 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                           child: const Center(
                                               child:
                                                   CircularProgressIndicator()))
-                                      : AddressImageWidget2(
-                                          userAddress: widget.userAddress,
-                                          imagePath: imagePath ?? ''),
+                                      : AddressImageWidget(
+                                          imagePath: imagePath),
                                 ),
                               ),
                               Positioned(
@@ -343,14 +348,10 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  provider.locality ??
-                                      widget.userAddress.country ??
-                                      '',
+                                  provider.locality ?? '',
                                   style: getRegularStyle(
                                     color: ColorManager.black,
-                                    // fontSize:
-                                    // userDetails.homeLocation!.length >
-                                    //         10
+                                    // fontSize: provider.locality!.length > 10
                                     //     ? 10
                                     //     : 12
                                   ),
@@ -362,36 +363,62 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
 
                                   // width: 30,
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      setState(() {
+                                        isLocFetching = true;
+                                      });
+                                      final s =
+                                          await getCurrentLocationPermission(
+                                              context);
+                                      print(s);
                                       // Navigator.push(context,
                                       //     MaterialPageRoute(builder: (ctx) {
                                       //   return CustomizeMarkerExample();
                                       // }));
+                                      // await Future.delayed(
+                                      //     Duration(seconds: 500));
+                                      setState(() {
+                                        isLocFetching = false;
+                                      });
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (ctx) {
                                         return AddressLocatorScreen(
-                                          isUpdate: true,
-                                          userAddress: widget.userAddress,
+                                          lat: s[0].toString(),
+                                          lot: s[1].toString(),
+                                          imageFile: imageFile,
+                                          defaultReg: defaultReg,
                                         );
                                       }));
                                     },
                                     child: Padding(
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 2, 5, 5),
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.location_on,
-                                            color: ColorManager.whiteColor,
-                                          ),
-                                          Text(
-                                            // str.ae_home_locator,
-                                            "Address Locator",
-                                            style: getRegularStyle(
-                                                color: ColorManager.whiteColor),
-                                          )
-                                        ],
-                                      ),
+                                      child: isLocFetching
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Container(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                            )
+                                          : Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.location_on,
+                                                  color:
+                                                      ColorManager.whiteColor,
+                                                ),
+                                                Text(
+                                                  // str.ae_home_locator,
+                                                  "Address Locator",
+                                                  style: getRegularStyle(
+                                                      color: ColorManager
+                                                          .whiteColor),
+                                                )
+                                              ],
+                                            ),
                                     ),
                                   ),
                                 )
@@ -412,11 +439,6 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                   target: currentLocator,
                                   zoom: 4.0,
                                 ),
-                                onMapCreated: (controller) {
-                                  setState(() {
-                                    mapController = controller;
-                                  });
-                                },
                                 markers: <Marker>{
                                   Marker(
                                     markerId: const MarkerId('test_marker_id'),
@@ -432,40 +454,6 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                           ),
                         ),
 
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     Text(
-                        //       str.ae_address,
-                        //       style: getBoldtStyle(
-                        //           color: ColorManager.black, fontSize: 14),
-                        //     ),
-                        //     Container(
-                        //       decoration: BoxDecoration(
-                        //           color: ColorManager.primary,
-                        //           borderRadius: BorderRadius.circular(5)),
-
-                        //       // width: 30,
-                        //       child: Padding(
-                        //         padding:
-                        //             const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        //         child: Row(
-                        //           children: [
-                        //             const Icon(
-                        //               Icons.location_on,
-                        //               color: ColorManager.whiteColor,
-                        //             ),
-                        //             Text(
-                        //               str.ae_add,
-                        //               style: getRegularStyle(
-                        //                   color: ColorManager.whiteColor),
-                        //             )
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     )
-                        //   ],
-                        // ),
                         MandatoryHeader(heading: str.ae_address_n),
                         TextFieldProfileService(
                             hintText: str.ae_address_h,
@@ -596,6 +584,8 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                         setState(() {
                                           selectedValue = value as Countries;
                                         });
+                                        provider.selectedAddressCountry =
+                                            value as Countries;
                                         defaultReg = null;
                                         await getRegionData(
                                             context, selectedValue?.countryId);
@@ -640,18 +630,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                         ),
                                       ),
                                       customButton: selectedValue == null
-                                          ? Row(
-                                              children: [
-                                                Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 0, 10, 0),
-                                                    child: Text(
-                                                        countryValue ?? ''),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
+                                          ? null
                                           : Row(
                                               children: [
                                                 Center(
@@ -734,7 +713,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                                           fontSize: 15)),
                                                 ))
                                             .toList(),
-                                        value: defaultReg,
+                                        // value: defaultReg,
                                         onChanged: (value) {
                                           setState(() {
                                             defaultReg = value as String;
@@ -806,7 +785,12 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                                               .fromLTRB(
                                                           10, 15, 10, 15),
                                                       child: Text(
-                                                          defaultReg ?? ''),
+                                                          defaultReg ?? '',
+                                                          style: getRegularStyle(
+                                                              color:
+                                                                  ColorManager
+                                                                      .black,
+                                                              fontSize: 12)),
                                                     ),
                                                   ),
                                                 ],
@@ -875,8 +859,11 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                     validateAddressFields();
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 20, 0)),
+                                      padding: isSaveAddressLoading
+                                          ? const EdgeInsets.fromLTRB(
+                                              40, 0, 40, 0)
+                                          : const EdgeInsets.fromLTRB(
+                                              20, 0, 20, 0)),
                                   child: isSaveAddressLoading
                                       ? const SizedBox(
                                           width: 20,
@@ -920,18 +907,21 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
   }
 
   validateAddressFields() {
+    final provider = Provider.of<DataProvider>(context, listen: false);
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
     final country = selectedValue?.countryId;
-    // final region = AddressEditControllers.regionController.text;
+    final region = AddressEditControllers.regionController.text;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
+    final latitude = provider.addressLatitude;
+    final longitude = provider.addressLongitude;
 
     if (addressName.isEmpty) {
       showAnimatedSnackBar(context, "Address name field is required");
     } else if (address.isEmpty) {
       showAnimatedSnackBar(context, "Address field is required");
-    } else if (selectedValue == null && countryValue == null) {
+    } else if (selectedValue == null) {
       showAnimatedSnackBar(context, "Select a country");
     } else if (defaultReg == null) {
       showAnimatedSnackBar(context, "Region is required");
@@ -939,110 +929,101 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
       showAnimatedSnackBar(context, "state is required");
     } else if (flat.isEmpty) {
       showAnimatedSnackBar(context, "Flat No is required");
+    } else if (imageFile == null) {
+      showAnimatedSnackBar(context, "Please Choose an address Photo");
+    } else if (latitude == null || longitude == null) {
+      showAnimatedSnackBar(context, "Please Choose an address Location");
     } else {
       setState(() {
         isSaveAddressLoading = true;
       });
-      addressUpdaeFun(context);
+      addressCreateFun(context);
     }
   }
 
-  addressUpdaeFun(BuildContext context) async {
-    final provider = Provider.of<DataProvider>(context, listen: false);
+  addressCreateFun(BuildContext context) async {
+    // log("addressCreateFun");
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
-    final country = selectedValue != null
-        ? (selectedValue?.countryId)
-        : widget.userAddress.countryId;
+    final country = selectedValue?.countryId;
     final region = defaultReg;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
-    final id = widget.userAddress.id;
-    final latitude = provider.addressLatitude ?? widget.userAddress.latitude;
-    final longitude = provider.addressLongitude ?? widget.userAddress.longitude;
-    //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
-
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    final latitude = provider.addressLatitude;
+    final longitude = provider.addressLongitude;
     final apiToken = Hive.box("token").get('api_token');
+
+    var stream = http.ByteStream(DelegatingStream(imageFile!.openRead()));
+    var length = await imageFile!.length();
 
     try {
       var uri = Uri.parse(
-          '$updateUserAddressApi?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat&address_id=$id&latitude=$latitude&longitude=$longitude');
+          '$userAddressCreate?address_name=$addressName&address=$address&country_id=$country&state=$state&region=$region&home_no=$flat&latitude=$latitude&longitude=$longitude');
       var request = http.MultipartRequest(
         "POST",
         uri,
       );
-      if (imagePath!.isNotEmpty) {
-        var stream = http.ByteStream(DelegatingStream(imageFile!.openRead()));
-        var length = await imageFile!.length();
-        print("imagepath not empty");
-        request.headers.addAll(
-            {"device-id": provider.deviceId ?? '', "api-token": apiToken});
-        var multipartFile = http.MultipartFile(
-          'image',
-          stream,
-          length,
-          filename: (imageFile!.path),
-        );
-        request.files.add(multipartFile);
-        var response = await request.send();
-      }
+      print(uri);
 
-      var response = await http.post(uri, headers: {
-        "device-id": provider.deviceId ?? '',
-        "api-token": apiToken
-      });
+      request.headers.addAll(
+          {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+      var multipartFile = http.MultipartFile(
+        'image',
+        stream,
+        length,
+        filename: (imageFile!.path),
+      );
+      request.files.add(multipartFile);
+      var response = await request.send();
+      print(response.reasonPhrase);
       if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        log(response.body);
+        print("1");
+        // var jsonResponse = jsonDecode(response.body);
+
         await getUserAddress(context);
         setState(() {
           isSaveAddressLoading = false;
         });
 
         navigateToAddressPage();
-
-        // final subServicesData = SubServicesModel.fromJson(jsonResponse);
-        // provider.subServicesModelData(subServicesData);
       } else {
-        // print(response.statusCode);
-        // print(response.body);
-        // print('Something went wrong');
+        print("2");
       }
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       log("Something Went Wrong1");
-      print(e);
     }
   }
 
   navigateToAddressPage() {
     Navigator.pop(context);
-    clearFields();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-      return const AddressPage();
-    }));
   }
 
-  // selectImage() async {
-  //   print("Img picker");
-  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  //   final imagePath = image?.path;
-  //   final imageName = image?.name;
-  //   print(image?.name);
-  //   print(image?.path);
-  //   // final XFile? photo =
-  //   //     await _picker.pickImage(source: ImageSource.camera);
-  //   if (image == null) {
-  //     return;
-  //   }
-  //   // updateProfile(imageName);
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   await upload(image);
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
+  selectImage() async {
+    print("Img picker");
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imagePath = image?.path;
+      imageFile = image;
+    });
+
+    final imageName = image?.name;
+    print(image?.name);
+    print(image?.path);
+    // final XFile? photo =
+    //     await _picker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    // updateProfile(imageName);
+    setState(() {
+      isLoading = true;
+    });
+    // await upload(image);
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   // upload(XFile imageFile) async {
   //   var stream = http.ByteStream(DelegatingStream(imageFile.openRead()));
@@ -1069,93 +1050,36 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
   //   await viewProfile(context);
   //   setState(() {});
   // }
-
-  fillFields() {
-    AddressEditControllers.addressNameController.text =
-        widget.userAddress.addressName ?? '';
-    AddressEditControllers.addressController.text =
-        widget.userAddress.address ?? '';
-    AddressEditControllers.regionController.text =
-        widget.userAddress.region ?? '';
-    AddressEditControllers.stateController.text =
-        widget.userAddress.state ?? '';
-    AddressEditControllers.flatNoController.text =
-        widget.userAddress.homeNo ?? '';
-    countryValue = widget.userAddress.country;
-  }
-
-  clearFields() {
-    AddressEditControllers.addressNameController.text = '';
-    AddressEditControllers.addressController.text = '';
-    AddressEditControllers.regionController.text = '';
-    AddressEditControllers.stateController.text = '';
-    AddressEditControllers.flatNoController.text = '';
-  }
-
-  selectImage() async {
-    print("Img picker");
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    final provider = Provider.of<DataProvider>(context, listen: false);
-    setState(() {
-      imagePath = image?.path;
-      imageFile = image;
-      provider.image = image;
-    });
-
-    final imageName = image?.name;
-    print(image?.name);
-    print(image?.path);
-    // final XFile? photo =
-    //     await _picker.pickImage(source: ImageSource.camera);
-    if (image == null) {
-      return;
-    }
-    // updateProfile(imageName);
-    setState(() {
-      isLoading = true;
-    });
-    // await upload(image);
-    setState(() {
-      isLoading = false;
-    });
-  }
 }
 
-class AddressImageWidget2 extends StatelessWidget {
-  const AddressImageWidget2({Key? key, this.imagePath, this.userAddress})
-      : super(key: key);
+class AddressImageWidget extends StatelessWidget {
+  const AddressImageWidget({
+    Key? key,
+    this.imagePath,
+  }) : super(key: key);
 
   final String? imagePath;
-  final UserAddress? userAddress;
 
   @override
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
-    return SizedBox(
-      child: imagePath!.isEmpty
-          ? CachedNetworkImage(
-              imageUrl: "$endPoint${userAddress?.image}",
-              fit: BoxFit.cover,
-            )
-          : Image.file(
-              File(
-                imagePath ?? '',
-              ),
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 20,
-                  color: ColorManager.whiteColor,
-                  child: Center(
-                    child: Text(
-                      "Please choose an address Photo",
-                      style: getRegularStyle(
-                          color: ColorManager.black, fontSize: 14),
-                    ),
-                  ),
-                );
-              },
+    return Image.file(
+      File(
+        imagePath ?? '',
+      ),
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          height: 20,
+          color: ColorManager.whiteColor,
+          child: Center(
+            child: Text(
+              "Please choose an address Photo",
+              style: getRegularStyle(color: ColorManager.black, fontSize: 14),
             ),
+          ),
+        );
+      },
     );
     //  CachedNetworkImage(
     //   imageUrl: '$endPoint/assets/uploads/cover_image/${userDetails?.coverPic}',

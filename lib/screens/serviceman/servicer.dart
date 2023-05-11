@@ -8,6 +8,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_services/API/get_region_info.dart';
 import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -57,6 +58,7 @@ class _ServicerPageState extends State<ServicerPage> {
   int? countryid;
   int? countryid2;
   List<Countries> r = [];
+  String? defRegion;
 
   @override
   void initState() {
@@ -68,7 +70,7 @@ class _ServicerPageState extends State<ServicerPage> {
     countryid = 165;
     selectedValue = "Oman";
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final str = AppLocalizations.of(context)!;
       final provider = Provider.of<DataProvider>(context, listen: false);
       final servicerProvider =
@@ -85,6 +87,8 @@ class _ServicerPageState extends State<ServicerPage> {
           ? "${servicerProvider.servicerLatitude} ${servicerProvider.servicerLongitude}"
           : str.s_map;
       provider.servicerSelectedCountry = '';
+      provider.clearRegions();
+      await getRegionData(context, 165);
       setState(() {});
     });
   }
@@ -466,8 +470,7 @@ class _ServicerPageState extends State<ServicerPage> {
                                                                         15)),
                                                             items: r3
                                                                 .map(
-                                                                    (item) =>
-                                                                        DropdownMenuItem<
+                                                                    (item) => DropdownMenuItem<
                                                                             String>(
                                                                           value:
                                                                               item,
@@ -478,13 +481,20 @@ class _ServicerPageState extends State<ServicerPage> {
                                                                 .toList(),
                                                             value:
                                                                 selectedValue,
-                                                            onChanged: (value) {
+                                                            onChanged:
+                                                                (value) async {
                                                               setState(() {
                                                                 selectedValue =
                                                                     value
                                                                         as String;
                                                               });
-                                                              s(selectedValue);
+                                                              await s(
+                                                                  selectedValue);
+                                                              defRegion = null;
+                                                              await getRegionData(
+                                                                  context,
+                                                                  countryid);
+                                                              setState(() {});
                                                             },
                                                             buttonHeight: 40,
                                                             dropdownMaxHeight:
@@ -502,7 +512,8 @@ class _ServicerPageState extends State<ServicerPage> {
                                                             searchController:
                                                                 AddressEditControllers
                                                                     .searchController,
-                                                            searchInnerWidget: Padding(
+                                                            searchInnerWidget:
+                                                                Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                       .only(
@@ -601,33 +612,176 @@ class _ServicerPageState extends State<ServicerPage> {
                                                   width: size.width * .44,
                                                   height: mob ? 50 : 35,
                                                   decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        blurRadius: 10.0,
-                                                        color: Colors
-                                                            .grey.shade300,
-                                                        // offset: const Offset(5, 8.5),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          // offset: const Offset(5, 8.5),
+                                                        ),
+                                                      ],
+                                                      color: ColorManager
+                                                          .whiteColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  child:
+                                                      //  TextField(
+                                                      //   controller:
+                                                      //       ServiceControllers
+                                                      //           .regionController,
+                                                      //   decoration: InputDecoration(
+                                                      //       hintText: str.s_region,
+                                                      //       hintStyle: getRegularStyle(
+                                                      //           color: const Color
+                                                      //                   .fromARGB(
+                                                      //               255,
+                                                      //               173,
+                                                      //               173,
+                                                      //               173),
+                                                      //           fontSize: Responsive
+                                                      //                   .isMobile(
+                                                      //                       context)
+                                                      //               ? 15
+                                                      //               : 10)),
+                                                      // ),
+                                                      DropdownButtonHideUnderline(
+                                                    child: DropdownButton2(
+                                                      isExpanded: true,
+                                                      // focusNode: nfocus,
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .keyboard_arrow_down,
+                                                        size: 35,
+                                                        color:
+                                                            ColorManager.black,
                                                       ),
-                                                    ],
-                                                  ),
-                                                  child: TextField(
-                                                    controller:
-                                                        ServiceControllers
-                                                            .regionController,
-                                                    decoration: InputDecoration(
-                                                        hintText: str.s_region,
-                                                        hintStyle: getRegularStyle(
-                                                            color: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                173,
-                                                                173,
-                                                                173),
-                                                            fontSize: Responsive
-                                                                    .isMobile(
-                                                                        context)
-                                                                ? 15
-                                                                : 10)),
+                                                      hint: Text(str.p_region_h,
+                                                          style: getRegularStyle(
+                                                              color: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  173,
+                                                                  173,
+                                                                  173),
+                                                              fontSize: 15)),
+                                                      items: provider
+                                                          .regionInfoModel
+                                                          ?.regions!
+                                                          .map((item) =>
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: item
+                                                                    .cityName,
+                                                                child: Text(
+                                                                    item.cityName ??
+                                                                        '',
+                                                                    style: getRegularStyle(
+                                                                        color: ColorManager
+                                                                            .black,
+                                                                        fontSize:
+                                                                            15)),
+                                                              ))
+                                                          .toList(),
+                                                      // value: defRegion,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          defRegion =
+                                                              value as String;
+                                                        });
+                                                        ProfileServiceControllers
+                                                                .regionController
+                                                                .text =
+                                                            defRegion ?? '';
+                                                        // s(selectedValue);
+                                                      },
+                                                      buttonHeight: 50,
+                                                      dropdownMaxHeight:
+                                                          size.height * .6,
+                                                      // buttonWidth: 140,
+                                                      itemHeight: 40,
+                                                      buttonPadding:
+                                                          const EdgeInsets
+                                                                  .fromLTRB(
+                                                              12, 0, 8, 0),
+                                                      // dropdownWidth: size.width,
+                                                      itemPadding:
+                                                          const EdgeInsets
+                                                                  .fromLTRB(
+                                                              12, 0, 12, 0),
+                                                      // searchController:
+                                                      //     AddressEditControllers
+                                                      //         .searchController,
+                                                      // searchInnerWidget: Padding(
+                                                      //   padding:
+                                                      //       const EdgeInsets.only(
+                                                      //     top: 8,
+                                                      //     bottom: 4,
+                                                      //     right: 8,
+                                                      //     left: 8,
+                                                      //   ),
+                                                      //   child: TextFormField(
+                                                      //     controller:
+                                                      //         AddressEditControllers
+                                                      //             .searchController,
+                                                      //     decoration: InputDecoration(
+                                                      //       isDense: true,
+                                                      //       contentPadding:
+                                                      //           const EdgeInsets
+                                                      //               .symmetric(
+                                                      //         horizontal: 10,
+                                                      //         vertical: 8,
+                                                      //       ),
+                                                      //       // TODO: localisation
+                                                      //       hintText:
+                                                      //           str.s_search_country,
+                                                      //       hintStyle:
+                                                      //           const TextStyle(
+                                                      //               fontSize: 12),
+                                                      //       border:
+                                                      //           OutlineInputBorder(
+                                                      //         borderRadius:
+                                                      //             BorderRadius
+                                                      //                 .circular(8),
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      // searchMatchFn:
+                                                      //     (item, searchValue) {
+                                                      //   return (item.value
+                                                      //       .toString()
+                                                      //       .toLowerCase()
+                                                      //       .contains(searchValue));
+                                                      // },
+                                                      customButton:
+                                                          defRegion == null
+                                                              ? null
+                                                              : Row(
+                                                                  children: [
+                                                                    Center(
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: const EdgeInsets.fromLTRB(
+                                                                            10,
+                                                                            15,
+                                                                            10,
+                                                                            15),
+                                                                        child: Text(defRegion ??
+                                                                            ''),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                      //This to clear the search value when you close the menu
+                                                      // onMenuStateChange: (isOpen) {
+                                                      //   if (!isOpen) {
+                                                      //     AddressEditControllers
+                                                      //         .searchController
+                                                      //         .clear();
+                                                      //   }
+                                                      // }
+                                                    ),
                                                   ),
                                                 ),
                                               ),

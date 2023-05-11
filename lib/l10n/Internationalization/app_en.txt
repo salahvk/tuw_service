@@ -144,6 +144,7 @@
     "su_tax_amount":"Tax Amount",
     "su_sub_date":"Subscription Date",
     "su_order_id":"Order Id",
+    "su_invoice_id":"Invoice id",
     "su_package_id":"Package Id",
 
     "a_home_locator":"Home Locator",
@@ -267,6 +268,8 @@
     "re_report_user":"Report User",
     "re_bother":"is this person bothering you?",
     "re_tell_us":"Tell us what they did.",
-    "re_report_success":"Reported Customer Successfully"
+    "re_report_success":"Reported Customer Successfully",
+
+
 
 }

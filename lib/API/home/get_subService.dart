@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +18,17 @@ import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-getSubService(BuildContext context, id) async {
+getSubService(BuildContext context, id, bool changeLan) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
+  final String lanId = Hive.box("LocalLan").get('lang_id');
+  print(lanId);
+
   if (apiToken == null) return;
   try {
     var response = await http.post(
-        Uri.parse('$subServices?parent_service_id=$id'),
+        Uri.parse('$subServices?parent_service_id=$id&language_id=$lanId'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -37,7 +41,9 @@ getSubService(BuildContext context, id) async {
 
       final subServicesData = SubServicesModel.fromJson(jsonResponse);
       provider.subServicesModelData(subServicesData);
-      selectServiceType(context, id);
+      if (changeLan != true) {
+        selectServiceType(context, id);
+      }
     } else {
       // print(response.statusCode);
       // print(response.body);

@@ -120,12 +120,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             Positioned(
                 top: 10,
                 left: size.width * .05,
-                right: size.width * .05,
+                // right: size.width * .05,
                 child: Container(
                   decoration: BoxDecoration(
                       color: ColorManager.whiteColor,
                       borderRadius: BorderRadius.circular(5)),
-                  width: size.width * .9,
+                  width: size.width * .8,
                   height: 50,
                   child: TextField(
                       controller:

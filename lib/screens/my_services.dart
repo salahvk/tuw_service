@@ -42,7 +42,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
     final homeData = provider.homeModel?.services;
     final mob = Responsive.isMobile(context);
     final w = MediaQuery.of(context).size.width;

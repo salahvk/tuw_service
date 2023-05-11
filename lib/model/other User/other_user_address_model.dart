@@ -33,7 +33,7 @@ class UserAddressData {
   String? addressName;
   String? address;
   int? countryId;
-  String? region;
+  var region;
   String? state;
   String? homeNo;
   String? createdAt;

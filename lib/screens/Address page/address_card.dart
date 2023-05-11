@@ -74,8 +74,11 @@ class _UserAddressCardState extends State<UserAddressCard> {
     final homeLocation =
         "${userAddressData?.country} | ${userAddressData?.state}";
     final currentLocator = LatLng(
-        double.parse(userAddressData?.latitude ?? '41.612849'),
-        double.parse(userAddressData?.longitude ?? '13.046816'));
+        provider.addressLatitude ?? double.parse('41.612849'),
+        provider.addressLongitude ?? double.parse('13.046816'));
+    //  LatLng(
+    // double.parse(userAddressData?.latitude ??  '41.612849'),
+    // double.parse(userAddressData?.longitude ?? '13.046816'));
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(

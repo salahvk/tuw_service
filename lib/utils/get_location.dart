@@ -31,6 +31,14 @@ requestLocationPermission(
       showAnimatedSnackBar(context, str.snack_enable_loc);
     } else {
       print("GPS Location service is granted");
+      final latLon = await getCurrentLocation();
+      final location = await getPlaceAddress(latLon);
+      await updateLocationFunction(
+        context,
+        latLon,
+        location,
+      );
+      await viewProfile(context);
     }
   } else {
     print("GPS Location permission granted.");

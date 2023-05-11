@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,16 +8,18 @@ import 'package:hive/hive.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/customerParent.dart';
+import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_region_info.dart';
 import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
-import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
+import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_service_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -30,21 +33,24 @@ import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileServicePage extends StatefulWidget {
-  const ProfileServicePage({Key? key}) : super(key: key);
+  ProfileServicePage({Key? key}) : super(key: key);
 
   @override
   State<ProfileServicePage> createState() => _ProfileServicePageState();
 }
 
 class _ProfileServicePageState extends State<ProfileServicePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String? defvalue;
   String? selectedValue;
+  String? defaultReg;
   bool isTickSelected = false;
   DateTime selectedDate = DateTime.now();
   bool value = true;
   final int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
-  List<String> r3 = [];
+  List<Countries> r2 = [];
   FocusNode nfocus = FocusNode();
   List<Countries> r = [];
 
@@ -56,16 +62,21 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
       'lang',
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       // print(timeStamp);
       final provider = Provider.of<DataProvider>(context, listen: false);
       int? n = provider.countriesModel?.countries?.length;
       int i = 0;
+
       while (i < n!.toInt()) {
-        r3.add(provider.countriesModel!.countries![i].countryName!);
+        r2.add(provider.countriesModel!.countries![i]);
         i++;
       }
+
       fillFields(provider);
+      provider.clearRegions();
+      await getRegionData(
+          context, provider.viewProfileModel?.userdetails?.countryId);
 
       setState(() {});
       getCustomerParent(context);
@@ -92,6 +103,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
     return Scaffold(
+      key: _scaffoldKey,
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
         height: h * 0.825,
@@ -376,7 +388,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                 delay: .5,
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   child: Row(
                                     children: [
                                       TitleWidget(name: str.p_country),
@@ -415,9 +427,8 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 10, 0, 10),
                                         child: DropdownButtonHideUnderline(
-                                          child: DropdownButton2(
+                                          child: DropdownButton2<Countries>(
                                               isExpanded: true,
-                                              focusNode: nfocus,
                                               icon: const Icon(
                                                 Icons.keyboard_arrow_down,
                                                 size: 35,
@@ -432,25 +443,76 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                                               173,
                                                               173),
                                                       fontSize: 15)),
-                                              items: r3
-                                                  .map((item) =>
-                                                      DropdownMenuItem<String>(
-                                                        value: item,
-                                                        child: Text(item,
-                                                            style: getRegularStyle(
-                                                                color:
-                                                                    ColorManager
-                                                                        .black,
-                                                                fontSize: 15)),
-                                                      ))
+                                              items: r2
+                                                  .map(
+                                                      (item) =>
+                                                          DropdownMenuItem<
+                                                              Countries>(
+                                                            value: item,
+                                                            child: Row(
+                                                              children: [
+                                                                CachedNetworkImage(
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        Container(
+                                                                          width:
+                                                                              25,
+                                                                          height:
+                                                                              20,
+                                                                          color:
+                                                                              ColorManager.whiteColor,
+                                                                        ),
+                                                                    imageBuilder:
+                                                                        (context,
+                                                                                imageProvider) =>
+                                                                            Container(
+                                                                              width: 25,
+                                                                              height: 20,
+                                                                              decoration: BoxDecoration(
+                                                                                // shape: BoxShape.circle,
+                                                                                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                                              ),
+                                                                            ),
+                                                                    // width: 90,
+                                                                    progressIndicatorBuilder:
+                                                                        (context,
+                                                                            url,
+                                                                            progress) {
+                                                                      return Container(
+                                                                        color: ColorManager
+                                                                            .black,
+                                                                      );
+                                                                    },
+                                                                    imageUrl:
+                                                                        '$endPoint${item.countryflag}'),
+                                                                const SizedBox(
+                                                                  width: 4,
+                                                                ),
+                                                                Text(
+                                                                    item.countryName ??
+                                                                        '',
+                                                                    style: getRegularStyle(
+                                                                        color: ColorManager
+                                                                            .black,
+                                                                        fontSize:
+                                                                            15)),
+                                                              ],
+                                                            ),
+                                                          ))
                                                   .toList(),
-                                              value: selectedValue,
-                                              onChanged: (value) {
+                                              // value: selectedValue,
+                                              onChanged: (value) async {
                                                 setState(() {
                                                   selectedValue =
-                                                      value as String;
+                                                      value?.countryName ?? '';
                                                 });
-                                                s(selectedValue);
+                                                defaultReg = null;
+                                                await getRegionData(
+                                                    context, value?.countryId);
+                                                setState(() {});
+                                                // provider.selectedAddressCountry =
+                                                //     value as Countries;
                                               },
                                               buttonHeight: 40,
                                               dropdownMaxHeight: h * .6,
@@ -484,7 +546,6 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                                       horizontal: 10,
                                                       vertical: 8,
                                                     ),
-                                                    // TODO: localisation
                                                     hintText:
                                                         str.s_search_country,
                                                     hintStyle: const TextStyle(
@@ -497,9 +558,30 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                                   ),
                                                 ),
                                               ),
+                                              customButton:
+                                                  selectedValue == null
+                                                      ? null
+                                                      : Row(
+                                                          children: [
+                                                            Center(
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .fromLTRB(
+                                                                        10,
+                                                                        0,
+                                                                        10,
+                                                                        0),
+                                                                child: Text(
+                                                                    selectedValue ??
+                                                                        ''),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                               searchMatchFn:
                                                   (item, searchValue) {
-                                                return (item.value
+                                                return (item.value.countryName
                                                     .toString()
                                                     .toLowerCase()
                                                     .contains(searchValue));
@@ -517,6 +599,149 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                     ),
                                   ),
                                 ),
+                                //   child: Padding(
+                                //     padding:
+                                //         const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                //     child: Row(
+                                //       children: [
+                                //         TitleWidget(name: str.p_country),
+                                //         const Icon(
+                                //           Icons.star_outlined,
+                                //           size: 10,
+                                //           color: ColorManager.errorRed,
+                                //         )
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
+                                // FadeSlideCustomAnimation(
+                                //   delay: .55,
+                                //   child: Padding(
+                                //     padding:
+                                //         const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                //     child: Container(
+                                //       decoration: BoxDecoration(
+                                //         boxShadow: [
+                                //           BoxShadow(
+                                //             blurRadius: 10.0,
+                                //             color: Colors.grey.shade300,
+                                //             // offset: const Offset(5, 8.5),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //       child: Container(
+                                //         width: w,
+                                //         height: 50,
+                                //         decoration: BoxDecoration(
+                                //             color: ColorManager.whiteColor,
+                                //             borderRadius:
+                                //                 BorderRadius.circular(8)),
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.fromLTRB(
+                                //               0, 10, 0, 10),
+                                //           child: DropdownButtonHideUnderline(
+                                //             child: DropdownButton2(
+                                //                 isExpanded: true,
+                                //                 focusNode: nfocus,
+                                //                 icon: const Icon(
+                                //                   Icons.keyboard_arrow_down,
+                                //                   size: 35,
+                                //                   color: ColorManager.black,
+                                //                 ),
+                                //                 hint: Text(str.ae_country_h,
+                                //                     style: getRegularStyle(
+                                //                         color:
+                                //                             const Color.fromARGB(
+                                //                                 255,
+                                //                                 173,
+                                //                                 173,
+                                //                                 173),
+                                //                         fontSize: 15)),
+                                //                 items: r3
+                                //                     .map((item) =>
+                                //                         DropdownMenuItem<String>(
+                                //                           value: item,
+                                //                           child: Text(item,
+                                //                               style: getRegularStyle(
+                                //                                   color:
+                                //                                       ColorManager
+                                //                                           .black,
+                                //                                   fontSize: 15)),
+                                //                         ))
+                                //                     .toList(),
+                                //                 value: selectedValue,
+                                //                 onChanged: (value) {
+                                //                   setState(() {
+                                //                     selectedValue =
+                                //                         value as String;
+                                //                   });
+                                //                   s(selectedValue);
+                                //                 },
+                                //                 buttonHeight: 40,
+                                //                 dropdownMaxHeight: h * .6,
+                                //                 // buttonWidth: 140,
+                                //                 itemHeight: 40,
+                                //                 buttonPadding:
+                                //                     const EdgeInsets.fromLTRB(
+                                //                         12, 0, 8, 0),
+                                //                 // dropdownWidth: size.width,
+                                //                 itemPadding: const EdgeInsets
+                                //                     .fromLTRB(12, 0, 12, 0),
+                                //                 searchController:
+                                //                     AddressEditControllers
+                                //                         .searchController,
+                                //                 searchInnerWidget: Padding(
+                                //                   padding: const EdgeInsets.only(
+                                //                     top: 8,
+                                //                     bottom: 4,
+                                //                     right: 8,
+                                //                     left: 8,
+                                //                   ),
+                                //                   child: TextFormField(
+                                //                     controller:
+                                //                         AddressEditControllers
+                                //                             .searchController,
+                                //                     decoration: InputDecoration(
+                                //                       isDense: true,
+                                //                       contentPadding:
+                                //                           const EdgeInsets
+                                //                               .symmetric(
+                                //                         horizontal: 10,
+                                //                         vertical: 8,
+                                //                       ),
+                                //                       // TODO: localisation
+                                //                       hintText:
+                                //                           str.s_search_country,
+                                //                       hintStyle: const TextStyle(
+                                //                           fontSize: 12),
+                                //                       border: OutlineInputBorder(
+                                //                         borderRadius:
+                                //                             BorderRadius.circular(
+                                //                                 8),
+                                //                       ),
+                                //                     ),
+                                //                   ),
+                                //                 ),
+                                //                 searchMatchFn:
+                                //                     (item, searchValue) {
+                                //                   return (item.value
+                                //                       .toString()
+                                //                       .toLowerCase()
+                                //                       .contains(searchValue));
+                                //                 },
+                                //                 //This to clear the search value when you close the menu
+                                //                 onMenuStateChange: (isOpen) {
+                                //                   if (!isOpen) {
+                                //                     AddressEditControllers
+                                //                         .searchController
+                                //                         .clear();
+                                //                   }
+                                //                 }),
+                                //           ),
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
                               ),
 
                               // Padding(
@@ -610,22 +835,155 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                                   // offset: const Offset(5, 8.5),
                                                 ),
                                               ],
+                                              color: ColorManager.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
-                                            child: TextField(
-                                              style: const TextStyle(),
-                                              controller:
+                                            child:
+                                                //  TextField(
+                                                //   style: const TextStyle(),
+                                                //   controller:
+                                                //       ProfileServiceControllers
+                                                //           .regionController,
+                                                //   decoration: InputDecoration(
+                                                //       hintText: str.p_region_h,
+                                                //       hintStyle: getRegularStyle(
+                                                //           color:
+                                                //               const Color.fromARGB(
+                                                //                   255,
+                                                //                   173,
+                                                //                   173,
+                                                //                   173),
+                                                //           fontSize: 15)),
+                                                // ),
+                                                DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                isExpanded: true,
+                                                focusNode: nfocus,
+                                                icon: const Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  size: 35,
+                                                  color: ColorManager.black,
+                                                ),
+                                                hint: Text(str.p_region_h,
+                                                    style: getRegularStyle(
+                                                        color: const Color
+                                                                .fromARGB(
+                                                            255, 173, 173, 173),
+                                                        fontSize: 15)),
+                                                items: provider
+                                                    .regionInfoModel?.regions!
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value: item.cityName,
+                                                          child: Text(
+                                                              item.cityName ??
+                                                                  '',
+                                                              style: getRegularStyle(
+                                                                  color:
+                                                                      ColorManager
+                                                                          .black,
+                                                                  fontSize:
+                                                                      15)),
+                                                        ))
+                                                    .toList(),
+                                                // value: defaultReg,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    defaultReg =
+                                                        value as String;
+                                                  });
                                                   ProfileServiceControllers
-                                                      .regionController,
-                                              decoration: InputDecoration(
-                                                  hintText: str.p_region_h,
-                                                  hintStyle: getRegularStyle(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              173,
-                                                              173,
-                                                              173),
-                                                      fontSize: 15)),
+                                                      .regionController
+                                                      .text = defaultReg ?? '';
+                                                  // s(selectedValue);
+                                                },
+                                                buttonHeight: 50,
+                                                dropdownMaxHeight: h * .6,
+                                                // buttonWidth: 140,
+                                                itemHeight: 40,
+                                                buttonPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 8, 0),
+                                                // dropdownWidth: size.width,
+                                                itemPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                // searchController:
+                                                //     AddressEditControllers
+                                                //         .searchController,
+                                                // searchInnerWidget: Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.only(
+                                                //     top: 8,
+                                                //     bottom: 4,
+                                                //     right: 8,
+                                                //     left: 8,
+                                                //   ),
+                                                //   child: TextFormField(
+                                                //     controller:
+                                                //         AddressEditControllers
+                                                //             .searchController,
+                                                //     decoration: InputDecoration(
+                                                //       isDense: true,
+                                                //       contentPadding:
+                                                //           const EdgeInsets
+                                                //               .symmetric(
+                                                //         horizontal: 10,
+                                                //         vertical: 8,
+                                                //       ),
+                                                //       // TODO: localisation
+                                                //       hintText:
+                                                //           str.s_search_country,
+                                                //       hintStyle:
+                                                //           const TextStyle(
+                                                //               fontSize: 12),
+                                                //       border:
+                                                //           OutlineInputBorder(
+                                                //         borderRadius:
+                                                //             BorderRadius
+                                                //                 .circular(8),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                // searchMatchFn:
+                                                //     (item, searchValue) {
+                                                //   return (item.value
+                                                //       .toString()
+                                                //       .toLowerCase()
+                                                //       .contains(searchValue));
+                                                // },
+                                                customButton: defaultReg == null
+                                                    ? null
+                                                    : Row(
+                                                        children: [
+                                                          Center(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .fromLTRB(
+                                                                      10,
+                                                                      15,
+                                                                      10,
+                                                                      15),
+                                                              child: Text(
+                                                                  defaultReg ??
+                                                                      ''),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                //This to clear the search value when you close the menu
+                                                // onMenuStateChange: (isOpen) {
+                                                //   if (!isOpen) {
+                                                //     AddressEditControllers
+                                                //         .searchController
+                                                //         .clear();
+                                                //   }
+                                                // }
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -773,6 +1131,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
   }
 
   onContinue() {
+    print(ProfileServiceControllers.regionController.text);
     FocusManager.instance.primaryFocus?.unfocus();
     if (ProfileServiceControllers.firstNameController.text.isEmpty) {
       showAnimatedSnackBar(context, "Please Enter Your First Name");
@@ -793,7 +1152,11 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     //   showAnimatedSnackBar(context, "Please Enter Your Address");
     // }
     else {
-      Navigator.pushNamed(context, Routes.chooseService);
+      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+        return ChooseServicePage(
+          scaffoldKey: _scaffoldKey,
+        );
+      }));
     }
   }
 
@@ -813,6 +1176,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
     ProfileServiceControllers.stateController.text = fieldData?.state ?? '';
 
     ProfileServiceControllers.regionController.text = fieldData?.region ?? '';
+    defaultReg = fieldData?.region;
   }
 
   s(filter) {

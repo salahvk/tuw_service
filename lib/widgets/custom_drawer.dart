@@ -8,6 +8,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/Address%20page/address_page.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/profile_service_man.dart';
 import 'package:social_media_services/screens/profile_page.dart';
+import 'package:social_media_services/screens/select_language.dart';
 import 'package:social_media_services/utils/initPlatformState.dart';
 import 'package:social_media_services/widgets/customized_drawer_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,6 +31,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    print(lang);
+    print("___________");
   }
 
   @override
@@ -84,6 +87,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pushNamed(context, Routes.privacyPolicy);
               },
             ),
+            CustomDrawerList(
+              title: str.pp_settings,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                  return SelectLanguageScreen();
+                }));
+              },
+            ),
             loading
                 ? Container(
                     alignment: Alignment.topCenter,
@@ -127,7 +139,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     Navigator.pop(context);
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
       builder: (context) {
-        return const ProfileServicePage();
+        return ProfileServicePage();
       },
     ), (route) => false);
   }

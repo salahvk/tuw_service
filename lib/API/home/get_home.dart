@@ -10,13 +10,24 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
-getHome(BuildContext context) async {
+getHome(
+  BuildContext context,
+//  {id, bool? changeLan}
+) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
+  final String id = Hive.box("LocalLan").get('lang_id');
+
   if (apiToken == null) return;
   try {
-    var response = await http.post(Uri.parse(home),
+    String? url;
+    // if (changeLan == true) {
+    //   url = "$home?language_id=$id";
+    // } else {
+    //   url = home;
+    // }
+    var response = await http.post(Uri.parse("$home?language_id=$id"),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);

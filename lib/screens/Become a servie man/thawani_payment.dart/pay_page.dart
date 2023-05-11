@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/payment_success.dart';
-import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
@@ -117,47 +116,54 @@ class PayPage extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                width: 200,
-                height: 50,
-                child: ThawaniPayBtn(
-                  testMode: false,
-                  // api: 'rRQ26GcsZzoEhbrP2HZvLYDbn9C9et',
-                  // pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
-                  successUrl: '$thawaniPaymentSuccess',
-                  api: 'LqZ2Ma9doGSkfIJPKssA3lPPKnhfRJ',
-                  pKey: 'sCyctJWWAtRZ6i3nsEe8fGEsYMa2Si',
-                  // successUrl: "https://company.com/success",
-                  cancelUrl: thawaniPaymentfailed,
-                  metadata: {
-                    "Customer Name": "${user?.firstname} ${user?.lastname}",
-                    "Customer PhoneNumber": "${user?.phone}",
-                    "Customer Email": "${user?.email}"
-                  },
-                  clintID: orderId,
-
-                  onError: (e) {
-                    print(e);
-                    print("object");
-                  },
-                  products: [
-                    {
-                      "name": packageName,
-                      "quantity": 1,
-                      "unit_amount": conAmount,
+              GestureDetector(
+                onTap: () {
+                  print("object");
+                },
+                child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ThawaniPayBtn(
+                    testMode: true,
+                    api: 'rRQ26GcsZzoEhbrP2HZvLYDbn9C9et',
+                    pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
+                    successUrl: "https://company.com/success",
+                    cancelUrl: "https://company.com/cancel",
+                    // successUrl: thawaniPaymentSuccess,
+                    // api: 'LqZ2Ma9doGSkfIJPKssA3lPPKnhfRJ',
+                    // pKey: 'sCyctJWWAtRZ6i3nsEe8fGEsYMa2Si',
+                    // cancelUrl: thawaniPaymentfailed,
+                    metadata: {
+                      "Customer Name": "${user?.firstname} ${user?.lastname}",
+                      "Customer PhoneNumber": "${user?.phone}",
+                      "Customer Email": "${user?.email}"
                     },
-                  ],
-                  onCreate: (v) {
-                    print(v);
-                  },
-                  onCancelled: (v) {
-                    Navigator.pop(context);
-                  },
-                  onPaid: (v) {
-                    print(v.data);
-                    getOrderSuccessData(context, v);
-                  },
-                  // child: const Text("data"),
+                    clintID: orderId,
+
+                    onError: (e) {
+                      print(e);
+                      print("object");
+                    },
+                    products: [
+                      {
+                        "name": packageName,
+                        "quantity": 1,
+                        "unit_amount": conAmount,
+                      },
+                    ],
+                    onCreate: (v) {
+                      print(v);
+                    },
+                    onCancelled: (v) {
+                      print(v.data);
+                      getFail(context, v);
+                    },
+                    onPaid: (v) {
+                      print(v.data);
+                      getOrderSuccessData(context, v);
+                    },
+                    // child: const Text("data"),
+                  ),
                 ),
               )
             ],
@@ -180,5 +186,10 @@ class PayPage extends StatelessWidget {
     //   isLoading = false;
     // });
     Navigator.pushNamed(context, Routes.paymentSuccessfull);
+  }
+
+  getFail(BuildContext context, StatusClass v) async {
+    await getThawaniFailed(context, v);
+    Navigator.pushNamed(context, Routes.payFailPage);
   }
 }

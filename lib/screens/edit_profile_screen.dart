@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/get_region_info.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -23,6 +24,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
@@ -45,6 +47,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
   DateTime selectedDate = DateTime.now();
   bool value = true;
   bool isPickerSelected = false;
+  String? defaultReg;
 
   FocusNode nfocus = FocusNode();
   FocusNode dobfocus = FocusNode();
@@ -70,7 +73,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       'lang',
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       // print(timeStamp);
       final provider = Provider.of<DataProvider>(context, listen: false);
       final otpProvider = Provider.of<OTPProvider>(context, listen: false);
@@ -85,7 +88,14 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
       if (widget.isregister) {
         selectedValue = otpProvider.userCountryName;
       }
+      provider.viewProfileModel?.userdetails?.latitude == null
+          ? await requestLocationPermission(context)
+          : null;
 
+      provider.clearRegions();
+      await getRegionData(
+          context, provider.viewProfileModel?.userdetails?.countryId);
+      defaultReg = provider.viewProfileModel?.userdetails?.region;
       setState(() {});
       // getCustomerParent(context);
     });
@@ -100,7 +110,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
     final smobWth = ResponsiveWidth.issMobile(context);
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
 
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -455,12 +465,21 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                                 ))
                                             .toList(),
                                         value: selectedValue,
-                                        onChanged: (value) {
+                                        onChanged: (value) async {
                                           setState(() {
                                             selectedValue = value as String;
                                           });
-                                          print(selectedValue);
-                                          s(selectedValue);
+
+                                          await s(selectedValue);
+
+                                          defaultReg = null;
+                                          await getRegionData(
+                                              context, countryid);
+                                          // print(defaultReg);
+                                          // setState(() {
+                                          //   // defaultReg == null;
+                                          //   defaultReg = 'Al Dakhiliya';
+                                          // });
                                         },
                                         buttonHeight: 40,
                                         dropdownMaxHeight: h * .6,
@@ -545,20 +564,147 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                             // offset: const Offset(5, 8.5),
                                           ),
                                         ],
+                                        color: ColorManager.whiteColor,
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: TextField(
-                                        style: const TextStyle(),
-                                        controller: EditProfileControllers
-                                            .stateController,
-                                        decoration: InputDecoration(
-                                            hintText: str.p_region_h,
-                                            hintStyle: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize:
-                                                    Responsive.isMobile(context)
-                                                        ? 15
-                                                        : 10)),
+
+                                      // child: TextField(
+                                      //   style: const TextStyle(),
+                                      //   controller: EditProfileControllers
+                                      //       .stateController,
+                                      //   decoration: InputDecoration(
+                                      //       hintText: str.p_region_h,
+                                      //       hintStyle: getRegularStyle(
+                                      //           color: const Color.fromARGB(
+                                      //               255, 173, 173, 173),
+                                      //           fontSize:
+                                      //               Responsive.isMobile(context)
+                                      //                   ? 15
+                                      //                   : 10)),
+                                      // ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton2(
+                                          isExpanded: true,
+                                          focusNode: nfocus,
+                                          icon: const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: 35,
+                                            color: ColorManager.black,
+                                          ),
+                                          hint: Text(str.p_region_h,
+                                              style: getRegularStyle(
+                                                  color: const Color.fromARGB(
+                                                      255, 173, 173, 173),
+                                                  fontSize: 15)),
+                                          items: provider
+                                              .regionInfoModel?.regions!
+                                              .map((item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: item.cityName,
+                                                    child: Text(
+                                                        item.cityName ?? '',
+                                                        style: getRegularStyle(
+                                                            color: ColorManager
+                                                                .black,
+                                                            fontSize: 15)),
+                                                  ))
+                                              .toList(),
+                                          // value: defaultReg,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              defaultReg = value as String;
+                                            });
+                                            EditProfileControllers
+                                                .regionController
+                                                .text = defaultReg ?? '';
+                                            // s(selectedValue);
+                                          },
+                                          buttonHeight: 50,
+                                          dropdownMaxHeight: h * .6,
+                                          // buttonWidth: 140,
+                                          itemHeight: 40,
+                                          buttonPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  12, 0, 8, 0),
+                                          // dropdownWidth: size.width,
+                                          itemPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  12, 0, 12, 0),
+                                          // searchController:
+                                          //     AddressEditControllers
+                                          //         .searchController,
+                                          // searchInnerWidget: Padding(
+                                          //   padding:
+                                          //       const EdgeInsets.only(
+                                          //     top: 8,
+                                          //     bottom: 4,
+                                          //     right: 8,
+                                          //     left: 8,
+                                          //   ),
+                                          //   child: TextFormField(
+                                          //     controller:
+                                          //         AddressEditControllers
+                                          //             .searchController,
+                                          //     decoration: InputDecoration(
+                                          //       isDense: true,
+                                          //       contentPadding:
+                                          //           const EdgeInsets
+                                          //               .symmetric(
+                                          //         horizontal: 10,
+                                          //         vertical: 8,
+                                          //       ),
+                                          //       // TODO: localisation
+                                          //       hintText:
+                                          //           str.s_search_country,
+                                          //       hintStyle:
+                                          //           const TextStyle(
+                                          //               fontSize: 12),
+                                          //       border:
+                                          //           OutlineInputBorder(
+                                          //         borderRadius:
+                                          //             BorderRadius
+                                          //                 .circular(8),
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          // searchMatchFn:
+                                          //     (item, searchValue) {
+                                          //   return (item.value
+                                          //       .toString()
+                                          //       .toLowerCase()
+                                          //       .contains(searchValue));
+                                          // },
+                                          customButton: defaultReg == null
+                                              ? null
+                                              : Row(
+                                                  children: [
+                                                    Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                10, 15, 10, 15),
+                                                        child: Text(
+                                                            defaultReg ?? '',
+                                                            style: getRegularStyle(
+                                                                color:
+                                                                    ColorManager
+                                                                        .black,
+                                                                fontSize: 12)),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                          //This to clear the search value when you close the menu
+                                          // onMenuStateChange: (isOpen) {
+                                          //   if (!isOpen) {
+                                          //     AddressEditControllers
+                                          //         .searchController
+                                          //         .clear();
+                                          //   }
+                                          // }
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -589,7 +735,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                       child: TextField(
                                         style: const TextStyle(),
                                         controller: EditProfileControllers
-                                            .regionController,
+                                            .stateController,
                                         decoration: InputDecoration(
                                             hintText: str.p_city_h,
                                             hintStyle: getRegularStyle(

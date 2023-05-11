@@ -1,5 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
+// import 'dart:math';
+
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,10 +20,11 @@ import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/model/viewProfileModel.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
-import 'package:social_media_services/screens/Address%20page/address_edit.dart';
+
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/Address%20page/address_add.dart';
 import 'package:social_media_services/screens/Google%20Map/googleMapScreen.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
@@ -51,6 +56,7 @@ class _AddressPageState extends State<AddressPage> {
   final ImagePicker _picker = ImagePicker();
 
   bool isLoading = false;
+  bool isLocFetching = false;
 
   @override
   void initState() {
@@ -390,28 +396,63 @@ class _AddressPageState extends State<AddressPage> {
 
                                 // width: 30,
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
+                                    setState(() {
+                                      isLocFetching = true;
+                                    });
+                                    final s =
+                                        await getCurrentLocationPermission(
+                                            context);
+                                    print(s);
+                                    log("__________");
+                                    // Navigator.push(context,
+                                    //     MaterialPageRoute(builder: (ctx) {
+                                    //   return CustomizeMarkerExample();
+                                    // }));
+                                    // await Future.delayed(
+                                    //     Duration(seconds: 500));
+                                    setState(() {
+                                      isLocFetching = false;
+                                    });
+                                    // Navigator.push(context,
+                                    //     MaterialPageRoute(builder: (ctx) {
+                                    //   return AddressLocatorScreen(
+                                    //       lat: s[0].toString(),
+                                    //       lot: s[1].toString());
+                                    // }));
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (ctx) {
-                                      return UserAddressEdit();
+                                      return UserAddressEdit(
+                                          lat: s[0].toString(),
+                                          lot: s[1].toString());
                                     }));
                                   },
                                   child: Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on,
-                                          color: ColorManager.whiteColor,
-                                        ),
-                                        Text(
-                                          str.a_add,
-                                          style: getRegularStyle(
-                                              color: ColorManager.whiteColor),
-                                        )
-                                      ],
-                                    ),
+                                    child: isLocFetching
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Container(
+                                                width: 20,
+                                                height: 20,
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          )
+                                        : Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.location_on,
+                                                color: ColorManager.whiteColor,
+                                              ),
+                                              Text(
+                                                str.a_add,
+                                                style: getRegularStyle(
+                                                    color: ColorManager
+                                                        .whiteColor),
+                                              )
+                                            ],
+                                          ),
                                   ),
                                 ),
                               )

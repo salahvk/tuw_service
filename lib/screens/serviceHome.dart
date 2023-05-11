@@ -10,7 +10,6 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/loading%20screens/loading_page.dart';
 
 class ServiceHomePage extends StatefulWidget {
@@ -26,9 +25,9 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final provider = Provider.of<DataProvider>(context, listen: false);
-      provider.viewProfileModel?.userdetails?.latitude == null
-          ? await requestLocationPermission(context)
-          : null;
+      // provider.viewProfileModel?.userdetails?.latitude == null
+      //     ? await requestLocationPermission(context)
+      //     : null;
     });
   }
 
@@ -37,7 +36,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final w = MediaQuery.of(context).size.width;
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
     final homeData = provider.homeModel?.services;
@@ -99,7 +98,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                             }));
                             final id = homeData![index].id;
                             servicerProvider.serviceId = id;
-                            getSubService(context, id);
+                            getSubService(context, id, false);
                           },
                           child: Container(
                             alignment: Alignment.center,

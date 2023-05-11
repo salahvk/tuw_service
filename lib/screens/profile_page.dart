@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     lang = Hive.box('LocalLan').get(
       'lang',
     );
+    log(lang);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await getActiveServices(context);
       getActiveSubscriptionData(context);

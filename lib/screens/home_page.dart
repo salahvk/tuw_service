@@ -38,6 +38,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    lang = Hive.box('LocalLan').get(
+      'lang',
+    );
+    print("did");
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final w = MediaQuery.of(context).size.width;

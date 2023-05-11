@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:social_media_services/components/color_manager.dart';
@@ -29,18 +28,18 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DataProvider>(context, listen: false);
-    InternetConnectionChecker().onStatusChange.listen((status) {
-      switch (status) {
-        case InternetConnectionStatus.connected:
-          provider.isInternetConnected = true;
+    // InternetConnectionChecker().onStatusChange.listen((status) {
+    //   switch (status) {
+    //     case InternetConnectionStatus.connected:
+    //       provider.isInternetConnected = true;
 
-          break;
-        case InternetConnectionStatus.disconnected:
-          provider.isInternetConnected = false;
+    //       break;
+    //     case InternetConnectionStatus.disconnected:
+    //       provider.isInternetConnected = false;
 
-          break;
-      }
-    });
+    //       break;
+    //   }
+    // });
     return Scaffold(
         backgroundColor: ColorManager.whiteColor,
         body: Center(

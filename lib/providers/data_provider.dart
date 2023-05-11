@@ -18,6 +18,7 @@ import 'package:social_media_services/model/other%20User/other_user_profile_mode
 import 'package:social_media_services/model/other%20User/show_user_address.dart';
 import 'package:social_media_services/model/payment_success.dart';
 import 'package:social_media_services/model/place_order.dart';
+import 'package:social_media_services/model/region_info_model.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/model/serviceman_profile_model.dart';
 import 'package:social_media_services/model/sub_services_model.dart';
@@ -27,6 +28,7 @@ import 'package:social_media_services/model/view_chat_message_model.dart';
 
 class DataProvider with ChangeNotifier {
   LanguageModel? languageModel;
+  RegionInfo? regionInfoModel;
   Timer? timer;
 
   void cancelTimer() {
@@ -36,6 +38,15 @@ class DataProvider with ChangeNotifier {
   void languageModelData(value) {
     languageModel = value;
     notifyListeners();
+  }
+
+  void regionInfodata(value) {
+    regionInfoModel = value;
+    notifyListeners();
+  }
+
+  void clearRegions() {
+    regionInfoModel = null;
   }
 
   CountriesModel? countriesModel;
@@ -187,7 +198,7 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool isInternetConnected = false;
+  // bool isInternetConnected = false;
   bool isTwoWheelerSelected = false;
   bool isFourWheelerSelected = false;
 
@@ -210,5 +221,6 @@ class DataProvider with ChangeNotifier {
   XFile? image;
   Countries? selectedAddressCountry;
   XFile? sendImage;
+  XFile? pickedFile;
   // String country
 }

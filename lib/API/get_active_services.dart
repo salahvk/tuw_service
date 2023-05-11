@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/model/active_services.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/utils/initPlatformState.dart';
@@ -16,7 +17,7 @@ getActiveServices(
   BuildContext context,
 ) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
-  log("Get active services");
+  // log("Get active services");
 
   final apiToken = Hive.box("token").get('api_token');
   if (apiToken == null) return;
@@ -30,6 +31,7 @@ getActiveServices(
       bool isLogOut =
           jsonResponse["message"].toString().contains("Please login again");
       if (isLogOut) {
+        await getHome(context);
         initPlatformState(context);
       } else {
         final activeServicesResponse = ActiveServices.fromJson(jsonResponse);

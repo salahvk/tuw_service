@@ -277,6 +277,11 @@
     "a_address_photo":"Please choose an address Photo",
     "login_again":"Please Login Again",
     "no_serviceMan":"No Service Man Available",
-    "search_servicer":"Enter a Servicer name to search"
+    "search_servicer":"Enter a Servicer name to search",
+
+    "sl_select":"أختر اللغه",
+    "su_invoice_id":"رقم الفاتورة"
+
+
 
 }

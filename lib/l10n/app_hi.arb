@@ -273,6 +273,8 @@
 
     "yesterday":"Yesterday",
     "address_locator":"Address Locator",
-    "a_address_photo":"Please choose an address Photo"
+    "a_address_photo":"Please choose an address Photo",
+
+        "sl_select":"भाषा चुने",   "su_invoice_id":"चालान आईडी"
 
 }

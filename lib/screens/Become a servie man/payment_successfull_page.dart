@@ -251,7 +251,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                   '',
                             ),
                             PaymentListTile(
-                              text1: "Invoice Id",
+                              text1: str.su_invoice_id,
                               text2: provider
                                       .paymentSuccess?.orderDetails?.invoiceId
                                       .toString() ??

@@ -16,9 +16,11 @@ import 'package:social_media_services/utils/snack_bar.dart';
 getCustomerParent(BuildContext context) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
+  final String lanId = Hive.box("LocalLan").get('lang_id');
   if (apiToken == null) return;
   try {
-    var response = await http.post(Uri.parse(customerParentService),
+    var response = await http.post(
+        Uri.parse("$customerParentService?language_id=$lanId"),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -37,10 +39,12 @@ getCustomerParent(BuildContext context) async {
 getCustomerChild(BuildContext context, id) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   final apiToken = Hive.box("token").get('api_token');
+  final String lanId = Hive.box("LocalLan").get('lang_id');
   if (apiToken == null) return;
   try {
     var response = await http.post(
-        Uri.parse("$customerChildService?parent_service_id=${id ?? '147'} }"),
+        Uri.parse(
+            "$customerChildService?parent_service_id=$id&language_id=$lanId"),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);

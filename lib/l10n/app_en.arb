@@ -280,7 +280,10 @@
     "a_region":"Region is required",
     "a_state":"state is required",
     "a_flat":"Flat No is required",
-    "a_loc":"Please Choose an address Location"
+    "a_loc":"Please Choose an address Location",
+
+        "sl_select":"Select Language",
+         "su_invoice_id":"Invoice id"
 
 
 

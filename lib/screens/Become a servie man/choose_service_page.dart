@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/customerParent.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -28,7 +29,8 @@ import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseServicePage extends StatefulWidget {
-  const ChooseServicePage({Key? key}) : super(key: key);
+  GlobalKey<ScaffoldState>? scaffoldKey;
+  ChooseServicePage({Key? key, this.scaffoldKey}) : super(key: key);
 
   @override
   State<ChooseServicePage> createState() => _ChooseServicePageState();
@@ -47,6 +49,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
   String lang = '';
   List<Services> sGroup = [];
   List<Childservices> childGroup = [];
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -75,7 +78,7 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
-    final provider = Provider.of<DataProvider>(context, listen: false);
+    final provider = Provider.of<DataProvider>(context, listen: true);
     final mob = Responsive.isMobile(context);
     final w = MediaQuery.of(context).size.width;
     final mobWth = ResponsiveWidth.isMobile(context);
@@ -155,7 +158,8 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
               child: Builder(
                 builder: (context) => InkWell(
                   onTap: () {
-                    Scaffold.of(context).openEndDrawer();
+                    Navigator.pop(context);
+                    widget.scaffoldKey?.currentState?.openEndDrawer();
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(10),
@@ -448,43 +452,88 @@ class _ChooseServicePageState extends State<ChooseServicePage> {
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.fromLTRB(
-                                                        10, 13, 10, 13),
-                                                child: ElevatedButton(
-                                                    style:
-                                                        ElevatedButton.styleFrom(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    13,
-                                                                    0,
-                                                                    13,
-                                                                    0)),
-                                                    onPressed: () async {
-                                                      FilePickerResult? result =
-                                                          await FilePicker
-                                                              .platform
-                                                              .pickFiles(
-                                                        type: FileType.custom,
-                                                        allowedExtensions: [
-                                                          'pdf',
-                                                          'doc'
-                                                        ],
-                                                      );
+                                                        10, 13, 0, 13),
+                                                child: SizedBox(
+                                                  width: 50,
+                                                  child: ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  13,
+                                                                  0,
+                                                                  13,
+                                                                  0)),
+                                                      onPressed: () async {
+                                                        FilePickerResult?
+                                                            result =
+                                                            await FilePicker
+                                                                .platform
+                                                                .pickFiles(
+                                                          type: FileType.custom,
+                                                          allowedExtensions: [
+                                                            'pdf',
+                                                            'doc',
+                                                            'jpg',
+                                                            'png'
+                                                          ],
+                                                        );
 
-                                                      if (result != null) {
-                                                        PlatformFile file =
-                                                            result.files.first;
+                                                        if (result != null) {
+                                                          PlatformFile file =
+                                                              result
+                                                                  .files.first;
+                                                          setState(() {
+                                                            fileName =
+                                                                file.name;
+                                                          });
+                                                          final path =
+                                                              file.path;
+
+                                                          final filePath =
+                                                              XFile(path!);
+                                                          provider.pickedFile =
+                                                              filePath;
+                                                        } else {}
+                                                      },
+                                                      child: Icon(Icons
+                                                          .file_present_rounded)),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 13, 10, 13),
+                                                child: SizedBox(
+                                                  width: 50,
+                                                  child: ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  13,
+                                                                  0,
+                                                                  13,
+                                                                  0)),
+                                                      onPressed: () async {
+                                                        provider.pickedFile =
+                                                            await _picker
+                                                                .pickImage(
+                                                          source: ImageSource
+                                                              .camera,
+
+                                                          // maxWidth: maxWidth,
+                                                          // maxHeight: maxHeight,
+                                                          // imageQuality: quality,
+                                                        );
                                                         setState(() {
-                                                          fileName = file.name;
+                                                          fileName = provider
+                                                              .pickedFile?.name;
                                                         });
-                                                      } else {}
-                                                    },
-                                                    child: Text(
-                                                        str.c_browse,
-                                                        style: getLightStyle(
-                                                            color: ColorManager
-                                                                .whiteText,
-                                                            fontSize: 18))),
+                                                      },
+                                                      child:
+                                                          Icon(Icons.camera)),
+                                                ),
                                               ),
                                               Expanded(
                                                   child: Text(fileName ?? ''))

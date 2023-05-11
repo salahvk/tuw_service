@@ -33,14 +33,14 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
   ScreenshotController screenshotController = ScreenshotController();
   bool isLoading = false;
 
-  paySuccessSound() async {
-    final duration = await player.setAsset('assets/Gpay.mp3');
-  }
+  // paySuccessSound() async {
+  //   final duration = await player.setAsset('assets/Gpay.mp3');
+  // }
 
   @override
   void initState() {
     super.initState();
-    paySuccessSound();
+    // paySuccessSound();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
@@ -149,135 +149,116 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
       body: _selectedIndex != 2
           ? _screens[_selectedIndex]
           : SafeArea(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Screenshot(
-                        controller: screenshotController,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            isProgress
-                                ? const SizedBox(
-                                    height: 280,
-                                    width: 280,
-                                    child: Center(
-                                      child: SizedBox(
-                                          height: 90,
-                                          width: 90,
-                                          child: CircularProgressIndicator(
-                                            backgroundColor:
-                                                ColorManager.primary,
-                                            color: ColorManager.whiteColor,
-                                            strokeWidth: 5,
-                                          )),
-                                    ))
-                                : SizedBox(
-                                    height: 180,
-                                    child: Stack(
-                                      alignment: AlignmentDirectional.center,
-                                      children: [
-                                        LottieBuilder.asset(
-                                          // fit: BoxFit.fitWidth,
-                                          ImageAssets.paymentFailure,
-                                          repeat: false,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                            Text(
-                              // lang == 'ar'
-                              //     ? str.su_title
-                              //     : 'Your payment was successfully processed\nDetail of transaction are included',
-                              str.pay_fail,
-                              textAlign: TextAlign.center,
-                              style: getRegularStyle(
-                                  color: ColorManager.errorRed, fontSize: 16),
-                            ),
-                            // Text(
-                            //   str.su_title_1,
-                            //   textAlign: TextAlign.center,
-                            //   style: getRegularStyle(
-                            //       color: ColorManager.paymentPageColor1,
-                            //       fontSize: 16),
-                            // ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            // PaymentListTile(
-                            //     text1: str.su_date, text2: '25/08/2022'),
-                            // PaymentListTile(
-                            //     text1: str.su_service_fee,
-                            //     text2: "\$135.00 OMR"),
-                            // PaymentListTile(
-                            //     text1: str.su_discount,
-                            //     text2: '\$7.00 OMR = 5%'),
-                            // PaymentListTile(
-                            //   text1: str.su_vat,
-                            //   text2: '\$12.00 OMR = 8%',
-                            // ),
-                            // PaymentListTile(
-                            //   text1: str.su_mobile,
-                            //   text2: '+968 9526 123456',
-                            // ),
-                            // PaymentListTile(
-                            //   text1: str.su_exp,
-                            //   text2: '25/09/2022',
-                            // ),
-                            // const SizedBox(
-                            //   height: 30,
-                            // ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Screenshot(
+                      controller: screenshotController,
+                      child: Column(
                         children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushReplacement(context,
-                                    MaterialPageRoute(builder: (ctx) {
-                                  return const HomePage(
-                                    selectedIndex: 0,
-                                  );
-                                }));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(13, 0, 13, 0)),
-                              child: Text(
-                                "BACK TO HOME",
-                                style: getMediumtStyle(
-                                    color: ColorManager.whiteText,
-                                    fontSize: 14),
-                              )),
                           const SizedBox(
-                            width: 10,
+                            height: 20,
                           ),
-                          ElevatedButton(
-                              onPressed: generatePdf,
-                              style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(13, 0, 13, 0)),
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: ColorManager.primary,
-                                      backgroundColor: ColorManager.primary3,
-                                    )
-                                  : Text(
-                                      "SAVE PDF",
-                                      style: getMediumtStyle(
-                                          color: ColorManager.whiteText,
-                                          fontSize: 14),
-                                    ))
+                          isProgress
+                              ? const SizedBox(
+                                  height: 280,
+                                  width: 280,
+                                  child: Center(
+                                    child: SizedBox(
+                                        height: 90,
+                                        width: 90,
+                                        child: CircularProgressIndicator(
+                                          backgroundColor: ColorManager.primary,
+                                          color: ColorManager.whiteColor,
+                                          strokeWidth: 5,
+                                        )),
+                                  ))
+                              : SizedBox(
+                                  height: 180,
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      LottieBuilder.asset(
+                                        // fit: BoxFit.fitWidth,
+                                        ImageAssets.paymentFailure,
+                                        repeat: false,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          Text(
+                            // lang == 'ar'
+                            //     ? str.su_title
+                            //     : 'Your payment was successfully processed\nDetail of transaction are included',
+                            str.pay_fail,
+                            textAlign: TextAlign.center,
+                            style: getRegularStyle(
+                                color: ColorManager.errorRed, fontSize: 16),
+                          ),
+                          // Text(
+                          //   str.su_title_1,
+                          //   textAlign: TextAlign.center,
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.paymentPageColor1,
+                          //       fontSize: 16),
+                          // ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          // PaymentListTile(
+                          //     text1: str.su_date, text2: '25/08/2022'),
+                          // PaymentListTile(
+                          //     text1: str.su_service_fee,
+                          //     text2: "\$135.00 OMR"),
+                          // PaymentListTile(
+                          //     text1: str.su_discount,
+                          //     text2: '\$7.00 OMR = 5%'),
+                          // PaymentListTile(
+                          //   text1: str.su_vat,
+                          //   text2: '\$12.00 OMR = 8%',
+                          // ),
+                          // PaymentListTile(
+                          //   text1: str.su_mobile,
+                          //   text2: '+968 9526 123456',
+                          // ),
+                          // PaymentListTile(
+                          //   text1: str.su_exp,
+                          //   text2: '25/09/2022',
+                          // ),
+                          // const SizedBox(
+                          //   height: 30,
+                          // ),
                         ],
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (ctx) {
+                                return const HomePage(
+                                  selectedIndex: 0,
+                                );
+                              }));
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.fromLTRB(13, 0, 13, 0)),
+                            child: Text(
+                              "BACK TO HOME",
+                              style: getMediumtStyle(
+                                  color: ColorManager.whiteText, fontSize: 14),
+                            )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),

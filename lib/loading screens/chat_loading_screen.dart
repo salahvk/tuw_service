@@ -59,7 +59,9 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
       final provider = Provider.of<DataProvider>(context, listen: false);
       await getServiceManDetailsFun(context, widget.serviceManId);
       await viewChatMessages(context, widget.serviceManId);
+      print("Roooo");
       await getOtherUserAddress(context, widget.serviceManId ?? '');
+      print("Roooo");
       if (provider.otherUserAddress?.userAddress == null) {
         Navigator.pop(context);
         return;

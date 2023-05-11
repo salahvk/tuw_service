@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
           theme: getApplicationTheme(context).copyWith(useMaterial3: true),
           initialRoute: Routes.splashScreen,
           onGenerateRoute: RouteGenerator.getRoute,
-          // home: const UserAddressCardLoading()
+          // home: PaymentFailurePage()
         ));
   }
 }

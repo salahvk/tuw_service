@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
@@ -13,7 +14,8 @@ import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:social_media_services/screens/Address%20page/address_edit.dart';
+import 'package:social_media_services/screens/Address%20page/address_add.dart';
+
 import 'package:social_media_services/screens/Address%20page/address_update.dart';
 
 class AddressLocatorScreen extends StatefulWidget {
@@ -21,8 +23,16 @@ class AddressLocatorScreen extends StatefulWidget {
   UserAddress? userAddress;
   final String? lat;
   final String? lot;
+  XFile? imageFile;
+  String? defaultReg;
   AddressLocatorScreen(
-      {Key? key, this.isUpdate = false, this.userAddress, this.lat, this.lot})
+      {Key? key,
+      this.isUpdate = false,
+      this.userAddress,
+      this.lat,
+      this.lot,
+      this.imageFile,
+      this.defaultReg})
       : super(key: key);
 
   @override
@@ -98,6 +108,10 @@ class _AddressLocatorScreenState extends State<AddressLocatorScreen> {
                             MaterialPageRoute(builder: (ctx) {
                           return UserAddressEdit(
                             isUpdate: true,
+                            lat: widget.lat,
+                            lot: widget.lot, imageFile: widget.imageFile,
+                            defaultReg: widget.defaultReg,
+                            // locUpdate: true,
                           );
                         }));
                       }
