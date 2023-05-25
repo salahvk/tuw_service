@@ -40,7 +40,7 @@ import 'package:social_media_services/widgets/chat/chat_date_widget.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
@@ -73,8 +73,8 @@ class _ChatScreenState extends State<ChatScreen> {
   late Timer timer;
   late Timer Ltimer;
   String lang = '';
-  VideoPlayerController? _controller;
-  VideoPlayerController? _toBeDisposed;
+  // VideoPlayerController? _controller;
+  // VideoPlayerController? _toBeDisposed;
   final ImagePicker _picker = ImagePicker();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
@@ -873,9 +873,9 @@ class _ChatScreenState extends State<ChatScreen> {
       ImageSource source, BuildContext context) async {
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
-    if (_controller != null) {
-      await _controller!.setVolume(0.0);
-    }
+    // if (_controller != null) {
+    //   await _controller!.setVolume(0.0);
+    // }
     // if (isVideo) {
     //   final XFile? file = await _picker.pickVideo(
     //       source: source, maxDuration: const Duration(seconds: 10));

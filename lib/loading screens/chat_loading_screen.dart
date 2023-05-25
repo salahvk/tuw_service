@@ -23,7 +23,7 @@ import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 
 class ChatLoadingScreen extends StatefulWidget {
   String? serviceManId;
@@ -41,7 +41,6 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
   String lang = '';
-  VideoPlayerController? _controller;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -534,9 +533,6 @@ class _ChatScreenState extends State<ChatLoadingScreen> {
   }
 
   Future<void> _onImageButtonPressed(ImageSource source) async {
-    if (_controller != null) {
-      await _controller!.setVolume(0.0);
-    }
     // if (isVideo) {
     //   final XFile? file = await _picker.pickVideo(
     //       source: source, maxDuration: const Duration(seconds: 10));
