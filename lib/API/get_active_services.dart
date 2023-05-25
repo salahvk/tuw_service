@@ -23,7 +23,9 @@ getActiveServices(
   if (apiToken == null) return;
 
   try {
-    var response = await http.post(Uri.parse('$api/active-services'),
+    final String lanId = Hive.box("LocalLan").get('lang_id');
+    var response = await http.post(
+        Uri.parse('$api/active-services?language_id=$lanId'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);

@@ -26,6 +26,7 @@ import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/report_user_diologue.dart';
 
 class ServiceManDetails extends StatefulWidget {
+  GlobalKey<ScaffoldState>? scaffoldKey;
   Serviceman? serviceman;
   ServiceManDetails({super.key, this.serviceman});
 

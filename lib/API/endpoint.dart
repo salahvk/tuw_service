@@ -1,6 +1,6 @@
-const String endPoint = "http://projects.techoriz.in/serviceapp/public";
+// const String endPoint = "http://projects.techoriz.in/serviceapp/public";
 
-// const String endPoint = "https://tuw.om";
+const String endPoint = "https://tuw.om";
 // const String endPoint = "http://192.168.29.44:8004";
 
 const String api = "$endPoint/api";

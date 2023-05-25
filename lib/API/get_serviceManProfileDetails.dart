@@ -13,11 +13,14 @@ import 'package:social_media_services/utils/animatedSnackBar.dart';
 getServiceManProfileFun(BuildContext context) async {
   final apiToken = Hive.box("token").get('api_token');
   final provider = Provider.of<DataProvider>(context, listen: false);
-
+  final String lanId = Hive.box("LocalLan").get('lang_id');
+  print(lanId);
   try {
-    var response = await http.post(
-        Uri.parse(
-            '$serviceManProfileApi?user_id=${provider.viewProfileModel?.userdetails?.id}'),
+    final url =
+        '$serviceManProfileApi?user_id=${provider.viewProfileModel?.userdetails?.id}&language_id=$lanId';
+    print(url);
+    print("hiiiiii");
+    var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -40,9 +43,10 @@ getServiceManProfileFun(BuildContext context) async {
 getServiceManDetailsFun(BuildContext context, id) async {
   final apiToken = Hive.box("token").get('api_token');
   final provider = Provider.of<DataProvider>(context, listen: false);
+  final String lanId = Hive.box("LocalLan").get('lang_id');
 
   try {
-    final url = '$serviceManProfileApi?user_id=$id';
+    final url = '$serviceManProfileApi?user_id=$id&language_id=$lanId';
     print(url);
     var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});

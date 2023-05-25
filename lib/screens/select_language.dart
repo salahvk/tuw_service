@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/customerParent.dart';
+import 'package:social_media_services/API/get_active_services.dart';
+import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
 import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/API/home/get_subService.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -60,6 +62,8 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                   final lan = provider.languageModel?.languages?[index];
                   final servicerProvider =
                       Provider.of<ServicerProvider>(context, listen: false);
+                  final serviceManData =
+                      provider.serviceManListModel?.serviceman;
                   return InkWell(
                     onTap: () async {
                       setState(() {
@@ -78,6 +82,9 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                       await getSubService(
                           context, servicerProvider.serviceId, true);
                       await getCustomerParent(context);
+                      await getServiceManDetailsFun(
+                          context, servicerProvider.navServiceId);
+                      await getActiveServices(context);
                       Navigator.pop(context);
                       // await getHome(context, id: id, changeLan: true);
                       await getHome(

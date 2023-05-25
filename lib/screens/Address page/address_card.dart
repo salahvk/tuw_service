@@ -23,7 +23,7 @@ import 'package:social_media_services/screens/Google%20Map/view_location.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/widgets/AddressBox/user_address_box.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -57,6 +57,16 @@ class _UserAddressCardState extends State<UserAddressCard> {
       await getUserAddress(context);
       setState(() {});
     });
+  }
+
+  void _openGoogleMaps(double latitude, double longitude) async {
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    // if (await launchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+    // } else {
+    // throw 'Could not launch $url';
+    // }
   }
 
   @override
@@ -213,11 +223,11 @@ class _UserAddressCardState extends State<UserAddressCard> {
                           const SizedBox(
                             height: 2,
                           ),
-                          Text(
-                            "mail@gmail.com",
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
-                          ),
+                          // Text(
+                          //   "mail@gmail.com",
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.grayLight, fontSize: 13),
+                          // ),
                           const SizedBox(
                             height: 2,
                           ),
@@ -319,6 +329,42 @@ class _UserAddressCardState extends State<UserAddressCard> {
                               ),
                             ),
                           ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: ColorManager.primary,
+                                borderRadius: BorderRadius.circular(5)),
+
+                            // width: 30,
+                            child: InkWell(
+                              onTap: () async {
+                                _openGoogleMaps(
+                                    double.parse(
+                                        userAddressData?.latitude ?? ''),
+                                    double.parse(
+                                        userAddressData?.longitude ?? ''));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      color: ColorManager.whiteColor,
+                                    ),
+                                    Text(
+                                      "Open Google Map",
+                                      style: getRegularStyle(
+                                          color: ColorManager.whiteColor),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -387,6 +433,7 @@ class CoverImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final str = AppLocalizations.of(context)!;
     return CachedNetworkImage(
       imageUrl: userDetail == null
           ? '$endPoint${userDetails?.coverImage}'
@@ -395,10 +442,12 @@ class CoverImageWidget extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         height: 20,
         color: ColorManager.whiteColor,
-        child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl:
-                "https://www.unleashed-technologies.com/sites/default/files/2020-05/image_url_drupal_blog_post_large.jpg"),
+        child: Center(
+          child: Text(
+            str.a_cover,
+            style: getRegularStyle(color: ColorManager.black, fontSize: 14),
+          ),
+        ),
       ),
     );
   }

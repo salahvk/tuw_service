@@ -1089,8 +1089,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
     var jsonResponse = jsonDecode(res.body);
 
     if (jsonResponse["result"] == false) {
-      showAnimatedSnackBar(
-          context, "Images must be a file of type: jpeg, jpg, png.");
+      showAnimatedSnackBar(context, jsonResponse["message"]);
       setState(() {});
       return;
     }

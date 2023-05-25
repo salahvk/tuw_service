@@ -1,12 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
-import 'package:social_media_services/custom/lorem.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PrivacyPolicy extends StatelessWidget {
+class PrivacyPolicy extends StatefulWidget {
   const PrivacyPolicy({super.key});
+
+  @override
+  State<PrivacyPolicy> createState() => _PrivacyPolicyState();
+}
+
+class _PrivacyPolicyState extends State<PrivacyPolicy> {
+  String? text;
+  String? lan;
+  Future<void> readTextFile() async {
+    print(lan);
+    if (lan == 'en') {
+      text = await rootBundle.loadString('assets/txt/privacyEnglish.txt');
+    } else if (lan == 'ar') {
+      text = await rootBundle.loadString('assets/txt/privacyArabic.txt');
+    } else {
+      text = await rootBundle.loadString('assets/txt/privacyHindi.txt');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    lan = Hive.box("LocalLan").get('lang');
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await readTextFile();
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +76,7 @@ class PrivacyPolicy extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
                 child: Text(
-                  lorem,
+                  text ?? '',
                   textAlign: TextAlign.justify,
                   style: getRegularStyle(
                       color: ColorManager.engineWorkerColor, fontSize: 16),

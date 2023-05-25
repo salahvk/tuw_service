@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/becomeServiceMan/payment_success.dart';
+import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
@@ -124,15 +125,15 @@ class PayPage extends StatelessWidget {
                   width: 200,
                   height: 50,
                   child: ThawaniPayBtn(
-                    testMode: true,
-                    api: 'rRQ26GcsZzoEhbrP2HZvLYDbn9C9et',
-                    pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
-                    successUrl: "https://company.com/success",
-                    cancelUrl: "https://company.com/cancel",
-                    // successUrl: thawaniPaymentSuccess,
-                    // api: 'LqZ2Ma9doGSkfIJPKssA3lPPKnhfRJ',
-                    // pKey: 'sCyctJWWAtRZ6i3nsEe8fGEsYMa2Si',
-                    // cancelUrl: thawaniPaymentfailed,
+                    testMode: false,
+                    // api: 'rRQ26GcsZzoEhbrP2HZvLYDbn9C9et',
+                    // pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
+                    // successUrl: "https://company.com/success",
+                    // cancelUrl: "https://company.com/cancel",
+                    successUrl: thawaniPaymentSuccess,
+                    api: 'LqZ2Ma9doGSkfIJPKssA3lPPKnhfRJ',
+                    pKey: 'sCyctJWWAtRZ6i3nsEe8fGEsYMa2Si',
+                    cancelUrl: thawaniPaymentfailed,
                     metadata: {
                       "Customer Name": "${user?.firstname} ${user?.lastname}",
                       "Customer PhoneNumber": "${user?.phone}",

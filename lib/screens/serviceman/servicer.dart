@@ -43,6 +43,7 @@ class ServicerPage extends StatefulWidget {
 }
 
 class _ServicerPageState extends State<ServicerPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selectedValue;
   final int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
@@ -102,6 +103,8 @@ class _ServicerPageState extends State<ServicerPage> {
     final smobWth = ResponsiveWidth.issMobile(context);
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
+    final servicerProvider =
+        Provider.of<ServicerProvider>(context, listen: false);
     final serviceManData = provider.serviceManListModel?.serviceman;
 
     return GestureDetector(
@@ -1072,10 +1075,13 @@ class _ServicerPageState extends State<ServicerPage> {
                                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: InkWell(
                                     onTap: () {
+                                      servicerProvider.navServiceId =
+                                          serviceManData![index].id;
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (ctx) {
                                         return ProfileLoading(
-                                          serviceman: serviceManData![index],
+                                          serviceman: serviceManData[index],
+                                          key: _scaffoldKey,
                                         );
                                       }));
                                     },

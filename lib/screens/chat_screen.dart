@@ -1102,8 +1102,7 @@ class _ChatScreenState extends State<ChatScreen> {
     await viewChatMessages(context, servicerProvider.servicerId);
 
     if (jsonResponse["result"] == false) {
-      showAnimatedSnackBar(
-          context, "Images must be a file of type: jpeg, jpg, png.");
+      showAnimatedSnackBar(context, jsonResponse["message"]);
       setState(() {});
       return;
     }

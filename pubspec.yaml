@@ -83,7 +83,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   flutter_sound_record: ^3.2.1
   record: ^4.4.3
-  url_launcher: ^6.1.7
+  url_launcher: ^6.1.11
   audioplayers: ^1.1.1
   page_transition: ^2.0.9
   pull_to_refresh: ^2.0.0
@@ -133,6 +133,7 @@ flutter:
   assets:
     - assets/
     - assets/logo/
+    - assets/txt/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

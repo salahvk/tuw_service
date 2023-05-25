@@ -33,7 +33,7 @@ import 'package:social_media_services/widgets/AddressBox/addressPage_box.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 
@@ -65,6 +65,16 @@ class _AddressPageState extends State<AddressPage> {
       'lang',
     );
     getUserAddress(context);
+  }
+
+  void _openGoogleMaps(double latitude, double longitude) async {
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    // if (await launchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+    // } else {
+    // throw 'Could not launch $url';
+    // }
   }
 
   @override
@@ -212,11 +222,11 @@ class _AddressPageState extends State<AddressPage> {
                           const SizedBox(
                             height: 2,
                           ),
-                          Text(
-                            "mail@gmail.com",
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
-                          ),
+                          // Text(
+                          //   "mail@gmail.com",
+                          //   style: getRegularStyle(
+                          //       color: ColorManager.grayLight, fontSize: 13),
+                          // ),
                           const SizedBox(
                             height: 2,
                           ),
@@ -380,6 +390,39 @@ class _AddressPageState extends State<AddressPage> {
                                 ),
                               ),
                             ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: ColorManager.primary,
+                                borderRadius: BorderRadius.circular(5)),
+
+                            // width: 30,
+                            child: InkWell(
+                              onTap: () async {
+                                _openGoogleMaps(currentLocator.latitude,
+                                    currentLocator.latitude);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      color: ColorManager.whiteColor,
+                                    ),
+                                    Text(
+                                      "Open Google Map",
+                                      style: getRegularStyle(
+                                          color: ColorManager.whiteColor),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -6,22 +6,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class MonthlyPlan extends StatelessWidget {
   final String plan;
   final String amount;
-  const MonthlyPlan({
+  int? len;
+  MonthlyPlan({
     Key? key,
     required this.size,
     required this.plan,
     required this.amount,
+    this.len,
   }) : super(key: key);
 
   final Size size;
 
   @override
   Widget build(BuildContext context) {
+    print(this.len);
     final str = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Container(
-        width: size.width * .44,
+        width: len! > 2 ? size.width * .4 : size.width * .44,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

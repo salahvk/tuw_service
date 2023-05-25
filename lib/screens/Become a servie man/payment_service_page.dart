@@ -453,6 +453,9 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           },
                                           child: Center(
                                             child: MonthlyPlan(
+                                              len: provider.customerChildSer
+                                                      ?.packages?.length ??
+                                                  0,
                                               size: size,
                                               plan: provider
                                                       .customerChildSer

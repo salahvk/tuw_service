@@ -5,4 +5,5 @@ class ServicerProvider with ChangeNotifier {
   String? servicerLongitude;
   int? serviceId;
   int? servicerId;
+  int? navServiceId;
 }
