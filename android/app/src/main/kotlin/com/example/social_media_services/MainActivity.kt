@@ -1,4 +1,4 @@
-package com.example.social_media_services
+package com.tuwconnect.services
 
 import io.flutter.embedding.android.FlutterActivity
 
