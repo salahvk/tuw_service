@@ -13,7 +13,6 @@ import 'package:social_media_services/API/get_active_subscription.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/my_services.dart';
 import 'package:social_media_services/screens/my_subscription.dart';
-import 'package:social_media_services/animations/animtions.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
@@ -202,8 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             SizedBox(
                 height: size.height * 0.36,
-                child: FadeCustomAnimation(
-                  delay: .1,
+                child: Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -242,12 +240,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 }));
               },
-              child: FadeSlideCustomAnimation(
-                delay: .1,
-                child: ProfileTitleWidget(
-                  name: str.pp_my_profile,
-                  icon: Icons.person_outline,
-                ),
+              child: ProfileTitleWidget(
+                name: str.pp_my_profile,
+                icon: Icons.person_outline,
               ),
             ),
             InkWell(
@@ -259,36 +254,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 }));
               },
-              child: FadeSlideCustomAnimation(
-                delay: .2,
-                child: ProfileTitleWidget(
-                  name: str.pp_message,
-                  icon: FontAwesomeIcons.message,
-                ),
+              child: ProfileTitleWidget(
+                name: str.pp_message,
+                icon: FontAwesomeIcons.message,
               ),
             ),
             InkWell(
               onTap: () {
                 Navigator.pushNamed(context, Routes.wishList);
               },
-              child: FadeSlideCustomAnimation(
-                delay: .3,
-                child: ProfileTitleWidget(
-                  name: str.pp_favourites,
-                  icon: Icons.favorite_border,
-                ),
+              child: ProfileTitleWidget(
+                name: str.pp_favourites,
+                icon: Icons.favorite_border,
               ),
             ),
             InkWell(
               onTap: () {
                 Navigator.pushNamed(context, Routes.addressPage);
               },
-              child: FadeSlideCustomAnimation(
-                delay: .4,
-                child: ProfileTitleWidget(
-                  name: str.pp_address,
-                  icon: Icons.pin_drop_outlined,
-                ),
+              child: ProfileTitleWidget(
+                name: str.pp_address,
+                icon: Icons.pin_drop_outlined,
               ),
             ),
             provider.viewProfileModel?.userdetails?.userType == 'customer'
@@ -297,12 +283,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () {
                       navigateToServiceManProfile();
                     },
-                    child: FadeSlideCustomAnimation(
-                      delay: .5,
-                      child: ProfileTitleWidget(
-                        name: str.pp_settings,
-                        icon: Icons.settings_outlined,
-                      ),
+                    child: ProfileTitleWidget(
+                      name: str.pp_settings,
+                      icon: Icons.settings_outlined,
                     ),
                   ),
             provider.viewProfileModel?.userdetails?.userType == 'customer'
@@ -313,13 +296,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         return const MyServicesPage();
                       }));
                     },
-                    child: FadeSlideCustomAnimation(
-                      delay: .5,
-                      child: ProfileTitleWidget(
-                        name: str.pp_my_Services,
-                        icon: Icons.pin_drop_outlined,
-                        svg: 'assets/Myservice.svg',
-                      ),
+                    child: ProfileTitleWidget(
+                      name: str.pp_my_Services,
+                      icon: Icons.pin_drop_outlined,
+                      svg: 'assets/Myservice.svg',
                     ),
                   ),
             provider.viewProfileModel?.userdetails?.userType == 'customer'
@@ -330,12 +310,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         return const MySubscriptionPage();
                       }));
                     },
-                    child: FadeSlideCustomAnimation(
-                      delay: .5,
-                      child: ProfileTitleWidget(
-                        name: str.pp_my_sub,
-                        icon: FontAwesomeIcons.bell,
-                      ),
+                    child: ProfileTitleWidget(
+                      name: str.pp_my_sub,
+                      icon: FontAwesomeIcons.bell,
                     ),
                   ),
           ],
