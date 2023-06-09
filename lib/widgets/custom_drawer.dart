@@ -25,6 +25,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String lang = '';
   bool loading = false;
+  bool isDeletionloading = false;
   @override
   void initState() {
     super.initState();
@@ -96,6 +97,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 }));
               },
             ),
+            isDeletionloading
+                ? Container(
+                    alignment: Alignment.topCenter,
+                    margin: const EdgeInsets.all(10),
+                    child: const LinearProgressIndicator(
+                        // value: 0.7,
+                        ))
+                : CustomDrawerList(
+                    title: "Delete Account",
+                    onTap: deleteAccount,
+                  ),
             loading
                 ? Container(
                     alignment: Alignment.topCenter,
@@ -112,6 +124,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
             // )
           ],
         ));
+  }
+
+  deleteAccount() async {
+    setState(() {
+      isDeletionloading = true;
+    });
+    await deleteAccountFun(context);
+    await Hive.box("token").clear();
+    callInitFunction(context);
   }
 
   logOUtFunction() async {

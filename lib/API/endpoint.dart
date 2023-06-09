@@ -17,6 +17,7 @@ const String profileImageApi = "$endPoint/assets/uploads/profile";
 
 const String viewUserProfileApi = "$api/view/userprofile";
 const String logout = "$apiUser/logout";
+const String deleteApi = "$api/delete-profile";
 String home = "$api/home";
 
 const String customerCoupenList = '$api/couponlist';

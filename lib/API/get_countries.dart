@@ -17,10 +17,6 @@ getCountriesData(BuildContext context) async {
     // print(response.body);
     if (response.statusCode != 200) {
       showAnimatedSnackBar(context, "Something Went Wrong3");
-      // showAnimatedSnackBar(
-      //   context,
-      //   "Api Error Occured",
-      // );
       return;
     }
 
