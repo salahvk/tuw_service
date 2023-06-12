@@ -500,6 +500,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                           searchController:
                                               AddressEditControllers
                                                   .searchController,
+                                          searchInnerWidgetHeight: 30,
                                           searchInnerWidget: Padding(
                                             padding: const EdgeInsets.only(
                                               top: 8,

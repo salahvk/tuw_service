@@ -513,6 +513,7 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
                                             //     .fromLTRB(12, 0, 12, 0),
                                             dropdownSearchData:
                                                 DropdownSearchData(
+                                              searchInnerWidgetHeight: 30,
                                               searchMatchFn:
                                                   (item, searchValue) {
                                                 return (item.value!.countryName

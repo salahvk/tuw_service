@@ -542,6 +542,8 @@ class _ServicerPageState extends State<ServicerPage> {
                                                             searchController:
                                                                 AddressEditControllers
                                                                     .searchController,
+                                                            searchInnerWidgetHeight:
+                                                                30,
                                                             searchInnerWidget:
                                                                 Padding(
                                                               padding:

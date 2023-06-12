@@ -518,6 +518,7 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                                               //     .fromLTRB(12, 0, 12, 0),
                                               dropdownSearchData:
                                                   DropdownSearchData(
+                                                searchInnerWidgetHeight: 30,
                                                 searchController:
                                                     ServiceManProfileEdit
                                                         .searchController,
