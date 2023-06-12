@@ -19,10 +19,11 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
   try {
     final provider = Provider.of<DataProvider>(context, listen: false);
     final otpProvider = Provider.of<OTPProvider>(context, listen: false);
-    var response = await http.post(
-        Uri.parse(
-            "$apiUser/request_otp?countrycode=$countryCode&phone=$phoneNo&language_id=$id"),
-        headers: {"device-id": provider.deviceId ?? ''});
+    final url = Uri.parse(
+        "$apiUser/request_otp?countrycode=$countryCode&phone=$phoneNo&language_id=$id");
+    print(url);
+    var response =
+        await http.post(url, headers: {"device-id": provider.deviceId ?? ''});
 
     if (response.statusCode != 200) {
       log("Something Went Wrong9");
@@ -33,11 +34,17 @@ getOtp(BuildContext context, countryCode, phoneNo, resend) async {
     var jsonResponse = jsonDecode(response.body);
     final result = jsonResponse["result"];
     final action = jsonResponse["action"];
-    log(action);
+    print(action);
 
     if (result == false) {
-      final errorMessage = jsonResponse["message"]["phone"][0];
-      showAnimatedSnackBar(context, errorMessage);
+      try {
+        final errorMessage = jsonResponse["message"]["phone"][0];
+        showAnimatedSnackBar(context, errorMessage);
+      } catch (_) {}
+      try {
+        final errorMessage = jsonResponse["message"];
+        showAnimatedSnackBar(context, errorMessage);
+      } catch (_) {}
       return;
     }
 

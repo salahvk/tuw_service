@@ -18,6 +18,7 @@ const String profileImageApi = "$endPoint/assets/uploads/profile";
 const String viewUserProfileApi = "$api/view/userprofile";
 const String logout = "$apiUser/logout";
 String home = "$api/home";
+const String deleteApi = "$api/delete-profile";
 
 const String customerCoupenList = '$api/couponlist';
 const String checkCoupen = '$api/coupon-validity?coupon_code=';
