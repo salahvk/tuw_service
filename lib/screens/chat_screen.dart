@@ -40,7 +40,6 @@ import 'package:social_media_services/widgets/chat/chat_date_widget.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// import 'package:video_player/video_player.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
@@ -61,8 +60,6 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isDropped = false;
   bool isLocationFetching = false;
   bool isAddressCardSelected = false;
-
-  // bool isAnimationVisible = false;
   bool isRecordingOn = false;
   bool isVibrantFeatureAvailable = false;
   bool isScrolling = false;
@@ -73,8 +70,6 @@ class _ChatScreenState extends State<ChatScreen> {
   late Timer timer;
   late Timer Ltimer;
   String lang = '';
-  // VideoPlayerController? _controller;
-  // VideoPlayerController? _toBeDisposed;
   final ImagePicker _picker = ImagePicker();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
@@ -122,39 +117,17 @@ class _ChatScreenState extends State<ChatScreen> {
           updateReadStatus(context, servicerProvider.servicerId);
         }
       });
-      // if (_scrollController.position.axisDirection == AxisDirection.up &&
-      //     _scrollController.position.atEdge) {
-      //   log("pagination");
-      //   final servicerProvider =
-      //       Provider.of<ServicerProvider>(context, listen: false);
-      //   await viewChatMessages(context, servicerProvider.servicerId, page: 2);
-      // }
     });
     _scrollController.addListener(() async {
       setState(() {
         isScrolling = true;
       });
-
-      // if (_scrollController.position.axisDirection == AxisDirection.up) {
-      //   if (_scrollController.position.atEdge &&
-      //       _scrollController.offset != 0.0) {
-      //     final servicerProvider =
-      //         Provider.of<ServicerProvider>(context, listen: false);
-      //     print("UP and top");
-      // await    viewChatMessages(context, servicerProvider.servicerId, page: 2);
-      //      final provider = Provider.of<DataProvider>(context, listen: false);
-      //     final chat = provider.viewChatMessageModel?.chatMessage?.data;
-      //     chatMessages?.insertAll(50, chat ?? []);
-      //   }
-      // }
       if (_scrollController.position.atEdge &&
           _scrollController.offset != 0.0) {
         setState(() {
           isScrolling = false;
         });
       }
-
-      // _scrollController.dispose();
     });
   }
 
@@ -178,7 +151,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
     recorder.stop();
     timer.cancel();
-    // Ltimer.cancel();
     await _stopWatchTimer.dispose();
   }
 
@@ -329,8 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ismenuVisible = false;
                                 });
                                 await selectImage();
-                                // await viewChatMessages(
-                                //     context, servicerProvider.servicerId);
+
                                 await Future.delayed(
                                     const Duration(seconds: 2));
                                 setState(() {});
@@ -873,42 +844,10 @@ class _ChatScreenState extends State<ChatScreen> {
       ImageSource source, BuildContext context) async {
     final servicerProvider =
         Provider.of<ServicerProvider>(context, listen: false);
-    // if (_controller != null) {
-    //   await _controller!.setVolume(0.0);
-    // }
-    // if (isVideo) {
-    //   final XFile? file = await _picker.pickVideo(
-    //       source: source, maxDuration: const Duration(seconds: 10));
-    //   await _playVideo(file);
-    // } else
-    //  if (isMultiImage) {
-    //   await _displayPickImageDialog(context!,
-    //       (double? maxWidth, double? maxHeight, int? quality) async {
-    //     try {
-    //       final List<XFile> pickedFileList = await _picker.pickMultiImage(
-    //         maxWidth: maxWidth,
-    //         maxHeight: maxHeight,
-    //         imageQuality: quality,
-    //       );
-    //       setState(() {
-    //         _imageFileList = pickedFileList;
-    //       });
-    //     } catch (e) {
-    //       setState(() {
-    //         _pickImageError = e;
-    //       });
-    //     }
-    //   });
-    // }
-    // if {
-    // await _displayPickImageDialog(context!,
-    //     (double? maxWidth, double? maxHeight, int? quality) async {
+
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
-        // maxWidth: maxWidth,
-        // maxHeight: maxHeight,
-        // imageQuality: quality,
       );
       print(pickedFile);
       final list = [pickedFile!];
@@ -1119,7 +1058,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final str = AppLocalizations.of(context)!;
     final length = imageFile.length;
     final datetime = DateTime.now();
-    log("audio senting.................................");
     ChatData waitingMessage = ChatData(
         message: msgController.text,
         type: 'audio',
@@ -1196,11 +1134,6 @@ class _ChatScreenState extends State<ChatScreen> {
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
         senderId: provider.viewProfileModel?.userdetails?.id,
-        // sendUserId: 42,
-        // firstname: 'sergio',
-        // onlineStatus: 'busy',
-        // chatMedia: '/assets/uploads/chatmedia/',
-        // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
         addressId: null);
     chatMessages?.insert(0, waitingMessage);
     setState(() {});
@@ -1272,11 +1205,6 @@ class _ChatScreenState extends State<ChatScreen> {
         createdAt: '2022-12-23T05:03:41.000000Z',
         localTime: datetime.toString(),
         senderId: provider.viewProfileModel?.userdetails?.id,
-        // sendUserId: 42,
-        // firstname: 'sergio',
-        // onlineStatus: 'busy',
-        // chatMedia: '/assets/uploads/chatmedia/',
-        // profileImage: '/assets/uploads/profile/profile_1669789172.jpg',
         addressId: null);
     chatMessages?.insert(0, waitingMessage);
     setState(() {});
