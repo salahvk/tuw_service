@@ -458,11 +458,6 @@
 //                 ),
 //               ],
 //             ),
-//             Text(
-//               "Lorem Ipsum has been the industry's standard dummy Lorem Ipsum has been the industry's standard dummy.",
-//               style: getRegularStyle(
-//                   color: ColorManager.engineWorkerColor, fontSize: 16),
-//             ),
 //           ],
 //         ),
 //       ),
