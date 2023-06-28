@@ -53,7 +53,6 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => DataProvider()),
           ChangeNotifierProvider(create: (_) => OTPProvider()),
           ChangeNotifierProvider(create: (_) => ServicerProvider()),
-          // ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ],
         child: MaterialApp(
           supportedLocales: const [
@@ -73,7 +72,6 @@ class _MyAppState extends State<MyApp> {
           theme: getApplicationTheme(context).copyWith(useMaterial3: true),
           initialRoute: Routes.splashScreen,
           onGenerateRoute: RouteGenerator.getRoute,
-          // home: PaymentFailurePage()
         ));
   }
 }
