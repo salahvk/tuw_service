@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 // import 'package:screenshot/screenshot.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/components/assets_manager.dart';
@@ -15,6 +16,7 @@ import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
+import 'package:social_media_services/utils/pdfApi.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/payment_custom_listTile.dart';
@@ -32,7 +34,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
   final player = AudioPlayer();
   bool isProgress = true;
   String lang = '';
-  // ScreenshotController screenshotController = ScreenshotController();
+  ScreenshotController screenshotController = ScreenshotController();
   bool isLoading = false;
 
   paySuccessSound() async {
@@ -199,13 +201,6 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                                 const SizedBox(
                                                   height: 8,
                                                 ),
-                                                // Text(
-                                                //   "Transaction no : #123456789",
-                                                //   style: getRegularStyle(
-                                                //       color: ColorManager
-                                                //           .paymentPageColor1,
-                                                //       fontSize: 16),
-                                                // ),
                                               ],
                                             )),
                                       ],
@@ -220,13 +215,6 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                   color: ColorManager.paymentPageColor1,
                                   fontSize: 16),
                             ),
-                            // Text(
-                            //   str.su_title_1,
-                            //   textAlign: TextAlign.center,
-                            //   style: getRegularStyle(
-                            //       color: ColorManager.paymentPageColor1,
-                            //       fontSize: 16),
-                            // ),
                             const SizedBox(
                               height: 30,
                             ),
@@ -261,7 +249,6 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                       .toString() ??
                                   '',
                             ),
-
                             PaymentListTile(
                                 text1: str.su_service_fee,
                                 text2: provider.paymentSuccess?.orderDetails
@@ -284,7 +271,6 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                                       ?.grandTotal ??
                                   '',
                             ),
-
                             const SizedBox(
                               height: 30,
                             ),
@@ -343,18 +329,18 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
     setState(() {
       isLoading = true;
     });
-    // screenshotController
-    //     .capture(delay: const Duration(milliseconds: 10))
-    //     .then((capturedImage) async {
-    //   final pdfFile = await PdfApi.generateCenteredText(
-    //     capturedImage,
-    //   );
-    //   await PdfApi.openFile(pdfFile);
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    // }).catchError((onError) {
-    //   print(onError);
-    // });
+    screenshotController
+        .capture(delay: const Duration(milliseconds: 10))
+        .then((capturedImage) async {
+      final pdfFile = await PdfApi.generateCenteredText(
+        capturedImage,
+      );
+      await PdfApi.openFile(pdfFile);
+      setState(() {
+        isLoading = false;
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 }
