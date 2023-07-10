@@ -76,11 +76,13 @@ class _ChatScreenState extends State<ChatScreen> {
   );
   final recorder = Record();
 
-  Future record() async {
-    final dir2 = await getExternalStorageDirectory();
+  Future<void> record() async {
+    final dir = await getTemporaryDirectory();
+    final path = '${dir.path}/myFile.aac';
+
     await initRecorder();
     await recorder.start(
-      path: '${dir2?.path}/myFile.aac',
+      path: path,
       encoder: AudioEncoder.aacLc,
     );
   }
