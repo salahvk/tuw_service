@@ -158,6 +158,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final w = size.width;
@@ -484,6 +485,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
             // * Message box
             Positioned(
+              bottom: 30,right: 5,
+              child: Tooltip(
+
+          key: tooltipkey,
+          triggerMode: TooltipTriggerMode.manual,
+          showDuration: const Duration(seconds: 1),
+          message: str.cp_long_press,
+          
+        ),),
+            Positioned(
               bottom: 0,
               child: Container(
                 color: ColorManager.whiteColor,
@@ -594,7 +605,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             },
                             onTap: () {
                               Vibration.vibrate(duration: 200);
-                              showSnackBar(str.cp_long_press, context);
+                              tooltipkey.currentState?.ensureTooltipVisible();
+                              // showAnimatedSnackBar(context,str.cp_long_press);
                             },
                             child: SizedBox(
                               width: w * .1,
