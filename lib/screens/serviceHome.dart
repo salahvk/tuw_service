@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/home/get_subService.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
@@ -62,15 +63,18 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.all(2.0),
+                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "$endPoint${provider.homeModel?.homebanner?[index].image}",
-                            width: w * .95,
-                            fit: BoxFit.fill,
-                          ),
+                             child: Container(
+                            width: w * .92,
+                            color: ColorManager.whiteColor,
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "$endPoint${provider.homeModel?.homebanner?[index].image}",
+                              width: w,
+                              fit: BoxFit.contain,
+                            ),)
                         ),
                       );
                     },
@@ -78,7 +82,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 20),
                   child: GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -93,9 +97,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                         return InkWell(
                           onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (ctx) {
-                              return const LoadingListPage();
-                            }));
+                                                               FadePageRoute(page: LoadingListPage()));
                             final id = homeData![index].id;
                             servicerProvider.serviceId = id;
                             getSubService(context, id, false);

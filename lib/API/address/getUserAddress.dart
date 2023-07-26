@@ -45,7 +45,7 @@ getUserAddress(BuildContext context) async {
       print('Something went wrong');
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+
   }
 }
 
@@ -73,6 +73,6 @@ showUserAddress(BuildContext context, String id) async {
       print('Something went wrong');
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+ 
   }
 }

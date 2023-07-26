@@ -283,7 +283,20 @@
     "a_loc":"Please Choose an address Location",
 
         "sl_select":"Select Language",
-         "su_invoice_id":"Invoice id"
+        "su_invoice_id":"Invoice id",
+
+"hw_title":"How To Work",
+"hw_title2":"How To Work Overall Tuw Services",
+"hw_des":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+"hw_learn":"Learn More",
+"hw_mc_1":"1. Register Mobile Number",
+"hw_mc_2":"2. Register New Account",
+"hw_mc_3":"3. Create New Profile",
+"hw_mc_4":"4. Choose Services",
+"hw_mc_5":"5. Payments",
+
+"no_ser":"No ServiceMan Available",
+"no_ava":"Not Available"
 
 
 

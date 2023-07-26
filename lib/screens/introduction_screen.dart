@@ -7,6 +7,7 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/screens/how.dart';
 import 'package:social_media_services/widgets/language_button.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -57,7 +58,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                         final lan = provider.languageModel?.languages?[index];
                         return InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, Routes.phoneNumber);
+                            // Navigator.pushNamed(context, Routes.phoneNumber);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (ctx) {
+                              return const HowToWorkPage();
+                            }));
                             setState(() {
                               selected = lan?.language ?? '';
                             });

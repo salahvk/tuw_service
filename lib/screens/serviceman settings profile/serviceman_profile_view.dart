@@ -60,7 +60,9 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
     final smobWth = ResponsiveWidth.issMobile(context);
     String? transport;
     if (userData != null && userData.transport != null) {
-      transport = userData.transport!.contains('four') ? str.s_four : str.s_two;
+      transport = (userData.transport?.contains('four') ?? false)
+          ? str.s_four
+          : str.s_two;
     }
 
     return Scaffold(
@@ -267,8 +269,9 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                 SizedBox(
                   height: 80,
                   child: ListView.builder(
-                    itemCount:
-                        provider.serviceManProfile!.galleryImages!.isEmpty
+                      itemCount: (provider
+                                  .serviceManProfile?.galleryImages?.isEmpty ??
+                              true)
                             ? 4
                             : provider.serviceManProfile?.galleryImages?.length,
                     scrollDirection: Axis.horizontal,
@@ -277,17 +280,17 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                           provider.serviceManProfile?.galleryImages;
                       return InkWell(
                         onTap: () {
-                          galleryImages!.isEmpty
+                          (galleryImages?.isEmpty ?? true)
                               ? showAnimatedSnackBar(context, str.sv_no_images)
                               : showDialog(
                                   context: context,
                                   builder: (context) => PopupImage(
-                                      image: galleryImages[index].galleryImage),
+                                      image: galleryImages?[index].galleryImage),
                                   barrierDismissible: true);
                         },
                         onLongPress: () {
                           final imageId = galleryImages?[index].id;
-                          galleryImages!.isEmpty
+                           (galleryImages?.isEmpty ?? true)
                               ? showAnimatedSnackBar(context, str.sv_no_images)
                               : showDialog(
                                   context: context,

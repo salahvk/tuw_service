@@ -212,127 +212,146 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
               SizedBox(
                 height: size.height * .03,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: subscription?.length ?? 0,
-                itemBuilder: (context, index) {
-                  print(subscription?[index].toJson());
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: ColorManager.whiteColor,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 10.0,
-                            color: Colors.grey.shade300,
-                            offset: const Offset(5, 8.5),
-                          ),
-                        ],
+              subscription?.length == 0
+                  ? Center(
+                      child: Text(
+                        "No Subscription Available",
+                        style: getRegularStyle(
+                            color: ColorManager.grayLight, fontSize: 16),
                       ),
-                      height: size.height * .21,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(25, 20, 20, 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  subscription?[index].packageName ?? '',
-                                  style: getMediumtStyle(
-                                      color: ColorManager.primary,
-                                      fontSize: 16),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: subscription?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        print(subscription?[index].toJson());
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorManager.whiteColor,
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.grey.shade300,
+                                  offset: const Offset(5, 8.5),
                                 ),
-                                // const SizedBox(height: 5),
-                                Text(
-                                  "${subscription?[index].amount} ${str.paid} |${subscription?[index].validity}",
-                                  style: getMediumtStyle(
-                                      color: ColorManager.paymentPageColor1,
-                                      fontSize: 12),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      str.msb_pur,
-                                      style: getMediumtStyle(
-                                          color: ColorManager.paymentPageColor1,
-                                          fontSize: 12),
-                                    ),
-                                    Text(
-                                      " ${subscription?[index].subscriptionDate}",
-                                      style: getMediumtStyle(
-                                          color: ColorManager.paymentPageColor1,
-                                          fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      str.msb_exp,
-                                      style: getMediumtStyle(
-                                          color: ColorManager.paymentPageColor1,
-                                          fontSize: 12),
-                                    ),
-                                    Text(
-                                      " ${subscription?[index].expiryDate}",
-                                      style: getMediumtStyle(
-                                          color: ColorManager.paymentPageColor1,
-                                          fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (ctx) {
-                                      return RenewServicePage(
-                                        serviceId:
-                                            subscription?[index].serviceId,
-                                      );
-                                    }));
-                                  },
-                                  child: Container(
-                                    width: 80,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                        color: ColorManager.primary,
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Center(
-                                      child: Text(
-                                        str.msb_renew,
-                                        style: getRegularStyle(
-                                            color: ColorManager.whiteColor,
-                                            fontSize: 10),
-                                      ),
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
-                            SizedBox(
-                              width: size.width * .2,
-                              child: SvgPicture.network(
-                                height: size.height * .1,
-                                '$endPoint${subscription?[index].serviceImage}',
-                                color: ColorManager.primary,
+                            height: size.height * .21,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 20, 20, 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        subscription?[index].packageName ?? '',
+                                        style: getMediumtStyle(
+                                            color: ColorManager.primary,
+                                            fontSize: 16),
+                                      ),
+                                      // const SizedBox(height: 5),
+                                      Text(
+                                        "${subscription?[index].amount} ${str.paid} |${subscription?[index].validity}",
+                                        style: getMediumtStyle(
+                                            color:
+                                                ColorManager.paymentPageColor1,
+                                            fontSize: 12),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            str.msb_pur,
+                                            style: getMediumtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: 12),
+                                          ),
+                                          Text(
+                                            " ${subscription?[index].subscriptionDate}",
+                                            style: getMediumtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            str.msb_exp,
+                                            style: getMediumtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: 12),
+                                          ),
+                                          Text(
+                                            " ${subscription?[index].expiryDate}",
+                                            style: getMediumtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (ctx) {
+                                            return RenewServicePage(
+                                              serviceId: subscription?[index]
+                                                  .serviceId,
+                                            );
+                                          }));
+                                        },
+                                        child: Container(
+                                          width: 80,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                              color: ColorManager.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Center(
+                                            child: Text(
+                                              str.msb_renew,
+                                              style: getRegularStyle(
+                                                  color:
+                                                      ColorManager.whiteColor,
+                                                  fontSize: 10),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: size.width * .2,
+                                    child: SvgPicture.network(
+                                      height: size.height * .1,
+                                      '$endPoint${subscription?[index].serviceImage}',
+                                      color: ColorManager.primary,
+                                    ),
+                                  ),
+                                  // const SizedBox(
+                                  //   width: 10,
+                                  // )
+                                ],
                               ),
                             ),
-                            // const SizedBox(
-                            //   width: 10,
-                            // )
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ],
           ),
         ),

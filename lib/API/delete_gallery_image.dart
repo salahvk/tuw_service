@@ -26,6 +26,6 @@ deleteGalleryImage(BuildContext context, id) async {
 
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+    
   }
 }

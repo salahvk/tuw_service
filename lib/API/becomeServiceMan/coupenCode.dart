@@ -58,6 +58,6 @@ checkCoupenCode(BuildContext context, code) async {
       provider.coupenCodeData(coupenCodeData);
     } else {}
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+
   }
 }

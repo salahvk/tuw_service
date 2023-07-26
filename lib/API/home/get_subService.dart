@@ -50,7 +50,7 @@ getSubService(BuildContext context, id, bool changeLan) async {
       // print('Something went wrong');
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+  
   }
 }
 
