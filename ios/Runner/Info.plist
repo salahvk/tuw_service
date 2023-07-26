@@ -41,7 +41,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when the user wants to share their location to other users and to find there distance inbetween the user and serviceman.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>For users to record and send their voice</string>
+	<string>Microphone use to record your voice and sent to other users by your own voice. We will not share this recorded voices to any other third party tools.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
