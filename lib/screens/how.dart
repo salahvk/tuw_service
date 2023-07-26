@@ -98,20 +98,20 @@ class HowToWorkPageState extends State<HowToWorkPage> {
       pages: [
         PageViewModel(
           titleWidget: Text(
-            str.hw_mc_1,
+            str.how1,
             style:
                 getSemiBoldtStyle(color: ColorManager.grayDark, fontSize: 20),
           ),
           bodyWidget: Text(
-            "Instead of having to buy an entire share, invest any amount you want.",
+            str.how1s,
             style: getRegularStyle(
                 color: ColorManager.serviceHomeGrey, fontSize: 14),
           ),
           image: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: Container(
               // width: 250,
-              child: Text(str.hw_title2,
+              child: Text(str.how,
                   softWrap: true,
                   style:
                       getBoldtStyle(color: ColorManager.black, fontSize: 20)),
@@ -121,26 +121,26 @@ class HowToWorkPageState extends State<HowToWorkPage> {
         ),
         PageViewModel(
           titleWidget: Text(
-            str.hw_mc_2,
+            str.how2,
             style:
                 getSemiBoldtStyle(color: ColorManager.grayDark, fontSize: 20),
           ),
           bodyWidget: Text(
-            "Download the Stockpile app and master the market with our mini-lesson.",
+            str.how2s,
             style: getRegularStyle(
                 color: ColorManager.serviceHomeGrey, fontSize: 14),
           ),
-          image: _buildImage('1201.png'),
+          image: Text(''),
           decoration: pageDecoration,
         ),
         PageViewModel(
           titleWidget: Text(
-            str.hw_mc_3,
+            str.how3,
             style:
                 getSemiBoldtStyle(color: ColorManager.grayDark, fontSize: 20),
           ),
           bodyWidget: Text(
-            "Kids and teens can track their stocks 24/7 and place trades that you approve.",
+            str.how3s,
             style: getRegularStyle(
                 color: ColorManager.serviceHomeGrey, fontSize: 14),
           ),
@@ -149,12 +149,12 @@ class HowToWorkPageState extends State<HowToWorkPage> {
         ),
         PageViewModel(
             titleWidget: Text(
-              str.hw_mc_4,
+              str.how4,
               style:
                   getSemiBoldtStyle(color: ColorManager.grayDark, fontSize: 20),
             ),
             bodyWidget: Text(
-              "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+              str.how4s,
               style: getRegularStyle(
                   color: ColorManager.serviceHomeGrey, fontSize: 14),
             ),
@@ -162,12 +162,12 @@ class HowToWorkPageState extends State<HowToWorkPage> {
             decoration: pageDecoration),
         PageViewModel(
             titleWidget: Text(
-              str.hw_mc_5,
+              str.how5,
               style:
                   getSemiBoldtStyle(color: ColorManager.grayDark, fontSize: 20),
             ),
             bodyWidget: Text(
-              "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+              str.how5s,
               style: getRegularStyle(
                   color: ColorManager.serviceHomeGrey, fontSize: 14),
             ),
@@ -218,12 +218,12 @@ class HowToWorkPageState extends State<HowToWorkPage> {
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
       ),
-      // dotsContainerDecorator: const ShapeDecoration(
-      //   color: Colors.black87,
-      //   shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      //   ),
-      // ),
+      dotsContainerDecorator: const ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+      ),
     );
   }
 }
