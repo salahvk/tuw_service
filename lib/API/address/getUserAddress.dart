@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_print
- 
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -11,7 +11,6 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/model/other%20User/show_user_address.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 
 getUserAddress(BuildContext context) async {
   print('getting user address');
@@ -44,9 +43,7 @@ getUserAddress(BuildContext context) async {
       // print(response.body);
       print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }
 
 showUserAddress(BuildContext context, String id) async {
@@ -72,7 +69,5 @@ showUserAddress(BuildContext context, String id) async {
     } else {
       print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }

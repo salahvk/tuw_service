@@ -846,11 +846,8 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
         }
         // final childData = ChildServiceModel.fromJson(jsonResponse);
         // provider.childModelData(childData);
-      } else {
-        log("Something Went Wrong1");
-      }
+      } else {}
     } on Exception catch (e) {
-      log("Something Went Wrong1");
       print(e);
     }
   }

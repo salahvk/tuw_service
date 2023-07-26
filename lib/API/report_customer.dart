@@ -53,7 +53,5 @@ reportCustomerFun(BuildContext context) async {
       // print(response.body);
       // print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }

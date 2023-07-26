@@ -112,7 +112,6 @@ sendLocation(context, String latLon) async {
       showAnimatedSnackBar(context, str.snack_message_sent);
     }
   } on Exception catch (e) {
-    log("Something Went Wrong1");
     showAnimatedSnackBar(context, str.snack_message_sent);
     print(e);
   }

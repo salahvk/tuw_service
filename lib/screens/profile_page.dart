@@ -291,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
+            provider.viewProfileModel?.userdetails?.userType == 'serviceman'
                 ? Container()
                 : InkWell(
                     onTap: () {
@@ -305,7 +305,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
+            provider.viewProfileModel?.userdetails?.userType == 'serviceman'
                 ? Container()
                 : InkWell(
                     onTap: () {
@@ -322,7 +322,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
+            provider.viewProfileModel?.userdetails?.userType == 'serviceman'
                 ? Container()
                 : InkWell(
                     onTap: () {
@@ -345,8 +345,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   navigateToServiceManProfile() {
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-      return ServiceManProfileViewPage();
-    }));
+    Navigator.push(context, FadePageRoute(page: ServiceManProfileViewPage()));
   }
 }

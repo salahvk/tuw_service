@@ -46,9 +46,7 @@ getServiceMan(BuildContext context, id) async {
       // print(response.body);
       // print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }
 
 searchServiceMan(
@@ -73,17 +71,15 @@ searchServiceMan(
       final serviceManListData = ServiceManListModel.fromJson(jsonResponse);
 
       provider.getServiceManData(serviceManListData);
-      if (provider.serviceManListModel?.serviceman?.isEmpty ?? false) {
-        showAnimatedSnackBar(context, "No ServiceMan Available");
-      }
+      // if (provider.serviceManListModel?.serviceman?.isEmpty ?? false) {
+      //   showAnimatedSnackBar(context, "No ServiceMan Available");
+      // }
     } else {
       // print(response.statusCode);
       // print(response.body);
       // print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }
 
 navToServiceMan(context, id) {

@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/sub_service.dart';
 import 'package:social_media_services/utils/get_location.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 getSubService(BuildContext context, id, bool changeLan) async {
@@ -49,9 +47,7 @@ getSubService(BuildContext context, id, bool changeLan) async {
       // print(response.body);
       // print('Something went wrong');
     }
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }
 
 selectServiceType(context, id) async {

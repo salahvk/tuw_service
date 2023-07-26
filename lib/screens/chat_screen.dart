@@ -1121,7 +1121,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final str = AppLocalizations.of(context)!;
     final length = imageFile.length;
     final datetime = DateTime.now();
-    log("audio senting.................................");
     ChatData waitingMessage = ChatData(
         message: msgController.text,
         type: 'audio',

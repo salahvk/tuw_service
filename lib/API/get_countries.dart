@@ -16,7 +16,6 @@ getCountriesData(BuildContext context) async {
         headers: {"device-id": provider.deviceId ?? ''});
     // print(response.body);
     if (response.statusCode != 200) {
-      showAnimatedSnackBar(context, "Something Went Wrong3");
       return;
     }
 

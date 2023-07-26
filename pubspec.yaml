@@ -90,6 +90,7 @@ dependencies:
   # amazon_payfort: ^0.0.8
   network_info_plus: ^3.0.1
   thawani_payment: ^0.0.6
+  introduction_screen: ^3.1.8
   # flutter_sound: ^9.2.13
 
 

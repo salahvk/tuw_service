@@ -237,10 +237,10 @@
 //   //       // final childData = ChildServiceModel.fromJson(jsonResponse);
 //   //       // provider.childModelData(childData);
 //   //     } else {
-//   //       log("Something Went Wrong1");
+
 //   //     }
 //   //   } on Exception catch (e) {
-//   //     log("Something Went Wrong1");
+
 //   //     print(e);
 //   //   }
 //   // }

@@ -57,7 +57,5 @@ checkCoupenCode(BuildContext context, code) async {
       final coupenCodeData = GetCoupenModel.fromJson(jsonResponse);
       provider.coupenCodeData(coupenCodeData);
     } else {}
-  } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
-  }
+  } on Exception catch (_) {}
 }
