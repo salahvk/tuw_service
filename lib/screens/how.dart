@@ -130,7 +130,7 @@ class HowToWorkPageState extends State<HowToWorkPage> {
             style: getRegularStyle(
                 color: ColorManager.serviceHomeGrey, fontSize: 14),
           ),
-          image: Text(''),
+          image: _buildImage('1201.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
@@ -144,7 +144,7 @@ class HowToWorkPageState extends State<HowToWorkPage> {
             style: getRegularStyle(
                 color: ColorManager.serviceHomeGrey, fontSize: 14),
           ),
-          image: _buildImage('1201.png'),
+             image: _buildImage('Service-App2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
@@ -158,7 +158,7 @@ class HowToWorkPageState extends State<HowToWorkPage> {
               style: getRegularStyle(
                   color: ColorManager.serviceHomeGrey, fontSize: 14),
             ),
-            image: _buildImage('1201.png'),
+          image: _buildImage('Service-App2.jpg'),
             decoration: pageDecoration),
         PageViewModel(
             titleWidget: Text(
@@ -171,7 +171,7 @@ class HowToWorkPageState extends State<HowToWorkPage> {
               style: getRegularStyle(
                   color: ColorManager.serviceHomeGrey, fontSize: 14),
             ),
-            image: _buildImage('1201.png'),
+                  image: _buildImage('Service-App1.jpg'),
             // reverse: true,
             decoration: pageDecoration),
         // PageViewModel(
