@@ -11,7 +11,8 @@ import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/utils/getLocalLanguage.dart';
-import 'package:social_media_services/widgets/backbutton.dart';
+import 'package:social_media_services/widgets/back_button.dart';
+
 import 'package:social_media_services/widgets/language_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

@@ -7,6 +7,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/utils/getLocalLanguage.dart';
+import 'package:social_media_services/widgets/back_button.dart';
 
 class HowToWorkPage extends StatefulWidget {
   const HowToWorkPage({Key? key}) : super(key: key);

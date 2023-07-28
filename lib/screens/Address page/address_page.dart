@@ -30,6 +30,7 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/widgets/AddressBox/addressPage_box.dart';
+import 'package:social_media_services/widgets/back_button.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -185,252 +186,214 @@ class _AddressPageState extends State<AddressPage> {
             : SafeArea(
                 child: SingleChildScrollView(
                   child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ProfileImage(
-                            isNavigationActive: false,
-                            iconSize: 12,
-                            profileSize: 40.5,
-                            iconRadius: 12,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    child: Stack(
+                      children: [
+                        BackButton2(),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                firstName ?? '',
-                                style: getBoldtStyle(
-                                    color: ColorManager.black, fontSize: 13),
+                              ProfileImage(
+                                isNavigationActive: false,
+                                iconSize: 12,
+                                profileSize: 40.5,
+                                iconRadius: 12,
                               ),
                               const SizedBox(
-                                width: 2,
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    firstName ?? '',
+                                    style: getBoldtStyle(
+                                        color: ColorManager.black, fontSize: 13),
+                                  ),
+                                  const SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    provider.viewProfileModel?.userdetails
+                                            ?.lastname ??
+                                        '',
+                                    style: getBoldtStyle(
+                                        color: ColorManager.black, fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              // Text(
+                              //   "mail@gmail.com",
+                              //   style: getRegularStyle(
+                              //       color: ColorManager.grayLight, fontSize: 13),
+                              // ),
+                              const SizedBox(
+                                height: 2,
                               ),
                               Text(
-                                provider.viewProfileModel?.userdetails
-                                        ?.lastname ??
-                                    '',
-                                style: getBoldtStyle(
-                                    color: ColorManager.black, fontSize: 13),
+                                provider.viewProfileModel?.userdetails?.phone ?? '',
+                                style: getRegularStyle(
+                                    color: ColorManager.grayLight, fontSize: 13),
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          // Text(
-                          //   "mail@gmail.com",
-                          //   style: getRegularStyle(
-                          //       color: ColorManager.grayLight, fontSize: 13),
-                          // ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            provider.viewProfileModel?.userdetails?.phone ?? '',
-                            style: getRegularStyle(
-                                color: ColorManager.grayLight, fontSize: 13),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                            child: Stack(
-                              children: [
-                                ClipRRect(
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(5),
+                                      child: SizedBox(
+                                        height: 100,
+                                        width: size.width,
+                                        child: isLoading
+                                            ? Container(
+                                                height: 20,
+                                                color: ColorManager.whiteColor,
+                                                child: const Center(
+                                                    child:
+                                                        CircularProgressIndicator()))
+                                            : CoverImageWidget(
+                                                userDetails: userDetails),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 5,
+                                      top: 5,
+                                      child: InkWell(
+                                        onTap: () {
+                                          selectImage();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.shade300,
+                                                spreadRadius: 1,
+                                                blurRadius: 3,
+                                                // offset: const Offset(2, 2.5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: const CircleAvatar(
+                                            radius: 16,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 14,
+                                              color: ColorManager.primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 40,
+                                width: size.width,
+                                decoration: BoxDecoration(
+                                    color: ColorManager.whiteColor,
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      userDetails?.homeLocation != null
+                                          ? Text(
+                                              userDetails?.homeLocation ?? '',
+                                              style: getRegularStyle(
+                                                  color: ColorManager.black,
+                                                  fontSize: userDetails!
+                                                              .homeLocation!
+                                                              .length >
+                                                          20
+                                                      ? 10
+                                                      : 12),
+                                            )
+                                          : Container(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: ColorManager.primary,
+                                            borderRadius: BorderRadius.circular(5)),
+
+                                        // width: 30,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            // Navigator.push(context,
+                                            //     MaterialPageRoute(builder: (ctx) {
+                                            //   return CustomizeMarkerExample();
+                                            // }));
+
+                                            final s =
+                                                await getCurrentLocationPermission(
+                                                    context);
+                                            print(s);
+
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (ctx) {
+                                              return GoogleMapScreen(
+                                                  lat: s[0].toString(),
+                                                  lot: s[1].toString());
+                                            }));
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                5, 2, 5, 5),
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.location_on,
+                                                  color: ColorManager.whiteColor,
+                                                ),
+                                                Text(
+                                                  str.a_home_locator,
+                                                  style: getRegularStyle(
+                                                      color:
+                                                          ColorManager.whiteColor),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 0, 14),
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
                                   child: SizedBox(
                                     height: 100,
                                     width: size.width,
-                                    child: isLoading
-                                        ? Container(
-                                            height: 20,
-                                            color: ColorManager.whiteColor,
-                                            child: const Center(
-                                                child:
-                                                    CircularProgressIndicator()))
-                                        : CoverImageWidget(
-                                            userDetails: userDetails),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 5,
-                                  top: 5,
-                                  child: InkWell(
-                                    onTap: () {
-                                      selectImage();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.shade300,
-                                            spreadRadius: 1,
-                                            blurRadius: 3,
-                                            // offset: const Offset(2, 2.5),
+                                    child: GoogleMap(
+                                      myLocationEnabled: true,
+                                      initialCameraPosition: CameraPosition(
+                                        target: currentLocator,
+                                        zoom: 4.0,
+                                      ),
+                                      markers: <Marker>{
+                                        Marker(
+                                          markerId:
+                                              const MarkerId('test_marker_id'),
+                                          position: currentLocator,
+                                          infoWindow: InfoWindow(
+                                            title: str.a_home_locator,
+                                            snippet: '*',
                                           ),
-                                        ],
-                                      ),
-                                      child: const CircleAvatar(
-                                        radius: 16,
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.edit,
-                                          size: 14,
-                                          color: ColorManager.primary,
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: 40,
-                            width: size.width,
-                            decoration: BoxDecoration(
-                                color: ColorManager.whiteColor,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  userDetails?.homeLocation != null
-                                      ? Text(
-                                          userDetails?.homeLocation ?? '',
-                                          style: getRegularStyle(
-                                              color: ColorManager.black,
-                                              fontSize: userDetails!
-                                                          .homeLocation!
-                                                          .length >
-                                                      20
-                                                  ? 10
-                                                  : 12),
-                                        )
-                                      : Container(),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: ColorManager.primary,
-                                        borderRadius: BorderRadius.circular(5)),
-
-                                    // width: 30,
-                                    child: InkWell(
-                                      onTap: () async {
-                                        // Navigator.push(context,
-                                        //     MaterialPageRoute(builder: (ctx) {
-                                        //   return CustomizeMarkerExample();
-                                        // }));
-
-                                        final s =
-                                            await getCurrentLocationPermission(
-                                                context);
-                                        print(s);
-
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (ctx) {
-                                          return GoogleMapScreen(
-                                              lat: s[0].toString(),
-                                              lot: s[1].toString());
-                                        }));
                                       },
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            5, 2, 5, 5),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.location_on,
-                                              color: ColorManager.whiteColor,
-                                            ),
-                                            Text(
-                                              str.a_home_locator,
-                                              style: getRegularStyle(
-                                                  color:
-                                                      ColorManager.whiteColor),
-                                            )
-                                          ],
-                                        ),
-                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 14),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: SizedBox(
-                                height: 100,
-                                width: size.width,
-                                child: GoogleMap(
-                                  myLocationEnabled: true,
-                                  initialCameraPosition: CameraPosition(
-                                    target: currentLocator,
-                                    zoom: 4.0,
                                   ),
-                                  markers: <Marker>{
-                                    Marker(
-                                      markerId:
-                                          const MarkerId('test_marker_id'),
-                                      position: currentLocator,
-                                      infoWindow: InfoWindow(
-                                        title: str.a_home_locator,
-                                        snippet: '*',
-                                      ),
-                                    ),
-                                  },
                                 ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: ColorManager.primary,
-                                borderRadius: BorderRadius.circular(5)),
-
-                            // width: 30,
-                            child: InkWell(
-                              onTap: () async {
-                                _openGoogleMaps(currentLocator.latitude,
-                                    currentLocator.latitude);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.location_on,
-                                      color: ColorManager.whiteColor,
-                                    ),
-                                    Text(
-                                      "Open Google Map",
-                                      style: getRegularStyle(
-                                          color: ColorManager.whiteColor),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                str.a_address,
-                                style: getBoldtStyle(
-                                    color: ColorManager.black, fontSize: 14),
                               ),
                               Container(
                                 decoration: BoxDecoration(
@@ -440,91 +403,134 @@ class _AddressPageState extends State<AddressPage> {
                                 // width: 30,
                                 child: InkWell(
                                   onTap: () async {
-                                    setState(() {
-                                      isLocFetching = true;
-                                    });
-                                    final s =
-                                        await getCurrentLocationPermission(
-                                            context);
-                                    print(s);
-                                    log("__________");
-                                    // Navigator.push(context,
-                                    //     MaterialPageRoute(builder: (ctx) {
-                                    //   return CustomizeMarkerExample();
-                                    // }));
-                                    // await Future.delayed(
-                                    //     Duration(seconds: 500));
-                                    setState(() {
-                                      isLocFetching = false;
-                                    });
-                                    // Navigator.push(context,
-                                    //     MaterialPageRoute(builder: (ctx) {
-                                    //   return AddressLocatorScreen(
-                                    //       lat: s[0].toString(),
-                                    //       lot: s[1].toString());
-                                    // }));
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (ctx) {
-                                      return UserAddressEdit(
-                                          lat: s[0].toString(),
-                                          lot: s[1].toString());
-                                    }));
+                                    _openGoogleMaps(currentLocator.latitude,
+                                        currentLocator.latitude);
                                   },
                                   child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                    child: isLocFetching
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Container(
-                                                width: 20,
-                                                height: 20,
-                                                child:
-                                                    CircularProgressIndicator()),
-                                          )
-                                        : Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.location_on,
-                                                color: ColorManager.whiteColor,
-                                              ),
-                                              Text(
-                                                str.a_add,
-                                                style: getRegularStyle(
-                                                    color: ColorManager
-                                                        .whiteColor),
-                                              )
-                                            ],
-                                          ),
+                                    padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.location_on,
+                                          color: ColorManager.whiteColor,
+                                        ),
+                                        Text(
+                                          "Open Google Map",
+                                          style: getRegularStyle(
+                                              color: ColorManager.whiteColor),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    str.a_address,
+                                    style: getBoldtStyle(
+                                        color: ColorManager.black, fontSize: 14),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: ColorManager.primary,
+                                        borderRadius: BorderRadius.circular(5)),
+
+                                    // width: 30,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          isLocFetching = true;
+                                        });
+                                        final s =
+                                            await getCurrentLocationPermission(
+                                                context);
+                                        print(s);
+                                        log("__________");
+                                        // Navigator.push(context,
+                                        //     MaterialPageRoute(builder: (ctx) {
+                                        //   return CustomizeMarkerExample();
+                                        // }));
+                                        // await Future.delayed(
+                                        //     Duration(seconds: 500));
+                                        setState(() {
+                                          isLocFetching = false;
+                                        });
+                                        // Navigator.push(context,
+                                        //     MaterialPageRoute(builder: (ctx) {
+                                        //   return AddressLocatorScreen(
+                                        //       lat: s[0].toString(),
+                                        //       lot: s[1].toString());
+                                        // }));
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return UserAddressEdit(
+                                              lat: s[0].toString(),
+                                              lot: s[1].toString());
+                                        }));
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                        child: isLocFetching
+                                            ? Padding(
+                                                padding: const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                              )
+                                            : Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on,
+                                                    color: ColorManager.whiteColor,
+                                                  ),
+                                                  Text(
+                                                    str.a_add,
+                                                    style: getRegularStyle(
+                                                        color: ColorManager
+                                                            .whiteColor),
+                                                  )
+                                                ],
+                                              ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      str.a_home,
+                                      style: getRegularStyle(
+                                          color: ColorManager.grayLight),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return AddressBox(
+                                    userAddress: userAddress?[index],
+                                  );
+                                },
+                                itemCount: userAddress?.length ?? 0,
                               )
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                            child: Row(
-                              children: [
-                                Text(
-                                  str.a_home,
-                                  style: getRegularStyle(
-                                      color: ColorManager.grayLight),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return AddressBox(
-                                userAddress: userAddress?[index],
-                              );
-                            },
-                            itemCount: userAddress?.length ?? 0,
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
