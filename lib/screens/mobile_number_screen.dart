@@ -77,6 +77,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           // reverse: true,
           child: Stack(
             children: [
+                       BackButton2()
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

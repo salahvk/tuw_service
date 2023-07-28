@@ -263,6 +263,7 @@ class _ServicerPageState extends State<ServicerPage> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
+                             BackButton2(),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [

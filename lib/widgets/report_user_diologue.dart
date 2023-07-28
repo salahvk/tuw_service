@@ -33,7 +33,7 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: SizedBox(
-          height: size.height * .5,
+          height: size.height * .7,
           width: size.width * .9,
           child: Stack(
             children: [
@@ -89,8 +89,8 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
                                       width: .7),
                                   borderRadius: BorderRadius.circular(5)),
                               child: TextField(
-                                  minLines: 1,
-                                  maxLines: 3,
+                                  minLines: 4,
+                                  maxLines: 8,
                                   controller: ReportCustomerControllers
                                       .reasonController,
                                   style: const TextStyle(),
@@ -117,8 +117,8 @@ class _ReportUserDiologueState extends State<ReportUserDiologue> {
                                       width: .7),
                                   borderRadius: BorderRadius.circular(5)),
                               child: TextField(
-                                  minLines: 1,
-                                  maxLines: 2,
+                                 minLines: 4,
+                                  maxLines: 8,
                                   controller: ReportCustomerControllers
                                       .commentController,
                                   style: const TextStyle(),
