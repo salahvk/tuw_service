@@ -6,11 +6,11 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/screens/serviceman/servicer.dart';
-import 'package:social_media_services/utils/animatedSnackBar.dart';
 
 getServiceMan(BuildContext context, id) async {
   //  final otpProvider = Provider.of<OTPProvider>(context, listen: false);
@@ -37,9 +37,9 @@ getServiceMan(BuildContext context, id) async {
 
       final serviceManListData = ServiceManListModel.fromJson(jsonResponse);
       provider.getServiceManData(serviceManListData);
-      if (provider.serviceManListModel?.serviceman?.isEmpty ?? false) {
-        showAnimatedSnackBar(context, "No ServiceMan Available");
-      }
+      // if (provider.serviceManListModel?.serviceman?.isEmpty ?? false) {
+      //   showAnimatedSnackBar(context, "No ServiceMan Available");
+      // }
     } else {
       // print(response.statusCode);
       // print(response.body);
@@ -82,9 +82,10 @@ searchServiceMan(
 }
 
 navToServiceMan(context, id) {
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-    return ServicerPage(
-      id: id,
-    );
-  }));
+  Navigator.pushReplacement(
+      context,
+      FadePageRoute(
+          page: ServicerPage(
+        id: id,
+      )));
 }

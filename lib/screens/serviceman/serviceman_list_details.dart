@@ -25,6 +25,7 @@ import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/report_user_diologue.dart';
+import 'package:social_media_services/widgets/scrollable_pop.dart';
 
 class ServiceManDetails extends StatefulWidget {
   GlobalKey<ScaffoldState>? scaffoldKey;
@@ -310,9 +311,16 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                                       context, str.sv_no_images)
                                   : showDialog(
                                       context: context,
-                                      builder: (context) => PopupImage(
-                                          image: galleryImages[index]
-                                              .galleryImage),
+                                      builder: (context) {
+                                        List<String> images = [];
+                                        for (var image in galleryImages) {
+                                          images.add(
+                                              "$endPoint${image.galleryImage}");
+                                        }
+
+                                        return ScrollableDialogBox(
+                                            images: images);
+                                      },
                                       barrierDismissible: true);
                             },
                             child: Padding(

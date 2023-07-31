@@ -25,6 +25,7 @@ class ServiceHomePage extends StatefulWidget {
 
 class _ServiceHomePageState extends State<ServiceHomePage> {
   int _backButtonPressCount = 0;
+  int selectedCarouselIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -138,28 +139,66 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                       ),
                       SizedBox(
                         height: mob ? 150 : 110,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Container(
-                                  width: w * .92,
-                                  color: ColorManager.whiteColor,
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "$endPoint${provider.homeModel?.homebanner?[index].image}",
-                                    width: w,
-                                    fit: BoxFit.contain,
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            PageView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Container(
+                                      width: w * .92,
+                                      color: ColorManager.whiteColor,
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            "$endPoint${provider.homeModel?.homebanner?[index].image}",
+                                        width: w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                );
+                              },
+                              itemCount:
+                                  provider.homeModel?.homebanner?.length ?? 0,
+                              onPageChanged: (index) {
+                                setState(() {
+                                  selectedCarouselIndex = index;
+                                });
+                              },
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  right: 16,
+                                  bottom: 8), // Adjust the margin as needed
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  for (int i = 0;
+                                      i <
+                                          (provider.homeModel?.homebanner
+                                                  ?.length ??
+                                              0);
+                                      i++)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: CircleAvatar(
+                                        radius: 5,
+                                        backgroundColor:
+                                            i == selectedCarouselIndex
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                      ),
+                                    ),
+                                ],
                               ),
-                            );
-                          },
-                          itemCount:
-                              provider.homeModel?.homebanner?.length ?? 0,
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
