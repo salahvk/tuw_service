@@ -171,7 +171,7 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
                     ),
                   ),
                 ),
-              ))
+              )),
         ],
       ),
       body: SafeArea(
@@ -181,6 +181,7 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // BackButton2(),
                 FadeCustomAnimation(
                   child: Stack(
                     children: [

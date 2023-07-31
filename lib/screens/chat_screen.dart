@@ -202,28 +202,49 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.topToBottom,
-                      child: ServiceManDetails(
-                        serviceman: widget.serviceman,
-                      )));
-            },
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 0, 2),
-              child: CircleAvatar(
-                radius: 16,
-                backgroundImage: provider
-                            .serviceManDetails?.userData?.profileImage ==
-                        null
-                    ? const AssetImage('assets/user.png') as ImageProvider
-                    : CachedNetworkImageProvider(
-                        '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
+          leading: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.arrow_back_ios_new,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.topToBottom,
+                          child: ServiceManDetails(
+                            serviceman: widget.serviceman,
+                          )));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 0, 0, 2),
+                  child: CircleAvatar(
+                    radius: 26,
+                    backgroundImage: provider
+                                .serviceManDetails?.userData?.profileImage ==
+                            null
+                        ? const AssetImage('assets/user.png') as ImageProvider
+                        : CachedNetworkImageProvider(
+                            '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
+                  ),
+                ),
+              ),
+            ],
           ),
           title: InkWell(
             onTap: () {

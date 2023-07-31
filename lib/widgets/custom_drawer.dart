@@ -59,11 +59,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: str.d_my_profile,
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                    builder: (context) {
-                      return const ProfilePage();
-                    },
-                  ), (route) => false);
+                  // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                  //   builder: (context) {
+                  //     return const ProfilePage();
+                  //   },
+                  // ), (route) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                    return const ProfilePage();
+                  }));
                 }),
             CustomDrawerList(
               title: str.d_address,
@@ -158,10 +161,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   becomeService() {
     Navigator.pop(context);
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-      builder: (context) {
-        return ProfileServicePage();
-      },
-    ), (route) => false);
+    // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+    //   builder: (context) {
+    //     return ProfileServicePage();
+    //   },
+    // ), (route) => false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return ProfileServicePage();
+        },
+      ),
+    );
   }
 }
