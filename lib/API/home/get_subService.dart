@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/home/get_service_man.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/sub_service.dart';
@@ -17,11 +18,11 @@ import 'package:social_media_services/utils/get_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 getSubService(BuildContext context, id, bool changeLan) async {
+  print('1');
   final provider = Provider.of<DataProvider>(context, listen: false);
-  provider.subServicesModel = null;
+  // provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   final String lanId = Hive.box("LocalLan").get('lang_id');
-  print(lanId);
 
   if (apiToken == null) return;
   try {
@@ -37,10 +38,10 @@ getSubService(BuildContext context, id, bool changeLan) async {
         return;
       }
 
-      final subServicesData = SubServicesModel.fromJson(jsonResponse);
-      provider.subServicesModelData(subServicesData);
+      print(jsonResponse['type']);
+
       if (changeLan != true) {
-        selectServiceType(context, id);
+        selectServiceType(context, id, jsonResponse);
       }
     } else {
       // print(response.statusCode);
@@ -50,14 +51,14 @@ getSubService(BuildContext context, id, bool changeLan) async {
   } on Exception catch (_) {}
 }
 
-selectServiceType(context, id) async {
+selectServiceType(context, id, jsonResponse) async {
   print(id);
   final provider = Provider.of<DataProvider>(context, listen: false);
   final str = AppLocalizations.of(context)!;
-  if (provider.subServicesModel?.type == 'service') {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-      return const SubServicesPage();
-    }));
+  if (jsonResponse['type'] == 'service') {
+    final subServicesData = SubServicesModel.fromJson(jsonResponse);
+    provider.subServicesModelData(subServicesData);
+    Navigator.pushReplacement(context, FadePageRoute(page: SubServicesPage()));
   } else if (provider.viewProfileModel?.userdetails?.latitude == null) {
     requestLocationPermission(
       context,
