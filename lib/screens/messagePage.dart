@@ -3,11 +3,15 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_chat_list.dart';
+import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/loading%20screens/chat_loading_screen.dart';
@@ -95,6 +99,89 @@ class _MessagePageState extends State<MessagePage> {
                   : w * .75,
           child: const CustomDrawer(),
         ),
+        bottomNavigationBar: widget.isHome
+            ? null
+            : Stack(
+                children: [
+                  Container(
+                    height: 45,
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        blurRadius: 5.0,
+                        color: Colors.grey.shade400,
+                        offset: const Offset(6, 1),
+                      ),
+                    ]),
+                  ),
+                  SizedBox(
+                    height: 44,
+                    child: GNav(
+                      tabMargin: const EdgeInsets.symmetric(
+                        vertical: 0,
+                      ),
+                      gap: 0,
+                      backgroundColor: ColorManager.whiteColor,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      activeColor: ColorManager.grayDark,
+                      iconSize: 24,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
+                      duration: const Duration(milliseconds: 400),
+                      tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
+                      color: ColorManager.black,
+                      tabs: [
+                        GButton(
+                          icon: FontAwesomeIcons.message,
+                          leading: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: SvgPicture.asset(ImageAssets.homeIconSvg),
+                          ),
+                        ),
+                        GButton(
+                          icon: FontAwesomeIcons.message,
+                          leading: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: SvgPicture.asset(ImageAssets.chatIconSvg),
+                          ),
+                        ),
+                      ],
+                      haptic: true,
+                      selectedIndex: _selectedIndex,
+                      onTabChange: (index) {
+                        // if (mounted) {
+                        //   Navigator.pushNamedAndRemoveUntil(
+                        //       context, Routes.homePage, (route) => false);
+                        // }
+
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                    ),
+                  ),
+                  Positioned(
+                      left: lang == 'ar' ? 5 : null,
+                      right: lang != 'ar' ? 5 : null,
+                      bottom: 0,
+                      child: Builder(
+                        builder: (context) => InkWell(
+                          onTap: () {
+                            Scaffold.of(context).openEndDrawer();
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                              Icons.menu,
+                              size: 25,
+                              color: ColorManager.black,
+                            ),
+                          ),
+                        ),
+                      ))
+                ],
+              ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
