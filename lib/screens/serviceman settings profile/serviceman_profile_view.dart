@@ -1,10 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_serviceManProfileDetails.dart';
@@ -17,9 +13,9 @@ import 'package:social_media_services/model/serviceManLIst.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
-import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/bottom_nav.dart';
 import 'package:social_media_services/utils/delete_image.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
@@ -77,102 +73,9 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
-            height: 45,
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                blurRadius: 5.0,
-                color: Colors.grey.shade400,
-                offset: const Offset(6, 1),
-              ),
-            ]),
-          ),
-          SizedBox(
-            height: 44,
-            child: GNav(
-              tabMargin: const EdgeInsets.symmetric(
-                vertical: 0,
-              ),
-              gap: 0,
-              backgroundColor: ColorManager.whiteColor,
-              mainAxisAlignment: MainAxisAlignment.center,
-              activeColor: ColorManager.grayDark,
-              iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              duration: const Duration(milliseconds: 400),
-              tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
-              color: ColorManager.black,
-              tabs: [
-                GButton(
-                  icon: FontAwesomeIcons.message,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            child: const HomePage(
-                              selectedIndex: 0,
-                            ),
-                          ));
-                    },
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: SvgPicture.asset(ImageAssets.homeIconSvg),
-                    ),
-                  ),
-                ),
-                GButton(
-                  icon: FontAwesomeIcons.message,
-                  leading: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            child: const HomePage(
-                              selectedIndex: 1,
-                            ),
-                          ));
-                    },
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: SvgPicture.asset(ImageAssets.chatIconSvg),
-                    ),
-                  ),
-                ),
-              ],
-              haptic: true,
-              selectedIndex: _selectedIndex,
-              onTabChange: (index) {},
-            ),
-          ),
-          Positioned(
-              left: lang == 'ar' ? 5 : null,
-              right: lang != 'ar' ? 5 : null,
-              bottom: 0,
-              child: Builder(
-                builder: (context) => InkWell(
-                  onTap: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.menu,
-                      size: 25,
-                      color: ColorManager.black,
-                    ),
-                  ),
-                ),
-              )),
-        ],
+      bottomNavigationBar: BottomNavigationWidget(
+        isInsidePage: true,
+        selectedIndex: 3,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

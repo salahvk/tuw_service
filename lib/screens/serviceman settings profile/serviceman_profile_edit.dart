@@ -5,9 +5,6 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +24,7 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/utils/bottom_nav.dart';
 import 'package:social_media_services/utils/delete_image.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/description_edit_widget.dart';
@@ -119,80 +117,9 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
         child: const CustomDrawer(),
       ),
       // * Custom bottom Nav
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
-            height: 45,
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                blurRadius: 5.0,
-                color: Colors.grey.shade400,
-                offset: const Offset(6, 1),
-              ),
-            ]),
-          ),
-          SizedBox(
-            height: 44,
-            child: GNav(
-              tabMargin: const EdgeInsets.symmetric(
-                vertical: 0,
-              ),
-              gap: 0,
-              backgroundColor: ColorManager.whiteColor,
-              mainAxisAlignment: MainAxisAlignment.center,
-              activeColor: ColorManager.grayDark,
-              iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              duration: const Duration(milliseconds: 400),
-              tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
-              color: ColorManager.black,
-              tabs: [
-                GButton(
-                  icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SvgPicture.asset(ImageAssets.homeIconSvg),
-                  ),
-                ),
-                GButton(
-                  icon: FontAwesomeIcons.message,
-                  leading: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SvgPicture.asset(ImageAssets.chatIconSvg),
-                  ),
-                ),
-              ],
-              haptic: true,
-              selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-            ),
-          ),
-          Positioned(
-              left: lang == 'ar' ? 5 : null,
-              right: lang != 'ar' ? 5 : null,
-              bottom: 0,
-              child: Builder(
-                builder: (context) => InkWell(
-                  onTap: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.menu,
-                      size: 25,
-                      color: ColorManager.black,
-                    ),
-                  ),
-                ),
-              ))
-        ],
+      bottomNavigationBar: BottomNavigationWidget(
+        isInsidePage: true,
+        selectedIndex: 3,
       ),
       body: _selectedIndex != 2
           ? _screens[_selectedIndex]
