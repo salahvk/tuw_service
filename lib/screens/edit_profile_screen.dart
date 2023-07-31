@@ -970,7 +970,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
         navigateToNext();
       } else {}
     } on Exception catch (_) {
-      showSnackBar("Something Went Wrong1", context);
+   
     }
   }
 

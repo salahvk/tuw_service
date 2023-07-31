@@ -38,7 +38,7 @@ class _SerDrawerState extends State<SerDrawer> {
     final mob = Responsive.isMobile(context);
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
-    return DrawerHeader(
+    return Container(
         decoration: BoxDecoration(
           color: ColorManager.primary3,
           borderRadius: lang == 'ar'
@@ -52,6 +52,9 @@ class _SerDrawerState extends State<SerDrawer> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+             SizedBox(
+              height: 20,
+            ),
             ServiceStatusButton(size: size),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 14, 16, 0.0),

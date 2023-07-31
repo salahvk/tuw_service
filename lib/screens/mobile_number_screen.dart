@@ -16,6 +16,7 @@ import 'package:social_media_services/main.dart';
 import 'package:social_media_services/model/get_countries.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
+import 'package:social_media_services/widgets/back_button.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -77,6 +78,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           // reverse: true,
           child: Stack(
             children: [
+                       BackButton2(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

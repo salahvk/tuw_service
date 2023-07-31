@@ -29,10 +29,10 @@ getCustomerParent(BuildContext context) async {
       final parentData = HomeModel.fromJson(jsonResponse);
       provider.parentModelData(parentData);
     } else {
-      showSnackBar("Something Went Wrong2", context);
+
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+ 
   }
 }
 
@@ -53,9 +53,9 @@ getCustomerChild(BuildContext context, id) async {
       final childData = ChildServiceModel.fromJson(jsonResponse);
       provider.childModelData(childData);
     } else {
-      showSnackBar("Something Went Wrong2", context);
+     
     }
   } on Exception catch (_) {
-    showSnackBar("Something Went Wrong1", context);
+    
   }
 }

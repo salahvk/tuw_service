@@ -26,6 +26,7 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/loading%20screens/profile_loading.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/widgets/back_button.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -85,7 +86,7 @@ class _ServicerPageState extends State<ServicerPage> {
                   .servicerLatitude !=
               null
           ? "${servicerProvider.servicerLatitude} ${servicerProvider.servicerLongitude}"
-          : str.s_map;
+          : '';
       provider.servicerSelectedCountry = '';
       provider.clearRegions();
       await getRegionData(context, 165);
@@ -263,6 +264,7 @@ class _ServicerPageState extends State<ServicerPage> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
+                             BackButton2(),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -296,58 +298,63 @@ class _ServicerPageState extends State<ServicerPage> {
                                           setState(() {});
                                         },
                                         decoration: InputDecoration(
-                                            suffixIcon: SizedBox(
-                                              width: 50,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Center(
-                                                    child: Container(
-                                                      width: .5,
-                                                      height: 48,
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              206,
-                                                              205,
-                                                              205),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(5, 0, 5, 0),
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        await searchServicer();
-                                                        await Future.delayed(
-                                                            const Duration(
-                                                                seconds: 1));
-                                                        setState(() {});
-                                                      },
-                                                      child: Text(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        String.fromCharCode(
-                                                            Icons.search
-                                                                .codePoint),
-                                                        style: TextStyle(
-                                                          inherit: false,
-                                                          color: ColorManager
-                                                              .primary,
-                                                          fontSize: 20.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: Icons
-                                                              .search
-                                                              .fontFamily,
-                                                          package: Icons.search
-                                                              .fontPackage,
+                                          suffixIcon: Material(
+                                              // color: Colors.transparent,
+                                              child: InkWell(
+                                                // splashColor:
+                                                //     ColorManager.tertiary,
+                                                onTap: () async {
+                                                  await searchServicer();
+                                                  await Future.delayed(
+                                                      const Duration(
+                                                          seconds: 1));
+                                                  setState(() {});
+                                                },
+                                                child: SizedBox(
+                                                  width: 50,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Center(
+                                                        child: Container(
+                                                          width: .4,
+                                                          height: 48,
+                                                          color: const Color
+                                                                  .fromARGB(255,
+                                                              206, 205, 205),
                                                         ),
                                                       ),
-                                                    ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                5, 0, 5, 0),
+                                                        child: Text(
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          String.fromCharCode(
+                                                              Icons.search
+                                                                  .codePoint),
+                                                          style: TextStyle(
+                                                            inherit: false,
+                                                            color: ColorManager
+                                                                .primary,
+                                                            fontSize: 20.0,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontFamily: Icons
+                                                                .search
+                                                                .fontFamily,
+                                                            package: Icons
+                                                                .search
+                                                                .fontPackage,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
                                             ),
                                             hintText: str.s_servicer,
@@ -692,15 +699,25 @@ class _ServicerPageState extends State<ServicerPage> {
                                                     //   color:
                                                     //       ColorManager.black,
                                                     // ),
-                                                    hint: Text(str.p_region_h,
-                                                        style: getRegularStyle(
-                                                            color: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                173,
-                                                                173,
-                                                                173),
-                                                            fontSize: 15)),
+                                                        hint: provider.regionInfoModel
+                                                                      ?.result ==
+                                                                  false ||
+                                                              provider.regionInfoModel
+                                                                      ?.result ==
+                                                                  null
+                                                          ? Text(str.no_ava,
+                                                              style: getRegularStyle(
+                                                                  color:
+                                                                      const Color.fromARGB(
+                                                                          255,
+                                                                          173,
+                                                                          173,
+                                                                          173),
+                                                                  fontSize: 15))
+                                                          : Text(str.p_region_h,
+                                                              style: getRegularStyle(
+                                                                  color: const Color.fromARGB(255, 173, 173, 173),
+                                                                  fontSize: 15)),
                                                     items: provider
                                                         .regionInfoModel
                                                         ?.regions!
@@ -1117,31 +1134,46 @@ class _ServicerPageState extends State<ServicerPage> {
                                     ),
                                   ),
                                 ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: ((context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: InkWell(
-                                    onTap: () {
-                                      servicerProvider.navServiceId =
-                                          serviceManData![index].id;
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (ctx) {
-                                        return ProfileLoading(
-                                          serviceman: serviceManData[index],
-                                          key: _scaffoldKey,
-                                        );
-                                      }));
-                                    },
-                                    child: ServicerListTile(
-                                      serviceman: serviceManData![index],
-                                    )),
-                              );
-                            }),
-                            itemCount: serviceManData?.length ?? 0,
-                          ),
+                              provider.serviceManListModel!.serviceman!.isEmpty
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    str.no_ser,
+                                    style: getSemiBoldtStyle(
+                                        color: ColorManager.grayLight,
+                                        fontSize: 16),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: ((context, index) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                      child: InkWell(
+                                          onTap: () {
+                                            servicerProvider.navServiceId =
+                                                serviceManData![index].id;
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (ctx) {
+                                              return ProfileLoading(
+                                                serviceman:
+                                                    serviceManData[index],
+                                                key: _scaffoldKey,
+                                              );
+                                            }));
+                                          },
+                                          child: ServicerListTile(
+                                            serviceman: serviceManData![index],
+                                          )),
+                                    );
+                                  }),
+                                  itemCount: serviceManData?.length ?? 0,
+                                ),
+
 
                           const SizedBox(
                             height: 5,
@@ -1288,9 +1320,9 @@ class _ServicerPageState extends State<ServicerPage> {
   searchServicer() {
     final provider = Provider.of<DataProvider>(context, listen: false);
     print(ServiceControllers.stateController.text);
-    if (ServiceControllers.servicerController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Enter a Servicer name to search");
-    } else {
+    // if (ServiceControllers.servicerController.text.isEmpty) {
+    //   showAnimatedSnackBar(context, "Enter a Servicer name to search");
+    // } else {
       searchServiceMan(
           context,
           widget.id.toString(),
@@ -1305,6 +1337,6 @@ class _ServicerPageState extends State<ServicerPage> {
                   : provider.isTwoWheelerSelected
                       ? 'two wheeler'
                       : '');
-    }
+    // }
   }
 }

@@ -5,6 +5,7 @@ import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/back_button.dart';
 
 class PrivacyPolicy extends StatefulWidget {
   const PrivacyPolicy({super.key});
@@ -44,44 +45,51 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
+                 child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
-                child: Row(
-                  children: [
-                    Container(
-                        width: 38,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: ColorManager.primary,
+              BackButton2(),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+                    child: Row(
+                      children: [
+                        Container(
+                            width: 38,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: ColorManager.primary,
+                            ),
+                            child: Center(
+                                child: Image.asset(ImageAssets.privacy))),
+                        const SizedBox(
+                          width: 8,
                         ),
-                        child: Center(child: Image.asset(ImageAssets.privacy))),
-                    const SizedBox(
-                      width: 8,
+                        Text(
+                          str.pr_privacy,
+                          style: getRegularStyle(
+                              color: ColorManager.black, fontSize: 17),
+                        )
+                      ],
                     ),
-                    Text(
-                      str.pr_privacy,
+                  ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  const Divider(
+                      color: ColorManager.engineWorkerColor, height: 5),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
+                    child: Text(
+                      text ?? '',
+                      textAlign: TextAlign.justify,
                       style: getRegularStyle(
-                          color: ColorManager.black, fontSize: 17),
-                    )
-                  ],
-                ),
+                          color: ColorManager.engineWorkerColor, fontSize: 16),
+                    ),
+                  )
+                ],
               ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              const Divider(color: ColorManager.engineWorkerColor, height: 5),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
-                child: Text(
-                  text ?? '',
-                  textAlign: TextAlign.justify,
-                  style: getRegularStyle(
-                      color: ColorManager.engineWorkerColor, fontSize: 16),
-                ),
-              )
             ],
           ),
         ),

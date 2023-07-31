@@ -23,6 +23,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_view.dart';
+import 'package:social_media_services/widgets/back_button.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/profile_tile_widget.dart';
@@ -197,133 +198,135 @@ class _ProfilePageState extends State<ProfilePage> {
           return _willPopCallback();
         },
         child: SafeArea(
-            child: Column(
+            child: Stack(
+              children: [BackButton2(),
+                Column(
           children: [
-            SizedBox(
-                height: size.height * 0.36,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Center(
-                      //     child: ProfileImage(
-                      //   isNavigationActive: false,
-                      //   iconSize: 18,
-                      //   profileSize: 60,
-                      //   iconRadius: 17,
-                      // )),
-                      Center(
-                          child: ProfileImage3(
-                        isNavigationActive: false,
-                        iconSize: 18,
-                        profileSize: 60,
-                        iconRadius: 17,
-                      )),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                        child: Text(
-                            '${firstName ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
-                            style: getBoldtStyle(
-                                color: ColorManager.black, fontSize: 20)),
+                SizedBox(
+                    height: size.height * 0.36,
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Center(
+                          //     child: ProfileImage(
+                          //   isNavigationActive: false,
+                          //   iconSize: 18,
+                          //   profileSize: 60,
+                          //   iconRadius: 17,
+                          // )),
+                          Center(
+                              child: ProfileImage3(
+                            isNavigationActive: false,
+                            iconSize: 18,
+                            profileSize: 60,
+                            iconRadius: 17,
+                          )),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                            child: Text(
+                                '${firstName ?? ''} ${provider.viewProfileModel?.userdetails?.lastname ?? ''}',
+                                style: getBoldtStyle(
+                                    color: ColorManager.black, fontSize: 20)),
+                          ),
+                          Text(provider.viewProfileModel?.userdetails?.phone ?? '',
+                              style: getRegularStyle(
+                                  color: const Color(0xff6e6e6e), fontSize: 14)),
+                        ],
                       ),
-                      Text(provider.viewProfileModel?.userdetails?.phone ?? '',
-                          style: getRegularStyle(
-                              color: const Color(0xff6e6e6e), fontSize: 14)),
-                    ],
+                    )),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return EditProfileScreen(
+                        isregister: false,
+                      );
+                    }));
+                  },
+                  child: ProfileTitleWidget(
+                    name: str.pp_my_profile,
+                    icon: Icons.person_outline,
                   ),
-                )),
-            InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                  return EditProfileScreen(
-                    isregister: false,
-                  );
-                }));
-              },
-              child: ProfileTitleWidget(
-                name: str.pp_my_profile,
-                icon: Icons.person_outline,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                  return const HomePage(
-                    selectedIndex: 1,
-                  );
-                }));
-              },
-              child: ProfileTitleWidget(
-                name: str.pp_message,
-                icon: FontAwesomeIcons.message,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, Routes.wishList);
-              },
-              child: ProfileTitleWidget(
-                name: str.pp_favourites,
-                icon: Icons.favorite_border,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, Routes.addressPage);
-              },
-              child: ProfileTitleWidget(
-                name: str.pp_address,
-                icon: Icons.pin_drop_outlined,
-              ),
-            ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
-                ? Container()
-                : InkWell(
-                    onTap: () {
-                      navigateToServiceManProfile();
-                    },
-                    child: ProfileTitleWidget(
-                      name: str.pp_settings,
-                      icon: Icons.settings_outlined,
-                    ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                      return const HomePage(
+                        selectedIndex: 1,
+                      );
+                    }));
+                  },
+                  child: ProfileTitleWidget(
+                    name: str.pp_message,
+                    icon: FontAwesomeIcons.message,
                   ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
-                ? Container()
-                : InkWell(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                        return const MyServicesPage();
-                      }));
-                    },
-                    child: ProfileTitleWidget(
-                      name: str.pp_my_Services,
-                      icon: Icons.pin_drop_outlined,
-                      svg: 'assets/Myservice.svg',
-                    ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.wishList);
+                  },
+                  child: ProfileTitleWidget(
+                    name: str.pp_favourites,
+                    icon: Icons.favorite_border,
                   ),
-            provider.viewProfileModel?.userdetails?.userType == 'customer'
-                ? Container()
-                : InkWell(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                        return const MySubscriptionPage();
-                      }));
-                    },
-                    child: ProfileTitleWidget(
-                      name: str.pp_my_sub,
-                      icon: FontAwesomeIcons.bell,
-                    ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.addressPage);
+                  },
+                  child: ProfileTitleWidget(
+                    name: str.pp_address,
+                    icon: Icons.pin_drop_outlined,
                   ),
+                ),
+                provider.viewProfileModel?.userdetails?.userType == 'serviceman'
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          navigateToServiceManProfile();
+                        },
+                        child: ProfileTitleWidget(
+                          name: str.pp_settings,
+                          icon: Icons.settings_outlined,
+                        ),
+                      ),
+                provider.viewProfileModel?.userdetails?.userType == 'serviceman'
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                            return const MyServicesPage();
+                          }));
+                        },
+                        child: ProfileTitleWidget(
+                          name: str.pp_my_Services,
+                          icon: Icons.pin_drop_outlined,
+                          svg: 'assets/Myservice.svg',
+                        ),
+                      ),
+                provider.viewProfileModel?.userdetails?.userType == 'serviceman'
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                            return const MySubscriptionPage();
+                          }));
+                        },
+                        child: ProfileTitleWidget(
+                          name: str.pp_my_sub,
+                          icon: FontAwesomeIcons.bell,
+                        ),
+                      ),
           ],
-        )),
+        ),
+              ],
+            )),
       ),
     );
   }
 
   navigateToServiceManProfile() {
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-      return ServiceManProfileViewPage();
-    }));
+    Navigator.push(context, FadePageRoute(page: ServiceManProfileViewPage()));
   }
 }
