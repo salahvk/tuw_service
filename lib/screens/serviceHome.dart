@@ -171,10 +171,14 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                 });
                               },
                             ),
-                            Container(
+                           
+                          ],
+                        ),
+                      ),
+                       Container(
                               margin: EdgeInsets.only(
-                                  right: 16,
-                                  bottom: 8), // Adjust the margin as needed
+                                  right: 0,
+                                  bottom: 8,top: 10), // Adjust the margin as needed
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -198,9 +202,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(8, 10, 8, 20),
                         child: GridView.builder(
