@@ -222,7 +222,7 @@ class _CustomChatBubbleState extends State<CustomChatBubble> {
                                               //     imageUrl:
                                               //         "https://www.pngall.com/wp-content/uploads/5/Google-Maps-Location-Mark.png")
                                               GoogleMap(
-                                            // liteModeEnabled: true,
+                                            liteModeEnabled: true,
                                             onTap: (argyment) {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
