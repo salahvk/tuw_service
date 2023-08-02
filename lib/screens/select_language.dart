@@ -8,6 +8,8 @@ import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/API/home/get_subService.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/model/get_home.dart';
+
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/utils/getLocalLanguage.dart';
@@ -87,8 +89,8 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
 
                           getlocalLanguage(context);
                           print(servicerProvider.serviceId);
-                          await getSubService(
-                              context, servicerProvider.serviceId, true);
+                          await getSubService(context,
+                              servicerProvider.serviceId, true, Services());
                           await getCustomerParent(context);
                           await getServiceManDetailsFun(
                               context, servicerProvider.navServiceId);

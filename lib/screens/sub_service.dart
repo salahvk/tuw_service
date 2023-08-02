@@ -9,6 +9,8 @@ import 'package:social_media_services/API/home/get_subService.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/model/get_home.dart';
+
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +22,9 @@ import 'package:social_media_services/loading%20screens/loading_page.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class SubServicesPage extends StatefulWidget {
-  const SubServicesPage({Key? key}) : super(key: key);
+  const SubServicesPage({Key? key, required this.homeService})
+      : super(key: key);
+  final Services homeService;
 
   @override
   State<SubServicesPage> createState() => _SubServicesPageState();
@@ -159,15 +163,37 @@ class _SubServicesPageState extends State<SubServicesPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(w * .02, mob ? 30 : 10, w * .02, 0),
+            padding: EdgeInsets.fromLTRB(w * .02, mob ? 10 : 10, w * .02, 0),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                  child: Text(
-                    str.se_sub_services,
-                    style:
-                        getBoldtStyle(color: ColorManager.black, fontSize: 20),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          size: 35,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        // str.se_sub_services,
+                        "${str.choose} ${widget.homeService.service}",
+                        style: getBoldtStyle(
+                            color: ColorManager.black, fontSize: 20),
+                      ),
+                      Spacer(),
+                      SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: SvgPicture.asset(
+                              'assets/logo/app_logo_shadow.svg')),
+                    ],
                   ),
                 ),
                 Padding(
@@ -190,7 +216,8 @@ class _SubServicesPageState extends State<SubServicesPage> {
                               return const LoadingListPage();
                             }));
                             final id = homeData![index].id;
-                            getSubService(context, id, false);
+                            getSubService(
+                                context, id, false, widget.homeService);
 
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (ctx) {

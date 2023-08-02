@@ -11,13 +11,14 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/home/get_service_man.dart';
 import 'package:social_media_services/components/routes_manager.dart';
+
 import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/sub_service.dart';
 import 'package:social_media_services/utils/get_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-getSubService(BuildContext context, id, bool changeLan) async {
+getSubService(BuildContext context, id, bool changeLan, homeService) async {
   print('1');
   final provider = Provider.of<DataProvider>(context, listen: false);
   // provider.subServicesModel = null;
@@ -41,7 +42,7 @@ getSubService(BuildContext context, id, bool changeLan) async {
       print(jsonResponse['type']);
 
       if (changeLan != true) {
-        selectServiceType(context, id, jsonResponse);
+        selectServiceType(context, id, jsonResponse, homeService);
       }
     } else {
       // print(response.statusCode);
@@ -51,14 +52,19 @@ getSubService(BuildContext context, id, bool changeLan) async {
   } on Exception catch (_) {}
 }
 
-selectServiceType(context, id, jsonResponse) async {
+selectServiceType(context, id, jsonResponse, homeService) async {
   print(id);
   final provider = Provider.of<DataProvider>(context, listen: false);
   final str = AppLocalizations.of(context)!;
   if (jsonResponse['type'] == 'service') {
     final subServicesData = SubServicesModel.fromJson(jsonResponse);
     provider.subServicesModelData(subServicesData);
-    Navigator.pushReplacement(context, FadePageRoute(page: SubServicesPage()));
+    Navigator.pushReplacement(
+        context,
+        FadePageRoute(
+            page: SubServicesPage(
+          homeService: homeService,
+        )));
   } else if (provider.viewProfileModel?.userdetails?.latitude == null) {
     requestLocationPermission(
       context,
@@ -82,6 +88,6 @@ selectServiceType(context, id, jsonResponse) async {
       context,
     );
   } else {
-    getServiceMan(context, id);
+    getServiceMan(context, id, homeService);
   }
 }

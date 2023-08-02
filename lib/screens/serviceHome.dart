@@ -129,14 +129,6 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                       EdgeInsets.fromLTRB(w * .02, mob ? 30 : 10, w * .02, 0),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                        child: Text(
-                          str.se_services,
-                          style: getBoldtStyle(
-                              color: ColorManager.black, fontSize: 20),
-                        ),
-                      ),
                       SizedBox(
                         height: mob ? 150 : 110,
                         child: Stack(
@@ -157,7 +149,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                         imageUrl:
                                             "$endPoint${provider.homeModel?.homebanner?[index].image}",
                                         width: w,
-                                        fit: BoxFit.contain,
+                                        fit: BoxFit.fitWidth,
                                       ),
                                     ),
                                   ),
@@ -171,37 +163,43 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                 });
                               },
                             ),
-                           
                           ],
                         ),
                       ),
-                       Container(
-                              margin: EdgeInsets.only(
-                                  right: 0,
-                                  bottom: 8,top: 10), // Adjust the margin as needed
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (int i = 0;
-                                      i <
-                                          (provider.homeModel?.homebanner
-                                                  ?.length ??
-                                              0);
-                                      i++)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 4),
-                                      child: CircleAvatar(
-                                        radius: 5,
-                                        backgroundColor:
-                                            i == selectedCarouselIndex
-                                                ? Colors.blue
-                                                : Colors.grey,
-                                      ),
-                                    ),
-                                ],
+                      Container(
+                        margin: EdgeInsets.only(
+                            right: 0,
+                            bottom: 8,
+                            top: 10), // Adjust the margin as needed
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            for (int i = 0;
+                                i <
+                                    (provider.homeModel?.homebanner?.length ??
+                                        0);
+                                i++)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: CircleAvatar(
+                                  radius: 5,
+                                  backgroundColor: i == selectedCarouselIndex
+                                      ? Colors.blue
+                                      : Colors.grey,
+                                ),
                               ),
-                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        child: Text(
+                          str.se_services,
+                          style: getBoldtStyle(
+                              color: ColorManager.black, fontSize: 20),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(8, 10, 8, 20),
                         child: GridView.builder(
@@ -222,7 +220,8 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                                       FadePageRoute(page: LoadingListPage()));
                                   final id = homeData![index].id;
                                   servicerProvider.serviceId = id;
-                                  getSubService(context, id, false);
+                                  getSubService(
+                                      context, id, false, homeData[index]);
                                   print("$endPoint${homeData[index].image}");
                                 },
                                 child: Container(

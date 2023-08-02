@@ -17,8 +17,8 @@ class BackButton2 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              Icons.arrow_back_ios_new,
-              size: 20,
+              Icons.arrow_back_rounded,
+              size: 30,
             ),
           ],
         ),

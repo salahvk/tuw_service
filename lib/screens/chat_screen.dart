@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
@@ -33,14 +34,12 @@ import 'package:social_media_services/screens/Google%20Map/share_location_from_a
 import 'package:social_media_services/screens/serviceman/serviceman_list_details.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/get_location.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/widgets/chat/chat_add_tile.dart';
 import 'package:social_media_services/widgets/chat/chat_bubble.dart';
 import 'package:social_media_services/widgets/chat/chat_date_widget.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'package:record/record.dart';
@@ -175,86 +174,108 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Leading section (Back button and profile image)
+                  Row(
                     children: [
-                      Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20,
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.arrow_back_rounded,
+                                size: 35,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.topToBottom,
+                              child: ServiceManDetails(
+                                serviceman: widget.serviceman,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 2),
+                          child: CircleAvatar(
+                            radius: 26,
+                            backgroundImage: provider.serviceManDetails
+                                        ?.userData?.profileImage ==
+                                    null
+                                ? const AssetImage('assets/user.png')
+                                    as ImageProvider
+                                : CachedNetworkImageProvider(
+                                    '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.topToBottom,
+                                  child: ServiceManDetails(
+                                    serviceman: widget.serviceman,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  " ${provider.serviceManDetails?.userData?.firstname ?? provider.serviceManDetails?.userData?.phone} ${provider.serviceManDetails?.userData?.lastname ?? ''}",
+                                  style: getRegularStyle(
+                                      color: ColorManager.black, fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.topToBottom,
-                          child: ServiceManDetails(
-                            serviceman: widget.serviceman,
-                          )));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(5, 0, 0, 2),
-                  child: CircleAvatar(
-                    radius: 26,
-                    backgroundImage: provider
-                                .serviceManDetails?.userData?.profileImage ==
-                            null
-                        ? const AssetImage('assets/user.png') as ImageProvider
-                        : CachedNetworkImageProvider(
-                            '$endPoint${provider.serviceManDetails?.userData?.profileImage}'),
+
+                  // Actions section (Call icon)
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          FlutterPhoneDirectCaller.callNumber(
+                              provider.serviceManDetails?.userData?.phone ??
+                                  '');
+                        },
+                        child: const Icon(Icons.call_outlined, size: 25),
+                      ),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          title: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.topToBottom,
-                      child: ServiceManDetails(
-                        serviceman: widget.serviceman,
-                      )));
-            },
-            child: Column(
-              children: [
-                Text(
-                  " ${provider.serviceManDetails?.userData?.firstname ?? provider.serviceManDetails?.userData?.phone} ${provider.serviceManDetails?.userData?.lastname ?? ''}",
-                  style:
-                      getRegularStyle(color: ColorManager.black, fontSize: 16),
-                ),
-              ],
             ),
           ),
-          actions: [
-            // const Icon(Icons.videocam),
-            const SizedBox(
-              width: 8,
-            ),
-            InkWell(
-                onTap: () {
-                  FlutterPhoneDirectCaller.callNumber(
-                      provider.serviceManDetails?.userData?.phone ?? '');
-                },
-                child: const Icon(Icons.call_outlined)),
-            const SizedBox(
-              width: 20,
-            )
-          ],
-          leadingWidth: 80,
         ),
         body: Stack(
           children: [
@@ -506,15 +527,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
             // * Message box
             Positioned(
-              bottom: 30,right: 5,
+              bottom: 30,
+              right: 5,
               child: Tooltip(
-
-          key: tooltipkey,
-          triggerMode: TooltipTriggerMode.manual,
-          showDuration: const Duration(seconds: 1),
-          message: str.cp_long_press,
-          
-        ),),
+                key: tooltipkey,
+                triggerMode: TooltipTriggerMode.manual,
+                showDuration: const Duration(seconds: 1),
+                message: str.cp_long_press,
+              ),
+            ),
             Positioned(
               bottom: 0,
               child: Container(

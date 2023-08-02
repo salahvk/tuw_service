@@ -17,6 +17,7 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
+import 'package:social_media_services/model/get_home.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
@@ -26,7 +27,6 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/loading%20screens/profile_loading.dart';
-import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,7 +36,13 @@ import 'package:social_media_services/widgets/title_widget.dart';
 class ServicerPage extends StatefulWidget {
   int? id;
   bool? isAdvancedSearchEnabled;
-  ServicerPage({super.key, this.id, this.isAdvancedSearchEnabled = false});
+  Services? homeservice;
+  ServicerPage({
+    super.key,
+    this.id,
+    this.isAdvancedSearchEnabled = false,
+    this.homeservice,
+  });
 
   @override
   State<ServicerPage> createState() => _ServicerPageState();
@@ -64,6 +70,7 @@ class _ServicerPageState extends State<ServicerPage> {
   @override
   void initState() {
     super.initState();
+    ServiceControllers.servicerController.clear();
     lang = Hive.box('LocalLan').get(
       'lang',
     );
@@ -260,11 +267,48 @@ class _ServicerPageState extends State<ServicerPage> {
                 child: Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          BackButton2(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back_rounded,
+                                    size: 35,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Flexible(
+                                  child: Center(
+                                    child: Text(
+                                      // str.se_sub_services,
+                                      "${str.choose} ${widget.homeservice?.service}",
+                                      style: getBoldtStyle(
+                                          color: ColorManager.black,
+                                          fontSize: 20),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: SvgPicture.asset(
+                                      'assets/logo/app_logo_shadow.svg'),
+                                ),
+                              ],
+                            ),
+                          ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [

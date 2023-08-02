@@ -295,6 +295,11 @@
 "hw_mc_4":"4. Choose Services",
 "hw_mc_5":"5. Payments",
 
+"skip":"Skip",
+"done":"Done",
+"proceed":"Proceed",
+"choose":"Choose",
+
 "no_ser":"No ServiceMan Available",
 "no_ava":"Not Available",
 "how":"Getting Started: Understanding the Process",

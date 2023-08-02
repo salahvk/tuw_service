@@ -74,6 +74,10 @@ class ReportCustomerControllers {
   static TextEditingController commentController = TextEditingController();
 }
 
+class ServiceNameControllers {
+  static TextEditingController service = TextEditingController();
+}
+
 clearReportControllers() {
   ReportCustomerControllers.reasonController.clear();
   ReportCustomerControllers.commentController.clear();

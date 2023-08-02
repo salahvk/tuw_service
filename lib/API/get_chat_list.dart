@@ -15,7 +15,7 @@ import 'package:social_media_services/utils/initPlatformState.dart';
 getChatList(BuildContext context) async {
   log("message list api");
   final provider = Provider.of<DataProvider>(context, listen: false);
-  provider.subServicesModel = null;
+  // provider.subServicesModel = null;
   final apiToken = Hive.box("token").get('api_token');
   // if (apiToken == null) return;
   try {
