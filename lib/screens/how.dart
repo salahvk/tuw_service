@@ -84,7 +84,7 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                       padding: const EdgeInsets.only(top: 16, right: 16),
                       child: SizedBox(
                           width: size.width * .6,
-                          height: size.height * .3,
+                          height: size.height * .25,
                           child: SvgPicture.asset(
                               'assets/logo/app_logo_shadow.svg')),
                     ),
@@ -105,106 +105,311 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                     ),
                   ),
                 ),
-                pages: [
-                  PageViewModel(
-                    titleWidget: Text(
-                      str.how1,
-                      style: getSemiBoldtStyle(
-                          color: ColorManager.grayDark, fontSize: 20),
-                    ),
-                    bodyWidget: Text(
-                      str.how1s,
-                      style: getRegularStyle(
-                          color: ColorManager.serviceHomeGrey, fontSize: 14),
-                    ),
-                    image: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Container(
-                        // width: 250,
-                        child: Text(str.how,
-                            softWrap: true,
-                            style: getBoldtStyle(
-                                color: ColorManager.black, fontSize: 20)),
+
+                rawPages: [
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: size.height * .25),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    // width: 250,
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      str.how,
+                                      softWrap: true,
+                                      style: getBoldtStyle(
+                                          color: ColorManager.black,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Text(
+                              str.how1,
+                              style: getSemiBoldtStyle(
+                                  color: ColorManager.grayDark, fontSize: 18),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              str.how1s,
+                              style: getRegularStyle(
+                                  color: ColorManager.serviceHomeGrey,
+                                  fontSize: 13.5),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    decoration: pageDecoration,
                   ),
-                  PageViewModel(
-                    titleWidget: Text(
-                      str.how2,
-                      style: getSemiBoldtStyle(
-                          color: ColorManager.grayDark, fontSize: 20),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: size.height * .25),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    // width: 250,
+                                    child: Text(
+                                      textAlign: TextAlign.start,
+                                      str.how2,
+                                      softWrap: true,
+                                      style: getSemiBoldtStyle(
+                                          color: ColorManager.grayDark,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Expanded(
+                          //   child: Container(
+                          //     // width: 250,
+                          //     child: Text(
+                          //       textAlign: TextAlign.center,
+                          //       str.how2,
+                          //       softWrap: true,
+                          //       style: getSemiBoldtStyle(
+                          //           color: ColorManager.grayDark, fontSize: 18),
+                          //     ),
+                          //   ),
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(vertical: 20),
+                          //   child: Text(
+                          //     str.how2,
+                          //     style: getSemiBoldtStyle(
+                          //         color: ColorManager.grayDark, fontSize: 18),
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              str.how2s,
+                              style: getRegularStyle(
+                                  color: ColorManager.serviceHomeGrey,
+                                  fontSize: 13.5),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    bodyWidget: Text(
-                      str.how2s,
-                      style: getRegularStyle(
-                          color: ColorManager.serviceHomeGrey, fontSize: 14),
-                    ),
-                    image: Text(''),
-                    decoration: pageDecoration,
                   ),
-                  PageViewModel(
-                    titleWidget: Text(
-                      str.how3,
-                      style: getSemiBoldtStyle(
-                          color: ColorManager.grayDark, fontSize: 20),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: size.height * .25),
+                      child: Column(
+                        children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 25),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       Expanded(
+                          //         child: Container(
+                          //           // width: 250,
+                          //           child: Text(
+                          //             textAlign: TextAlign.center,
+                          //             str.how,
+                          //             softWrap: true,
+                          //             style: getBoldtStyle(
+                          //                 color: ColorManager.black,
+                          //                 fontSize: 18),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 25),
+                                child: Text(
+                                  str.how3,
+                                  style: getSemiBoldtStyle(
+                                      color: ColorManager.grayDark,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              str.how3s,
+                              style: getRegularStyle(
+                                  color: ColorManager.serviceHomeGrey,
+                                  fontSize: 13.5),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    bodyWidget: Text(
-                      str.how3s,
-                      style: getRegularStyle(
-                          color: ColorManager.serviceHomeGrey, fontSize: 14),
-                    ),
-                    image: Text(''),
-                    decoration: pageDecoration,
                   ),
-                  PageViewModel(
-                      titleWidget: Text(
-                        str.how4,
-                        style: getSemiBoldtStyle(
-                            color: ColorManager.grayDark, fontSize: 20),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: size.height * .2),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 25),
+                                child: Text(
+                                  str.how4,
+                                  style: getSemiBoldtStyle(
+                                      color: ColorManager.grayDark,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              str.how4s,
+                              style: getRegularStyle(
+                                  color: ColorManager.serviceHomeGrey,
+                                  fontSize: 13.5),
+                            ),
+                          ),
+                        ],
                       ),
-                      bodyWidget: Text(
-                        str.how4s,
-                        style: getRegularStyle(
-                            color: ColorManager.serviceHomeGrey, fontSize: 14),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: size.height * .25),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 25),
+                                child: Text(
+                                  str.how5,
+                                  style: getSemiBoldtStyle(
+                                      color: ColorManager.grayDark,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              str.how5s,
+                              style: getRegularStyle(
+                                  color: ColorManager.serviceHomeGrey,
+                                  fontSize: 13.5),
+                            ),
+                          ),
+                        ],
                       ),
-                      image: Text(''),
-                      decoration: pageDecoration),
-                  PageViewModel(
-                      titleWidget: Text(
-                        str.how5,
-                        style: getSemiBoldtStyle(
-                            color: ColorManager.grayDark, fontSize: 20),
-                      ),
-                      bodyWidget: Text(
-                        str.how5s,
-                        style: getRegularStyle(
-                            color: ColorManager.serviceHomeGrey, fontSize: 14),
-                      ),
-                      image: Text(''),
-                      // reverse: true,
-                      decoration: pageDecoration),
-                  // PageViewModel(
-                  //   title: str.hw_mc_5,
-                  //   bodyWidget: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Text("Click on ", style: bodyStyle),
-                  //       Icon(Icons.edit),
-                  //       Text(" to edit a post", style: bodyStyle),
-                  //     ],
-                  //   ),
-                  //   decoration: pageDecoration.copyWith(
-                  //     bodyFlex: 2,
-                  //     imageFlex: 4,
-                  //     bodyAlignment: Alignment.bottomCenter,
-                  //     imageAlignment: Alignment.topCenter,
-                  //   ),
-                  //   image: _buildImage('img1.jpg'),
-                  //   reverse: true,
-                  // ),
+                    ),
+                  ),
                 ],
+                // pages: [
+
+                //   PageViewModel(
+                //     titleWidget: Text(
+                //       str.how2,
+                //       style: getSemiBoldtStyle(
+                //           color: ColorManager.grayDark, fontSize: 20),
+                //     ),
+                //     bodyWidget: Text(
+                //       str.how2s,
+                //       style: getRegularStyle(
+                //           color: ColorManager.serviceHomeGrey, fontSize: 14),
+                //     ),
+                //     image: Text(''),
+                //     decoration: pageDecoration,
+                //   ),
+                //   PageViewModel(
+                //     titleWidget: Text(
+                //       str.how3,
+                //       style: getSemiBoldtStyle(
+                //           color: ColorManager.grayDark, fontSize: 20),
+                //     ),
+                //     bodyWidget: Text(
+                //       str.how3s,
+                //       style: getRegularStyle(
+                //           color: ColorManager.serviceHomeGrey, fontSize: 14),
+                //     ),
+                //     image: Text(''),
+                //     decoration: pageDecoration,
+                //   ),
+                //   PageViewModel(
+                //       titleWidget: Text(
+                //         str.how4,
+                //         style: getSemiBoldtStyle(
+                //             color: ColorManager.grayDark, fontSize: 20),
+                //       ),
+                //       bodyWidget: Text(
+                //         str.how4s,
+                //         style: getRegularStyle(
+                //             color: ColorManager.serviceHomeGrey, fontSize: 14),
+                //       ),
+                //       image: Text(''),
+                //       decoration: pageDecoration),
+                //   PageViewModel(
+                //       titleWidget: Text(
+                //         str.how5,
+                //         style: getSemiBoldtStyle(
+                //             color: ColorManager.grayDark, fontSize: 20),
+                //       ),
+                //       bodyWidget: Text(
+                //         str.how5s,
+                //         style: getRegularStyle(
+                //             color: ColorManager.serviceHomeGrey, fontSize: 14),
+                //       ),
+                //       image: Text(''),
+                //       // reverse: true,
+                //       decoration: pageDecoration),
+                //   // PageViewModel(
+                //   //   title: str.hw_mc_5,
+                //   //   bodyWidget: Row(
+                //   //     mainAxisAlignment: MainAxisAlignment.center,
+                //   //     children: [
+                //   //       Text("Click on ", style: bodyStyle),
+                //   //       Icon(Icons.edit),
+                //   //       Text(" to edit a post", style: bodyStyle),
+                //   //     ],
+                //   //   ),
+                //   //   decoration: pageDecoration.copyWith(
+                //   //     bodyFlex: 2,
+                //   //     imageFlex: 4,
+                //   //     bodyAlignment: Alignment.bottomCenter,
+                //   //     imageAlignment: Alignment.topCenter,
+                //   //   ),
+                //   //   image: _buildImage('img1.jpg'),
+                //   //   reverse: true,
+                //   // ),
+                // ],
                 onDone: () => _onIntroEnd(context),
                 onSkip: () =>
                     _onIntroEnd(context), // You can override onSkip callback
@@ -219,7 +424,7 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                 next: const Icon(Icons.arrow_forward),
                 done: Text(str.done,
                     style: TextStyle(fontWeight: FontWeight.w600)),
-                curve: Curves.fastLinearToSlowEaseIn,
+                curve: Curves.fastLinearToSlowEaseIn, dotsFlex: 2,
                 controlsMargin: const EdgeInsets.all(16),
                 controlsPadding: kIsWeb
                     ? const EdgeInsets.all(12.0)
