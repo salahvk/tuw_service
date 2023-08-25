@@ -353,7 +353,7 @@ class _UserAddressCardState extends State<UserAddressCard> {
                                       color: ColorManager.whiteColor,
                                     ),
                                     Text(
-                                      "Open Google Map",
+                                      str.open_google_map,
                                       style: getRegularStyle(
                                           color: ColorManager.whiteColor),
                                     )

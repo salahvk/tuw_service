@@ -149,12 +149,12 @@
     "su_package_id":"पैकेज आईडी",
 
     "a_home_locator":"होम लोकेटर",
-    "a_add":"जोड़ना",
+   "a_add": "घर का पता जोड़ें",
     "a_address":"पता",
     "a_home":"घर का पता",
     "a_cover":"कृपया कवर फोटो चुनें",
 
-    "ae_home_locator":"होम लोकेटर",
+ "ae_home_locator": "घर की स्थिति बदलें",
     "ae_add":"जोड़ना",
     "ae_address":"पता",
     "ae_address_n":"पते का नाम",
@@ -271,9 +271,16 @@
     "re_tell_us":"हमें बताएं कि उन्होंने क्या किया।",
     "re_report_success":"ग्राहक को सफलतापूर्वक रिपोर्ट किया गया",
 
-    "yesterday":"Yesterday",
-    "address_locator":"Address Locator",
-    "a_address_photo":"Please choose an address Photo",
+  "yesterday": "कल",
+  "address_locator": "पता लोकेटर",
+  "a_address_photo": "कृपया एक पता फ़ोटो चुनें",
+  "a_address_name_req": "पते का नाम आवश्यक है",
+  "a_address_req": "पता आवश्यक है",
+  "a_country": "देश चुनें",
+  "a_region": "क्षेत्र आवश्यक है",
+  "a_state": "राज्य आवश्यक है",
+  "a_flat": "फ्लैट नंबर आवश्यक है",
+  "a_loc": "कृपया एक पते का स्थान चुनें",
 
         "sl_select":"भाषा चुने",   "su_invoice_id":"चालान आईडी",
 
@@ -294,7 +301,16 @@
           "skip": "छोड़ें",
   "done": "पूर्ण",
   "proceed": "आगे बढ़ें",
+  "explore": "अन्वेषण करें",
   "choose": "चुनें",
+
+  "back": "वापस",
+  "hello": "नमस्ते",
+
+  "open_google_map": "Google मैप खोलें",
+
+
+  "delete_account":"खाता हटा दो",
 
 
         "how":"शुरू करना: प्रक्रिया को समझना",

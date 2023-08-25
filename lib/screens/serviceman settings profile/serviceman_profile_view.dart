@@ -36,10 +36,12 @@ class ServiceManProfileViewPage extends StatefulWidget {
 
 class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
   final int _selectedIndex = 2;
+
   String lang = '';
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       getServiceManProfileFun(context);
     });

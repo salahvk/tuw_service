@@ -920,6 +920,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
   }
 
   validateAddressFields() {
+    final str = AppLocalizations.of(context)!;
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
     final country = selectedValue?.countryId;
@@ -936,7 +937,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     } else if (defaultReg == null) {
       showAnimatedSnackBar(context, "Region is required");
     } else if (state.isEmpty) {
-      showAnimatedSnackBar(context, "state is required");
+      showAnimatedSnackBar(context, str.a_state);
     } else if (flat.isEmpty) {
       showAnimatedSnackBar(context, "Flat No is required");
     } else {

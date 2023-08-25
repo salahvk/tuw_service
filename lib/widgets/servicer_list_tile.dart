@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_favorites.dart';
@@ -20,12 +21,15 @@ class ServicerListTile extends StatefulWidget {
 
 class _ServicerListTileState extends State<ServicerListTile> {
   bool isFavorite = false;
+  String? apiToken;
   @override
   void initState() {
     super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   final provider = Provider.of<DataProvider>(context, listen: false);
     // });
+    apiToken = Hive.box("token").get('api_token');
+
     isFavorite = widget.serviceman?.featured == 1 ? true : false;
   }
 
@@ -150,20 +154,22 @@ class _ServicerListTileState extends State<ServicerListTile> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(
-                              Icons.favorite,
-                              shadows: const [
-                                Shadow(
-                                  blurRadius: 5.0,
-                                  color: Colors.black12,
-                                  offset: Offset(0, 3.5),
-                                ),
-                              ],
-                              size: mob ? 23 : 15,
-                              color: isFavorite
-                                  ? ColorManager.primary2
-                                  : Colors.black12,
-                            ),
+                            apiToken == null
+                                ? Container()
+                                : Icon(
+                                    Icons.favorite,
+                                    shadows: const [
+                                      Shadow(
+                                        blurRadius: 5.0,
+                                        color: Colors.black12,
+                                        offset: Offset(0, 3.5),
+                                      ),
+                                    ],
+                                    size: mob ? 23 : 15,
+                                    color: isFavorite
+                                        ? ColorManager.primary2
+                                        : Colors.black12,
+                                  ),
                             Column(
                               children: [
                                 Image.asset(provider.isTwoSelected

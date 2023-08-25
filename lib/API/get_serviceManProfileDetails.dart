@@ -41,15 +41,17 @@ getServiceManProfileFun(BuildContext context) async {
 }
 
 getServiceManDetailsFun(BuildContext context, id) async {
-  final apiToken = Hive.box("token").get('api_token');
+  String? apiToken = Hive.box("token").get('api_token');
   final provider = Provider.of<DataProvider>(context, listen: false);
   final String lanId = Hive.box("LocalLan").get('lang_id');
 
   try {
     final url = '$serviceManProfileApi?user_id=$id&language_id=$lanId';
     print(url);
-    var response = await http.post(Uri.parse(url),
-        headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
+    var response = await http.post(Uri.parse(url), headers: {
+      "device-id": provider.deviceId ?? '',
+      "api-token": apiToken ?? ''
+    });
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       log(response.body);

@@ -8,7 +8,7 @@
     "m_ent_mob_no":"Enter Mobile Number",
     "m_sub1":"We will send you an OTP for verify your mobile number.",
     "m_continue":"Continue",
-    "m_snack":"Please Enter a valid Mobile Number",
+    "m_snack":"Please Enter a Valid Mobile Number",
     "m_10digits":"Mobile Number must not be above 10 digits",
 
     "t_1":"By continuing, you agree to ",
@@ -19,7 +19,7 @@
     "o_dont":"Don't get the code? ",
     "o_resend":"Resend",
     "o_verify":"Verify Now",
-    "o_snack":"Enter a valid OTP",
+    "o_snack":"Enter a Valid OTP",
 
     "e_name":"Name",
     "e_name_h":"Enter Name",
@@ -149,12 +149,12 @@
     "su_package_id":"Package Name",
 
     "a_home_locator":"Home Locator",
-    "a_add":"Add",
+    "a_add":"Add home address",
     "a_address":"Address",
     "a_home":"Home Address",
     "a_cover":"Please choose cover Photo",
 
-    "ae_home_locator":"Home Locator",
+    "ae_home_locator":"Change home Location",
     "ae_add":"Add",
     "ae_address":"Address",
     "ae_address_n":"Address Name",
@@ -210,8 +210,8 @@
     "ps_snack_cvv":"Please Enter Your CVV Number",
     "ps_snack_package":"Please Choose a package to continue",
     "ps_snack_coupen":"Please Enter a Coupen code to redeem",
-    "e_snack_name":"The name field is required",
-    "e_snack_dob":"DOB field can not be empty",
+    "e_snack_name":"First name is required",
+    "e_snack_dob":"Date of birth is required",
     "e_snack_country_field":"Country field can not be empty",
 
     "sv_edit_profile":"Edit Profile",
@@ -257,7 +257,7 @@
     "pay_fail":"Payment Failed",
     "redeem":"Redeem",
     "validity":"Validity",
-    "tax_total":"Tax total",
+    "tax_total":"Tax Amount",
     "fetch_loc":"Location Fetching...",
     "paid":"paid",
     "omr":"OMR",
@@ -298,7 +298,14 @@
 "skip":"Skip",
 "done":"Done",
 "proceed":"Proceed",
+"explore":"Explore",
 "choose":"Choose",
+
+"delete_account":"Delete Account",
+
+"back":"Back",
+"hello":"Hello",
+"open_google_map": "Open Google Map",
 
 "no_ser":"No ServiceMan Available",
 "no_ava":"Not Available",

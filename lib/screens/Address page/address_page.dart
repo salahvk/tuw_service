@@ -34,6 +34,7 @@ import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
@@ -188,9 +189,18 @@ class _AddressPageState extends State<AddressPage> {
                   child: Center(
                     child: Stack(
                       children: [
-                        BackButton2(),
+                        Row(
+                          children: [
+                            BackButton2(),
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TopLogo(),
+                            )
+                          ],
+                        ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -362,7 +372,7 @@ class _AddressPageState extends State<AddressPage> {
                                                       ColorManager.whiteColor,
                                                 ),
                                                 Text(
-                                                  str.a_home_locator,
+                                                  str.ae_home_locator,
                                                   style: getRegularStyle(
                                                       color: ColorManager
                                                           .whiteColor),
@@ -405,38 +415,38 @@ class _AddressPageState extends State<AddressPage> {
                                   ),
                                 ),
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: ColorManager.primary,
-                                    borderRadius: BorderRadius.circular(5)),
-                                width: size.width * .5,
-                                height: 30,
-                                child: InkWell(
-                                  onTap: () async {
-                                    _openGoogleMaps(currentLocator.latitude,
-                                        currentLocator.latitude);
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 2, 5, 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on,
-                                          color: ColorManager.whiteColor,
-                                        ),
-                                        Text(
-                                          "Open Google Map",
-                                          style: getRegularStyle(
-                                              color: ColorManager.whiteColor),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Container(
+                              //   decoration: BoxDecoration(
+                              //       color: ColorManager.primary,
+                              //       borderRadius: BorderRadius.circular(5)),
+                              //   width: size.width * .5,
+                              //   height: 30,
+                              //   child: InkWell(
+                              //     onTap: () async {
+                              //       _openGoogleMaps(currentLocator.latitude,
+                              //           currentLocator.latitude);
+                              //     },
+                              //     child: Padding(
+                              //       padding:
+                              //           const EdgeInsets.fromLTRB(5, 2, 5, 5),
+                              //       child: Row(
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.center,
+                              //         children: [
+                              //           const Icon(
+                              //             Icons.location_on,
+                              //             color: ColorManager.whiteColor,
+                              //           ),
+                              //           Text(
+                              //             str.open_google_map,
+                              //             style: getRegularStyle(
+                              //                 color: ColorManager.whiteColor),
+                              //           )
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 10,
                               ),

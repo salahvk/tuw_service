@@ -128,6 +128,7 @@ class _HomePageState extends State<HomePage> {
               child: Builder(
                 builder: (context) => InkWell(
                   onTap: () {
+                    String? apiToken = Hive.box("token").get('api_token');
                     Scaffold.of(context).openEndDrawer();
                   },
                   child: const Padding(

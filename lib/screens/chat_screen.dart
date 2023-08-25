@@ -192,10 +192,20 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.arrow_back_rounded,
-                                size: 35,
-                              ),
+                              Text(
+                                textAlign: TextAlign.center,
+                                String.fromCharCode(
+                                    Icons.arrow_back_ios_rounded.codePoint),
+                                style: TextStyle(
+                                  inherit: false,
+                                  color: ColorManager.primary,
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: Icons.search.fontFamily,
+                                  package:
+                                      Icons.arrow_back_ios_rounded.fontPackage,
+                                ),
+                              )
                             ],
                           ),
                         ),

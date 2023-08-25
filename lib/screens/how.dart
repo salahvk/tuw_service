@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/API/home/get_home.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/utils/getLocalLanguage.dart';
 import 'package:social_media_services/widgets/backbutton.dart';
 
@@ -69,7 +71,22 @@ class HowToWorkPageState extends State<HowToWorkPage> {
       body: SafeArea(
         child: Column(
           children: [
-            BackButton2(),
+            Row(
+              children: [
+                BackButton2(),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                      backgroundColor: Color(0xff08dc2c),
+                      child: Image.asset(
+                        'assets/logo/app-logo-T.jpg',
+                        height: 30,
+                        width: 30,
+                      )),
+                )
+              ],
+            ),
             Expanded(
               child: IntroductionScreen(
                 key: introKey,
@@ -81,27 +98,57 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                   // alignment: Alignment.topRight,
                   child: SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 16, right: 16),
-                      child: SizedBox(
-                          width: size.width * .6,
-                          height: size.height * .25,
+                      padding: const EdgeInsets.only(top: 0, right: 0),
+                      child: Container(
+                          color: Colors.white,
+                          width: size.width,
+                          height: size.height * .22,
                           child: SvgPicture.asset(
                               'assets/logo/app_logo_shadow.svg')),
                     ),
                   ),
                 ),
                 globalFooter: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SizedBox(
-                    width: size.width * .5,
-                    height: 50,
-                    child: ElevatedButton(
-                      child: Text(
-                        str.proceed,
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () => _onIntroEnd(context),
+                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  child: Container(
+                    color: Colors.white,
+                    height: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: size.width * .45,
+                          height: 50,
+                          child: ElevatedButton(
+                            child: Text(
+                              str.explore,
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () async {
+                              getHome(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (ctx) {
+                                  return const HomePage();
+                                }),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: size.width * .45,
+                          height: 50,
+                          child: ElevatedButton(
+                            child: Text(
+                              str.proceed,
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () => _onIntroEnd(context),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -146,10 +193,14 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                             child: Text(
                               str.how1s,
                               style: getRegularStyle(
-                                  color: ColorManager.serviceHomeGrey,
-                                  fontSize: 13.5),
+                                      color: ColorManager.serviceHomeGrey,
+                                      fontSize: 14.5)
+                                  .copyWith(height: 1.5),
                             ),
                           ),
+                          SizedBox(
+                            height: 150,
+                          )
                         ],
                       ),
                     ),
@@ -206,10 +257,14 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                             child: Text(
                               str.how2s,
                               style: getRegularStyle(
-                                  color: ColorManager.serviceHomeGrey,
-                                  fontSize: 13.5),
+                                      color: ColorManager.serviceHomeGrey,
+                                      fontSize: 14.5)
+                                  .copyWith(height: 1.5),
                             ),
                           ),
+                          SizedBox(
+                            height: 150,
+                          )
                         ],
                       ),
                     ),
@@ -259,10 +314,14 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                             child: Text(
                               str.how3s,
                               style: getRegularStyle(
-                                  color: ColorManager.serviceHomeGrey,
-                                  fontSize: 13.5),
+                                      color: ColorManager.serviceHomeGrey,
+                                      fontSize: 14.5)
+                                  .copyWith(height: 1.5),
                             ),
                           ),
+                          SizedBox(
+                            height: 150,
+                          )
                         ],
                       ),
                     ),
@@ -292,10 +351,14 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                             child: Text(
                               str.how4s,
                               style: getRegularStyle(
-                                  color: ColorManager.serviceHomeGrey,
-                                  fontSize: 13.5),
+                                      color: ColorManager.serviceHomeGrey,
+                                      fontSize: 14.5)
+                                  .copyWith(height: 1.5),
                             ),
                           ),
+                          SizedBox(
+                            height: 150,
+                          )
                         ],
                       ),
                     ),
@@ -324,10 +387,14 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                             child: Text(
                               str.how5s,
                               style: getRegularStyle(
-                                  color: ColorManager.serviceHomeGrey,
-                                  fontSize: 13.5),
+                                      color: ColorManager.serviceHomeGrey,
+                                      fontSize: 14.5)
+                                  .copyWith(height: 1.5),
                             ),
                           ),
+                          SizedBox(
+                            height: 150,
+                          )
                         ],
                       ),
                     ),
@@ -420,12 +487,17 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                 //rtl: true, // Display as right-to-left
                 back: const Icon(Icons.arrow_back),
                 skip: Text(str.skip,
-                    style: TextStyle(fontWeight: FontWeight.w600)),
-                next: const Icon(Icons.arrow_forward),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: ColorManager.primary)),
+                next: const Icon(Icons.arrow_forward,
+                    color: ColorManager.primary),
                 done: Text(str.done,
-                    style: TextStyle(fontWeight: FontWeight.w600)),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: ColorManager.primary)),
                 curve: Curves.fastLinearToSlowEaseIn, dotsFlex: 2,
-                controlsMargin: const EdgeInsets.all(16),
+                // controlsMargin: const EdgeInsets.all(16),
                 controlsPadding: kIsWeb
                     ? const EdgeInsets.all(12.0)
                     : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),

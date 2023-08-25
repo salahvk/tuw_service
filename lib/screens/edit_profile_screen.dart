@@ -25,7 +25,6 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/profile_page.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/get_location.dart';
-import 'package:social_media_services/utils/snack_bar.dart';
 import 'package:social_media_services/API/viewProfile.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/widgets/customRadioButton.dart';
@@ -213,18 +212,28 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                               ? Row(
                                   children: [
                                     InkWell(
-                                      onTap: () {
-                                        Navigator.pushReplacement(context,
-                                            MaterialPageRoute(builder: (ctx) {
-                                          return const HomePage();
-                                        }));
-                                      },
-                                      child: const Icon(
-                                        Icons.arrow_back_rounded,
-                                        size: 30,
-                                        color: ColorManager.primary,
-                                      ),
-                                    )
+                                        onTap: () {
+                                          Navigator.pushReplacement(context,
+                                              MaterialPageRoute(builder: (ctx) {
+                                            return const HomePage();
+                                          }));
+                                        },
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          String.fromCharCode(Icons
+                                              .arrow_back_ios_rounded
+                                              .codePoint),
+                                          style: TextStyle(
+                                            inherit: false,
+                                            color: ColorManager.primary,
+                                            fontSize: 30.0,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: Icons.search.fontFamily,
+                                            package: Icons
+                                                .arrow_back_ios_rounded
+                                                .fontPackage,
+                                          ),
+                                        ))
                                   ],
                                 )
                               : Container(
@@ -297,7 +306,7 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                 ],
                               ),
                               child: TextField(
-                                focusNode: nfocus,
+                                // focusNode: nfocus,
                                 style: const TextStyle(),
                                 controller:
                                     EditProfileControllers.lastNameController,

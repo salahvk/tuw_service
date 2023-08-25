@@ -17,12 +17,15 @@ getServiceMan(BuildContext context, id, homeservice) async {
   final provider = Provider.of<DataProvider>(context, listen: false);
   final userDetails = provider.viewProfileModel?.userdetails;
   // provider.subServicesModel = null;
-  final apiToken = Hive.box("token").get('api_token');
-  if (apiToken == null) return;
+  String? apiToken = Hive.box("token").get('api_token');
+  // if (apiToken == null) return;
+  if (apiToken == null) {
+    apiToken = '';
+  }
   try {
     var response = await http.post(
         Uri.parse(
-            '$servicemanList?service_id=$id&page=1&latitude=${userDetails?.latitude}&longitude=${userDetails?.longitude}'),
+            '$servicemanList?service_id=$id&page=1&latitude=${userDetails?.latitude ?? provider.explorerLat}&longitude=${userDetails?.longitude ?? provider.explorerLong}'),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
@@ -55,11 +58,15 @@ searchServiceMan(
   final provider = Provider.of<DataProvider>(context, listen: false);
   final userDetails = provider.viewProfileModel?.userdetails;
   // provider.subServicesModel = null;
-  final apiToken = Hive.box("token").get('api_token');
-  if (apiToken == null) return;
+  String? apiToken = Hive.box("token").get('api_token');
+  // for explore apiToken want to be null so cant return it
+  // if (apiToken == null) return;
+  if (apiToken == null) {
+    apiToken = '';
+  }
   try {
     final url =
-        '$servicemanList?service_id=$id&page=1&latitude=${servicerProvider.servicerLatitude ?? userDetails?.latitude}&longitude=${servicerProvider.servicerLatitude ?? userDetails?.longitude}&sel_country_id=${countryId ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
+        '$servicemanList?service_id=$id&page=1&latitude=${servicerProvider.servicerLatitude ?? userDetails?.latitude ?? provider.explorerLat}&longitude=${servicerProvider.servicerLatitude ?? userDetails?.longitude ?? provider.explorerLong}&sel_country_id=${countryId ?? ''}&sel_state=${state ?? ''}&sel_region=${region ?? ''}&sel_name=${name ?? ''}&sel_transport=${transport ?? ''}';
     print(url);
     var response = await http.post(Uri.parse(url),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});

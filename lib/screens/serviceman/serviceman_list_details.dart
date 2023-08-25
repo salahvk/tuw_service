@@ -39,10 +39,11 @@ class ServiceManDetails extends StatefulWidget {
 class _ServiceManDetailsState extends State<ServiceManDetails> {
   final int _selectedIndex = 2;
   String lang = '';
+  String? apiToken;
   @override
   void initState() {
     super.initState();
-
+    apiToken = Hive.box("token").get('api_token');
     lang = Hive.box('LocalLan').get(
       'lang',
     );
@@ -467,41 +468,50 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const ReportUserDiologue(),
-                                  barrierDismissible: true);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.fromLTRB(
-                                    size.width * .1, 0, size.width * .1, 0)),
-                            child: Text(
-                              str.wd_report,
-                              style: getMediumtStyle(
-                                  color: ColorManager.whiteText, fontSize: 14),
-                            )),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        ElevatedButton(
-                          onPressed: navToChatLoadingScreen,
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(
-                                  size.width * .1, 0, size.width * .1, 0)),
-                          child: SvgPicture.asset(
-                            height: 20,
-                            ImageAssets.chatIconSvg,
-                            color: ColorManager.whiteColor,
+                    apiToken == null
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            const ReportUserDiologue(),
+                                        barrierDismissible: true);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.fromLTRB(
+                                          size.width * .1,
+                                          0,
+                                          size.width * .1,
+                                          0)),
+                                  child: Text(
+                                    str.wd_report,
+                                    style: getMediumtStyle(
+                                        color: ColorManager.whiteText,
+                                        fontSize: 14),
+                                  )),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              ElevatedButton(
+                                onPressed: navToChatLoadingScreen,
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.fromLTRB(
+                                        size.width * .1,
+                                        0,
+                                        size.width * .1,
+                                        0)),
+                                child: SvgPicture.asset(
+                                  height: 20,
+                                  ImageAssets.chatIconSvg,
+                                  color: ColorManager.whiteColor,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

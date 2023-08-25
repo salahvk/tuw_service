@@ -167,34 +167,52 @@ class _SubServicesPageState extends State<SubServicesPage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 20),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_rounded,
-                          size: 35,
-                        ),
-                      ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                textAlign: TextAlign.center,
+                                String.fromCharCode(
+                                    Icons.arrow_back_ios_rounded.codePoint),
+                                style: TextStyle(
+                                  inherit: false,
+                                  color: ColorManager.primary,
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: Icons.search.fontFamily,
+                                  package:
+                                      Icons.arrow_back_ios_rounded.fontPackage,
+                                ),
+                              ),
+                              Text(
+                                "Back",
+                                style: getRegularStyle(
+                                    color: ColorManager.black, fontSize: 18),
+                              )
+                            ],
+                          )),
                       Spacer(),
-                      Text(
-                        // str.se_sub_services,
-                        "${str.choose} ${widget.homeService.service}",
-                        style: getBoldtStyle(
-                            color: ColorManager.black, fontSize: 20),
-                      ),
-                      Spacer(),
-                      SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: SvgPicture.asset(
-                              'assets/logo/app_logo_shadow.svg')),
+                      CircleAvatar(
+                          backgroundColor: Color(0xff08dc2c),
+                          child: Image.asset(
+                            'assets/logo/app-logo-T.jpg',
+                            height: 30,
+                            width: 30,
+                          ))
                     ],
                   ),
+                ),
+                Text(
+                  // str.se_sub_services,
+                  "${str.choose} ${widget.homeService.service}",
+                  style: getBoldtStyle(color: ColorManager.black, fontSize: 18),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),

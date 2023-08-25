@@ -249,7 +249,7 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
                                 padding:
                                     const EdgeInsets.fromLTRB(13, 0, 13, 0)),
                             child: Text(
-                              "BACK TO HOME",
+                              str.su_home,
                               style: getMediumtStyle(
                                   color: ColorManager.whiteText, fontSize: 14),
                             )),

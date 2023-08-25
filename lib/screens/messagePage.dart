@@ -13,6 +13,7 @@ import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/API/get_chat_list.dart';
 import 'package:social_media_services/components/assets_manager.dart';
 import 'package:social_media_services/components/color_manager.dart';
+import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/loading%20screens/chat_loading_screen.dart';
 import 'package:social_media_services/providers/data_provider.dart';
@@ -35,13 +36,20 @@ class _MessagePageState extends State<MessagePage> {
   String lang = '';
   late Timer timer;
   String? time;
+  String? apiToken;
   @override
   void initState() {
     super.initState();
+    apiToken = Hive.box("token").get('api_token');
+
     lang = Hive.box('LocalLan').get(
       'lang',
     );
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (apiToken == null) {
+        Navigator.pushReplacementNamed(context, Routes.phoneNumber);
+        return;
+      }
       getChatList(
         context,
       );
@@ -88,250 +96,259 @@ class _MessagePageState extends State<MessagePage> {
       onWillPop: () async {
         return _willPopCallback();
       },
-      child: Scaffold(
-        drawerEnableOpenDragGesture: false,
-        endDrawer: SizedBox(
-          height: size.height * 0.825,
-          width: mobWth
-              ? size.width * 0.6
-              : smobWth
-                  ? w * .7
-                  : w * .75,
-          child: const CustomDrawer(),
-        ),
-        bottomNavigationBar: widget.isHome
-            ? null
-            : Stack(
-                children: [
-                  Container(
-                    height: 45,
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5.0,
-                        color: Colors.grey.shade400,
-                        offset: const Offset(6, 1),
-                      ),
-                    ]),
-                  ),
-                  SizedBox(
-                    height: 44,
-                    child: GNav(
-                      tabMargin: const EdgeInsets.symmetric(
-                        vertical: 0,
-                      ),
-                      gap: 0,
-                      backgroundColor: ColorManager.whiteColor,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      activeColor: ColorManager.grayDark,
-                      iconSize: 24,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 5),
-                      duration: const Duration(milliseconds: 400),
-                      tabBackgroundColor: ColorManager.primary.withOpacity(0.4),
-                      color: ColorManager.black,
-                      tabs: [
-                        GButton(
-                          icon: FontAwesomeIcons.message,
-                          leading: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: SvgPicture.asset(ImageAssets.homeIconSvg),
-                          ),
-                        ),
-                        GButton(
-                          icon: FontAwesomeIcons.message,
-                          leading: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: SvgPicture.asset(ImageAssets.chatIconSvg),
-                          ),
-                        ),
-                      ],
-                      haptic: true,
-                      selectedIndex: _selectedIndex,
-                      onTabChange: (index) {
-                        // if (mounted) {
-                        //   Navigator.pushNamedAndRemoveUntil(
-                        //       context, Routes.homePage, (route) => false);
-                        // }
-
-                        setState(() {
-                          _selectedIndex = index;
-                        });
-                      },
-                    ),
-                  ),
-                  Positioned(
-                      left: lang == 'ar' ? 5 : null,
-                      right: lang != 'ar' ? 5 : null,
-                      bottom: 0,
-                      child: Builder(
-                        builder: (context) => InkWell(
-                          onTap: () {
-                            Scaffold.of(context).openEndDrawer();
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Icon(
-                              Icons.menu,
-                              size: 25,
-                              color: ColorManager.black,
-                            ),
-                          ),
-                        ),
-                      ))
-                ],
+      child: apiToken == null
+          ? Scaffold()
+          : Scaffold(
+              drawerEnableOpenDragGesture: false,
+              endDrawer: SizedBox(
+                height: size.height * 0.825,
+                width: mobWth
+                    ? size.width * 0.6
+                    : smobWth
+                        ? w * .7
+                        : w * .75,
+                child: const CustomDrawer(),
               ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              bottomNavigationBar: widget.isHome
+                  ? null
+                  : Stack(
+                      children: [
+                        Container(
+                          height: 45,
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              blurRadius: 5.0,
+                              color: Colors.grey.shade400,
+                              offset: const Offset(6, 1),
+                            ),
+                          ]),
+                        ),
+                        SizedBox(
+                          height: 44,
+                          child: GNav(
+                            tabMargin: const EdgeInsets.symmetric(
+                              vertical: 0,
+                            ),
+                            gap: 0,
+                            backgroundColor: ColorManager.whiteColor,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            activeColor: ColorManager.grayDark,
+                            iconSize: 24,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 5),
+                            duration: const Duration(milliseconds: 400),
+                            tabBackgroundColor:
+                                ColorManager.primary.withOpacity(0.4),
+                            color: ColorManager.black,
+                            tabs: [
+                              GButton(
+                                icon: FontAwesomeIcons.message,
+                                leading: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child:
+                                      SvgPicture.asset(ImageAssets.homeIconSvg),
+                                ),
+                              ),
+                              GButton(
+                                icon: FontAwesomeIcons.message,
+                                leading: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child:
+                                      SvgPicture.asset(ImageAssets.chatIconSvg),
+                                ),
+                              ),
+                            ],
+                            haptic: true,
+                            selectedIndex: _selectedIndex,
+                            onTabChange: (index) {
+                              // if (mounted) {
+                              //   Navigator.pushNamedAndRemoveUntil(
+                              //       context, Routes.homePage, (route) => false);
+                              // }
+
+                              setState(() {
+                                _selectedIndex = index;
+                              });
+                            },
+                          ),
+                        ),
+                        Positioned(
+                            left: lang == 'ar' ? 5 : null,
+                            right: lang != 'ar' ? 5 : null,
+                            bottom: 0,
+                            child: Builder(
+                              builder: (context) => InkWell(
+                                onTap: () {
+                                  Scaffold.of(context).openEndDrawer();
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Icon(
+                                    Icons.menu,
+                                    size: 25,
+                                    color: ColorManager.black,
+                                  ),
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        str.mh_message,
-                        style: getBoldtStyle(
-                            color: ColorManager.black, fontSize: 20),
-                      )
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              str.mh_message,
+                              style: getBoldtStyle(
+                                  color: ColorManager.black, fontSize: 20),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                        child: Text(
+                          str.mh_recents,
+                          style: getSemiBoldtStyle(
+                              color: ColorManager.black, fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                            itemCount: provider
+                                .chatListDetails?.chatMessage?.data?.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final profileDetails = provider
+                                  .chatListDetails?.chatMessage?.data?[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.shade300,
+                                                spreadRadius: 1,
+                                                blurRadius: 3,
+                                                offset: const Offset(4, 4.5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              navToChatLoadingScreen(index);
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundColor: ColorManager
+                                                  .whiteColor
+                                                  .withOpacity(0.8),
+                                              radius: 25,
+                                              backgroundImage: profileDetails
+                                                          ?.profilePic ==
+                                                      null
+                                                  ? const AssetImage(
+                                                          'assets/user.png')
+                                                      as ImageProvider
+                                                  : CachedNetworkImageProvider(
+                                                      '$endPoint${profileDetails?.profilePic}'),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 5,
+                                          left: 1,
+                                          // left: size.width * .0,
+                                          child: CircleAvatar(
+                                            radius: 5,
+                                            backgroundColor: profileDetails
+                                                        ?.onlineStatus ==
+                                                    'online'
+                                                ? ColorManager.primary
+                                                : profileDetails
+                                                            ?.onlineStatus ==
+                                                        'offline'
+                                                    ? ColorManager.grayLight
+                                                    : ColorManager.errorRed,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Text(profileDetails?.firstname ??
+                                        profileDetails?.phone ??
+                                        ''),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: ((context, index) {
+                          final profileDetails = provider
+                              .chatListDetails?.chatMessage?.data?[index];
+
+                          var dtime = DateFormat("HH:mm").parse(
+                              profileDetails?.createdAt?.substring(11, 16) ??
+                                  '',
+                              true);
+
+                          var date = DateFormat("yyyy-MM-dd").parse(
+                              profileDetails?.createdAt?.substring(0, 10) ?? '',
+                              true);
+                          String localDate =
+                              DateFormat.yMd('es').format(date.toLocal());
+
+                          var hour = dtime.toLocal().hour;
+                          var minute = dtime.toLocal().minute;
+
+                          var day = date.toLocal().weekday;
+                          if (DateTime.now().weekday == day) {
+                            String time24 = "$hour:$minute";
+                            time = DateFormat.jm()
+                                .format(DateFormat("hh:mm").parse(time24));
+                          } else if (day == DateTime.now().weekday - 1) {
+                            time = "Yesterday";
+                          } else {
+                            time = localDate;
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: InkWell(
+                              onTap: () {
+                                navToChatLoadingScreen(index);
+                              },
+                              child: ChatListTile(
+                                profileData: profileDetails,
+                                time: time,
+                              ),
+                            ),
+                          );
+                        }),
+                        itemCount:
+                            provider.chatListDetails?.chatMessage?.data?.length,
+                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
-                  child: Text(
-                    str.mh_recents,
-                    style: getSemiBoldtStyle(
-                        color: ColorManager.black, fontSize: 16),
-                  ),
-                ),
-                SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                      itemCount:
-                          provider.chatListDetails?.chatMessage?.data?.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        final profileDetails =
-                            provider.chatListDetails?.chatMessage?.data?[index];
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.shade300,
-                                          spreadRadius: 1,
-                                          blurRadius: 3,
-                                          offset: const Offset(4, 4.5),
-                                        ),
-                                      ],
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        navToChatLoadingScreen(index);
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: ColorManager.whiteColor
-                                            .withOpacity(0.8),
-                                        radius: 25,
-                                        backgroundImage: profileDetails
-                                                    ?.profilePic ==
-                                                null
-                                            ? const AssetImage(
-                                                    'assets/user.png')
-                                                as ImageProvider
-                                            : CachedNetworkImageProvider(
-                                                '$endPoint${profileDetails?.profilePic}'),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 5,
-                                    left: 1,
-                                    // left: size.width * .0,
-                                    child: CircleAvatar(
-                                      radius: 5,
-                                      backgroundColor:
-                                          profileDetails?.onlineStatus ==
-                                                  'online'
-                                              ? ColorManager.primary
-                                              : profileDetails?.onlineStatus ==
-                                                      'offline'
-                                                  ? ColorManager.grayLight
-                                                  : ColorManager.errorRed,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Text(profileDetails?.firstname ??
-                                  profileDetails?.phone ??
-                                  ''),
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: ((context, index) {
-                    final profileDetails =
-                        provider.chatListDetails?.chatMessage?.data?[index];
-
-                    var dtime = DateFormat("HH:mm").parse(
-                        profileDetails?.createdAt?.substring(11, 16) ?? '',
-                        true);
-
-                    var date = DateFormat("yyyy-MM-dd").parse(
-                        profileDetails?.createdAt?.substring(0, 10) ?? '',
-                        true);
-                    String localDate =
-                        DateFormat.yMd('es').format(date.toLocal());
-
-                    var hour = dtime.toLocal().hour;
-                    var minute = dtime.toLocal().minute;
-
-                    var day = date.toLocal().weekday;
-                    if (DateTime.now().weekday == day) {
-                      String time24 = "$hour:$minute";
-                      time = DateFormat.jm()
-                          .format(DateFormat("hh:mm").parse(time24));
-                    } else if (day == DateTime.now().weekday - 1) {
-                      time = "Yesterday";
-                    } else {
-                      time = localDate;
-                    }
-
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: InkWell(
-                        onTap: () {
-                          navToChatLoadingScreen(index);
-                        },
-                        child: ChatListTile(
-                          profileData: profileDetails,
-                          time: time,
-                        ),
-                      ),
-                    );
-                  }),
-                  itemCount:
-                      provider.chatListDetails?.chatMessage?.data?.length,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 

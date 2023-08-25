@@ -19,7 +19,7 @@
     "o_dont":"Don't get the code? ",
     "o_resend":"Resend",
     "o_verify":"Verify Now",
-    "o_snack":"Enter a valid OTP",
+    "o_snack":"Enter a Valid OTP",
 
     "e_name":"Name",
     "e_name_h":"Enter Name",

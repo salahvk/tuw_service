@@ -29,6 +29,7 @@ import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/profile_tile_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -201,7 +202,16 @@ class _ProfilePageState extends State<ProfilePage> {
         child: SafeArea(
             child: Stack(
           children: [
-            BackButton2(),
+            Row(
+              children: [
+                BackButton2(),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TopLogo(),
+                )
+              ],
+            ),
             Column(
               children: [
                 SizedBox(

@@ -32,6 +32,7 @@ import 'package:social_media_services/widgets/custom_text_field.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class ProfileServicePage extends StatefulWidget {
   ProfileServicePage({Key? key}) : super(key: key);
@@ -228,9 +229,21 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
               child: SafeArea(
                 child: Stack(
                   children: [
-                    BackButton2(),
+                    Row(
+                      children: [
+                        BackButton2(),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TopLogo(),
+                        )
+                      ],
+                    ),
                     Column(
                       children: [
+                        SizedBox(
+                          height: 50,
+                        ),
                         const FadeCustomAnimation(
                             delay: .1, child: CustomStepper(num: 1)),
                         Expanded(
@@ -1169,22 +1182,23 @@ class _ProfileServicePageState extends State<ProfileServicePage> {
   }
 
   onContinue() {
+    final str = AppLocalizations.of(context)!;
     print(ProfileServiceControllers.regionController.text);
     FocusManager.instance.primaryFocus?.unfocus();
     if (ProfileServiceControllers.firstNameController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter Your First Name");
+      showAnimatedSnackBar(context, str.e_snack_name);
     }
     //  else if (ProfileServiceControllers.lastNameController.text.isEmpty) {
     //   showAnimatedSnackBar(context, "Please Enter Your Last Name");
     // }
     else if (ProfileServiceControllers.civilCardController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter Your Civil Card Number");
+      showAnimatedSnackBar(context, str.ps_snack_cvv);
     } else if (selectedValue == null) {
-      showAnimatedSnackBar(context, "Please Select your country");
+      showAnimatedSnackBar(context, str.a_country);
     } else if (ProfileServiceControllers.regionController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter Your Region");
+      showAnimatedSnackBar(context, str.a_region);
     } else if (ProfileServiceControllers.stateController.text.isEmpty) {
-      showAnimatedSnackBar(context, "Please Enter Your State");
+      showAnimatedSnackBar(context, str.a_state);
     }
     // else if (ProfileServiceControllers.addressController.text.isEmpty) {
     //   showAnimatedSnackBar(context, "Please Enter Your Address");

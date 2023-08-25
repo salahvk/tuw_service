@@ -22,10 +22,13 @@ getSubService(BuildContext context, id, bool changeLan, homeService) async {
   print('1');
   final provider = Provider.of<DataProvider>(context, listen: false);
   // provider.subServicesModel = null;
-  final apiToken = Hive.box("token").get('api_token');
+  String? apiToken = Hive.box("token").get('api_token');
   final String lanId = Hive.box("LocalLan").get('lang_id');
 
-  if (apiToken == null) return;
+  // if (apiToken == null) return;
+  if (apiToken == null) {
+    apiToken = '';
+  }
   try {
     var response = await http.post(
         Uri.parse('$subServices?parent_service_id=$id&language_id=$lanId'),
@@ -65,10 +68,17 @@ selectServiceType(context, id, jsonResponse, homeService) async {
             page: SubServicesPage(
           homeService: homeService,
         )));
-  } else if (provider.viewProfileModel?.userdetails?.latitude == null) {
-    requestLocationPermission(
-      context,
-    );
+  } else if (provider.viewProfileModel?.userdetails?.latitude == null &&
+      provider.explorerLat == null) {
+    String? apiToken = Hive.box("token").get('api_token');
+    if (apiToken == null) {
+      requestExplorerLocationPermission(context);
+    } else {
+      requestLocationPermission(
+        context,
+      );
+    }
+
     Navigator.pop(context);
 
     AnimatedSnackBar.material(str.snack_get_location,

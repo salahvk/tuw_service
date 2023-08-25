@@ -276,38 +276,74 @@ class _ServicerPageState extends State<ServicerPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Icon(
-                                    Icons.arrow_back_rounded,
-                                    size: 35,
-                                  ),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              String.fromCharCode(Icons
+                                                  .arrow_back_ios_rounded
+                                                  .codePoint),
+                                              style: TextStyle(
+                                                inherit: false,
+                                                color: ColorManager.primary,
+                                                fontSize: 25.0,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily:
+                                                    Icons.search.fontFamily,
+                                                package: Icons
+                                                    .arrow_back_ios_rounded
+                                                    .fontPackage,
+                                              ),
+                                            ),
+                                            Text(
+                                              str.back,
+                                              style: getRegularStyle(
+                                                  color: ColorManager.black,
+                                                  fontSize: 18),
+                                            )
+                                          ],
+                                        )),
+                                  ],
                                 ),
                                 SizedBox(
                                   width: 5,
                                 ),
-                                Flexible(
-                                  child: Center(
-                                    child: Text(
-                                      // str.se_sub_services,
-                                      "${str.choose} ${widget.homeservice?.service}",
-                                      style: getBoldtStyle(
-                                          color: ColorManager.black,
-                                          fontSize: 20),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: SvgPicture.asset(
-                                      'assets/logo/app_logo_shadow.svg'),
-                                ),
+                                Spacer(),
+                                CircleAvatar(
+                                    backgroundColor: Color(0xff08dc2c),
+                                    child: Image.asset(
+                                      'assets/logo/app-logo-T.jpg',
+                                      height: 30,
+                                      width: 30,
+                                    ))
                               ],
                             ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  // str.se_sub_services,
+                                  "${str.choose} ${widget.homeservice?.service}",
+                                  style: getBoldtStyle(
+                                      color: ColorManager.black, fontSize: 18),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,

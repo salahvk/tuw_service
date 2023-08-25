@@ -25,12 +25,14 @@ import 'package:social_media_services/screens/Become%20a%20servie%20man/thawani_
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/custom_stepper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/monthly_plan.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class PaymentServicePage extends StatefulWidget {
   const PaymentServicePage({Key? key}) : super(key: key);
@@ -175,489 +177,596 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
       body: _selectedIndex != 2
           ? _screens[_selectedIndex]
           : SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      const CustomStepper(num: 3),
-                      // MandatoryHeader(heading: str.ps_card),
-                      // TextFieldProfileService(
-                      //   controller:
-                      //       PaymentServiceControllers.cardHolderController,
-                      //   hintText: str.ps_card_h,
-                      // ),
-                      // MandatoryHeader(heading: str.ps_card_no),
-                      // TextFieldProfileService(
-                      //     controller:
-                      //         PaymentServiceControllers.cardNumberController,
-                      //     hintText: str.ps_card_no_h,
-                      //     type: TextInputType.number),
-
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         MandatoryHeader(heading: str.ps_ex),
-                      //         Padding(
-                      //           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      //           child: Container(
-                      //             width: size.width * 0.44,
-                      //             decoration: BoxDecoration(
-                      //               boxShadow: [
-                      //                 BoxShadow(
-                      //                   blurRadius: 10.0,
-                      //                   color: Colors.grey.shade300,
-                      //                   // offset: const Offset(5, 8.5),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //             child: TextField(
-                      //               style: const TextStyle(),
-                      //               readOnly: true,
-                      //               controller: PaymentServiceControllers
-                      //                   .dateController,
-                      //               decoration: InputDecoration(
-                      //                   suffixIcon: InkWell(
-                      //                     onTap: () => _selectDate(context),
-                      //                     child: const Icon(
-                      //                       Icons.calendar_month,
-                      //                       color: ColorManager.primary,
-                      //                     ),
-                      //                   ),
-                      //                   hintText: str.ps_ex,
-                      //                   hintStyle: getRegularStyle(
-                      //                       color: const Color.fromARGB(
-                      //                           255, 173, 173, 173),
-                      //                       fontSize: 14)),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //     Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       // mainAxisAlignment: MainAxisAlignment.start,
-                      //       children: [
-                      //         Padding(
-                      //           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      //           child: MandatoryHeader(heading: str.ps_cvv),
-                      //         ),
-                      //         Padding(
-                      //           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      //           child: Row(
-                      //             mainAxisAlignment:
-                      //                 MainAxisAlignment.spaceBetween,
-                      //             children: [
-                      //               SizedBox(
-                      //                   width: size.width * .44,
-                      //                   child: TextFieldProfileService(
-                      //                       controller:
-                      //                           PaymentServiceControllers
-                      //                               .cvvCodeController,
-                      //                       hintText: str.ps_cvv_h,
-                      //                       type: TextInputType.number)),
-                      //             ],
-                      //           ),
-                      //         )
-                      //       ],
-                      //     )
-                      //   ],
-                      // ),
-
+                      BackButton2(),
+                      Spacer(),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: TitleWidget(name: str.ps_coupon),
-                      ),
-                      // TextFieldProfileService(
-                      //     controller:
-                      //         PaymentServiceControllers.couponController,
-                      //     hintText: str.ps_coupon_h,
-                      //     type: TextInputType.number),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10.0,
-                                color: Colors.grey.shade300,
-                                // offset: const Offset(5, 8.5),
-                              ),
-                            ],
-                          ),
-                          child: TextField(
-                            // focusNode: nfocus,
-                            style: const TextStyle(),
-                            onChanged: (value) {
-                              // searchCoupenCode(value);
-                            },
-                            controller:
-                                PaymentServiceControllers.couponController,
-                            // keyboardType: type,
-                            decoration: InputDecoration(
-                                suffixIcon: SizedBox(
-                                  width: size.width * .5,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        // width: size.width * .4,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              padding: coupenLoading
-                                                  ? const EdgeInsets.symmetric(
-                                                      horizontal: 35,
-                                                      vertical: 0)
-                                                  : const EdgeInsets.symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 0),
-                                            ),
-                                            onPressed: redeem,
-                                            child: coupenLoading
-                                                ? const SizedBox(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child:
-                                                        CircularProgressIndicator())
-                                                : Text(
-                                                    str.redeem,
-                                                    style: getSemiBoldtStyle(
-                                                        color: ColorManager
-                                                            .whiteColor,
-                                                        fontSize: 15),
-                                                  )),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      InkWell(
-                                        onTap: getCoupenFunction,
-                                        child: getCodeLoading
-                                            ? const SizedBox(
-                                                width: 20,
-                                                height: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                ))
-                                            : Icon(
-                                                isVisible
-                                                    ? Icons
-                                                        .arrow_drop_up_outlined
-                                                    : Icons
-                                                        .arrow_drop_down_circle,
-                                                color: ColorManager.primary2,
-                                              ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                hintText: str.ps_coupon_h,
-                                hintStyle: getRegularStyle(
-                                    color: const Color.fromARGB(
-                                        255, 173, 173, 173),
-                                    fontSize: 15)),
-                          ),
-                        ),
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        padding: const EdgeInsets.all(8.0),
+                        child: TopLogo(),
+                      )
+                    ],
+                  ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Visibility(
-                              visible: isVisible,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: ColorManager.primary,
-                                    borderRadius: BorderRadius.circular(5)),
-                                width: w * .5,
-                                height: 100,
-                                child: ListView.builder(
-                                  itemCount:
-                                      provider.coupenCodeModel?.coupons?.length,
-                                  itemBuilder: (context, index) {
-                                    return Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          // color: ColorManager.primary2,
-                                          // height: 30,
-                                          child: Text(provider.coupenCodeModel
-                                                  ?.coupons?[index].code ??
-                                              ''),
-                                        ),
+                          SizedBox(
+                            height: 0,
+                          ),
+                          const CustomStepper(num: 3),
+                          // MandatoryHeader(heading: str.ps_card),
+                          // TextFieldProfileService(
+                          //   controller:
+                          //       PaymentServiceControllers.cardHolderController,
+                          //   hintText: str.ps_card_h,
+                          // ),
+                          // MandatoryHeader(heading: str.ps_card_no),
+                          // TextFieldProfileService(
+                          //     controller:
+                          //         PaymentServiceControllers.cardNumberController,
+                          //     hintText: str.ps_card_no_h,
+                          //     type: TextInputType.number),
+
+                          // Row(
+                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         MandatoryHeader(heading: str.ps_ex),
+                          //         Padding(
+                          //           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          //           child: Container(
+                          //             width: size.width * 0.44,
+                          //             decoration: BoxDecoration(
+                          //               boxShadow: [
+                          //                 BoxShadow(
+                          //                   blurRadius: 10.0,
+                          //                   color: Colors.grey.shade300,
+                          //                   // offset: const Offset(5, 8.5),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //             child: TextField(
+                          //               style: const TextStyle(),
+                          //               readOnly: true,
+                          //               controller: PaymentServiceControllers
+                          //                   .dateController,
+                          //               decoration: InputDecoration(
+                          //                   suffixIcon: InkWell(
+                          //                     onTap: () => _selectDate(context),
+                          //                     child: const Icon(
+                          //                       Icons.calendar_month,
+                          //                       color: ColorManager.primary,
+                          //                     ),
+                          //                   ),
+                          //                   hintText: str.ps_ex,
+                          //                   hintStyle: getRegularStyle(
+                          //                       color: const Color.fromARGB(
+                          //                           255, 173, 173, 173),
+                          //                       fontSize: 14)),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       // mainAxisAlignment: MainAxisAlignment.start,
+                          //       children: [
+                          //         Padding(
+                          //           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          //           child: MandatoryHeader(heading: str.ps_cvv),
+                          //         ),
+                          //         Padding(
+                          //           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          //           child: Row(
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.spaceBetween,
+                          //             children: [
+                          //               SizedBox(
+                          //                   width: size.width * .44,
+                          //                   child: TextFieldProfileService(
+                          //                       controller:
+                          //                           PaymentServiceControllers
+                          //                               .cvvCodeController,
+                          //                       hintText: str.ps_cvv_h,
+                          //                       type: TextInputType.number)),
+                          //             ],
+                          //           ),
+                          //         )
+                          //       ],
+                          //     )
+                          //   ],
+                          // ),
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: TitleWidget(name: str.ps_coupon),
+                          ),
+                          // TextFieldProfileService(
+                          //     controller:
+                          //         PaymentServiceControllers.couponController,
+                          //     hintText: str.ps_coupon_h,
+                          //     type: TextInputType.number),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey.shade300,
+                                    // offset: const Offset(5, 8.5),
+                                  ),
+                                ],
+                              ),
+                              child: TextField(
+                                // focusNode: nfocus,
+                                style: const TextStyle(),
+                                onChanged: (value) {
+                                  // searchCoupenCode(value);
+                                },
+                                controller:
+                                    PaymentServiceControllers.couponController,
+                                // keyboardType: type,
+                                decoration: InputDecoration(
+                                    suffixIcon: SizedBox(
+                                      width: size.width * .5,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          SizedBox(
+                                            // width: size.width * .4,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  padding: coupenLoading
+                                                      ? const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 35,
+                                                          vertical: 0)
+                                                      : const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 20,
+                                                          vertical: 0),
+                                                ),
+                                                onPressed: redeem,
+                                                child: coupenLoading
+                                                    ? const SizedBox(
+                                                        width: 30,
+                                                        height: 30,
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                    : Text(
+                                                        str.redeem,
+                                                        style: getSemiBoldtStyle(
+                                                            color: ColorManager
+                                                                .whiteColor,
+                                                            fontSize: 15),
+                                                      )),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: getCoupenFunction,
+                                            child: getCodeLoading
+                                                ? const SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ))
+                                                : Icon(
+                                                    isVisible
+                                                        ? Icons
+                                                            .arrow_drop_up_outlined
+                                                        : Icons
+                                                            .arrow_drop_down_circle,
+                                                    color:
+                                                        ColorManager.primary2,
+                                                  ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
-                              )),
-                        ],
-                      ),
-                      provider.customerChildSer!.packages!.isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: SizedBox(
-                                height: size.height * .125,
-                                child: Center(
-                                  child: ListView.builder(
-                                    // physics:
-                                    //     const NeverScrollableScrollPhysics(),
-                                    // shrinkWrap: true,
-                                    itemCount: provider.customerChildSer
-                                            ?.packages?.length ??
-                                        0,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 10, 0),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            setState(() {
-                                              isPackageSelected = true;
-                                              taxTotal = 0;
-                                              taxTotalAmount = 0;
-                                              packages = provider
-                                                  .customerChildSer
-                                                  ?.packages?[index];
+                                    ),
+                                    hintText: str.ps_coupon_h,
+                                    hintStyle: getRegularStyle(
+                                        color: const Color.fromARGB(
+                                            255, 173, 173, 173),
+                                        fontSize: 15)),
+                              ),
+                            ),
+                          ),
 
-                                              if (packages!
-                                                  .taxDetails!.isEmpty) {
-                                                setState(() {
-                                                  taxTotalAmount = 0;
-                                                });
-
-                                                if (packages?.offerPrice !=
-                                                    null) {
-                                                  grandTotal = packages
-                                                      ?.offerPrice
-                                                      ?.toDouble();
-                                                } else {
-                                                  print("This value is Null");
-                                                  grandTotal = packages?.amount;
-                                                }
-                                              }
-                                            });
-
-                                            await Future.delayed(const Duration(
-                                                milliseconds: 100));
-                                            setState(() {});
-                                          },
-                                          child: Center(
-                                            child: MonthlyPlan(
-                                              len: provider.customerChildSer
-                                                      ?.packages?.length ??
-                                                  0,
-                                              size: size,
-                                              plan: provider
-                                                      .customerChildSer
-                                                      ?.packages![index]
-                                                      .packageName ??
-                                                  '',
-                                              amount: provider.customerChildSer
-                                                      ?.packages![index].amount
-                                                      .toString() ??
-                                                  '',
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Visibility(
+                                  visible: isVisible,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: ColorManager.primary,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    width: w * .5,
+                                    height: 100,
+                                    child: ListView.builder(
+                                      itemCount: provider
+                                          .coupenCodeModel?.coupons?.length,
+                                      itemBuilder: (context, index) {
+                                        return Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              // color: ColorManager.primary2,
+                                              // height: 30,
+                                              child: Text(provider
+                                                      .coupenCodeModel
+                                                      ?.coupons?[index]
+                                                      .code ??
+                                                  ''),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      // SizedBox(
-                      //   height: 50,
-                      //   child: ListView.builder(
-                      //     scrollDirection: Axis.horizontal,
-                      //     itemBuilder: (context, index) {
-                      //       return Padding(
-                      //           padding: const EdgeInsets.all(2.0),
-                      //           child: Container(
-                      //             width: 50,
-                      //             height: 50,
-                      //             color: ColorManager.errorRed,
-                      //           ));
-                      //     },
-                      //     itemCount: 15,
-                      //   ),
-                      // ),
-                      isPackageSelected
-                          ? Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Container(
-                                width: size.width,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 10.0,
-                                      color: Colors.grey.shade300,
-                                      // offset: const Offset(5, 8.5),
+                                        );
+                                      },
                                     ),
-                                  ],
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.whiteColor,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        14, 20, 14, 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(packages?.packageName ?? '',
-                                            style: getBoldtStyle(
-                                                color: ColorManager.black,
-                                                fontSize: 18)),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                            "${str.su_service_fee} : ${packages?.amount ?? ''}",
-                                            style: getRegularStyle(
-                                                color: ColorManager.grayDark,
-                                                fontSize: 16)),
-                                        packages?.offerPrice != null
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 5, 0, 5),
-                                                child: Text(
-                                                    "${str.su_discount}     : ${packages?.offerPrice ?? ''}",
-                                                    style: getRegularStyle(
-                                                        color: ColorManager
-                                                            .grayDark,
-                                                        fontSize: 16)),
-                                              )
-                                            : Container(),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 5),
-                                          child: Text(
-                                              "${str.validity}     : ${packages?.validity ?? ''}",
-                                              style: getRegularStyle(
-                                                  color: ColorManager.grayDark,
-                                                  fontSize: 16)),
-                                        ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            taxTotal = taxTotal +
-                                                (packages?.taxDetails?[index]
-                                                        .percentage ??
-                                                    0);
+                                  )),
+                            ],
+                          ),
+                          provider.customerChildSer!.packages!.isNotEmpty
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: SizedBox(
+                                    height: size.height * .125,
+                                    child: Center(
+                                      child: ListView.builder(
+                                        // physics:
+                                        //     const NeverScrollableScrollPhysics(),
+                                        // shrinkWrap: true,
+                                        itemCount: provider.customerChildSer
+                                                ?.packages?.length ??
+                                            0,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 10, 0),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                setState(() {
+                                                  isPackageSelected = true;
+                                                  taxTotal = 0;
+                                                  taxTotalAmount = 0;
+                                                  packages = provider
+                                                      .customerChildSer
+                                                      ?.packages?[index];
 
-                                            taxTotalAmount =
-                                                (packages?.offerPrice ??
-                                                        packages?.amount) *
-                                                    (taxTotal / 100);
-                                            // if (packages?.offerPrice != null) {
-                                            grandTotal =
-                                                (packages?.offerPrice ??
-                                                        packages?.amount) +
-                                                    taxTotalAmount;
-                                            // }
+                                                  if (packages!
+                                                      .taxDetails!.isEmpty) {
+                                                    setState(() {
+                                                      taxTotalAmount = 0;
+                                                    });
 
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 5),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                      "${packages?.taxDetails![index].taxName}",
+                                                    if (packages?.offerPrice !=
+                                                        null) {
+                                                      grandTotal = packages
+                                                          ?.offerPrice
+                                                          ?.toDouble();
+                                                    } else {
+                                                      print(
+                                                          "This value is Null");
+                                                      grandTotal =
+                                                          packages?.amount;
+                                                    }
+                                                  }
+                                                });
+
+                                                await Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 100));
+                                                setState(() {});
+                                              },
+                                              child: Center(
+                                                child: MonthlyPlan(
+                                                  len: provider.customerChildSer
+                                                          ?.packages?.length ??
+                                                      0,
+                                                  size: size,
+                                                  plan: provider
+                                                          .customerChildSer
+                                                          ?.packages![index]
+                                                          .packageName ??
+                                                      '',
+                                                  amount: provider
+                                                          .customerChildSer
+                                                          ?.packages![index]
+                                                          .amount
+                                                          .toString() ??
+                                                      '',
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          // SizedBox(
+                          //   height: 50,
+                          //   child: ListView.builder(
+                          //     scrollDirection: Axis.horizontal,
+                          //     itemBuilder: (context, index) {
+                          //       return Padding(
+                          //           padding: const EdgeInsets.all(2.0),
+                          //           child: Container(
+                          //             width: 50,
+                          //             height: 50,
+                          //             color: ColorManager.errorRed,
+                          //           ));
+                          //     },
+                          //     itemCount: 15,
+                          //   ),
+                          // ),
+                          isPackageSelected
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                  child: Container(
+                                    width: size.width,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 10.0,
+                                          color: Colors.grey.shade300,
+                                          // offset: const Offset(5, 8.5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: ColorManager.whiteColor,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            14, 20, 14, 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(packages?.packageName ?? '',
+                                                style: getBoldtStyle(
+                                                    color: ColorManager.black,
+                                                    fontSize: 18)),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: Text(
+                                                      "${str.su_service_fee} :",
                                                       style: getRegularStyle(
                                                           color: ColorManager
                                                               .grayDark,
                                                           fontSize: 16)),
-                                                  const SizedBox(
-                                                    width: 65,
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Text(
+                                                    packages?.amount
+                                                            .toString() ??
+                                                        '',
+                                                    style: getRegularStyle(
+                                                        color: ColorManager
+                                                            .grayDark,
+                                                        fontSize: 16)),
+                                              ],
+                                            ),
+                                            packages?.offerPrice != null
+                                                ? Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(0, 5, 0, 5),
+                                                    child: Text(
+                                                        "${str.su_discount}     : ${packages?.offerPrice ?? ''}",
+                                                        style: getRegularStyle(
+                                                            color: ColorManager
+                                                                .grayDark,
+                                                            fontSize: 16)),
+                                                  )
+                                                : Container(),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 5, 0, 5),
+                                              child: Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 120,
+                                                    child: Text(
+                                                        "${str.validity} :",
+                                                        style: getRegularStyle(
+                                                            color: ColorManager
+                                                                .grayDark,
+                                                            fontSize: 16)),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
                                                   ),
                                                   Text(
-                                                      ': ${packages?.taxDetails![index].percentage ?? ''} %',
+                                                      "${packages?.validity ?? ''}",
                                                       style: getRegularStyle(
                                                           color: ColorManager
                                                               .grayDark,
                                                           fontSize: 16)),
                                                 ],
                                               ),
-                                            );
-                                          },
-                                          itemCount:
-                                              packages?.taxDetails?.length ?? 0,
+                                            ),
+                                            ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, index) {
+                                                taxTotal = taxTotal +
+                                                    (packages
+                                                            ?.taxDetails?[index]
+                                                            .percentage ??
+                                                        0);
+
+                                                taxTotalAmount =
+                                                    (packages?.offerPrice ??
+                                                            packages?.amount) *
+                                                        (taxTotal / 100);
+                                                // if (packages?.offerPrice != null) {
+                                                grandTotal =
+                                                    (packages?.offerPrice ??
+                                                            packages?.amount) +
+                                                        taxTotalAmount;
+                                                // }
+
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 0, 0, 5),
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 120,
+                                                        child: Text(
+                                                            "${packages?.taxDetails![index].taxName} :",
+                                                            style: getRegularStyle(
+                                                                color:
+                                                                    ColorManager
+                                                                        .grayDark,
+                                                                fontSize: 16)),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Text(
+                                                          '${packages?.taxDetails![index].percentage ?? ''} %',
+                                                          style: getRegularStyle(
+                                                              color:
+                                                                  ColorManager
+                                                                      .grayDark,
+                                                              fontSize: 16)),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              itemCount: packages
+                                                      ?.taxDetails?.length ??
+                                                  0,
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: Text(
+                                                      "${str.tax_total} :",
+                                                      style: getRegularStyle(
+                                                          color: ColorManager
+                                                              .grayDark,
+                                                          fontSize: 16)),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Text("$taxTotalAmount",
+                                                    style: getRegularStyle(
+                                                        color: ColorManager
+                                                            .grayDark,
+                                                        fontSize: 16)),
+                                              ],
+                                            ),
+                                            Text(
+                                                packages?.packageDescription ??
+                                                    '',
+                                                style: getRegularStyle(
+                                                    color: const Color.fromARGB(
+                                                        255, 173, 173, 173),
+                                                    fontSize: 16)),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Container(
+                                              height: 60,
+                                              width: double.infinity,
+                                              color: ColorManager.background,
+                                              child: Center(
+                                                  child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "${str.su_grand_total} : ",
+                                                    style: getMediumtStyle(
+                                                        color:
+                                                            ColorManager.black,
+                                                        fontSize: 16),
+                                                  ),
+                                                  Text(
+                                                    "$grandTotal ",
+                                                    style: getBoldtStyle(
+                                                        color: ColorManager
+                                                            .primary,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              )),
+                                            )
+                                          ],
                                         ),
-                                        Text(
-                                            "${str.tax_total}  : $taxTotalAmount",
-                                            style: getRegularStyle(
-                                                color: ColorManager.grayDark,
-                                                fontSize: 16)),
-                                        Text(packages?.packageDescription ?? '',
-                                            style: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize: 16)),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Container(
-                                          height: 60,
-                                          width: double.infinity,
-                                          color: ColorManager.background,
-                                          child: Center(
-                                              child: Text(
-                                                  "${str.su_grand_total}: $grandTotal ")),
-                                        )
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(28, 0, 28, 0)),
-                              onPressed: onContinue,
-                              child: !isPaymentLoading
-                                  ?
-                                  // Text(str.ps_pay,
-                                  Text("Proceed",
-                                      style: getRegularStyle(
-                                          color: ColorManager.whiteText,
-                                          fontSize: 16))
-                                  : const SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: CircularProgressIndicator())),
+                                )
+                              : Container(),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          28, 0, 28, 0)),
+                                  onPressed: onContinue,
+                                  child: !isPaymentLoading
+                                      ?
+                                      // Text(str.ps_pay,
+                                      Text("Proceed",
+                                          style: getRegularStyle(
+                                              color: ColorManager.whiteText,
+                                              fontSize: 16))
+                                      : const SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: CircularProgressIndicator())),
+                            ],
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
     );

@@ -30,6 +30,8 @@ class DataProvider with ChangeNotifier {
   LanguageModel? languageModel;
   RegionInfo? regionInfoModel;
   Timer? timer;
+  String? explorerLat;
+  String? explorerLong;
 
   void cancelTimer() {
     timer?.cancel();

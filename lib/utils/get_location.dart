@@ -54,6 +54,35 @@ requestLocationPermission(
   // searchController.text.isEmpty ? getCurrentLocation() : null;
 }
 
+requestExplorerLocationPermission(
+  BuildContext context,
+) async {
+  LocationPermission permission = await Geolocator.checkPermission();
+  final str = AppLocalizations.of(context)!;
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      print('Location permissions are denied');
+    } else if (permission == LocationPermission.deniedForever) {
+      print("'Location permissions are permanently denied");
+      showAnimatedSnackBar(context, str.snack_enable_loc);
+    } else {
+      print("GPS Location service is granted");
+      final latLon = await getCurrentLocation();
+      final provider = Provider.of<DataProvider>(context, listen: false);
+      provider.explorerLat = latLon[0].toString();
+      provider.explorerLong = latLon[1].toString();
+    }
+  } else {
+    print("GPS Location permission granted.");
+    final latLon = await getCurrentLocation();
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    provider.explorerLat = latLon[0].toString();
+    provider.explorerLong = latLon[1].toString();
+  }
+  // searchController.text.isEmpty ? getCurrentLocation() : null;
+}
+
 sendCurrentLocation(
   BuildContext context,
 ) async {

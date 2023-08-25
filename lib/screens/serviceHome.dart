@@ -126,11 +126,44 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                 // ),
                 Padding(
                   padding:
-                      EdgeInsets.fromLTRB(w * .02, mob ? 30 : 10, w * .02, 0),
+                      EdgeInsets.fromLTRB(w * .02, mob ? 10 : 5, w * .02, 0),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: mob ? 150 : 110,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8, right: 8, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              str.hello,
+                              style: getSemiBoldtStyle(
+                                  color: ColorManager.black, fontSize: 25),
+                            ),
+                            CircleAvatar(
+                                backgroundColor: Color(0xff08dc2c),
+                                child: Image.asset(
+                                  'assets/logo/app-logo-T.jpg',
+                                  height: 30,
+                                  width: 30,
+                                ))
+                          ],
+                        ),
+                      ),
+                      Container(
+                        // height: mob ? 150 : 110,
+                        width: w * .92,
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 10.0,
+                                color: Colors.grey.shade400,
+                                offset: const Offset(2, 2.5),
+                              ),
+                            ],
+                            color: ColorManager.whiteColor,
+                            borderRadius: BorderRadius.circular(5)),
+                        height: 150,
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -139,7 +172,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
                                     child: Container(

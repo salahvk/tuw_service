@@ -21,6 +21,7 @@ import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/terms_and_condition.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
   const PhoneNumberScreen({Key? key}) : super(key: key);
@@ -79,7 +80,16 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           // reverse: true,
           child: Stack(
             children: [
-              BackButton2(),
+              Row(
+                children: [
+                  BackButton2(),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TopLogo(),
+                  )
+                ],
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
