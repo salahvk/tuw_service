@@ -117,11 +117,12 @@
     "ps_monthly":"Monthly Plan",
     "ps_pay":"PAY NOW",
 
-    "pp_my_profile":"My Profile",
+    "pp_my_profile":"Edit Profile",
     "pp_message":"Message",
     "pp_favourites":"Favourites",
     "pp_address":"Address Book",
-    "pp_settings":"Settings",
+    "pp_settings1":"Profile Settings",
+    "pp_settings":"Language Settings",
     "pp_my_Services":"My Services",
     "pp_my_sub":"My Subscription",
 
@@ -149,7 +150,7 @@
     "su_package_id":"Package Name",
 
     "a_home_locator":"Home Locator",
-    "a_add":"Add home address",
+    "a_add":"Add address",
     "a_address":"Address",
     "a_home":"Home Address",
     "a_cover":"Please choose cover Photo",
@@ -306,6 +307,8 @@
 "back":"Back",
 "hello":"Hello",
 "open_google_map": "Open Google Map",
+
+"tax":"Tax",
 
 "no_ser":"No ServiceMan Available",
 "no_ava":"Not Available",

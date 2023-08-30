@@ -7,6 +7,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/screens/how.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/widgets/language_button.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -19,10 +20,49 @@ class IntroductionScreen extends StatefulWidget {
 class _IntroductionScreenState extends State<IntroductionScreen> {
   String selected = '';
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      requestExplorerLocationPermission(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final provider = Provider.of<DataProvider>(context, listen: false);
+    //  else if (provider.viewProfileModel?.userdetails?.latitude == null &&
+    //     provider.explorerLat == null)
+    // {
+    //   String? apiToken = Hive.box("token").get('api_token');
+    //   if (apiToken == null) {
+    //     requestExplorerLocationPermission(context);
+    //   } else {
+    //     requestLocationPermission(
+    //       context,
+    //     );
+    //   }
+
+    //   Navigator.pop(context);
+
+    // AnimatedSnackBar.material(str.snack_get_location,
+    //         type: AnimatedSnackBarType.info,
+    //         borderRadius: BorderRadius.circular(6),
+    //         duration: const Duration(seconds: 1))
+    //     .show(
+    //   context,
+    // );
+    // await Future.delayed(const Duration(seconds: 2));
+
+    // AnimatedSnackBar.material(str.snack_done,
+    //         type: AnimatedSnackBarType.success,
+    //         borderRadius: BorderRadius.circular(6),
+    //         duration: const Duration(seconds: 3))
+    //     .show(
+    //   context,
+    // );
+    // }
     return Scaffold(
       body: SafeArea(
         child: Column(

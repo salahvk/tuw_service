@@ -26,6 +26,7 @@ import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/report_user_diologue.dart';
 import 'package:social_media_services/widgets/scrollable_pop.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class ServiceManDetails extends StatefulWidget {
   GlobalKey<ScaffoldState>? scaffoldKey;
@@ -183,9 +184,18 @@ class _ServiceManDetailsState extends State<ServiceManDetails> {
         child: SingleChildScrollView(
           child: Stack(
             children: [
-              BackButton2(),
+              Row(
+                children: [
+                  BackButton2(),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TopLogo(),
+                  )
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                padding: const EdgeInsets.fromLTRB(15, 60, 15, 0),
                 child: Column(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

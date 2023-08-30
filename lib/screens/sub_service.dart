@@ -19,6 +19,7 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/loading%20screens/loading_page.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 
 class SubServicesPage extends StatefulWidget {
@@ -171,33 +172,34 @@ class _SubServicesPageState extends State<SubServicesPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                textAlign: TextAlign.center,
-                                String.fromCharCode(
-                                    Icons.arrow_back_ios_rounded.codePoint),
-                                style: TextStyle(
-                                  inherit: false,
-                                  color: ColorManager.primary,
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: Icons.search.fontFamily,
-                                  package:
-                                      Icons.arrow_back_ios_rounded.fontPackage,
-                                ),
-                              ),
-                              Text(
-                                "Back",
-                                style: getRegularStyle(
-                                    color: ColorManager.black, fontSize: 18),
-                              )
-                            ],
-                          )),
+                      // InkWell(
+                      //     onTap: () {
+                      //       Navigator.pop(context);
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Text(
+                      //           textAlign: TextAlign.center,
+                      //           String.fromCharCode(
+                      //               Icons.arrow_back_ios_rounded.codePoint),
+                      //           style: TextStyle(
+                      //             inherit: false,
+                      //             color: ColorManager.primary,
+                      //             fontSize: 25.0,
+                      //             fontWeight: FontWeight.w700,
+                      //             fontFamily: Icons.search.fontFamily,
+                      //             package:
+                      //                 Icons.arrow_back_ios_rounded.fontPackage,
+                      //           ),
+                      //         ),
+                      //         Text(
+                      //           str.back,
+                      //           style: getRegularStyle(
+                      //               color: ColorManager.black, fontSize: 18),
+                      //         )
+                      //       ],
+                      //     )),
+                      BackButton2(),
                       Spacer(),
                       CircleAvatar(
                           backgroundColor: Color(0xff08dc2c),

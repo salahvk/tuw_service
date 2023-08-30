@@ -317,7 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: FadeSlideCustomAnimation(
                           delay: .5,
                           child: ProfileTitleWidget(
-                            name: str.pp_settings,
+                            name: str.pp_settings1,
                             icon: Icons.settings_outlined,
                           ),
                         ),

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_services/API/endpoint.dart';
 import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
+import 'package:social_media_services/loading%20screens/address_card_loading.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 
@@ -117,6 +118,41 @@ class _AddressBoxState extends State<AddressBox> {
                 children: [
                   InkWell(
                     onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                        return UserAddressCardLoading(
+                          id: widget.userAddress!.userId.toString(),
+                          addressId: widget.userAddress!.id.toString(),
+                        );
+                      }));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            // offset: const Offset(2, 2.5),
+                          ),
+                        ],
+                      ),
+                      child: const CircleAvatar(
+                        radius: 14,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.remove_red_eye,
+                          size: 18,
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  InkWell(
+                    onTap: () {
                       provider.locality = null;
                       provider.addressLatitude = null;
                       provider.addressLongitude = null;
@@ -169,7 +205,6 @@ class _AddressBoxState extends State<AddressBox> {
                           builder: (context) =>
                               DialogueBox(addressId: addressId),
                           barrierDismissible: false);
-                    
                     },
                     child: Container(
                       decoration: BoxDecoration(

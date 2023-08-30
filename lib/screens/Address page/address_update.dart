@@ -20,6 +20,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
+import 'package:social_media_services/model/region_info_model.dart';
 import 'package:social_media_services/model/user_address_show.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
@@ -49,7 +50,7 @@ class UserAddressUpdate extends StatefulWidget {
 class _UserAddressUpdateState extends State<UserAddressUpdate> {
   Countries? selectedValue;
   String? countryValue;
-
+  int? defaultRegId;
   int _selectedIndex = 2;
   final List<Widget> _screens = [const ServiceHomePage(), const MessagePage()];
   String lang = '';
@@ -708,7 +709,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
+                                      child: DropdownButton2<Regions>(
                                         isExpanded: true,
                                         // focusNode: nfocus,
                                         icon: const Icon(
@@ -724,8 +725,8 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                         items: provider
                                             .regionInfoModel?.regions!
                                             .map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item.cityName,
+                                                DropdownMenuItem<Regions>(
+                                                  value: item,
                                                   child: Text(
                                                       item.cityName ?? '',
                                                       style: getRegularStyle(
@@ -734,10 +735,12 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                                           fontSize: 15)),
                                                 ))
                                             .toList(),
-                                        value: defaultReg,
+                                        // value: defaultReg,
                                         onChanged: (value) {
                                           setState(() {
-                                            defaultReg = value as String;
+                                            defaultReg =
+                                                value?.cityName as String;
+                                            defaultRegId = value?.id as int;
                                           });
                                           // s(selectedValue);
                                         },
@@ -955,7 +958,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     final country = selectedValue != null
         ? (selectedValue?.countryId)
         : widget.userAddress.countryId;
-    final region = defaultReg;
+    final region = defaultRegId;
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
     final id = widget.userAddress.id;
@@ -1083,6 +1086,8 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     AddressEditControllers.flatNoController.text =
         widget.userAddress.homeNo ?? '';
     countryValue = widget.userAddress.country;
+    defaultReg = widget.userAddress.region;
+    defaultRegId = widget.userAddress.regionId;
   }
 
   clearFields() {

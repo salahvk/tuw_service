@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class MonthlyPlan extends StatelessWidget {
   final String plan;
   final String amount;
+  final bool isSelected;
   int? len;
   MonthlyPlan({
     Key? key,
@@ -13,13 +14,13 @@ class MonthlyPlan extends StatelessWidget {
     required this.plan,
     required this.amount,
     this.len,
+    required this.isSelected,
   }) : super(key: key);
 
   final Size size;
 
   @override
   Widget build(BuildContext context) {
-    print(this.len);
     final str = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -36,7 +37,7 @@ class MonthlyPlan extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-              color: ColorManager.whiteColor,
+              color: isSelected ? Colors.grey[300] : ColorManager.whiteColor,
               borderRadius: BorderRadius.circular(5)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),

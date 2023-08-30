@@ -20,6 +20,7 @@ getUserAddress(BuildContext context) async {
   if (apiToken == null) return;
   try {
     provider.userAddressShow = null;
+    print(getUserAddressApi);
     var response = await http.get(Uri.parse(getUserAddressApi),
         headers: {"device-id": provider.deviceId ?? '', "api-token": apiToken});
     if (response.statusCode == 200) {

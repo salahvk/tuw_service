@@ -443,58 +443,69 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                           return Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 0, 0, 10, 0),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                setState(() {
-                                                  isPackageSelected = true;
-                                                  taxTotal = 0;
-                                                  taxTotalAmount = 0;
-                                                  packages = provider
-                                                      .customerChildSer
-                                                      ?.packages?[index];
+                                            child: Container(
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  print("s");
+                                                  setState(() {
+                                                    isPackageSelected = true;
+                                                    taxTotal = 0;
+                                                    taxTotalAmount = 0;
+                                                    packages = provider
+                                                        .customerChildSer
+                                                        ?.packages?[index];
 
-                                                  if (packages!
-                                                      .taxDetails!.isEmpty) {
-                                                    setState(() {
-                                                      taxTotalAmount = 0;
-                                                    });
+                                                    if (packages!
+                                                        .taxDetails!.isEmpty) {
+                                                      setState(() {
+                                                        taxTotalAmount = 0;
+                                                      });
 
-                                                    if (packages?.offerPrice !=
-                                                        null) {
-                                                      grandTotal = packages
-                                                          ?.offerPrice
-                                                          ?.toDouble();
-                                                    } else {
-                                                      print(
-                                                          "This value is Null");
-                                                      grandTotal =
-                                                          packages?.amount;
+                                                      if (packages
+                                                              ?.offerPrice !=
+                                                          null) {
+                                                        grandTotal = packages
+                                                            ?.offerPrice
+                                                            ?.toDouble();
+                                                      } else {
+                                                        print(
+                                                            "This value is Null");
+                                                        grandTotal =
+                                                            packages?.amount;
+                                                      }
                                                     }
-                                                  }
-                                                });
+                                                  });
 
-                                                await Future.delayed(
-                                                    const Duration(
-                                                        milliseconds: 100));
-                                                setState(() {});
-                                              },
-                                              child: Center(
-                                                child: MonthlyPlan(
-                                                  len: provider.customerChildSer
-                                                          ?.packages?.length ??
-                                                      0,
-                                                  size: size,
-                                                  plan: provider
-                                                          .customerChildSer
-                                                          ?.packages![index]
-                                                          .packageName ??
-                                                      '',
-                                                  amount: provider
-                                                          .customerChildSer
-                                                          ?.packages![index]
-                                                          .amount
-                                                          .toString() ??
-                                                      '',
+                                                  await Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 100));
+                                                  setState(() {});
+                                                },
+                                                child: Center(
+                                                  child: MonthlyPlan(
+                                                    isSelected: packages?.id ==
+                                                        provider
+                                                            .customerChildSer
+                                                            ?.packages?[index]
+                                                            .id,
+                                                    len: provider
+                                                            .customerChildSer
+                                                            ?.packages
+                                                            ?.length ??
+                                                        0,
+                                                    size: size,
+                                                    plan: provider
+                                                            .customerChildSer
+                                                            ?.packages![index]
+                                                            .packageName ??
+                                                        '',
+                                                    amount: provider
+                                                            .customerChildSer
+                                                            ?.packages![index]
+                                                            .amount
+                                                            .toString() ??
+                                                        '',
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -648,19 +659,25 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                     children: [
                                                       SizedBox(
                                                         width: 120,
-                                                        child: Text(
-                                                            "${packages?.taxDetails![index].taxName} :",
+                                                        child: Text(str.tax,
                                                             style: getRegularStyle(
                                                                 color:
                                                                     ColorManager
                                                                         .grayDark,
                                                                 fontSize: 16)),
+                                                        //  Text(
+                                                        //     "${packages?.taxDetails![index].taxName} :",
+                                                        //     style: getRegularStyle(
+                                                        //         color:
+                                                        //             ColorManager
+                                                        //                 .grayDark,
+                                                        //         fontSize: 16)),
                                                       ),
                                                       const SizedBox(
                                                         width: 20,
                                                       ),
                                                       Text(
-                                                          '${packages?.taxDetails![index].percentage ?? ''} %',
+                                                          '${packages?.taxDetails![index].taxName}(${packages?.taxDetails![index].percentage ?? ''} %)',
                                                           style: getRegularStyle(
                                                               color:
                                                                   ColorManager
@@ -727,6 +744,12 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                                         color: ColorManager
                                                             .primary,
                                                         fontSize: 16),
+                                                  ),
+                                                  Text(
+                                                    "OMR",
+                                                    style: getBoldtStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 14),
                                                   )
                                                 ],
                                               )),
@@ -752,14 +775,16 @@ class _PaymentServicePageState extends State<PaymentServicePage> {
                                   child: !isPaymentLoading
                                       ?
                                       // Text(str.ps_pay,
-                                      Text("Proceed",
+                                      Text(str.proceed,
                                           style: getRegularStyle(
                                               color: ColorManager.whiteText,
                                               fontSize: 16))
                                       : const SizedBox(
                                           width: 30,
                                           height: 30,
-                                          child: CircularProgressIndicator())),
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ))),
                             ],
                           )
                         ],

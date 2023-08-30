@@ -25,6 +25,7 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/otp_provider.dart';
 import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/screens/home_page.dart';
+import 'package:social_media_services/utils/get_location.dart';
 import 'package:social_media_services/utils/pinTheme.dart';
 import 'package:social_media_services/screens/edit_profile_screen.dart';
 import 'package:social_media_services/utils/snack_bar.dart';
@@ -281,7 +282,8 @@ navigateToHome(BuildContext context) {
   }), (route) => false);
 }
 
-navigateToEdit(BuildContext context) {
+navigateToEdit(BuildContext context) async {
+  requestLocationPermission(context);
   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
     return EditProfileScreen();
   }), (route) => false);

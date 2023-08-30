@@ -19,6 +19,7 @@ import 'package:social_media_services/components/color_manager.dart';
 import 'package:social_media_services/components/styles_manager.dart';
 import 'package:social_media_services/controllers/controllers.dart';
 import 'package:social_media_services/model/get_countries.dart';
+import 'package:social_media_services/model/region_info_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Google%20Map/address_locator.dart';
@@ -26,6 +27,7 @@ import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/get_location.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
@@ -33,6 +35,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class UserAddressEdit extends StatefulWidget {
   bool isUpdate;
@@ -63,6 +66,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
   String? imagePath;
   XFile? imageFile;
   String? defaultReg;
+  int? defaultRegId;
 
   List<Countries> r2 = [];
   final ImagePicker _picker = ImagePicker();
@@ -212,695 +216,740 @@ class _UserAddressEditState extends State<UserAddressEdit> {
             : SafeArea(
                 child: SingleChildScrollView(
                   // reverse: true,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ProfileImage(
-                          isNavigationActive: true,
-                          iconSize: 12,
-                          profileSize: 40.5,
-                          iconRadius: 12,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          BackButton2(),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TopLogo(),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 00, 15, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              provider.viewProfileModel?.userdetails
-                                      ?.firstname ??
-                                  '',
-                              style: getBoldtStyle(
-                                  color: ColorManager.black, fontSize: 13),
+                            ProfileImage(
+                              isNavigationActive: true,
+                              iconSize: 12,
+                              profileSize: 40.5,
+                              iconRadius: 12,
                             ),
                             const SizedBox(
-                              width: 2,
+                              height: 5,
                             ),
-                            Text(
-                              provider.viewProfileModel?.userdetails
-                                      ?.lastname ??
-                                  '',
-                              style: getBoldtStyle(
-                                  color: ColorManager.black, fontSize: 13),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  provider.viewProfileModel?.userdetails
+                                          ?.firstname ??
+                                      '',
+                                  style: getBoldtStyle(
+                                      color: ColorManager.black, fontSize: 13),
+                                ),
+                                const SizedBox(
+                                  width: 2,
+                                ),
+                                Text(
+                                  provider.viewProfileModel?.userdetails
+                                          ?.lastname ??
+                                      '',
+                                  style: getBoldtStyle(
+                                      color: ColorManager.black, fontSize: 13),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        // Text(
-                        //   "mail @gmail.com",
-                        //   style: getRegularStyle(
-                        //       color: ColorManager.grayLight, fontSize: 13),
-                        // ),
-                        // const SizedBox(
-                        //   height: 2,
-                        // ),
-                        // Text(
-                        //   provider.viewProfileModel?.userdetails?.phone ?? '',
-                        //   style: getRegularStyle(
-                        //       color: ColorManager.grayLight, fontSize: 13),
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5, top: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                str.ae_address,
-                                style: getBoldtStyle(
-                                    color: ColorManager.black, fontSize: 14),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            // Text(
+                            //   "mail @gmail.com",
+                            //   style: getRegularStyle(
+                            //       color: ColorManager.grayLight, fontSize: 13),
+                            // ),
+                            // const SizedBox(
+                            //   height: 2,
+                            // ),
+                            // Text(
+                            //   provider.viewProfileModel?.userdetails?.phone ?? '',
+                            //   style: getRegularStyle(
+                            //       color: ColorManager.grayLight, fontSize: 13),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5, top: 5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    str.ae_address,
+                                    style: getBoldtStyle(
+                                        color: ColorManager.black,
+                                        fontSize: 14),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: ColorManager.primary,
+                                        borderRadius: BorderRadius.circular(5)),
+                                  )
+                                ],
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: ColorManager.primary,
-                                    borderRadius: BorderRadius.circular(5)),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                          child: Stack(
-                            children: [
-                              ClipRRect(
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: SizedBox(
+                                      height: 100,
+                                      width: size.width,
+                                      child: isLoading
+                                          ? Container(
+                                              height: 20,
+                                              color: ColorManager.whiteColor,
+                                              child: const Center(
+                                                  child:
+                                                      CircularProgressIndicator()))
+                                          : AddressImageWidget(
+                                              imagePath: imagePath),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 5,
+                                    top: 5,
+                                    child: InkWell(
+                                      onTap: () {
+                                        selectImage();
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.shade300,
+                                              spreadRadius: 1,
+                                              blurRadius: 3,
+                                              // offset: const Offset(2, 2.5),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const CircleAvatar(
+                                          radius: 16,
+                                          backgroundColor: Colors.white,
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 14,
+                                            color: ColorManager.primary,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 40,
+                              width: size.width,
+                              decoration: BoxDecoration(
+                                  color: ColorManager.whiteColor,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      provider.locality ?? '',
+                                      style: getRegularStyle(
+                                        color: ColorManager.black,
+                                        // fontSize: provider.locality!.length > 10
+                                        //     ? 10
+                                        //     : 12
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: ColorManager.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+
+                                      // width: 30,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            isLocFetching = true;
+                                          });
+                                          final s =
+                                              await getCurrentLocationPermission(
+                                                  context);
+                                          print(s);
+                                          // Navigator.push(context,
+                                          //     MaterialPageRoute(builder: (ctx) {
+                                          //   return CustomizeMarkerExample();
+                                          // }));
+                                          // await Future.delayed(
+                                          //     Duration(seconds: 500));
+                                          setState(() {
+                                            isLocFetching = false;
+                                          });
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (ctx) {
+                                            return AddressLocatorScreen(
+                                              lat: s[0].toString(),
+                                              lot: s[1].toString(),
+                                              imageFile: imageFile,
+                                              defaultReg: defaultReg,
+                                            );
+                                          }));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 2, 5, 5),
+                                          child: isLocFetching
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Container(
+                                                      width: 20,
+                                                      height: 20,
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                )
+                                              : Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.location_on,
+                                                      color: ColorManager
+                                                          .whiteColor,
+                                                    ),
+                                                    Text(
+                                                      // str.ae_home_locator,
+                                                      "Address Locator",
+                                                      style: getRegularStyle(
+                                                          color: ColorManager
+                                                              .whiteColor),
+                                                    )
+                                                  ],
+                                                ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 14),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: SizedBox(
                                   height: 100,
                                   width: size.width,
-                                  child: isLoading
-                                      ? Container(
-                                          height: 20,
-                                          color: ColorManager.whiteColor,
-                                          child: const Center(
-                                              child:
-                                                  CircularProgressIndicator()))
-                                      : AddressImageWidget(
-                                          imagePath: imagePath),
-                                ),
-                              ),
-                              Positioned(
-                                right: 5,
-                                top: 5,
-                                child: InkWell(
-                                  onTap: () {
-                                    selectImage();
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.shade300,
-                                          spreadRadius: 1,
-                                          blurRadius: 3,
-                                          // offset: const Offset(2, 2.5),
+                                  child: GoogleMap(
+                                    myLocationEnabled: true,
+                                    initialCameraPosition: CameraPosition(
+                                      target: currentLocator,
+                                      zoom: 4.0,
+                                    ),
+                                    markers: <Marker>{
+                                      Marker(
+                                        markerId:
+                                            const MarkerId('test_marker_id'),
+                                        position: currentLocator,
+                                        infoWindow: InfoWindow(
+                                          title: str.a_home_locator,
+                                          snippet: '*',
                                         ),
-                                      ],
-                                    ),
-                                    child: const CircleAvatar(
-                                      radius: 16,
-                                      backgroundColor: Colors.white,
-                                      child: Icon(
-                                        Icons.edit,
-                                        size: 14,
-                                        color: ColorManager.primary,
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 40,
-                          width: size.width,
-                          decoration: BoxDecoration(
-                              color: ColorManager.whiteColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  provider.locality ?? '',
-                                  style: getRegularStyle(
-                                    color: ColorManager.black,
-                                    // fontSize: provider.locality!.length > 10
-                                    //     ? 10
-                                    //     : 12
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.primary,
-                                      borderRadius: BorderRadius.circular(5)),
-
-                                  // width: 30,
-                                  child: InkWell(
-                                    onTap: () async {
-                                      setState(() {
-                                        isLocFetching = true;
-                                      });
-                                      final s =
-                                          await getCurrentLocationPermission(
-                                              context);
-                                      print(s);
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (ctx) {
-                                      //   return CustomizeMarkerExample();
-                                      // }));
-                                      // await Future.delayed(
-                                      //     Duration(seconds: 500));
-                                      setState(() {
-                                        isLocFetching = false;
-                                      });
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (ctx) {
-                                        return AddressLocatorScreen(
-                                          lat: s[0].toString(),
-                                          lot: s[1].toString(),
-                                          imageFile: imageFile,
-                                          defaultReg: defaultReg,
-                                        );
-                                      }));
                                     },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(5, 2, 5, 5),
-                                      child: isLocFetching
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: Container(
-                                                  width: 20,
-                                                  height: 20,
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                            )
-                                          : Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.location_on,
-                                                  color:
-                                                      ColorManager.whiteColor,
-                                                ),
-                                                Text(
-                                                  // str.ae_home_locator,
-                                                  "Address Locator",
-                                                  style: getRegularStyle(
-                                                      color: ColorManager
-                                                          .whiteColor),
-                                                )
-                                              ],
-                                            ),
-                                    ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 14),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: SizedBox(
-                              height: 100,
-                              width: size.width,
-                              child: GoogleMap(
-                                myLocationEnabled: true,
-                                initialCameraPosition: CameraPosition(
-                                  target: currentLocator,
-                                  zoom: 4.0,
                                 ),
-                                markers: <Marker>{
-                                  Marker(
-                                    markerId: const MarkerId('test_marker_id'),
-                                    position: currentLocator,
-                                    infoWindow: InfoWindow(
-                                      title: str.a_home_locator,
-                                      snippet: '*',
-                                    ),
-                                  ),
-                                },
                               ),
                             ),
-                          ),
-                        ),
 
-                        MandatoryHeader(heading: str.ae_address_n),
-                        TextFieldProfileService(
-                            hintText: str.ae_address_h,
-                            controller:
-                                AddressEditControllers.addressNameController),
-                        MandatoryHeader(heading: str.ae_address),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.grey.shade300,
-                                  // offset: const Offset(5, 8.5),
+                            MandatoryHeader(heading: str.ae_address_n),
+                            TextFieldProfileService(
+                                hintText: str.ae_address_h,
+                                controller: AddressEditControllers
+                                    .addressNameController),
+                            MandatoryHeader(heading: str.ae_address),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 10.0,
+                                      color: Colors.grey.shade300,
+                                      // offset: const Offset(5, 8.5),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: SizedBox(
-                              child: TextField(
-                                minLines: 4,
-                                maxLines: 5,
-                                style: const TextStyle(),
-                                controller:
-                                    AddressEditControllers.addressController,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.only(
-                                        left: 10, right: 10, top: 10),
-                                    hintText: str.ae_address_h,
-                                    hintStyle: getRegularStyle(
-                                        color: const Color.fromARGB(
-                                            255, 173, 173, 173),
-                                        fontSize: 15)),
+                                child: SizedBox(
+                                  child: TextField(
+                                    minLines: 4,
+                                    maxLines: 5,
+                                    style: const TextStyle(),
+                                    controller: AddressEditControllers
+                                        .addressController,
+                                    decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 10, right: 10, top: 10),
+                                        hintText: str.ae_address_h,
+                                        hintStyle: getRegularStyle(
+                                            color: const Color.fromARGB(
+                                                255, 173, 173, 173),
+                                            fontSize: 15)),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        MandatoryHeader(heading: str.ae_country),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.grey.shade300,
-                                  // offset: const Offset(5, 8.5),
+                            MandatoryHeader(heading: str.ae_country),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 10.0,
+                                      color: Colors.grey.shade300,
+                                      // offset: const Offset(5, 8.5),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Container(
-                              width: size.width,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: ColorManager.whiteColor,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2<Countries>(
-                                      isExpanded: true,
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 35,
-                                        color: ColorManager.black,
-                                      ),
-                                      hint: Text(str.ae_country_h,
-                                          style: getRegularStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 173, 173, 173),
-                                              fontSize: 15)),
-                                      items: r2
-                                          .map((item) =>
-                                              DropdownMenuItem<Countries>(
-                                                value: item,
-                                                child: Row(
-                                                  children: [
-                                                    CachedNetworkImage(
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            Container(
-                                                              width: 25,
-                                                              height: 20,
-                                                              color: ColorManager
-                                                                  .whiteColor,
-                                                            ),
-                                                        imageBuilder: (context,
-                                                                imageProvider) =>
-                                                            Container(
-                                                              width: 25,
-                                                              height: 20,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                // shape: BoxShape.circle,
-                                                                image: DecorationImage(
-                                                                    image:
-                                                                        imageProvider,
-                                                                    fit: BoxFit
-                                                                        .cover),
-                                                              ),
-                                                            ),
-                                                        // width: 90,
-                                                        progressIndicatorBuilder:
-                                                            (context, url,
-                                                                progress) {
-                                                          return Container(
-                                                            color: ColorManager
-                                                                .black,
-                                                          );
-                                                        },
-                                                        imageUrl:
-                                                            '$endPoint${item.countryflag}'),
-                                                    const SizedBox(
-                                                      width: 4,
+                                child: Container(
+                                  width: size.width,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.whiteColor,
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2<Countries>(
+                                          isExpanded: true,
+                                          icon: const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: 35,
+                                            color: ColorManager.black,
+                                          ),
+                                          hint: Text(str.ae_country_h,
+                                              style: getRegularStyle(
+                                                  color: const Color.fromARGB(
+                                                      255, 173, 173, 173),
+                                                  fontSize: 15)),
+                                          items: r2
+                                              .map((item) =>
+                                                  DropdownMenuItem<Countries>(
+                                                    value: item,
+                                                    child: Row(
+                                                      children: [
+                                                        CachedNetworkImage(
+                                                            errorWidget:
+                                                                (context, url,
+                                                                        error) =>
+                                                                    Container(
+                                                                      width: 25,
+                                                                      height:
+                                                                          20,
+                                                                      color: ColorManager
+                                                                          .whiteColor,
+                                                                    ),
+                                                            imageBuilder: (context,
+                                                                    imageProvider) =>
+                                                                Container(
+                                                                  width: 25,
+                                                                  height: 20,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    // shape: BoxShape.circle,
+                                                                    image: DecorationImage(
+                                                                        image:
+                                                                            imageProvider,
+                                                                        fit: BoxFit
+                                                                            .cover),
+                                                                  ),
+                                                                ),
+                                                            // width: 90,
+                                                            progressIndicatorBuilder:
+                                                                (context, url,
+                                                                    progress) {
+                                                              return Container(
+                                                                color:
+                                                                    ColorManager
+                                                                        .black,
+                                                              );
+                                                            },
+                                                            imageUrl:
+                                                                '$endPoint${item.countryflag}'),
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Text(
+                                                            item.countryName ??
+                                                                '',
+                                                            style: getRegularStyle(
+                                                                color:
+                                                                    ColorManager
+                                                                        .black,
+                                                                fontSize: 15)),
+                                                      ],
                                                     ),
-                                                    Text(item.countryName ?? '',
-                                                        style: getRegularStyle(
-                                                            color: ColorManager
-                                                                .black,
-                                                            fontSize: 15)),
-                                                  ],
-                                                ),
-                                              ))
-                                          .toList(),
-                                      // value: selectedValue,
-                                      onChanged: (value) async {
-                                        setState(() {
-                                          selectedValue = value as Countries;
-                                        });
-                                        provider.selectedAddressCountry =
-                                            value as Countries;
-                                        defaultReg = null;
-                                        await getRegionData(
-                                            context, selectedValue?.countryId);
-                                        setState(() {});
-                                      },
-                                      buttonHeight: 40,
-                                      dropdownMaxHeight: size.height * .6,
-                                      // buttonWidth: 140,
-                                      itemHeight: 40,
-                                      buttonPadding: const EdgeInsets.fromLTRB(
-                                          12, 0, 8, 0),
-                                      // dropdownWidth: size.width,
-                                      itemPadding: const EdgeInsets.fromLTRB(
-                                          12, 0, 12, 0),
-                                      searchController: AddressEditControllers
-                                          .searchController,
-                                      searchInnerWidget: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8,
-                                          bottom: 4,
-                                          right: 8,
-                                          left: 8,
-                                        ),
-                                        child: TextFormField(
-                                          controller: AddressEditControllers
-                                              .searchController,
-                                          decoration: InputDecoration(
-                                            isDense: true,
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                              horizontal: 10,
-                                              vertical: 8,
+                                                  ))
+                                              .toList(),
+                                          // value: selectedValue,
+                                          onChanged: (value) async {
+                                            setState(() {
+                                              selectedValue =
+                                                  value as Countries;
+                                            });
+                                            provider.selectedAddressCountry =
+                                                value as Countries;
+                                            defaultReg = null;
+                                            await getRegionData(context,
+                                                selectedValue?.countryId);
+                                            setState(() {});
+                                          },
+                                          buttonHeight: 40,
+                                          dropdownMaxHeight: size.height * .6,
+                                          // buttonWidth: 140,
+                                          itemHeight: 40,
+                                          buttonPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  12, 0, 8, 0),
+                                          // dropdownWidth: size.width,
+                                          itemPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  12, 0, 12, 0),
+                                          searchController:
+                                              AddressEditControllers
+                                                  .searchController,
+                                          searchInnerWidget: Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
                                             ),
-                                            hintText: str.s_search_country,
-                                            hintStyle:
-                                                const TextStyle(fontSize: 12),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
+                                            child: TextFormField(
+                                              controller: AddressEditControllers
+                                                  .searchController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText: str.s_search_country,
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      customButton: selectedValue == null
-                                          ? null
-                                          : Row(
-                                              children: [
-                                                Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 0, 10, 0),
-                                                    child: Text(selectedValue
-                                                            ?.countryName ??
-                                                        ''),
-                                                  ),
+                                          customButton: selectedValue == null
+                                              ? null
+                                              : Row(
+                                                  children: [
+                                                    Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                10, 0, 10, 0),
+                                                        child: Text(selectedValue
+                                                                ?.countryName ??
+                                                            ''),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                      searchMatchFn: (item, searchValue) {
-                                        return (item.value.countryName
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(searchValue));
-                                      },
-                                      //This to clear the search value when you close the menu
-                                      onMenuStateChange: (isOpen) {
-                                        if (!isOpen) {
-                                          AddressEditControllers
-                                              .searchController
-                                              .clear();
-                                        }
-                                      }),
+                                          searchMatchFn: (item, searchValue) {
+                                            return (item.value.countryName
+                                                .toString()
+                                                .toLowerCase()
+                                                .contains(searchValue));
+                                          },
+                                          //This to clear the search value when you close the menu
+                                          onMenuStateChange: (isOpen) {
+                                            if (!isOpen) {
+                                              AddressEditControllers
+                                                  .searchController
+                                                  .clear();
+                                            }
+                                          }),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ), // * Region
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            ), // * Region
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                MandatoryHeader(heading: str.ae_region),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Container(
-                                    width: size.width * .44,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 10.0,
-                                          color: Colors.grey.shade300,
-                                          // offset: const Offset(5, 8.5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    MandatoryHeader(heading: str.ae_region),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: Container(
+                                        width: size.width * .44,
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 10.0,
+                                              color: Colors.grey.shade300,
+                                              // offset: const Offset(5, 8.5),
+                                            ),
+                                          ],
+                                          color: ColorManager.whiteColor,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
-                                      ],
-                                      color: ColorManager.whiteColor,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        isExpanded: true,
-                                        // focusNode: nfocus,
-                                        icon: const Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: 35,
-                                          color: ColorManager.black,
-                                        ),
-                                        hint: Text(str.p_region_h,
-                                            style: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize: 15)),
-                                        items: provider
-                                            .regionInfoModel?.regions!
-                                            .map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item.cityName,
-                                                  child: Text(
-                                                      item.cityName ?? '',
-                                                      style: getRegularStyle(
-                                                          color: ColorManager
-                                                              .black,
-                                                          fontSize: 15)),
-                                                ))
-                                            .toList(),
-                                        // value: defaultReg,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            defaultReg = value as String;
-                                          });
-                                          // s(selectedValue);
-                                        },
-                                        buttonHeight: 50,
-                                        dropdownMaxHeight: size.height * .6,
-                                        // buttonWidth: 140,
-                                        itemHeight: 40,
-                                        buttonPadding:
-                                            const EdgeInsets.fromLTRB(
-                                                12, 0, 8, 0),
-                                        // dropdownWidth: size.width,
-                                        itemPadding: const EdgeInsets.fromLTRB(
-                                            12, 0, 12, 0),
-                                        // searchController:
-                                        //     AddressEditControllers
-                                        //         .searchController,
-                                        // searchInnerWidget: Padding(
-                                        //   padding:
-                                        //       const EdgeInsets.only(
-                                        //     top: 8,
-                                        //     bottom: 4,
-                                        //     right: 8,
-                                        //     left: 8,
-                                        //   ),
-                                        //   child: TextFormField(
-                                        //     controller:
-                                        //         AddressEditControllers
-                                        //             .searchController,
-                                        //     decoration: InputDecoration(
-                                        //       isDense: true,
-                                        //       contentPadding:
-                                        //           const EdgeInsets
-                                        //               .symmetric(
-                                        //         horizontal: 10,
-                                        //         vertical: 8,
-                                        //       ),
-                                        //       // TODO: localisation
-                                        //       hintText:
-                                        //           str.s_search_country,
-                                        //       hintStyle:
-                                        //           const TextStyle(
-                                        //               fontSize: 12),
-                                        //       border:
-                                        //           OutlineInputBorder(
-                                        //         borderRadius:
-                                        //             BorderRadius
-                                        //                 .circular(8),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // searchMatchFn:
-                                        //     (item, searchValue) {
-                                        //   return (item.value
-                                        //       .toString()
-                                        //       .toLowerCase()
-                                        //       .contains(searchValue));
-                                        // },
-                                        customButton: defaultReg == null
-                                            ? null
-                                            : Row(
-                                                children: [
-                                                  Center(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          10, 15, 10, 15),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2<Regions>(
+                                            isExpanded: true,
+                                            // focusNode: nfocus,
+                                            icon: const Icon(
+                                              Icons.keyboard_arrow_down,
+                                              size: 35,
+                                              color: ColorManager.black,
+                                            ),
+                                            hint: Text(str.p_region_h,
+                                                style: getRegularStyle(
+                                                    color: const Color.fromARGB(
+                                                        255, 173, 173, 173),
+                                                    fontSize: 15)),
+                                            items: provider
+                                                .regionInfoModel?.regions!
+                                                .map((item) =>
+                                                    DropdownMenuItem<Regions>(
+                                                      value: item,
                                                       child: Text(
-                                                          defaultReg ?? '',
+                                                          item.cityName ?? '',
                                                           style: getRegularStyle(
                                                               color:
                                                                   ColorManager
                                                                       .black,
-                                                              fontSize: 12)),
-                                                    ),
+                                                              fontSize: 15)),
+                                                    ))
+                                                .toList(),
+                                            // value: defaultReg,
+                                            onChanged: (value) {
+                                              print(value);
+                                              setState(() {
+                                                defaultReg =
+                                                    value?.cityName as String;
+                                                defaultRegId = value?.id as int;
+                                              });
+                                              // s(selectedValue);
+                                            },
+                                            buttonHeight: 50,
+                                            dropdownMaxHeight: size.height * .6,
+                                            // buttonWidth: 140,
+                                            itemHeight: 40,
+                                            buttonPadding:
+                                                const EdgeInsets.fromLTRB(
+                                                    12, 0, 8, 0),
+                                            // dropdownWidth: size.width,
+                                            itemPadding:
+                                                const EdgeInsets.fromLTRB(
+                                                    12, 0, 12, 0),
+                                            // searchController:
+                                            //     AddressEditControllers
+                                            //         .searchController,
+                                            // searchInnerWidget: Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.only(
+                                            //     top: 8,
+                                            //     bottom: 4,
+                                            //     right: 8,
+                                            //     left: 8,
+                                            //   ),
+                                            //   child: TextFormField(
+                                            //     controller:
+                                            //         AddressEditControllers
+                                            //             .searchController,
+                                            //     decoration: InputDecoration(
+                                            //       isDense: true,
+                                            //       contentPadding:
+                                            //           const EdgeInsets
+                                            //               .symmetric(
+                                            //         horizontal: 10,
+                                            //         vertical: 8,
+                                            //       ),
+                                            //       // TODO: localisation
+                                            //       hintText:
+                                            //           str.s_search_country,
+                                            //       hintStyle:
+                                            //           const TextStyle(
+                                            //               fontSize: 12),
+                                            //       border:
+                                            //           OutlineInputBorder(
+                                            //         borderRadius:
+                                            //             BorderRadius
+                                            //                 .circular(8),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            // searchMatchFn:
+                                            //     (item, searchValue) {
+                                            //   return (item.value
+                                            //       .toString()
+                                            //       .toLowerCase()
+                                            //       .contains(searchValue));
+                                            // },
+                                            customButton: defaultReg == null
+                                                ? null
+                                                : Row(
+                                                    children: [
+                                                      Center(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  10,
+                                                                  15,
+                                                                  10,
+                                                                  15),
+                                                          child: Text(
+                                                              defaultReg ?? '',
+                                                              style: getRegularStyle(
+                                                                  color:
+                                                                      ColorManager
+                                                                          .black,
+                                                                  fontSize:
+                                                                      12)),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                        //This to clear the search value when you close the menu
-                                        // onMenuStateChange: (isOpen) {
-                                        //   if (!isOpen) {
-                                        //     AddressEditControllers
-                                        //         .searchController
-                                        //         .clear();
-                                        //   }
-                                        // }
+                                            //This to clear the search value when you close the menu
+                                            // onMenuStateChange: (isOpen) {
+                                            //   if (!isOpen) {
+                                            //     AddressEditControllers
+                                            //         .searchController
+                                            //         .clear();
+                                            //   }
+                                            // }
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MandatoryHeader(heading: str.ae_state),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Container(
-                                    width: size.width * .44,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 10.0,
-                                          color: Colors.grey.shade300,
-                                          // offset: const Offset(5, 8.5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    MandatoryHeader(heading: str.ae_state),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: Container(
+                                        width: size.width * .44,
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 10.0,
+                                              color: Colors.grey.shade300,
+                                              // offset: const Offset(5, 8.5),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                        child: TextField(
+                                          style: const TextStyle(),
+                                          controller: AddressEditControllers
+                                              .stateController,
+                                          decoration: InputDecoration(
+                                              hintText: str.ae_state_h,
+                                              hintStyle: getRegularStyle(
+                                                  color: const Color.fromARGB(
+                                                      255, 173, 173, 173),
+                                                  fontSize: 15)),
+                                        ),
+                                      ),
                                     ),
-                                    child: TextField(
-                                      style: const TextStyle(),
-                                      controller: AddressEditControllers
-                                          .stateController,
-                                      decoration: InputDecoration(
-                                          hintText: str.ae_state_h,
-                                          hintStyle: getRegularStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 173, 173, 173),
-                                              fontSize: 15)),
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
+                            MandatoryHeader(heading: str.ae_home_flat),
+                            TextFieldProfileService(
+                                hintText: str.ae_no,
+                                controller:
+                                    AddressEditControllers.flatNoController),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        validateAddressFields();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          padding: isSaveAddressLoading
+                                              ? const EdgeInsets.fromLTRB(
+                                                  40, 0, 40, 0)
+                                              : const EdgeInsets.fromLTRB(
+                                                  20, 0, 20, 0)),
+                                      child: isSaveAddressLoading
+                                          ? const SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 3,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                            Color>(
+                                                        ColorManager
+                                                            .whiteColor),
+                                              ))
+                                          : Text(
+                                              str.ae_save,
+                                              style: getMediumtStyle(
+                                                  color: ColorManager.whiteText,
+                                                  fontSize: 14),
+                                            )),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20, 0, 20, 0)),
+                                      child: Text(
+                                        str.ae_cancel,
+                                        style: getMediumtStyle(
+                                            color: ColorManager.whiteText,
+                                            fontSize: 14),
+                                      ))
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                        MandatoryHeader(heading: str.ae_home_flat),
-                        TextFieldProfileService(
-                            hintText: str.ae_no,
-                            controller:
-                                AddressEditControllers.flatNoController),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    validateAddressFields();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      padding: isSaveAddressLoading
-                                          ? const EdgeInsets.fromLTRB(
-                                              40, 0, 40, 0)
-                                          : const EdgeInsets.fromLTRB(
-                                              20, 0, 20, 0)),
-                                  child: isSaveAddressLoading
-                                      ? const SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    ColorManager.whiteColor),
-                                          ))
-                                      : Text(
-                                          str.ae_save,
-                                          style: getMediumtStyle(
-                                              color: ColorManager.whiteText,
-                                              fontSize: 14),
-                                        )),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 20, 0)),
-                                  child: Text(
-                                    str.ae_cancel,
-                                    style: getMediumtStyle(
-                                        color: ColorManager.whiteText,
-                                        fontSize: 14),
-                                  ))
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ));
@@ -946,7 +995,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     final addressName = AddressEditControllers.addressNameController.text;
     final address = AddressEditControllers.addressController.text;
     final country = selectedValue?.countryId;
-    final region = defaultReg;
+    final region = defaultRegId.toString();
     final state = AddressEditControllers.stateController.text;
     final flat = AddressEditControllers.flatNoController.text;
     final provider = Provider.of<DataProvider>(context, listen: false);

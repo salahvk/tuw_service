@@ -11,7 +11,7 @@ import 'package:thawani_payment/class/status.dart';
 import 'package:thawani_payment/thawani_payment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PayPage extends StatelessWidget {
+class PayPage extends StatefulWidget {
   final String serviceFee;
   final String validity;
   final String packageName;
@@ -33,9 +33,16 @@ class PayPage extends StatelessWidget {
   });
 
   @override
+  State<PayPage> createState() => _PayPageState();
+}
+
+class _PayPageState extends State<PayPage> {
+  bool isLoading = false;
+  @override
   Widget build(BuildContext context) {
-    print(amount);
-    final conAmount = (amount * 1000).toInt();
+    print(widget.amount);
+
+    final conAmount = (widget.amount * 1000).toInt();
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
     final user = Provider.of<DataProvider>(context, listen: false)
@@ -76,24 +83,24 @@ class PayPage extends StatelessWidget {
                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "$packageName",
+                            "${widget.packageName}",
                             style: getSemiBoldtStyle(
                                 color: ColorManager.black, fontSize: 20),
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text("${str.su_service_fee} : $serviceFee"),
+                          Text("${str.su_service_fee} : ${widget.serviceFee}"),
                           SizedBox(
                             height: 10,
                           ),
-                          Text("${str.validity} : $validity"),
+                          Text("${str.validity} : ${widget.validity}"),
                           SizedBox(
                             height: 10,
                           ),
                           // Text("Validity : $validity"),
                           Text(
-                            "${str.tax_total}  : $taxTotal",
+                            "${str.tax_total}  : ${widget.taxTotal}",
                             // style: getRegularStyle(
                             //     color: ColorManager.grayDark, fontSize: 12)
                           ),
@@ -107,7 +114,8 @@ class PayPage extends StatelessWidget {
                           width: double.infinity,
                           color: ColorManager.background,
                           child: Center(
-                              child: Text("${str.su_grand_total}: $amount")),
+                              child: Text(
+                                  "${str.su_grand_total}: ${widget.amount}")),
                         ),
                       )
                     ],
@@ -117,56 +125,75 @@ class PayPage extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              GestureDetector(
-                onTap: () {
-                  print("object");
-                },
-                child: SizedBox(
-                  width: 200,
-                  height: 50,
-                  child: ThawaniPayBtn(
-                    testMode: false,
-                    // api: 'rRQ26GcsZzoEhbrP2HZvLYDbn9C9et',
-                    // pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
-                    // successUrl: "https://company.com/success",
-                    // cancelUrl: "https://company.com/cancel",
-                    successUrl: thawaniPaymentSuccess,
-                    api: 'LqZ2Ma9doGSkfIJPKssA3lPPKnhfRJ',
-                    pKey: 'sCyctJWWAtRZ6i3nsEe8fGEsYMa2Si',
-                    cancelUrl: thawaniPaymentfailed,
-                    metadata: {
-                      "Customer Name": "${user?.firstname} ${user?.lastname}",
-                      "Customer PhoneNumber": "${user?.phone}",
-                      "Customer Email": "${user?.email}"
-                    },
-                    clintID: orderId,
+              isLoading
+                  ? Container(
+                      width: 200,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            )),
+                      ),
+                    )
+                  : SizedBox(
+                      width: 200,
+                      height: 50,
+                      child: ThawaniPayBtn(
+                        testMode: false,
+                        buttonStyle: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              ColorManager.primary),
+                        ),
+                        // api: 'rRQ26GcsZzoEhbrP2HZvLYDbn9C9et',
+                        // pKey: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',
+                        // successUrl: "https://company.com/success",
+                        // cancelUrl: "https://company.com/cancel",
+                        successUrl: thawaniPaymentSuccess,
+                        api: 'LqZ2Ma9doGSkfIJPKssA3lPPKnhfRJ',
+                        pKey: 'sCyctJWWAtRZ6i3nsEe8fGEsYMa2Si',
+                        cancelUrl: thawaniPaymentfailed,
+                        metadata: {
+                          "Customer Name":
+                              "${user?.firstname} ${user?.lastname}",
+                          "Customer PhoneNumber": "${user?.phone}",
+                          "Customer Email": "${user?.email}"
+                        },
+                        clintID: widget.orderId,
 
-                    onError: (e) {
-                      print(e);
-                      print("object");
-                    },
-                    products: [
-                      {
-                        "name": packageName,
-                        "quantity": 1,
-                        "unit_amount": conAmount,
-                      },
-                    ],
-                    onCreate: (v) {
-                      print(v);
-                    },
-                    onCancelled: (v) {
-                      print(v.data);
-                      getFail(context, v);
-                    },
-                    onPaid: (v) {
-                      print(v.data);
-                      getOrderSuccessData(context, v);
-                    },
-                    // child: const Text("data"),
-                  ),
-                ),
-              )
+                        onError: (e) {
+                          print(e);
+                          print("object");
+                        },
+                        products: [
+                          {
+                            "name": widget.packageName,
+                            "quantity": 1,
+                            "unit_amount": conAmount,
+                          },
+                        ],
+                        onCreate: (v) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          print(v);
+                        },
+                        onCancelled: (v) {
+                          print(v.data);
+                          getFail(context, v);
+                        },
+                        onPaid: (v) {
+                          print(v.data);
+                          getOrderSuccessData(context, v);
+                        },
+                        // child: const Text("data"),
+                      ),
+                    )
             ],
           ),
         ),

@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +14,6 @@ import 'package:social_media_services/components/routes_manager.dart';
 import 'package:social_media_services/model/sub_services_model.dart';
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/screens/sub_service.dart';
-import 'package:social_media_services/utils/get_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 getSubService(BuildContext context, id, bool changeLan, homeService) async {
@@ -68,36 +66,39 @@ selectServiceType(context, id, jsonResponse, homeService) async {
             page: SubServicesPage(
           homeService: homeService,
         )));
-  } else if (provider.viewProfileModel?.userdetails?.latitude == null &&
-      provider.explorerLat == null) {
-    String? apiToken = Hive.box("token").get('api_token');
-    if (apiToken == null) {
-      requestExplorerLocationPermission(context);
-    } else {
-      requestLocationPermission(
-        context,
-      );
-    }
+  }
+  //  else if (provider.viewProfileModel?.userdetails?.latitude == null &&
+  //     provider.explorerLat == null)
+  // {
+  //   String? apiToken = Hive.box("token").get('api_token');
+  //   if (apiToken == null) {
+  //     requestExplorerLocationPermission(context);
+  //   } else {
+  //     requestLocationPermission(
+  //       context,
+  //     );
+  //   }
 
-    Navigator.pop(context);
+  //   Navigator.pop(context);
 
-    AnimatedSnackBar.material(str.snack_get_location,
-            type: AnimatedSnackBarType.info,
-            borderRadius: BorderRadius.circular(6),
-            duration: const Duration(seconds: 1))
-        .show(
-      context,
-    );
-    await Future.delayed(const Duration(seconds: 2));
+  // AnimatedSnackBar.material(str.snack_get_location,
+  //         type: AnimatedSnackBarType.info,
+  //         borderRadius: BorderRadius.circular(6),
+  //         duration: const Duration(seconds: 1))
+  //     .show(
+  //   context,
+  // );
+  // await Future.delayed(const Duration(seconds: 2));
 
-    AnimatedSnackBar.material(str.snack_done,
-            type: AnimatedSnackBarType.success,
-            borderRadius: BorderRadius.circular(6),
-            duration: const Duration(seconds: 3))
-        .show(
-      context,
-    );
-  } else {
+  // AnimatedSnackBar.material(str.snack_done,
+  //         type: AnimatedSnackBarType.success,
+  //         borderRadius: BorderRadius.circular(6),
+  //         duration: const Duration(seconds: 3))
+  //     .show(
+  //   context,
+  // );
+  // }
+  else {
     getServiceMan(context, id, homeService);
   }
 }
