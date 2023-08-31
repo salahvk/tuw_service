@@ -14,6 +14,7 @@ import 'package:social_media_services/responsive/responsive.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/choose_more_services_page.dart';
 import 'package:social_media_services/screens/home_page.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -159,85 +160,184 @@ class _MyServicesPageState extends State<MyServicesPage> {
       ),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Padding(
-            padding: lang == 'ar'
-                ? const EdgeInsets.fromLTRB(0, 0, 18, 0)
-                : const EdgeInsets.fromLTRB(18, 0, 0, 0),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Stack(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    BackButton2(),
+                    Spacer(),
+                    CircleAvatar(
+                        backgroundColor: Color(0xff08dc2c),
+                        child: Image.asset(
+                          'assets/logo/app-logo-T.jpg',
+                          height: 30,
+                          width: 30,
+                        ))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: lang == 'ar'
+                    ? const EdgeInsets.fromLTRB(0, 0, 18, 0)
+                    : const EdgeInsets.fromLTRB(18, 0, 0, 0),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Stack(
                       children: [
-                        // SizedBox(
-                        //   width: 15,
-                        // ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.arrow_back,
-                            size: 30,
-                            color: ColorManager.primary,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              str.ms_my,
+                              style: getSemiBoldtStyle(
+                                  color: ColorManager.black, fontSize: 18),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: size.height * .03,
+                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          str.ms_my,
+                          str.ms_new,
                           style: getSemiBoldtStyle(
-                              color: ColorManager.black, fontSize: 18),
+                              color: ColorManager.serviceHomeGrey,
+                              fontSize: 16),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: size.height * .06,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      str.ms_new,
-                      style: getSemiBoldtStyle(
-                          color: ColorManager.serviceHomeGrey, fontSize: 16),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: size.height * .26,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    // shrinkWrap: true,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    itemCount: homeData?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          print(homeData?[index].service);
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (ctx) {
-                            return ChooseMoreServicePage(
-                              services: homeData?[index],
-                            );
-                          }));
+                    SizedBox(
+                      height: size.height * .26,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        // shrinkWrap: true,
+                        // physics: const NeverScrollableScrollPhysics(),
+                        itemCount: homeData?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              print(homeData?[index].service);
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (ctx) {
+                                return ChooseMoreServicePage(
+                                  services: homeData?[index],
+                                );
+                              }));
+                            },
+                            child: Padding(
+                              padding: lang == 'ar'
+                                  ? const EdgeInsets.fromLTRB(18, 10, 0, 10)
+                                  : const EdgeInsets.fromLTRB(0, 10, 18, 10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ColorManager.whiteColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 10.0,
+                                      color: Colors.grey.shade300,
+                                      offset: const Offset(5, 8.5),
+                                    ),
+                                  ],
+                                ),
+                                height: size.height * .24,
+                                child: Stack(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          25, 30, 25, 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            // mainAxisAlignment:
+                                            //     MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                  width: mob ? 70.0 : 50,
+                                                  height: mob ? 70.0 : 50,
+                                                  child: SvgPicture.network(
+                                                    '$endPoint${homeData?[index].image}',
+                                                    color:
+                                                        ColorManager.primary2,
+                                                  )),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                        child: SizedBox(
+                                            // width: size.width * .2,
+                                            child: SvgPicture.asset(
+                                      'assets/Asset40.svg',
+                                      color: const Color(0xffe9f4e4),
+                                    ))),
+                                    Positioned(
+                                      bottom: 30,
+                                      child: Text(
+                                          homeData![index].service ?? '',
+                                          // maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          style: getMediumtStyle(
+                                              color: ColorManager.black,
+                                              fontSize: homeData[index]
+                                                          .service!
+                                                          .length >
+                                                      13
+                                                  ? 13
+                                                  : 15)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
                         },
-                        child: Padding(
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * .03,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          str.ms_ordered,
+                          style: getSemiBoldtStyle(
+                              color: ColorManager.serviceHomeGrey,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: size.height * .02,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: provider.activeServices?.services?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return Padding(
                           padding: lang == 'ar'
                               ? const EdgeInsets.fromLTRB(18, 10, 0, 10)
                               : const EdgeInsets.fromLTRB(0, 10, 18, 10),
                           child: Container(
                             decoration: BoxDecoration(
                               color: ColorManager.whiteColor,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(6),
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 10.0,
@@ -246,226 +346,140 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                 ),
                               ],
                             ),
-                            height: size.height * .24,
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(25, 30, 25, 20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                            height: size.height * .16,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: mobWth
+                                        ? const EdgeInsets.fromLTRB(
+                                            25, 0, 35, 0)
+                                        : smobWth
+                                            ? const EdgeInsets.fromLTRB(
+                                                20, 0, 20, 0)
+                                            : const EdgeInsets.fromLTRB(
+                                                15, 0, 15, 0),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: ColorManager.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        width: size.width * .23,
+                                        height: size.height * .14,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(18.0),
+                                          child: SvgPicture.network(
+                                            height: size.height * .1,
+                                            '$endPoint${provider.activeServices?.services?[index].serviceImage}',
+                                            color: ColorManager.whiteColor,
+                                          ),
+                                        )),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        // mainAxisAlignment:
-                                        //     MainAxisAlignment.center,
+                                      Text(
+                                        provider
+                                                .activeServices
+                                                ?.services?[index]
+                                                .serviceName ??
+                                            '',
+                                        style: getMediumtStyle(
+                                            color: ColorManager.primary,
+                                            fontSize: 16),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      // Text(
+                                      //   "1,999 Paid | 3 month",
+                                      //   style: getMediumtStyle(
+                                      //       color: ColorManager.paymentPageColor1,
+                                      //       fontSize: 12),
+                                      // ),
+                                      Row(
                                         children: [
-                                          SizedBox(
-                                              width: mob ? 70.0 : 50,
-                                              height: mob ? 70.0 : 50,
-                                              child: SvgPicture.network(
-                                                '$endPoint${homeData?[index].image}',
-                                                color: ColorManager.primary2,
-                                              )),
+                                          Text(
+                                            str.ms_Sub,
+                                            style: getSemiBoldtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: mobWth
+                                                    ? 12
+                                                    : smobWth
+                                                        ? 11
+                                                        : 10),
+                                          ),
+                                          Text(
+                                            " ${provider.activeServices?.services?[index].subscriptionDate}",
+                                            style: getMediumtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: mobWth
+                                                    ? 12
+                                                    : smobWth
+                                                        ? 11
+                                                        : 10),
+                                          ),
                                         ],
                                       ),
+                                      const SizedBox(height: 5),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            str.ms_exp,
+                                            style: getSemiBoldtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: mobWth
+                                                    ? 12
+                                                    : smobWth
+                                                        ? 11
+                                                        : 10),
+                                          ),
+                                          Text(
+                                            " ${provider.activeServices?.services?[index].expiryDate}",
+                                            style: getMediumtStyle(
+                                                color: ColorManager
+                                                    .paymentPageColor1,
+                                                fontSize: mobWth
+                                                    ? 12
+                                                    : smobWth
+                                                        ? 11
+                                                        : 10),
+                                          ),
+                                        ],
+                                      ),
+                                      // Container(
+                                      //   width: 60,
+                                      //   height: 20,
+                                      //   decoration: BoxDecoration(
+                                      //       color: ColorManager.primary,
+                                      //       borderRadius: BorderRadius.circular(5)),
+                                      //   child: Center(
+                                      //     child: Text(
+                                      //       "RENEW",
+                                      //       style: getRegularStyle(
+                                      //           color: ColorManager.whiteColor,
+                                      //           fontSize: 10),
+                                      //     ),
+                                      //   ),
+                                      // )
                                     ],
                                   ),
-                                ),
-                                Positioned(
-                                    child: SizedBox(
-                                        // width: size.width * .2,
-                                        child: SvgPicture.asset(
-                                  'assets/Asset40.svg',
-                                  color: const Color(0xffe9f4e4),
-                                ))),
-                                Positioned(
-                                  bottom: 30,
-                                  child: Text(homeData![index].service ?? '',
-                                      // maxLines: 2,
-                                      textAlign: TextAlign.center,
-                                      style: getMediumtStyle(
-                                          color: ColorManager.black,
-                                          fontSize:
-                                              homeData[index].service!.length >
-                                                      13
-                                                  ? 13
-                                                  : 15)),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * .03,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      str.ms_ordered,
-                      style: getSemiBoldtStyle(
-                          color: ColorManager.serviceHomeGrey, fontSize: 16),
+                        );
+                      },
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: size.height * .02,
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: provider.activeServices?.services?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: lang == 'ar'
-                          ? const EdgeInsets.fromLTRB(18, 10, 0, 10)
-                          : const EdgeInsets.fromLTRB(0, 10, 18, 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: ColorManager.whiteColor,
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 10.0,
-                              color: Colors.grey.shade300,
-                              offset: const Offset(5, 8.5),
-                            ),
-                          ],
-                        ),
-                        height: size.height * .16,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: mobWth
-                                    ? const EdgeInsets.fromLTRB(25, 0, 35, 0)
-                                    : smobWth
-                                        ? const EdgeInsets.fromLTRB(
-                                            20, 0, 20, 0)
-                                        : const EdgeInsets.fromLTRB(
-                                            15, 0, 15, 0),
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                        color: ColorManager.primary,
-                                        borderRadius: BorderRadius.circular(8)),
-                                    width: size.width * .23,
-                                    height: size.height * .14,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: SvgPicture.network(
-                                        height: size.height * .1,
-                                        '$endPoint${provider.activeServices?.services?[index].serviceImage}',
-                                        color: ColorManager.whiteColor,
-                                      ),
-                                    )),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    provider.activeServices?.services?[index]
-                                            .serviceName ??
-                                        '',
-                                    style: getMediumtStyle(
-                                        color: ColorManager.primary,
-                                        fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  // Text(
-                                  //   "1,999 Paid | 3 month",
-                                  //   style: getMediumtStyle(
-                                  //       color: ColorManager.paymentPageColor1,
-                                  //       fontSize: 12),
-                                  // ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        str.ms_Sub,
-                                        style: getSemiBoldtStyle(
-                                            color:
-                                                ColorManager.paymentPageColor1,
-                                            fontSize: mobWth
-                                                ? 12
-                                                : smobWth
-                                                    ? 11
-                                                    : 10),
-                                      ),
-                                      Text(
-                                        " ${provider.activeServices?.services?[index].subscriptionDate}",
-                                        style: getMediumtStyle(
-                                            color:
-                                                ColorManager.paymentPageColor1,
-                                            fontSize: mobWth
-                                                ? 12
-                                                : smobWth
-                                                    ? 11
-                                                    : 10),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        str.ms_exp,
-                                        style: getSemiBoldtStyle(
-                                            color:
-                                                ColorManager.paymentPageColor1,
-                                            fontSize: mobWth
-                                                ? 12
-                                                : smobWth
-                                                    ? 11
-                                                    : 10),
-                                      ),
-                                      Text(
-                                        " ${provider.activeServices?.services?[index].expiryDate}",
-                                        style: getMediumtStyle(
-                                            color:
-                                                ColorManager.paymentPageColor1,
-                                            fontSize: mobWth
-                                                ? 12
-                                                : smobWth
-                                                    ? 11
-                                                    : 10),
-                                      ),
-                                    ],
-                                  ),
-                                  // Container(
-                                  //   width: 60,
-                                  //   height: 20,
-                                  //   decoration: BoxDecoration(
-                                  //       color: ColorManager.primary,
-                                  //       borderRadius: BorderRadius.circular(5)),
-                                  //   child: Center(
-                                  //     child: Text(
-                                  //       "RENEW",
-                                  //       style: getRegularStyle(
-                                  //           color: ColorManager.whiteColor,
-                                  //           fontSize: 10),
-                                  //     ),
-                                  //   ),
-                                  // )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

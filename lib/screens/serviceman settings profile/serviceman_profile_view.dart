@@ -21,9 +21,11 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/serviceman%20settings%20profile/serviceman_profile_edit.dart';
 import 'package:social_media_services/utils/animatedSnackBar.dart';
 import 'package:social_media_services/utils/delete_image.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/popup_image.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class ServiceManProfileViewPage extends StatefulWidget {
   Serviceman? serviceman;
@@ -178,327 +180,346 @@ class _ServiceManProfileViewPageState extends State<ServiceManProfileViewPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // BackButton2(),
-                FadeCustomAnimation(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 45,
-                        backgroundColor: ColorManager.background,
-                        child: ProfileImage(
-                          isNavigationActive: false,
-                          iconSize: 0,
-                          profileSize: 60,
-                          iconRadius: 0,
-                        ),
-                      ),
-                      Positioned(
-                        height: 40,
-                        // left: size.width * .0,
-                        child: CircleAvatar(
-                          radius: mob ? 8 : 6,
-                          backgroundColor: userData?.onlineStatus == 'online'
-                              ? ColorManager.primary
-                              : userData?.onlineStatus == 'offline'
-                                  ? ColorManager.grayLight
-                                  : ColorManager.errorRed,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .1,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 4),
-                    child: Text(
-                      '${userData?.firstname ?? ''} ${userData?.lastname ?? ''}',
-                      style: getRegularStyle(
-                          color: ColorManager.black, fontSize: 16),
-                    ),
-                  ),
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Image.asset(ImageAssets.tools),
-                //     const SizedBox(
-                //       width: 5,
-                //     ),
-                //     Text(widget.serviceman?.about ?? '',
-                //         style: getRegularStyle(
-                //             color: ColorManager.engineWorkerColor,
-                //             fontSize: 15)),
-                //   ],
-                // ),
-                // const SizedBox(
-                //   height: 5,
-                // ),
-                FadeSlideCustomAnimation(
-                  delay: .15,
-                  child: Text(
-                      '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
-                      style: getRegularStyle(
-                          color: ColorManager.engineWorkerColor, fontSize: 15)),
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 9.5,
-                              color: Colors.grey.shade400,
-                              offset: const Offset(6, 6),
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(5),
-                          color: ColorManager.primary,
-                        ),
-                        child: const Icon(
-                          Icons.photo_library_outlined,
-                          color: ColorManager.whiteColor,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .25,
-                  isRight: true,
-                  child: SizedBox(
-                    height: 80,
-                    child: ListView.builder(
-                      itemCount: (provider
-                                  .serviceManProfile?.galleryImages?.isEmpty ??
-                              true)
-                          ? 4
-                          : provider.serviceManProfile?.galleryImages?.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        final galleryImages =
-                            provider.serviceManProfile?.galleryImages;
-                        return InkWell(
-                          onTap: () {
-                            (galleryImages?.isEmpty ?? true)
-                                ? showAnimatedSnackBar(
-                                    context, str.sv_no_images)
-                                : showDialog(
-                                    context: context,
-                                    builder: (context) => PopupImage(
-                                        image:
-                                            galleryImages?[index].galleryImage),
-                                    barrierDismissible: true);
-                          },
-                          onLongPress: () {
-                            final imageId = galleryImages?[index].id;
-                            (galleryImages?.isEmpty ?? true)
-                                ? showAnimatedSnackBar(
-                                    context, str.sv_no_images)
-                                : showDialog(
-                                    context: context,
-                                    builder: (context) => DeleteImage(
-                                        imageId: imageId.toString()),
-                                    barrierDismissible: false);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: ColorManager.grayLight,
-                                ),
-                                height: 80,
-                                width: size.width * .3,
-                                child: (galleryImages?.isEmpty ?? true)
-                                    ? Image.asset(
-                                        'assets/no_image.png',
-                                        fit: BoxFit.cover,
-                                      )
-                                    : CachedNetworkImage(
-                                        errorWidget: (context, url, error) {
-                                          return Container(
-                                            height: 80,
-                                            width: size.width * .3,
-                                            color: ColorManager.grayLight,
-                                          );
-                                        },
-                                        imageUrl:
-                                            "$endPoint${galleryImages?[index].galleryImage ?? ''}",
-                                        fit: BoxFit.cover,
-                                        // cacheManager: customCacheManager,
-                                      ),
-                              ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  BackButton2(),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TopLogo(),
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // BackButton2(),
+                    FadeCustomAnimation(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 45,
+                            backgroundColor: ColorManager.background,
+                            child: ProfileImage(
+                              isNavigationActive: false,
+                              iconSize: 0,
+                              profileSize: 60,
+                              iconRadius: 0,
                             ),
                           ),
-                        );
-                      },
+                          Positioned(
+                            height: 40,
+                            // left: size.width * .0,
+                            child: CircleAvatar(
+                              radius: mob ? 8 : 6,
+                              backgroundColor:
+                                  userData?.onlineStatus == 'online'
+                                      ? ColorManager.primary
+                                      : userData?.onlineStatus == 'offline'
+                                          ? ColorManager.grayLight
+                                          : ColorManager.errorRed,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .3,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          '${str.wd_desc}:',
+                    FadeSlideCustomAnimation(
+                      delay: .1,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 4),
+                        child: Text(
+                          '${userData?.firstname ?? ''} ${userData?.lastname ?? ''}',
                           style: getRegularStyle(
                               color: ColorManager.black, fontSize: 16),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                userData?.about != null
-                    ? FadeSlideCustomAnimation(
-                        delay: .35,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                userData?.about ?? '',
-                                style: getRegularStyle(
-                                    color: ColorManager.engineWorkerColor,
-                                    fontSize: 16),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(),
-                FadeSlideCustomAnimation(
-                  delay: .4,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        0, userData?.about != null ? 15 : 0, 0, 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          '${str.wd_ser}:',
-                          style: getRegularStyle(
-                              color: ColorManager.black, fontSize: 16),
-                        ),
-                        const SizedBox(
-                          width: 7,
-                        ),
-                        SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: Image.asset(
-                            ImageAssets.tools,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(userData?.serviceName ?? '',
-                            style: getRegularStyle(
-                                color: ColorManager.engineWorkerColor,
-                                fontSize: 15)),
-                      ],
-                    ),
-                  ),
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .45,
-                  child: Row(
-                    children: [
-                      Text(
-                        '${str.wd_tran}:',
-                        style: getRegularStyle(
-                            color: ColorManager.black, fontSize: 16),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      userData?.transport == 'two wheeler'
-                          ? Image.asset(ImageAssets.scooter)
-                          : Image.asset(ImageAssets.car),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(transport ?? '',
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Image.asset(ImageAssets.tools),
+                    //     const SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Text(widget.serviceman?.about ?? '',
+                    //         style: getRegularStyle(
+                    //             color: ColorManager.engineWorkerColor,
+                    //             fontSize: 15)),
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   height: 5,
+                    // ),
+                    FadeSlideCustomAnimation(
+                      delay: .15,
+                      child: Text(
+                          '${userData?.countryName ?? ''} | ${userData?.state ?? ''}',
                           style: getRegularStyle(
                               color: ColorManager.engineWorkerColor,
                               fontSize: 15)),
-                    ],
-                  ),
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .5,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 8),
-                    child: Row(
-                      children: [
-                        Text(
-                          '${str.wd_more}:',
-                          style: getRegularStyle(
-                              color: ColorManager.black, fontSize: 16),
-                        ),
-                      ],
                     ),
-                  ),
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .55,
-                  child: Row(
-                    children: [
-                      // userData?.profile == null
-                      //     ? Container()
-                      //     :
-                      Expanded(
-                        child: Text(
-                          userData?.profile ?? '',
-                          style: getRegularStyle(
-                              color: ColorManager.engineWorkerColor,
-                              fontSize: 16),
+                    FadeSlideCustomAnimation(
+                      delay: .2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 9.5,
+                                  color: Colors.grey.shade400,
+                                  offset: const Offset(6, 6),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(5),
+                              color: ColorManager.primary,
+                            ),
+                            child: const Icon(
+                              Icons.photo_library_outlined,
+                              color: ColorManager.whiteColor,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    FadeSlideCustomAnimation(
+                      delay: .25,
+                      isRight: true,
+                      child: SizedBox(
+                        height: 80,
+                        child: ListView.builder(
+                          itemCount: (provider.serviceManProfile?.galleryImages
+                                      ?.isEmpty ??
+                                  true)
+                              ? 4
+                              : provider
+                                  .serviceManProfile?.galleryImages?.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final galleryImages =
+                                provider.serviceManProfile?.galleryImages;
+                            return InkWell(
+                              onTap: () {
+                                (galleryImages?.isEmpty ?? true)
+                                    ? showAnimatedSnackBar(
+                                        context, str.sv_no_images)
+                                    : showDialog(
+                                        context: context,
+                                        builder: (context) => PopupImage(
+                                            image: galleryImages?[index]
+                                                .galleryImage),
+                                        barrierDismissible: true);
+                              },
+                              onLongPress: () {
+                                final imageId = galleryImages?[index].id;
+                                (galleryImages?.isEmpty ?? true)
+                                    ? showAnimatedSnackBar(
+                                        context, str.sv_no_images)
+                                    : showDialog(
+                                        context: context,
+                                        builder: (context) => DeleteImage(
+                                            imageId: imageId.toString()),
+                                        barrierDismissible: false);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: ColorManager.grayLight,
+                                    ),
+                                    height: 80,
+                                    width: size.width * .3,
+                                    child: (galleryImages?.isEmpty ?? true)
+                                        ? Image.asset(
+                                            'assets/no_image.png',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : CachedNetworkImage(
+                                            errorWidget: (context, url, error) {
+                                              return Container(
+                                                height: 80,
+                                                width: size.width * .3,
+                                                color: ColorManager.grayLight,
+                                              );
+                                            },
+                                            imageUrl:
+                                                "$endPoint${galleryImages?[index].galleryImage ?? ''}",
+                                            fit: BoxFit.cover,
+                                            // cacheManager: customCacheManager,
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                FadeSlideCustomAnimation(
-                  delay: .6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          onPressed: navigateToServiceEditManProfile,
-                          style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.fromLTRB(33, 0, 33, 0)),
-                          child: Text(
-                            str.sv_edit_profile,
-                            style: getMediumtStyle(
-                                color: ColorManager.whiteText, fontSize: 14),
-                          )),
-                      const SizedBox(
-                        width: 15,
+                    ),
+                    FadeSlideCustomAnimation(
+                      delay: .3,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${str.wd_desc}:',
+                              style: getRegularStyle(
+                                  color: ColorManager.black, fontSize: 16),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    userData?.about != null
+                        ? FadeSlideCustomAnimation(
+                            delay: .35,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    userData?.about ?? '',
+                                    style: getRegularStyle(
+                                        color: ColorManager.engineWorkerColor,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                    FadeSlideCustomAnimation(
+                      delay: .4,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            0, userData?.about != null ? 15 : 0, 0, 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${str.wd_ser}:',
+                              style: getRegularStyle(
+                                  color: ColorManager.black, fontSize: 16),
+                            ),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: Image.asset(
+                                ImageAssets.tools,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(userData?.serviceName ?? '',
+                                style: getRegularStyle(
+                                    color: ColorManager.engineWorkerColor,
+                                    fontSize: 15)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    FadeSlideCustomAnimation(
+                      delay: .45,
+                      child: Row(
+                        children: [
+                          Text(
+                            '${str.wd_tran}:',
+                            style: getRegularStyle(
+                                color: ColorManager.black, fontSize: 16),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          userData?.transport == 'two wheeler'
+                              ? Image.asset(ImageAssets.scooter)
+                              : Image.asset(ImageAssets.car),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(transport ?? '',
+                              style: getRegularStyle(
+                                  color: ColorManager.engineWorkerColor,
+                                  fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    FadeSlideCustomAnimation(
+                      delay: .5,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 8),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${str.wd_more}:',
+                              style: getRegularStyle(
+                                  color: ColorManager.black, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    FadeSlideCustomAnimation(
+                      delay: .55,
+                      child: Row(
+                        children: [
+                          // userData?.profile == null
+                          //     ? Container()
+                          //     :
+                          Expanded(
+                            child: Text(
+                              userData?.profile ?? '',
+                              style: getRegularStyle(
+                                  color: ColorManager.engineWorkerColor,
+                                  fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    FadeSlideCustomAnimation(
+                      delay: .6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              onPressed: navigateToServiceEditManProfile,
+                              style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(33, 0, 33, 0)),
+                              child: Text(
+                                str.sv_edit_profile,
+                                style: getMediumtStyle(
+                                    color: ColorManager.whiteText,
+                                    fontSize: 14),
+                              )),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

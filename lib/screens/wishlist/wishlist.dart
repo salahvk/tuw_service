@@ -16,10 +16,12 @@ import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/screens/messagePage.dart';
 import 'package:social_media_services/screens/serviceHome.dart';
 import 'package:social_media_services/loading%20screens/profile_loading.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:social_media_services/widgets/favoriteServiceTile.dart';
 import 'package:social_media_services/widgets/servicer_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class WishListPage extends StatefulWidget {
   int? id;
@@ -214,49 +216,66 @@ class _WishListPageState extends State<WishListPage> {
             : SafeArea(
                 child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                    child: SingleChildScrollView(
-                      child: Column(
+                  Column(
+                    children: [
+                      Row(
                         children: [
-                          Text(
-                            str.w_wishList,
-                            style: getMediumtStyle(
-                                color: ColorManager.black, fontSize: 22),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: ((context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (ctx) {
-                                        return ProfileLoading(
-                                          serviceId: favoriteServiceMan![index]
-                                              .id
-                                              .toString(),
-                                        );
-                                      }));
-                                    },
-                                    child: FavoriteServiceListTile(
-                                      serviceman: favoriteServiceMan![index],
-                                    )),
-                              );
-                            }),
-                            itemCount: favoriteServiceMan?.length ?? 0,
-                          ),
-                          const SizedBox(
-                            height: 5,
+                          BackButton2(),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TopLogo(),
                           )
                         ],
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Text(
+                                str.w_wishList,
+                                style: getMediumtStyle(
+                                    color: ColorManager.black, fontSize: 22),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: ((context, index) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                    child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (ctx) {
+                                            return ProfileLoading(
+                                              serviceId:
+                                                  favoriteServiceMan![index]
+                                                      .id
+                                                      .toString(),
+                                            );
+                                          }));
+                                        },
+                                        child: FavoriteServiceListTile(
+                                          serviceman:
+                                              favoriteServiceMan![index],
+                                        )),
+                                  );
+                                }),
+                                itemCount: favoriteServiceMan?.length ?? 0,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )),

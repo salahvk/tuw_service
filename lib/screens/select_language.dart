@@ -12,6 +12,7 @@ import 'package:social_media_services/model/active_services.dart';
 
 import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/providers/servicer_provider.dart';
+import 'package:social_media_services/screens/home_page.dart';
 import 'package:social_media_services/utils/getLocalLanguage.dart';
 import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -148,7 +149,8 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                               await getServiceManDetailsFun(
                                   context, servicerProvider.navServiceId);
                               await getActiveServices(context);
-                              Navigator.pop(context);
+                              // Navigator.pushAndRemoveUntil(context, newRouteName, (route) => false);
+                              navigateToHome(context);
                               // await getHome(context, id: id, changeLan: true);
                               await getHome(
                                 context,
@@ -176,5 +178,11 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
         ),
       ),
     );
+  }
+
+  navigateToHome(BuildContext context) {
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) {
+      return const HomePage();
+    }), (route) => false);
   }
 }

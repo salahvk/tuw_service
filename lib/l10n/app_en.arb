@@ -209,7 +209,7 @@
     "ps_snack_card":"Please Enter A Card Holder Name",
     "ps_snack_card_no":"Please Enter A Card Number",
     "ps_snack_expiry":"Please Enter Card Expiry Date",
-    "ps_snack_cvv":"Please Enter Your CVV Number",
+    "ps_snack_cvv":"Please Enter Your Civil Card Number",
     "ps_snack_package":"Please Choose a package to continue",
     "ps_snack_coupen":"Please Enter a Coupen code to redeem",
     "e_snack_name":"First name is required",
@@ -280,7 +280,7 @@
     "a_address_req":"Address field is required",
     "a_country":"Select a country",
     "a_region":"Region is required",
-    "a_state":"state is required",
+    "a_state":"State is required",
     "a_flat":"Flat No is required",
     "a_loc":"Please Choose an address Location",
     
@@ -311,6 +311,7 @@
 "open_google_map": "Open Google Map",
 
 "tax":"Tax",
+"thawani_payment": "Thawani Payment",
 
 "no_ser":"No ServiceMan Available",
 "no_ava":"Not Available",

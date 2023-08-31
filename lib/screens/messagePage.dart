@@ -168,6 +168,15 @@ class _MessagePageState extends State<MessagePage> {
                             haptic: true,
                             selectedIndex: _selectedIndex,
                             onTabChange: (index) {
+                              widget.isOther
+                                  ? Navigator.push(context,
+                                      MaterialPageRoute(builder: (ctx) {
+                                      return HomePage(
+                                        selectedIndex: index,
+                                      );
+                                    }))
+                                  : null;
+
                               // if (mounted) {
                               //   Navigator.pushNamedAndRemoveUntil(
                               //       context, Routes.homePage, (route) => false);

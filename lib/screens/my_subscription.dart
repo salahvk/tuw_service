@@ -13,8 +13,10 @@ import 'package:social_media_services/providers/data_provider.dart';
 import 'package:social_media_services/responsive/responsive_width.dart';
 import 'package:social_media_services/screens/Become%20a%20servie%20man/renew_service.dart';
 import 'package:social_media_services/screens/home_page.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 import 'package:social_media_services/widgets/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_services/widgets/top_logo.dart';
 
 class MySubscriptionPage extends StatefulWidget {
   const MySubscriptionPage({super.key});
@@ -161,42 +163,49 @@ class _MySubscriptionPageState extends State<MySubscriptionPage> {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(
-                height: 10,
+              Row(
+                children: [
+                  BackButton2(),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TopLogo(),
+                  )
+                ],
               ),
               Stack(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child:
-                            // Text(
-                            //   textAlign: TextAlign.center,
-                            //   String.fromCharCode(Icons.arrow_back.codePoint),
-                            //   style: TextStyle(
-                            //     inherit: false,
-                            //     color: ColorManager.primary,
-                            //     fontSize: 30.0,
-                            //     fontWeight: FontWeight.w600,
-                            //     fontFamily: Icons.search.fontFamily,
-                            //     package: Icons.arrow_back.fontPackage,
-                            //   ),
-                            // )
-                            const Icon(
-                          Icons.arrow_back,
-                          size: 30,
-                          color: ColorManager.primary,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     const SizedBox(
+                  //       width: 15,
+                  //     ),
+                  //     InkWell(
+                  //       onTap: () {
+                  //         Navigator.pop(context);
+                  //       },
+                  //       child:
+                  //           // Text(
+                  //           //   textAlign: TextAlign.center,
+                  //           //   String.fromCharCode(Icons.arrow_back.codePoint),
+                  //           //   style: TextStyle(
+                  //           //     inherit: false,
+                  //           //     color: ColorManager.primary,
+                  //           //     fontSize: 30.0,
+                  //           //     fontWeight: FontWeight.w600,
+                  //           //     fontFamily: Icons.search.fontFamily,
+                  //           //     package: Icons.arrow_back.fontPackage,
+                  //           //   ),
+                  //           // )
+                  //           const Icon(
+                  //         Icons.arrow_back,
+                  //         size: 30,
+                  //         color: ColorManager.primary,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

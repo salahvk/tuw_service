@@ -965,23 +965,24 @@ class _UserAddressEditState extends State<UserAddressEdit> {
     final flat = AddressEditControllers.flatNoController.text;
     final latitude = provider.addressLatitude;
     final longitude = provider.addressLongitude;
+    final str = AppLocalizations.of(context)!;
 
     if (addressName.isEmpty) {
-      showAnimatedSnackBar(context, "Address name field is required");
+      showAnimatedSnackBar(context, str.a_address_name_req);
     } else if (address.isEmpty) {
-      showAnimatedSnackBar(context, "Address field is required");
+      showAnimatedSnackBar(context, str.a_address_req);
     } else if (selectedValue == null) {
-      showAnimatedSnackBar(context, "Select a country");
+      showAnimatedSnackBar(context, str.a_country);
     } else if (defaultReg == null) {
-      showAnimatedSnackBar(context, "Region is required");
+      showAnimatedSnackBar(context, str.a_region);
     } else if (state.isEmpty) {
-      showAnimatedSnackBar(context, "state is required");
+      showAnimatedSnackBar(context, str.a_state);
     } else if (flat.isEmpty) {
-      showAnimatedSnackBar(context, "Flat No is required");
+      showAnimatedSnackBar(context, str.a_flat);
     } else if (imageFile == null) {
-      showAnimatedSnackBar(context, "Please Choose an address Photo");
+      showAnimatedSnackBar(context, str.a_address_photo);
     } else if (latitude == null || longitude == null) {
-      showAnimatedSnackBar(context, "Please Choose an address Location");
+      showAnimatedSnackBar(context, str.a_loc);
     } else {
       setState(() {
         isSaveAddressLoading = true;

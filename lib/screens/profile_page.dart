@@ -271,8 +271,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {
                     // Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                      return const HomePage(
-                        selectedIndex: 1,
+                      return const MessagePage(
+                        isOther: true,
+                        isHome: false,
                       );
                     }));
                   },
