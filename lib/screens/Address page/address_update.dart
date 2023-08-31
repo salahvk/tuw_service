@@ -387,7 +387,7 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                                           ),
                                           Text(
                                             // str.ae_home_locator,
-                                            "Address Locator",
+                                            str.address_locator,
                                             style: getRegularStyle(
                                                 color: ColorManager.whiteColor),
                                           )

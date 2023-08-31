@@ -269,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (ctx) {
                       return const HomePage(
                         selectedIndex: 1,

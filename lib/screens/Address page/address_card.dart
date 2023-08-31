@@ -292,7 +292,7 @@ class _UserAddressCardState extends State<UserAddressCard> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: SizedBox(
-                                height: 100,
+                                height: 150,
                                 width: size.width,
                                 child: GoogleMap(
                                   myLocationEnabled: true,
@@ -333,8 +333,8 @@ class _UserAddressCardState extends State<UserAddressCard> {
                             decoration: BoxDecoration(
                                 color: ColorManager.primary,
                                 borderRadius: BorderRadius.circular(5)),
-
-                            // width: 30,
+                            width: 190,
+                            height: 25,
                             child: InkWell(
                               onTap: () async {
                                 _openGoogleMaps(
@@ -375,18 +375,18 @@ class _UserAddressCardState extends State<UserAddressCard> {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                            child: Row(
-                              children: [
-                                Text(
-                                  str.a_home,
-                                  style: getRegularStyle(
-                                      color: ColorManager.grayLight),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                          //   child: Row(
+                          //     children: [
+                          //       Text(
+                          //         str.a_home,
+                          //         style: getRegularStyle(
+                          //             color: ColorManager.grayLight),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           // ListView.builder(
                           //   shrinkWrap: true,
                           //   physics: const NeverScrollableScrollPhysics(),

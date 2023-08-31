@@ -40,7 +40,7 @@
 
     "d_my_profile":"My Profile",
     "d_address":"Address Book",
-    "d_become":"Become a Service man",
+    "d_become":"Become a Service Man",
     "d_privacy":"Privacy Policy",
     "d_logout":"Logout",
     "d_add_service":"Add Service",
@@ -150,16 +150,17 @@
     "su_package_id":"Package Name",
 
     "a_home_locator":"Home Locator",
-    "a_add":"Add address",
+    "a_add":"Add Address",
     "a_address":"Address",
     "a_home":"Home Address",
     "a_cover":"Please choose cover Photo",
+    "a_add_cover":"Please Choose an Address Cover Photo",
 
     "ae_home_locator":"Change home Location",
     "ae_add":"Add",
     "ae_address":"Address",
     "ae_address_n":"Address Name",
-    "ae_address_h":"Enter Address Name",
+    "ae_address_h2":"Enter Address Name",
     "ae_address_h":"Enter Address",
     "ae_country":"Country",
     "ae_country_h":"Enter Country",
@@ -273,7 +274,7 @@
     "re_report_success":"Reported Customer Successfully",
 
     "yesterday":"Yesterday",
-    "address_locator":"Address Locator",
+    "address_locator":"Find Location",
     "a_address_photo":"Please choose an address Photo",
     "a_address_name_req":"Address name field is required",
     "a_address_req":"Address field is required",
@@ -282,6 +283,7 @@
     "a_state":"state is required",
     "a_flat":"Flat No is required",
     "a_loc":"Please Choose an address Location",
+    
 
         "sl_select":"Select Language",
          "su_invoice_id":"Invoice id",

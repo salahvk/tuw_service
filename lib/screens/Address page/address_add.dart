@@ -286,12 +286,12 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    str.ae_address,
-                                    style: getBoldtStyle(
-                                        color: ColorManager.black,
-                                        fontSize: 14),
-                                  ),
+                                  // Text(
+                                  //   str.ae_address,
+                                  //   style: getBoldtStyle(
+                                  //       color: ColorManager.black,
+                                  //       fontSize: 14),
+                                  // ),
                                   Container(
                                     decoration: BoxDecoration(
                                         color: ColorManager.primary,
@@ -433,7 +433,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                                     ),
                                                     Text(
                                                       // str.ae_home_locator,
-                                                      "Address Locator",
+                                                      str.address_locator,
                                                       style: getRegularStyle(
                                                           color: ColorManager
                                                               .whiteColor),
@@ -478,7 +478,7 @@ class _UserAddressEditState extends State<UserAddressEdit> {
 
                             MandatoryHeader(heading: str.ae_address_n),
                             TextFieldProfileService(
-                                hintText: str.ae_address_h,
+                                hintText: str.ae_address_h2,
                                 controller: AddressEditControllers
                                     .addressNameController),
                             MandatoryHeader(heading: str.ae_address),
@@ -1123,7 +1123,7 @@ class AddressImageWidget extends StatelessWidget {
           color: ColorManager.whiteColor,
           child: Center(
             child: Text(
-              "Please choose an address Photo",
+              str.a_add_cover,
               style: getRegularStyle(color: ColorManager.black, fontSize: 14),
             ),
           ),

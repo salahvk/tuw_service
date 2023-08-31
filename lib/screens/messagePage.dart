@@ -26,7 +26,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MessagePage extends StatefulWidget {
   final bool isHome;
-  const MessagePage({Key? key, this.isHome = true}) : super(key: key);
+  final bool isOther;
+  //  isother making true in initial case may cause some errors want to test it
+  const MessagePage({Key? key, this.isHome = true, this.isOther = false})
+      : super(key: key);
 
   @override
   State<MessagePage> createState() => _MessagePageState();
@@ -71,11 +74,13 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Future<bool> _willPopCallback() async {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-      return const HomePage(
-        selectedIndex: 0,
-      );
-    }));
+    widget.isOther
+        ? Navigator.pop(context)
+        : Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
+            return const HomePage(
+              selectedIndex: 0,
+            );
+          }));
     return true; // return true if the route to be popped
   }
 

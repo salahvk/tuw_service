@@ -239,13 +239,13 @@ class _AddressBoxState extends State<AddressBox> {
                 ],
               ),
             ),
-            Positioned(
-              top: 130,
-              right: lang == 'ar' ? null : 5,
-              left: lang == 'ar' ? 5 : null,
-              child: const Icon(Icons.navigate_next_sharp,
-                  color: ColorManager.primary, size: 30),
-            )
+            // Positioned(
+            //   top: 130,
+            //   right: lang == 'ar' ? null : 5,
+            //   left: lang == 'ar' ? 5 : null,
+            //   child: const Icon(Icons.navigate_next_sharp,
+            //       color: ColorManager.primary, size: 30),
+            // )
           ],
         ),
       ),
