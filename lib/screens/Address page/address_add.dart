@@ -35,6 +35,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
+import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:social_media_services/widgets/top_logo.dart';
 
 class UserAddressEdit extends StatefulWidget {
@@ -481,7 +482,15 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                 hintText: str.ae_address_h2,
                                 controller: AddressEditControllers
                                     .addressNameController),
-                            MandatoryHeader(heading: str.ae_address),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: TitleWidget(name: str.ae_address),
+                                ),
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: Container(
@@ -857,7 +866,11 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    MandatoryHeader(heading: str.ae_state),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: TitleWidget(name: str.ae_state),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 10, 0, 0),
@@ -889,7 +902,15 @@ class _UserAddressEditState extends State<UserAddressEdit> {
                                 ),
                               ],
                             ),
-                            MandatoryHeader(heading: str.ae_home_flat),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: TitleWidget(name: str.ae_home_flat),
+                                ),
+                              ],
+                            ),
                             TextFieldProfileService(
                                 hintText: str.ae_no,
                                 controller:
@@ -969,17 +990,22 @@ class _UserAddressEditState extends State<UserAddressEdit> {
 
     if (addressName.isEmpty) {
       showAnimatedSnackBar(context, str.a_address_name_req);
-    } else if (address.isEmpty) {
-      showAnimatedSnackBar(context, str.a_address_req);
-    } else if (selectedValue == null) {
+    }
+    //  else if (address.isEmpty) {
+    //   showAnimatedSnackBar(context, str.a_address_req);
+    // }
+    else if (selectedValue == null) {
       showAnimatedSnackBar(context, str.a_country);
     } else if (defaultReg == null) {
       showAnimatedSnackBar(context, str.a_region);
-    } else if (state.isEmpty) {
-      showAnimatedSnackBar(context, str.a_state);
-    } else if (flat.isEmpty) {
-      showAnimatedSnackBar(context, str.a_flat);
-    } else if (imageFile == null) {
+    }
+    //  else if (state.isEmpty) {
+    //   showAnimatedSnackBar(context, str.a_state);
+    // }
+    // else if (flat.isEmpty) {
+    //   showAnimatedSnackBar(context, str.a_flat);
+    // }
+    else if (imageFile == null) {
       showAnimatedSnackBar(context, str.a_address_photo);
     } else if (latitude == null || longitude == null) {
       showAnimatedSnackBar(context, str.a_loc);

@@ -34,6 +34,7 @@ import 'package:social_media_services/widgets/mandatory_widget.dart';
 import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:social_media_services/widgets/textField_Profile.dart';
+import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 
@@ -472,7 +473,15 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                             hintText: str.ae_address_h,
                             controller:
                                 AddressEditControllers.addressNameController),
-                        MandatoryHeader(heading: str.ae_address),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: TitleWidget(name: str.ae_address),
+                            ),
+                          ],
+                        ),
+
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Container(
@@ -831,7 +840,15 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                MandatoryHeader(heading: str.ae_state),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
+                                      child: TitleWidget(name: str.ae_state),
+                                    ),
+                                  ],
+                                ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -863,7 +880,15 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
                             ),
                           ],
                         ),
-                        MandatoryHeader(heading: str.ae_home_flat),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: TitleWidget(name: str.ae_home_flat),
+                            ),
+                          ],
+                        ),
+
                         TextFieldProfileService(
                             hintText: str.ae_no,
                             controller:
@@ -932,18 +957,22 @@ class _UserAddressUpdateState extends State<UserAddressUpdate> {
     final flat = AddressEditControllers.flatNoController.text;
 
     if (addressName.isEmpty) {
-      showAnimatedSnackBar(context, "Address name field is required");
-    } else if (address.isEmpty) {
-      showAnimatedSnackBar(context, "Address field is required");
-    } else if (selectedValue == null && countryValue == null) {
-      showAnimatedSnackBar(context, "Select a country");
+      showAnimatedSnackBar(context, str.a_address_name_req);
+    }
+    //  else if (address.isEmpty) {
+    //   showAnimatedSnackBar(context, "Address field is required");
+    // }
+    else if (selectedValue == null && countryValue == null) {
+      showAnimatedSnackBar(context, str.a_country);
     } else if (defaultReg == null) {
-      showAnimatedSnackBar(context, "Region is required");
-    } else if (state.isEmpty) {
-      showAnimatedSnackBar(context, str.a_state);
-    } else if (flat.isEmpty) {
-      showAnimatedSnackBar(context, "Flat No is required");
-    } else {
+      showAnimatedSnackBar(context, str.a_region);
+    }
+    //  else if (state.isEmpty) {
+    //   showAnimatedSnackBar(context, str.a_state);
+    // } else if (flat.isEmpty) {
+    //   showAnimatedSnackBar(context, "Flat No is required");
+    // }
+    else {
       setState(() {
         isSaveAddressLoading = true;
       });

@@ -75,16 +75,53 @@ class _UserAddressBoxState extends State<UserAddressBox> {
                   left: lang != 'ar' ? 15 : null,
                   right: lang == 'ar' ? 15 : null,
                   bottom: 15,
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //   padding: const EdgeInsets.fromLTRB(15, 100, 15, 20),
                       Text(
-                        "${widget.userAddress?.addressName}\n${widget.userAddress?.address}\n${widget.userAddress?.homeNo}\n${widget.userAddress?.region}, ${widget.userAddress?.state}, ${widget.userAddress?.country}",
+                        widget.userAddress?.addressName ?? "",
                         style: getRegularStyle(
-                            color: ColorManager.whiteColor, fontSize: 16),
+                          color: ColorManager.whiteColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                      widget.userAddress?.address == null
+                          ? Container()
+                          : Text(
+                              widget.userAddress?.address ?? "",
+                              style: getRegularStyle(
+                                color: ColorManager.whiteColor,
+                                fontSize: 16,
+                              ),
+                            ),
+                      widget.userAddress?.homeNo == null
+                          ? Container()
+                          : Text(
+                              widget.userAddress?.homeNo ?? "",
+                              style: getRegularStyle(
+                                color: ColorManager.whiteColor,
+                                fontSize: 16,
+                              ),
+                            ),
+                      Text(
+                        "${widget.userAddress?.region}, ${widget.userAddress?.state ?? ''}, ${widget.userAddress?.country}",
+                        style: getRegularStyle(
+                          color: ColorManager.whiteColor,
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
+                  // child: Row(
+                  //   children: [
+                  //     //   padding: const EdgeInsets.fromLTRB(15, 100, 15, 20),
+                  //     Text(
+                  //       "${widget.userAddress?.addressName}\n${widget.userAddress?.address}\n${widget.userAddress?.homeNo}\n${widget.userAddress?.region}, ${widget.userAddress?.state}, ${widget.userAddress?.country}",
+                  //       style: getRegularStyle(
+                  //           color: ColorManager.whiteColor, fontSize: 16),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ],
             ),
