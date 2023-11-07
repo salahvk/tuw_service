@@ -49,7 +49,7 @@ class _ServiceManDetailsState extends State<ProfileLoading> {
 
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
-
+    return Scaffold();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

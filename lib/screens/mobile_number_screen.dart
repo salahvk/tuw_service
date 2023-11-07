@@ -75,12 +75,11 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       },
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
-        body: SafeArea(
-            child: SingleChildScrollView(
-          // reverse: true,
-          child: Stack(
-            children: [
-              Row(
+        appBar: PreferredSize(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
                 children: [
                   BackButton2(),
                   Spacer(),
@@ -90,6 +89,25 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   )
                 ],
               ),
+            ),
+          ),
+          preferredSize: Size.fromHeight(80),
+        ),
+        body: SafeArea(
+            child: SingleChildScrollView(
+          // reverse: true,
+          child: Stack(
+            children: [
+              // Row(
+              //   children: [
+              //     BackButton2(),
+              //     Spacer(),
+              //     Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: TopLogo(),
+              //     )
+              //   ],
+              // ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

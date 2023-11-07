@@ -36,6 +36,7 @@ import 'package:social_media_services/widgets/statusListTile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
+import 'package:social_media_services/widgets/backbutton.dart';
 
 class ServiceManProfileEditPage extends StatefulWidget {
   const ServiceManProfileEditPage({super.key});
@@ -203,6 +204,22 @@ class _ServiceManProfileEditPageState extends State<ServiceManProfileEditPage> {
                   child: Column(
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          BackButton2(),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                                backgroundColor: Color(0xff08dc2c),
+                                child: Image.asset(
+                                  'assets/logo/app-logo-T.jpg',
+                                  height: 30,
+                                  width: 30,
+                                )),
+                          )
+                        ],
+                      ),
                       Stack(
                         children: [
                           SizedBox(

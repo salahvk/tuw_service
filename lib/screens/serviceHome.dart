@@ -26,14 +26,38 @@ class ServiceHomePage extends StatefulWidget {
 class _ServiceHomePageState extends State<ServiceHomePage> {
   int _backButtonPressCount = 0;
   int selectedCarouselIndex = 0;
+  PageController? _pageController;
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final provider = Provider.of<DataProvider>(context, listen: false);
+
+      startAutoSlide(provider);
       // provider.viewProfileModel?.userdetails?.latitude == null
       //     ? await requestLocationPermission(context)
       //     : null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void startAutoSlide(provider) {
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (_pageController?.page == provider.homeModel?.homebanner?.length - 1) {
+        _pageController?.animateToPage(0,
+            duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+      } else {
+        _pageController?.nextPage(
+            duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+      }
     });
   }
 
@@ -169,6 +193,7 @@ class _ServiceHomePageState extends State<ServiceHomePage> {
                           children: [
                             PageView.builder(
                               scrollDirection: Axis.horizontal,
+                              controller: _pageController,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding:

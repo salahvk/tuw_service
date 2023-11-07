@@ -33,6 +33,7 @@ import 'package:social_media_services/widgets/profile_image.dart';
 import 'package:social_media_services/widgets/title_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
+import 'package:social_media_services/widgets/backbutton.dart';
 
 class EditProfileScreen extends StatefulWidget {
   bool isregister;
@@ -199,14 +200,12 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
 
       body: _selectedIndex != 2
           ? _screens[_selectedIndex]
-          : GestureDetector(
-              child: SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(15, h * .05, 15, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          : SafeArea(
+              child: GestureDetector(
+                child: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Column(
                         children: [
                           widget.isregister
                               ? Row(
@@ -236,622 +235,705 @@ class _ProfileDetailsPageState extends State<EditProfileScreen> {
                                         ))
                                   ],
                                 )
-                              : Container(
-                                  height: 30,
+                              : Row(
+                                  children: [
+                                    BackButton2(),
+                                    Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CircleAvatar(
+                                          backgroundColor: Color(0xff08dc2c),
+                                          child: Image.asset(
+                                            'assets/logo/app-logo-T.jpg',
+                                            height: 30,
+                                            width: 30,
+                                          )),
+                                    )
+                                  ],
                                 ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: ProfileImage(
-                                  // image: provider.viewProfileModel
-                                  //         ?.userdetails?.profilePic ??
-                                  //     '',
-                                  isNavigationActive: false,
-                                  iconSize: 12,
-                                  profileSize: 40.5,
-                                  iconRadius: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: TitleWidget(name: str.p_first_name),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.grey.shade300,
-                                    // offset: const Offset(5, 8.5),
-                                  ),
-                                ],
-                              ),
-                              child: TextField(
-                                // focusNode: nfocus,
-                                style: const TextStyle(),
-                                controller:
-                                    EditProfileControllers.firstNameController,
-                                decoration: InputDecoration(
-                                    hintText: str.p_first_name_h,
-                                    hintStyle: getRegularStyle(
-                                        color: const Color.fromARGB(
-                                            255, 173, 173, 173),
-                                        fontSize: Responsive.isMobile(context)
-                                            ? 15
-                                            : 10)),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: TitleWidget(name: str.p_last_name),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.grey.shade300,
-                                    // offset: const Offset(5, 8.5),
-                                  ),
-                                ],
-                              ),
-                              child: TextField(
-                                // focusNode: nfocus,
-                                style: const TextStyle(),
-                                controller:
-                                    EditProfileControllers.lastNameController,
-                                decoration: InputDecoration(
-                                    hintText: str.p_last_name_h,
-                                    hintStyle: getRegularStyle(
-                                        color: const Color.fromARGB(
-                                            255, 173, 173, 173),
-                                        fontSize: Responsive.isMobile(context)
-                                            ? 15
-                                            : 10)),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: TitleWidget(name: str.e_dob),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Container(
-                                      width: mob
-                                          ? size.width * 0.5
-                                          : size.width * .45,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            // offset: const Offset(5, 8.5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: TextField(
-                                        style: const TextStyle(),
-                                        readOnly: true,
-                                        controller: EditProfileControllers
-                                            .dateController,
-                                        decoration: InputDecoration(
-                                            suffixIcon: InkWell(
-                                              onTap: () => _selectDate(context),
-                                              child: const Icon(
-                                                Icons.calendar_month,
-                                                color: ColorManager.primary,
-                                              ),
-                                            ),
-                                            hintText: str.e_dob_h,
-                                            hintStyle: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize:
-                                                    Responsive.isMobile(context)
-                                                        ? 14
-                                                        : 10)),
+                            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: ProfileImage(
+                                        // image: provider.viewProfileModel
+                                        //         ?.userdetails?.profilePic ??
+                                        //     '',
+                                        isNavigationActive: false,
+                                        iconSize: 12,
+                                        profileSize: 40.5,
+                                        iconRadius: 12,
                                       ),
                                     ),
+                                  ],
+                                ),
+
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                  child: TitleWidget(name: str.p_first_name),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 10.0,
+                                          color: Colors.grey.shade300,
+                                          // offset: const Offset(5, 8.5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: TextField(
+                                      // focusNode: nfocus,
+                                      style: const TextStyle(),
+                                      controller: EditProfileControllers
+                                          .firstNameController,
+                                      decoration: InputDecoration(
+                                          hintText: str.p_first_name_h,
+                                          hintStyle: getRegularStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 173, 173, 173),
+                                              fontSize:
+                                                  Responsive.isMobile(context)
+                                                      ? 15
+                                                      : 10)),
+                                    ),
                                   ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    child: TitleWidget(name: str.e_gender),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: TitleWidget(name: str.p_last_name),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 10.0,
+                                          color: Colors.grey.shade300,
+                                          // offset: const Offset(5, 8.5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: TextField(
+                                      // focusNode: nfocus,
+                                      style: const TextStyle(),
+                                      controller: EditProfileControllers
+                                          .lastNameController,
+                                      decoration: InputDecoration(
+                                          hintText: str.p_last_name_h,
+                                          hintStyle: getRegularStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 173, 173, 173),
+                                              fontSize:
+                                                  Responsive.isMobile(context)
+                                                      ? 15
+                                                      : 10)),
+                                    ),
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: Row(
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 15, 0, 0),
+                                          child: TitleWidget(name: str.e_dob),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 0),
+                                          child: Container(
+                                            width: mob
+                                                ? size.width * 0.5
+                                                : size.width * .45,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 10.0,
+                                                  color: Colors.grey.shade300,
+                                                  // offset: const Offset(5, 8.5),
+                                                ),
+                                              ],
+                                            ),
+                                            child: TextField(
+                                              style: const TextStyle(),
+                                              readOnly: true,
+                                              controller: EditProfileControllers
+                                                  .dateController,
+                                              decoration: InputDecoration(
+                                                  suffixIcon: InkWell(
+                                                    onTap: () =>
+                                                        _selectDate(context),
+                                                    child: const Icon(
+                                                      Icons.calendar_month,
+                                                      color:
+                                                          ColorManager.primary,
+                                                    ),
+                                                  ),
+                                                  hintText: str.e_dob_h,
+                                                  hintStyle: getRegularStyle(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              173,
+                                                              173,
+                                                              173),
+                                                      fontSize:
+                                                          Responsive.isMobile(
+                                                                  context)
+                                                              ? 14
+                                                              : 10)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              value = true;
-                                              gender = 'male';
-                                            });
-                                          },
-                                          child: CustomizedRadioButton(
-                                            gender: "MALE",
-                                            isMaleSelected: value,
-                                          ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 0, 0),
+                                          child:
+                                              TitleWidget(name: str.e_gender),
                                         ),
-                                        TitleWidget(name: str.e_male),
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              value = false;
-                                              gender = 'female';
-                                            });
-                                          },
-                                          child: CustomizedRadioButton(
-                                            gender: "FEMALE",
-                                            isMaleSelected: value,
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 15, 0, 0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    value = true;
+                                                    gender = 'male';
+                                                  });
+                                                },
+                                                child: CustomizedRadioButton(
+                                                  gender: "MALE",
+                                                  isMaleSelected: value,
+                                                ),
+                                              ),
+                                              TitleWidget(name: str.e_male),
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    value = false;
+                                                    gender = 'female';
+                                                  });
+                                                },
+                                                child: CustomizedRadioButton(
+                                                  gender: "FEMALE",
+                                                  isMaleSelected: value,
+                                                ),
+                                              ),
+                                              TitleWidget(name: str.e_female),
+                                            ],
                                           ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                  child: TitleWidget(name: str.e_country),
+                                ),
+
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 10.0,
+                                          color: Colors.grey.shade300,
+                                          // offset: const Offset(5, 8.5),
                                         ),
-                                        TitleWidget(name: str.e_female),
                                       ],
                                     ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: TitleWidget(name: str.e_country),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.grey.shade300,
-                                    // offset: const Offset(5, 8.5),
-                                  ),
-                                ],
-                              ),
-                              child: Container(
-                                width: size.width,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: ColorManager.whiteColor,
-                                    borderRadius: BorderRadius.circular(8)),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2(
-                                        isExpanded: true,
-                                        focusNode: nfocus,
-                                        icon: const Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: 35,
-                                          color: ColorManager.black,
-                                        ),
-                                        hint: Text(str.ae_country_h,
-                                            style: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize: 15)),
-                                        items: r3
-                                            .map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(item,
-                                                      style: getRegularStyle(
-                                                          color: ColorManager
-                                                              .black,
-                                                          fontSize: 15)),
-                                                ))
-                                            .toList(),
-                                        value: selectedValue,
-                                        onChanged: (value) async {
-                                          setState(() {
-                                            selectedValue = value as String;
-                                          });
-
-                                          await s(selectedValue);
-
-                                          defaultReg = null;
-                                          await getRegionData(
-                                              context, countryid);
-                                          // print(defaultReg);
-                                          // setState(() {
-                                          //   // defaultReg == null;
-                                          //   defaultReg = 'Al Dakhiliya';
-                                          // });
-                                        },
-                                        buttonHeight: 40,
-                                        dropdownMaxHeight: h * .6,
-                                        // buttonWidth: 140,
-                                        itemHeight: 40,
-                                        buttonPadding:
-                                            const EdgeInsets.fromLTRB(
-                                                12, 0, 8, 0),
-                                        // dropdownWidth: size.width,
-                                        itemPadding: const EdgeInsets.fromLTRB(
-                                            12, 0, 12, 0),
-                                        searchController: AddressEditControllers
-                                            .searchController,
-                                        searchInnerWidget: Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 8,
-                                            bottom: 4,
-                                            right: 8,
-                                            left: 8,
-                                          ),
-                                          child: TextFormField(
-                                            controller: AddressEditControllers
-                                                .searchController,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10,
-                                                vertical: 8,
-                                              ),
-                                              hintText: str.s_search_country,
-                                              hintStyle:
-                                                  const TextStyle(fontSize: 12),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        searchMatchFn: (item, searchValue) {
-                                          return (item.value
-                                              .toString()
-                                              .toLowerCase()
-                                              .contains(searchValue));
-                                        },
-                                        //This to clear the search value when you close the menu
-                                        onMenuStateChange: (isOpen) {
-                                          if (!isOpen) {
-                                            AddressEditControllers
-                                                .searchController
-                                                .clear();
-                                          }
-                                        }),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // * Region
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: TitleWidget(name: str.p_region),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     child: Container(
-                                      width: size.width * .45,
+                                      width: size.width,
+                                      height: 50,
                                       decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            // offset: const Offset(5, 8.5),
-                                          ),
-                                        ],
-                                        color: ColorManager.whiteColor,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-
-                                      // child: TextField(
-                                      //   style: const TextStyle(),
-                                      //   controller: EditProfileControllers
-                                      //       .stateController,
-                                      //   decoration: InputDecoration(
-                                      //       hintText: str.p_region_h,
-                                      //       hintStyle: getRegularStyle(
-                                      //           color: const Color.fromARGB(
-                                      //               255, 173, 173, 173),
-                                      //           fontSize:
-                                      //               Responsive.isMobile(context)
-                                      //                   ? 15
-                                      //                   : 10)),
-                                      // ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButton2(
-                                          isExpanded: true,
-                                          focusNode: nfocus,
-                                          icon: const Icon(
-                                            Icons.keyboard_arrow_down,
-                                            size: 35,
-                                            color: ColorManager.black,
-                                          ),
-                                          hint: Text(str.p_region_h,
-                                              style: getRegularStyle(
-                                                  color: const Color.fromARGB(
-                                                      255, 173, 173, 173),
-                                                  fontSize: 15)),
-                                          items: provider
-                                              .regionInfoModel?.regions!
-                                              .map((item) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: item.cityName,
-                                                    child: Text(
-                                                        item.cityName ?? '',
-                                                        style: getRegularStyle(
-                                                            color: ColorManager
-                                                                .black,
-                                                            fontSize: 15)),
-                                                  ))
-                                              .toList(),
-                                          // value: defaultReg,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              defaultReg = value as String;
-                                            });
-                                            EditProfileControllers
-                                                .regionController
-                                                .text = defaultReg ?? '';
-                                            // s(selectedValue);
-                                          },
-                                          buttonHeight: 50,
-                                          dropdownMaxHeight: h * .6,
-                                          // buttonWidth: 140,
-                                          itemHeight: 40,
-                                          buttonPadding:
-                                              const EdgeInsets.fromLTRB(
-                                                  12, 0, 8, 0),
-                                          // dropdownWidth: size.width,
-                                          itemPadding:
-                                              const EdgeInsets.fromLTRB(
-                                                  12, 0, 12, 0),
-                                          // searchController:
-                                          //     AddressEditControllers
-                                          //         .searchController,
-                                          // searchInnerWidget: Padding(
-                                          //   padding:
-                                          //       const EdgeInsets.only(
-                                          //     top: 8,
-                                          //     bottom: 4,
-                                          //     right: 8,
-                                          //     left: 8,
-                                          //   ),
-                                          //   child: TextFormField(
-                                          //     controller:
-                                          //         AddressEditControllers
-                                          //             .searchController,
-                                          //     decoration: InputDecoration(
-                                          //       isDense: true,
-                                          //       contentPadding:
-                                          //           const EdgeInsets
-                                          //               .symmetric(
-                                          //         horizontal: 10,
-                                          //         vertical: 8,
-                                          //       ),
-                                          //       // TODO: localisation
-                                          //       hintText:
-                                          //           str.s_search_country,
-                                          //       hintStyle:
-                                          //           const TextStyle(
-                                          //               fontSize: 12),
-                                          //       border:
-                                          //           OutlineInputBorder(
-                                          //         borderRadius:
-                                          //             BorderRadius
-                                          //                 .circular(8),
-                                          //       ),
-                                          //     ),
-                                          //   ),
-                                          // ),
-                                          // searchMatchFn:
-                                          //     (item, searchValue) {
-                                          //   return (item.value
-                                          //       .toString()
-                                          //       .toLowerCase()
-                                          //       .contains(searchValue));
-                                          // },
-                                          customButton: defaultReg == null
-                                              ? null
-                                              : Row(
-                                                  children: [
-                                                    Center(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                10, 15, 10, 15),
-                                                        child: Text(
-                                                            defaultReg ?? '',
+                                          color: ColorManager.whiteColor,
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 10),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2(
+                                              isExpanded: true,
+                                              focusNode: nfocus,
+                                              icon: const Icon(
+                                                Icons.keyboard_arrow_down,
+                                                size: 35,
+                                                color: ColorManager.black,
+                                              ),
+                                              hint: Text(str.ae_country_h,
+                                                  style: getRegularStyle(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              173,
+                                                              173,
+                                                              173),
+                                                      fontSize: 15)),
+                                              items: r3
+                                                  .map((item) =>
+                                                      DropdownMenuItem<String>(
+                                                        value: item,
+                                                        child: Text(item,
                                                             style: getRegularStyle(
                                                                 color:
                                                                     ColorManager
                                                                         .black,
-                                                                fontSize: 12)),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                                fontSize: 15)),
+                                                      ))
+                                                  .toList(),
+                                              value: selectedValue,
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  selectedValue =
+                                                      value as String;
+                                                });
+
+                                                await s(selectedValue);
+
+                                                defaultReg = null;
+                                                await getRegionData(
+                                                    context, countryid);
+                                                // print(defaultReg);
+                                                // setState(() {
+                                                //   // defaultReg == null;
+                                                //   defaultReg = 'Al Dakhiliya';
+                                                // });
+                                              },
+                                              buttonHeight: 40,
+                                              dropdownMaxHeight: h * .6,
+                                              // buttonWidth: 140,
+                                              itemHeight: 40,
+                                              buttonPadding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      12, 0, 8, 0),
+                                              // dropdownWidth: size.width,
+                                              itemPadding: const EdgeInsets
+                                                  .fromLTRB(12, 0, 12, 0),
+                                              searchController:
+                                                  AddressEditControllers
+                                                      .searchController,
+                                              searchInnerWidget: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 8,
+                                                  bottom: 4,
+                                                  right: 8,
+                                                  left: 8,
                                                 ),
-                                          //This to clear the search value when you close the menu
-                                          // onMenuStateChange: (isOpen) {
-                                          //   if (!isOpen) {
-                                          //     AddressEditControllers
-                                          //         .searchController
-                                          //         .clear();
-                                          //   }
-                                          // }
+                                                child: TextFormField(
+                                                  controller:
+                                                      AddressEditControllers
+                                                          .searchController,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText:
+                                                        str.s_search_country,
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 12),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              searchMatchFn:
+                                                  (item, searchValue) {
+                                                return (item.value
+                                                    .toString()
+                                                    .toLowerCase()
+                                                    .contains(searchValue));
+                                              },
+                                              //This to clear the search value when you close the menu
+                                              onMenuStateChange: (isOpen) {
+                                                if (!isOpen) {
+                                                  AddressEditControllers
+                                                      .searchController
+                                                      .clear();
+                                                }
+                                              }),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: TitleWidget(name: str.p_city),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                    child: Container(
-                                      width: size.width * .44,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 10.0,
-                                            color: Colors.grey.shade300,
-                                            // offset: const Offset(5, 8.5),
+                                ),
+                                // * Region
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 15, 0, 0),
+                                          child:
+                                              TitleWidget(name: str.p_region),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 0),
+                                          child: Container(
+                                            width: size.width * .45,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 10.0,
+                                                  color: Colors.grey.shade300,
+                                                  // offset: const Offset(5, 8.5),
+                                                ),
+                                              ],
+                                              color: ColorManager.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+
+                                            // child: TextField(
+                                            //   style: const TextStyle(),
+                                            //   controller: EditProfileControllers
+                                            //       .stateController,
+                                            //   decoration: InputDecoration(
+                                            //       hintText: str.p_region_h,
+                                            //       hintStyle: getRegularStyle(
+                                            //           color: const Color.fromARGB(
+                                            //               255, 173, 173, 173),
+                                            //           fontSize:
+                                            //               Responsive.isMobile(context)
+                                            //                   ? 15
+                                            //                   : 10)),
+                                            // ),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                isExpanded: true,
+                                                focusNode: nfocus,
+                                                icon: const Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  size: 35,
+                                                  color: ColorManager.black,
+                                                ),
+                                                hint: Text(str.p_region_h,
+                                                    style: getRegularStyle(
+                                                        color: const Color
+                                                                .fromARGB(
+                                                            255, 173, 173, 173),
+                                                        fontSize: 15)),
+                                                items: provider
+                                                    .regionInfoModel?.regions!
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value: item.cityName,
+                                                          child: Text(
+                                                              item.cityName ??
+                                                                  '',
+                                                              style: getRegularStyle(
+                                                                  color:
+                                                                      ColorManager
+                                                                          .black,
+                                                                  fontSize:
+                                                                      15)),
+                                                        ))
+                                                    .toList(),
+                                                // value: defaultReg,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    defaultReg =
+                                                        value as String;
+                                                  });
+                                                  EditProfileControllers
+                                                      .regionController
+                                                      .text = defaultReg ?? '';
+                                                  // s(selectedValue);
+                                                },
+                                                buttonHeight: 50,
+                                                dropdownMaxHeight: h * .6,
+                                                // buttonWidth: 140,
+                                                itemHeight: 40,
+                                                buttonPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 8, 0),
+                                                // dropdownWidth: size.width,
+                                                itemPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                // searchController:
+                                                //     AddressEditControllers
+                                                //         .searchController,
+                                                // searchInnerWidget: Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.only(
+                                                //     top: 8,
+                                                //     bottom: 4,
+                                                //     right: 8,
+                                                //     left: 8,
+                                                //   ),
+                                                //   child: TextFormField(
+                                                //     controller:
+                                                //         AddressEditControllers
+                                                //             .searchController,
+                                                //     decoration: InputDecoration(
+                                                //       isDense: true,
+                                                //       contentPadding:
+                                                //           const EdgeInsets
+                                                //               .symmetric(
+                                                //         horizontal: 10,
+                                                //         vertical: 8,
+                                                //       ),
+                                                //       // TODO: localisation
+                                                //       hintText:
+                                                //           str.s_search_country,
+                                                //       hintStyle:
+                                                //           const TextStyle(
+                                                //               fontSize: 12),
+                                                //       border:
+                                                //           OutlineInputBorder(
+                                                //         borderRadius:
+                                                //             BorderRadius
+                                                //                 .circular(8),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                // searchMatchFn:
+                                                //     (item, searchValue) {
+                                                //   return (item.value
+                                                //       .toString()
+                                                //       .toLowerCase()
+                                                //       .contains(searchValue));
+                                                // },
+                                                customButton: defaultReg == null
+                                                    ? null
+                                                    : Row(
+                                                        children: [
+                                                          Center(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .fromLTRB(
+                                                                      10,
+                                                                      15,
+                                                                      10,
+                                                                      15),
+                                                              child: Text(
+                                                                  defaultReg ??
+                                                                      '',
+                                                                  style: getRegularStyle(
+                                                                      color: ColorManager
+                                                                          .black,
+                                                                      fontSize:
+                                                                          12)),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                //This to clear the search value when you close the menu
+                                                // onMenuStateChange: (isOpen) {
+                                                //   if (!isOpen) {
+                                                //     AddressEditControllers
+                                                //         .searchController
+                                                //         .clear();
+                                                //   }
+                                                // }
+                                              ),
+                                            ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 15, 0, 0),
+                                          child: TitleWidget(name: str.p_city),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 0),
+                                          child: Container(
+                                            width: size.width * .44,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 10.0,
+                                                  color: Colors.grey.shade300,
+                                                  // offset: const Offset(5, 8.5),
+                                                ),
+                                              ],
+                                            ),
+                                            child: TextField(
+                                              style: const TextStyle(),
+                                              controller: EditProfileControllers
+                                                  .stateController,
+                                              decoration: InputDecoration(
+                                                  hintText: str.p_city_h,
+                                                  hintStyle: getRegularStyle(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              173,
+                                                              173,
+                                                              173),
+                                                      fontSize:
+                                                          Responsive.isMobile(
+                                                                  context)
+                                                              ? 15
+                                                              : 10)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                  child: TitleWidget(name: str.e_about),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 10.0,
+                                          color: Colors.grey.shade300,
+                                          offset: const Offset(4, 4.5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Container(
                                       child: TextField(
+                                        minLines: 4,
+                                        maxLines: 5,
                                         style: const TextStyle(),
                                         controller: EditProfileControllers
-                                            .stateController,
+                                            .aboutController,
                                         decoration: InputDecoration(
-                                            hintText: str.p_city_h,
-                                            hintStyle: getRegularStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 173, 173, 173),
-                                                fontSize:
-                                                    Responsive.isMobile(context)
-                                                        ? 15
-                                                        : 10)),
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10,
+                                                        right: 10,
+                                                        top: 10),
+                                                hintText: str.e_about_h,
+                                                hintStyle: getRegularStyle(
+                                                    color: const Color.fromARGB(
+                                                        255, 173, 173, 173),
+                                                    fontSize:
+                                                        Responsive.isMobile(context)
+                                                            ? 15
+                                                            : 10))
+                                            .copyWith(
+                                                enabledBorder: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    borderSide: const BorderSide(
+                                                        color: ColorManager.whiteColor,
+                                                        width: .5)),
+                                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: ColorManager.whiteColor, width: .5))),
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: TitleWidget(name: str.e_about),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.grey.shade300,
-                                    offset: const Offset(4, 4.5),
-                                  ),
-                                ],
-                              ),
-                              child: Container(
-                                child: TextField(
-                                  minLines: 4,
-                                  maxLines: 5,
-                                  style: const TextStyle(),
-                                  controller:
-                                      EditProfileControllers.aboutController,
-                                  decoration: InputDecoration(
-                                          contentPadding: const EdgeInsets.only(
-                                              left: 10, right: 10, top: 10),
-                                          hintText: str.e_about_h,
-                                          hintStyle: getRegularStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 173, 173, 173),
-                                              fontSize: Responsive.isMobile(context)
-                                                  ? 15
-                                                  : 10))
-                                      .copyWith(
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              borderSide: const BorderSide(
-                                                  color:
-                                                      ColorManager.whiteColor,
-                                                  width: .5)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              borderSide: const BorderSide(color: ColorManager.whiteColor, width: .5))),
                                 ),
-                              ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(7, 0, 7, 5),
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 35,
+                                                vertical: mob ? 16 : 10),
+                                          ),
+                                          onPressed: updateProfileValidation,
+                                          child: Center(
+                                            child: loading
+                                                ? const SizedBox(
+                                                    width: 30,
+                                                    height: 30,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      backgroundColor:
+                                                          ColorManager.primary,
+                                                      color: ColorManager
+                                                          .whiteColor,
+                                                      strokeWidth: 5,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    str.e_save,
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: getRegularStyle(
+                                                        color: ColorManager
+                                                            .whiteText,
+                                                        fontSize:
+                                                            Responsive.isMobile(
+                                                                    context)
+                                                                ? 15
+                                                                : 10),
+                                                  ),
+                                          )),
+                                    )
+                                  ],
+                                )
+                              ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(7, 0, 7, 5),
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 35,
-                                          vertical: mob ? 16 : 10),
-                                    ),
-                                    onPressed: updateProfileValidation,
-                                    child: Center(
-                                      child: loading
-                                          ? const SizedBox(
-                                              width: 30,
-                                              height: 30,
-                                              child: CircularProgressIndicator(
-                                                backgroundColor:
-                                                    ColorManager.primary,
-                                                color: ColorManager.whiteColor,
-                                                strokeWidth: 5,
-                                              ),
-                                            )
-                                          : Text(
-                                              str.e_save,
-                                              textAlign: TextAlign.justify,
-                                              style: getRegularStyle(
-                                                  color: ColorManager.whiteText,
-                                                  fontSize: Responsive.isMobile(
-                                                          context)
-                                                      ? 15
-                                                      : 10),
-                                            ),
-                                    )),
-                              )
-                            ],
-                          )
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

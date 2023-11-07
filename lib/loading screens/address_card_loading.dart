@@ -69,6 +69,8 @@ class _UserAddressCardLoadingState extends State<UserAddressCardLoading> {
     final currentLocator = LatLng(
         double.parse(userDetails?.latitude ?? '41.612849'),
         double.parse(userDetails?.longitude ?? '13.046816'));
+
+    return Scaffold();
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawer: SizedBox(

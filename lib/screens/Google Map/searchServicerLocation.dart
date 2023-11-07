@@ -174,29 +174,32 @@ class _SearchServicerLocationState extends State<SearchServicerLocation> {
                           color: ColorManager.whiteColor,
                           borderRadius: BorderRadius.circular(10)),
                       width: size.width * .43,
-                      height: 80,
+                      // height: 80,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                                height: 25,
+                                // height: 25,
                                 child: Text(
-                                  ' $place',
-                                  style: getSemiBoldtStyle(
-                                      color: ColorManager.black, fontSize: 13),
-                                )),
+                              ' $place',
+                              style: getSemiBoldtStyle(
+                                  color: ColorManager.black, fontSize: 13),
+                            )),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5, bottom: 5),
+                              child: SizedBox(
+                                  // height: 20,
+                                  child: Text(
+                                country ?? '',
+                                style: getRegularStyle(
+                                    color: ColorManager.grayLight,
+                                    fontSize: 10),
+                              )),
+                            ),
                             SizedBox(
-                                height: 20,
-                                child: Text(
-                                  country ?? '',
-                                  style: getRegularStyle(
-                                      color: ColorManager.grayLight,
-                                      fontSize: 10),
-                                )),
-                            SizedBox(
-                              height: 15,
+                              // height: 15,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
