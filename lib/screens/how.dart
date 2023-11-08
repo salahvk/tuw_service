@@ -122,8 +122,8 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                           child: ElevatedButton(
                             child: Text(
                               str.explore,
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                              style: getBoldtStyle(
+                                  color: ColorManager.whiteColor, fontSize: 16),
                             ),
                             onPressed: () async {
                               getHome(context);
@@ -142,8 +142,8 @@ class HowToWorkPageState extends State<HowToWorkPage> {
                           child: ElevatedButton(
                             child: Text(
                               str.proceed,
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                              style: getBoldtStyle(
+                                  color: ColorManager.whiteColor, fontSize: 16),
                             ),
                             onPressed: () => _onIntroEnd(context),
                           ),
