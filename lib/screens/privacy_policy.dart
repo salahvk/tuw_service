@@ -43,11 +43,10 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   Widget build(BuildContext context) {
     final str = AppLocalizations.of(context)!;
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Row(
+      appBar: PreferredSize(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Row(
               children: [
                 BackButton2(),
                 Spacer(),
@@ -63,10 +62,16 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                 )
               ],
             ),
+          ),
+          preferredSize: Size(100, 150)),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                     child: Row(
                       children: [
                         Container(

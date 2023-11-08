@@ -47,6 +47,7 @@ class _WishListState extends State<WishList> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final str = AppLocalizations.of(context)!;
+    return Scaffold();
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawer: SizedBox(
