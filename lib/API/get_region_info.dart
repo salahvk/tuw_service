@@ -32,3 +32,29 @@ getRegionData(BuildContext context, id) async {
     print(e);
   }
 }
+
+
+getStateData(BuildContext context, id) async {
+  try {
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    var response = await http.get(Uri.parse("$getStateApi$id"),
+        headers: {"device-id": provider.deviceId ?? ''});
+    // print(response.body);
+    if (response.statusCode != 200) {
+      log("Something Went Wrong8");
+      return;
+    }
+
+    var jsonResponse = jsonDecode(response.body);
+    log(response.body);
+    if (jsonResponse['result'] == true) {
+      var regionInfoModel = RegionInfo.fromJson(jsonResponse);
+      provider.regionInfodata(regionInfoModel);
+    } else {
+      provider.clearRegions();
+    }
+  } on Exception catch (e) {
+    log("Something Went Wrong7");
+    print(e);
+  }
+}

@@ -99,6 +99,7 @@ class _ServicerPageState extends State<ServicerPage> {
       provider.servicerSelectedCountry = '';
       provider.clearRegions();
       await getRegionData(context, 165);
+      await getStateData(context, 5);
       setState(() {});
     });
   }
